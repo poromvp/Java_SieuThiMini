@@ -11,6 +11,6 @@ public class TienIch {
         nut.setFocusPainted(false); // Bỏ viền xanh khi nhấn vào nút
         nut.setContentAreaFilled(false); // Bỏ hiệu ứng nền mặc định của JButton
         nut.setForeground(new Color(226, 224, 221)); // Đặt màu chữ trên nút
-        nut.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+        nut.setBorder(BorderFactory.createLineBorder(Color.WHITE, 1));
     }
 }

@@ -58,7 +58,7 @@ public class FrameLogin extends JFrame implements ActionListener {
         Image scaledImage = avtLogin.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         ImageIcon resizedIcon = new ImageIcon(scaledImage);
         JLabel lbAvatar = new JLabel(resizedIcon);
-        lbAvatar.setSize(50, 50);
+        lbAvatar.setSize(5, 5);
         pn2.setLayout(new GridBagLayout());
         GridBagConstraints gbcpn2 = new GridBagConstraints();
 
@@ -66,10 +66,12 @@ public class FrameLogin extends JFrame implements ActionListener {
         gbcpn2.gridy = 0;
         gbcpn2.gridwidth = 2;
         // Đảm bảo pn2 chiếm đúng 30% chiều rộng
-        gbcpn2.weightx = 1.0;
-        gbcpn2.weighty = 1.0;
+        gbcpn2.weightx = 0.1;
+        gbcpn2.weighty = 0.1;
         gbcpn2.anchor = GridBagConstraints.NORTH; // Căn các thành phần lên trên cùng
-        gbcpn2.insets = new Insets(1, 1, 2, 2); // Khoảng cách giữa các thành phần
+        gbcpn2.insets = new Insets(1, 1, 2, 1); // Khoảng cách giữa các thành phần
+        gbcpn2.ipadx = 2; // Giảm padding ngang
+        gbcpn2.ipady = 2; // Giảm padding dọc
 
         gbcpn2.fill = GridBagConstraints.HORIZONTAL;
         pn2.add(lbAvatar, gbcpn2);
@@ -79,7 +81,7 @@ public class FrameLogin extends JFrame implements ActionListener {
         lb1.setFont(new Font("Arial", Font.BOLD, 20));
         gbcpn2.gridx = 0;
         gbcpn2.gridy = 1;
-        
+
         pn2.add(lb1, gbcpn2);
 
         gbcpn2.gridwidth = 1;
@@ -88,33 +90,33 @@ public class FrameLogin extends JFrame implements ActionListener {
         lb2.setFont(new Font("Arial", Font.BOLD, 14));
         gbcpn2.gridx = 0;
         gbcpn2.gridy = 2;
-        
+
         pn2.add(lb2, gbcpn2);
 
         txtUserName = new JTextArea(1, 8);
         gbcpn2.gridx = 1;
         gbcpn2.gridy = 2;
-        
+
         pn2.add(txtUserName, gbcpn2);
 
         JLabel lb3 = new JLabel("Mật Khẩu: ");
         lb3.setFont(new Font("Arial", Font.BOLD, 14));
         gbcpn2.gridx = 0;
         gbcpn2.gridy = 3;
-        
+
         pn2.add(lb3, gbcpn2);
 
         txtPass = new JPasswordField(8);
         gbcpn2.gridx = 1;
         gbcpn2.gridy = 3;
-        
+
         pn2.add(txtPass, gbcpn2);
 
         cbShowPass = new JCheckBox("Hiển thị mật khẩu");
         kytumacdinhcuaPass = txtPass.getEchoChar();
         gbcpn2.gridx = 0;
         gbcpn2.gridy = 4;
-        
+
         pn2.add(cbShowPass, gbcpn2);
 
         gbcpn2.gridwidth = 2;
@@ -124,7 +126,7 @@ public class FrameLogin extends JFrame implements ActionListener {
         btnSubmit.setContentAreaFilled(false); // Bỏ hiệu ứng nền mặc định của JButton
         gbcpn2.gridx = 0;
         gbcpn2.gridy = 5;
-        
+
         pn2.add(btnSubmit, gbcpn2);
 
         btnSubmit.addActionListener((ActionListener) this);

@@ -87,6 +87,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
     JDateChooser to, from;
     JComboBox<String> chonThoiGian, chonDoiTuong;
     JTable tb;
+    JButton btnIn, btnGui;
 
     public void panelBaoCao() {
         /*
@@ -166,7 +167,9 @@ public class FrameAdmin extends JFrame implements ActionListener {
                 "Ngày Tạo" };
 
         tb = new JTable(data, columnNames);
-        PanelDoanhThuNangCao pnldoanhthunangcao = new PanelDoanhThuNangCao(chonDoiTuong,tb);
+        btnIn = new JButton("In Báo Cáo");
+        btnGui = new JButton("Gửi Báo Cáo");
+        PanelDoanhThuNangCao pnldoanhthunangcao = new PanelDoanhThuNangCao(chonDoiTuong,tb,btnIn,btnGui);
         JScrollPane scroll2 = new JScrollPane(pnldoanhthunangcao,
                 JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, // Thanh cuộn dọc tự động
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER // Không có thanh cuộn ngang

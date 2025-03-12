@@ -5,7 +5,7 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableCellRenderer;
 
 public class PanelDoanhThuNangCao extends JPanel{
-    public PanelDoanhThuNangCao(JComboBox<String> characts, JTable tb){
+    public PanelDoanhThuNangCao(JComboBox<String> characts, JTable tb, JButton btnIn, JButton btnGui){
         setBorder(new CompoundBorder(new TitledBorder("Doanh Thu Theo"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -36,5 +36,13 @@ public class PanelDoanhThuNangCao extends JPanel{
         }
         JScrollPane scrollPane = new JScrollPane(tb);
         pn2.add(scrollPane);
+
+        gbc.gridx=0;
+        gbc.gridy=2;
+        JPanel pn3 = new JPanel();
+        pn3.add(btnIn);
+        pn3.add(btnGui);
+        add(pn3,gbc);
+
     }
 }

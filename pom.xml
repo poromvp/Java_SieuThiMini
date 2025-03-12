@@ -67,6 +67,20 @@
       <artifactId>gson</artifactId>
       <version>2.8.9</version>
     </dependency>
+
+    <!-- JCalendar JChooserDate-->
+    <dependency>
+      <groupId>com.toedter</groupId>
+      <artifactId>jcalendar</artifactId>
+      <version>1.4</version>
+    </dependency>
+    
+    <!-- Biểu Đồ -->
+    <dependency>
+        <groupId>org.jfree</groupId>
+        <artifactId>jfreechart</artifactId>
+        <version>1.5.3</version>
+    </dependency>
   </dependencies>
   
 

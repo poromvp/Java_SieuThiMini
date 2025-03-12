@@ -3,14 +3,20 @@ package com.sieuthi;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableCellRenderer;
+
+import com.sieuthi.NhanVien_BaoCaoBanHang.PanelChucNang;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PanelTable;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PanelThongKe;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PanelTimKiem;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PanelXemChiTiet;
 
 public class FrameNhanVien extends JFrame implements ActionListener {
-    JButton btn1, btn2, btn3, btn4, btn5, btn7;
+    JButton btn0, btn1, btn2, btn3, btn4, btn5, btn7;
     JPanel pn2;
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> new FrameNhanVien());
+    }
 
     public FrameNhanVien() {
         setTitle("Frame Nhân Viên");
@@ -19,6 +25,7 @@ public class FrameNhanVien extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        btn0 = new JButton();
         btn1 = new JButton("BÁN HÀNG");
         btn2 = new JButton("<html><center>QUẢN LÝ<br>KHÁCH HÀNG</center></html>");
         btn3 = new JButton("<html><center>BÁO CÁO<br>BÁN HÀNG</center></html>");
@@ -28,6 +35,7 @@ public class FrameNhanVien extends JFrame implements ActionListener {
         pn1.setBackground(new Color(56, 57, 60));
         pn1.setBounds(0, 0, 278, 700);
         pn1.setLayout(new BoxLayout(pn1, BoxLayout.Y_AXIS));
+        pn1.add(btn0);
         pn1.add(btn1);
         pn1.add(btn2);
         pn1.add(btn3);
@@ -36,6 +44,9 @@ public class FrameNhanVien extends JFrame implements ActionListener {
         pn2 = new JPanel();
         panelBanHang();
 
+        TienIch.quanlynutsidebar(btn0);
+        ImageIcon icon = new ImageIcon(getClass().getResource("/images/P-Mart-logo.png").getPath());
+        btn0.setIcon(icon);
         TienIch.quanlynutsidebar(btn1);
         TienIch.quanlynutsidebar(btn2);
         TienIch.quanlynutsidebar(btn3);
@@ -97,95 +108,14 @@ public class FrameNhanVien extends JFrame implements ActionListener {
         // Đặt màu chữ: Xanh dương
         lbBaoCao.setForeground(Color.WHITE);
 
-        JPanel pnlChucNang = new JPanel();
-        pnlChucNang.setBorder(new CompoundBorder(new TitledBorder("Chức Năng"), new EmptyBorder(4, 4, 4, 4)));
-        pnlChucNang.setLayout(new GridBagLayout());
-        GridBagConstraints gbcPnlChucNang = new GridBagConstraints();
-        gbcPnlChucNang.fill = GridBagConstraints.BOTH;
-        gbcPnlChucNang.weightx = 1.0;
-        gbcPnlChucNang.weighty = 1.0;
-
-        gbcPnlChucNang.gridx = 0;
-        gbcPnlChucNang.gridy = 0;
         btnTimKiem = new JButton("Tìm Kiếm");
-        btnTimKiem.setMnemonic('T');
-        btnTimKiem.setFont(new Font("Arial", Font.BOLD, 16));
-        btnTimKiem.setContentAreaFilled(false);
-        btnTimKiem.setOpaque(true);
-        btnTimKiem.setBackground(new Color(37, 150, 190));
-        ImageIcon in = new ImageIcon(getClass().getResource("/images/icon/searchIcon.png").getPath());
-        btnTimKiem.setIcon(in);
-        btnTimKiem.setHorizontalTextPosition(SwingConstants.RIGHT);
-        pnlChucNang.add(btnTimKiem, gbcPnlChucNang);
-
-        gbcPnlChucNang.gridx = 0;
-        gbcPnlChucNang.gridy = 1;
         btnXemChiTiet = new JButton("Xem Chi Tiết");
-        btnXemChiTiet.setMnemonic('X');
-        btnXemChiTiet.setFont(new Font("Arial", Font.BOLD, 16));
-        btnXemChiTiet.setContentAreaFilled(false);
-        btnXemChiTiet.setOpaque(true);
-        btnXemChiTiet.setBackground(new Color(136, 236, 123));
-        in = new ImageIcon(getClass().getResource("/images/icon/detailIcon.png").getPath());
-        btnXemChiTiet.setIcon(in);
-        btnXemChiTiet.setHorizontalTextPosition(SwingConstants.RIGHT);
-        pnlChucNang.add(btnXemChiTiet, gbcPnlChucNang);
-
-        gbcPnlChucNang.gridx = 1;
-        gbcPnlChucNang.gridy = 0;
         btnInBaoCao = new JButton("In Báo Cáo");
-        btnInBaoCao.setMnemonic('I');
-        btnInBaoCao.setFont(new Font("Arial", Font.BOLD, 16));
-        btnInBaoCao.setContentAreaFilled(false);
-        btnInBaoCao.setOpaque(true);
-        btnInBaoCao.setBackground(new Color(243, 191, 86));
-        in = new ImageIcon(getClass().getResource("/images/icon/inIcon.png").getPath());
-        btnInBaoCao.setIcon(in);
-        btnInBaoCao.setHorizontalTextPosition(SwingConstants.RIGHT);
-        pnlChucNang.add(btnInBaoCao, gbcPnlChucNang);
+        PanelChucNang pnlChucNang = new PanelChucNang(btnTimKiem, btnXemChiTiet, btnInBaoCao);
 
-        JPanel pnlThongKe = new JPanel();
-        pnlThongKe.setBorder(new CompoundBorder(new TitledBorder("Thống Kê"), new EmptyBorder(4, 4, 4, 4)));
-        pnlThongKe.setLayout(new GridBagLayout());
-        GridBagConstraints gbcPnlThongKe = new GridBagConstraints();
-        gbcPnlThongKe.fill = GridBagConstraints.BOTH;
-        gbcPnlThongKe.weightx = 1.0;
-        gbcPnlThongKe.weighty = 1.0;
-
-        gbcPnlThongKe.gridx = 0;
-        gbcPnlThongKe.gridy = 0;
-        JLabel lbtongdon = new JLabel("Tổng Đơn Hàng Trong Ngày: ");
-        lbtongdon.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa
-        lbtongdon.setFont(new Font("Arial", Font.BOLD, 20));
-        pnlThongKe.add(lbtongdon, gbcPnlThongKe);
-        gbcPnlThongKe.gridx = 1;
-        gbcPnlThongKe.gridy = 0;
         lbTongDon = new JLabel("56");
-        lbTongDon.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa
-        lbTongDon.setFont(new Font("Arial", Font.BOLD, 20));
-        pnlThongKe.add(lbTongDon, gbcPnlThongKe);
-
-        gbcPnlThongKe.gridx = 0;
-        gbcPnlThongKe.gridy = 1;
-        JLabel lbtongdoanhthu = new JLabel("Tổng Doanh Thu Trong Ngày: ");
-        lbtongdoanhthu.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa
-        lbtongdoanhthu.setFont(new Font("Arial", Font.BOLD, 20));
-        pnlThongKe.add(lbtongdoanhthu, gbcPnlThongKe);
-        gbcPnlThongKe.gridx = 1;
-        gbcPnlThongKe.gridy = 1;
         lbTongDoanhThu = new JLabel("12,000");
-        lbTongDoanhThu.setHorizontalAlignment(SwingConstants.CENTER); // Căn giữa
-        lbTongDoanhThu.setFont(new Font("Arial", Font.BOLD, 20));
-        pnlThongKe.add(lbTongDoanhThu, gbcPnlThongKe);
-
-        gbcPnlThongKe.gridx = 3;
-        gbcPnlThongKe.gridy = 1;
-        JLabel vnd = new JLabel("VND");
-        vnd.setHorizontalAlignment(SwingConstants.LEFT);
-        vnd.setFont(new Font("Arial", Font.BOLD, 20));
-        pnlThongKe.add(vnd, gbcPnlThongKe);
-
-        JPanel pnlTable = new JPanel();
+        PanelThongKe pnlThongKe = new PanelThongKe(lbTongDon, lbTongDoanhThu);
 
         // Dữ liệu của bảng
         String[][] data = {
@@ -193,24 +123,12 @@ public class FrameNhanVien extends JFrame implements ActionListener {
                 { "2", "Cam", "20", "KH126", "9,800", "NV002", "20/02/2025" },
                 { "3", "Chuối", "15", "KH122", "10,200", "NV003", "20/02/2025" }
         };
-
         // Tên cột
         String[] columnNames = { "ID", "Tên sản phẩm", "Số lượng", "Mã Khách Hàng", "Giá Tiền", "Mã Nhân Viên",
                 "Ngày Tạo" };
+
         tableHoaDon = new JTable(data, columnNames);
-        tableHoaDon.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16)); // Đổi font thành Arial, cỡ 14, không
-                                                                                // đậm
-        tableHoaDon.setFont(new Font("Arial", Font.PLAIN, 13)); // Đổi font thành Arial, cỡ 14, không đậm
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer(); // căn giữa
-        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        for (int i = 0; i < tableHoaDon.getColumnCount(); i++) {
-            tableHoaDon.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-        }
-
-        JScrollPane scrollPane = new JScrollPane(tableHoaDon);
-        scrollPane.setPreferredSize(new Dimension(1200, 500));
-        pnlTable.add(scrollPane);
+        PanelTable pnlTable = new PanelTable(tableHoaDon);
 
         gbc.fill = GridBagConstraints.BOTH; // Bảng mở rộng theo chiều ngang và dọc
         gbc.weightx = 1.0; // Giãn ngang
@@ -259,32 +177,23 @@ public class FrameNhanVien extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(null, "Bạn Đã Nhấn Nút Đăng Xuất");
         }
         if (e.getSource() == btnTimKiem) {
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Sắp xếp dọc
-
-            JTextField txtName = new JTextField(10);
-            JTextField txtAge = new JTextField(10);
-            JTextField txtEmail = new JTextField(10);
-
-            panel.add(new JLabel("Họ và tên:"));
-            panel.add(txtName);
-            panel.add(new JLabel("Tuổi:"));
-            panel.add(txtAge);
-            panel.add(new JLabel("Email:"));
-            panel.add(txtEmail);
-
+            PanelTimKiem panel = new PanelTimKiem();
             // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            /*
+             * giá trị của biến result sẽ là:
+             * JOptionPane.OK_OPTION (0) nếu bạn nhấn OK.
+             * JOptionPane.CANCEL_OPTION (2) nếu bạn nhấn Cancel.
+             * JOptionPane.CLOSED_OPTION (-1) nếu bạn đóng hộp thoại bằng dấu X (góc trên
+             * phải).
+             */
+            if (result == 0) {
+                System.out.println("Bạn vừa nhập: " + panel.getTxtName());
+            }
         }
         if (e.getSource() == btnXemChiTiet) {
-            JPanel panel = new JPanel();
-            panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-            JTextField txtUsername = new JTextField(10);
-            txtUsername.setEnabled(false);
             int dong = tableHoaDon.getSelectedRow();
-
             if (dong == -1) { // Nếu không có dòng nào được chọn
                 JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để xem chi tiết!", "Thông báo",
                         JOptionPane.WARNING_MESSAGE);
@@ -295,19 +204,11 @@ public class FrameNhanVien extends JFrame implements ActionListener {
                  */
             }
 
-            Object txt = tableHoaDon.getValueAt(dong, 1);
-            txtUsername.setText(txt.toString());
-
-            panel.add(new JLabel("Tên đăng nhập:"));
-            panel.add(txtUsername);
+            PanelXemChiTiet panel = new PanelXemChiTiet(tableHoaDon, dong);
 
             // Hiển thị JOptionPane với panel tự thiết kế
-            int result = JOptionPane.showConfirmDialog(null, panel, "Xem Chi Tiết",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
         }
     }
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FrameNhanVien());
-    }
 }

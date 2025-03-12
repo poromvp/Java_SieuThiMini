@@ -1,0 +1,60 @@
+package com.FormEmployee;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.BorderFactory;
+import javax.swing.JPanel;
+import javax.swing.border.Border;
+
+import com.ComponentCommon.StyledLeftMenubutton;
+import com.sieuthi.FrameEmployee;
+
+public class LeftMenu extends JPanel implements ActionListener {
+
+    private StyledLeftMenubutton btn_home;
+    private StyledLeftMenubutton btn_sell;
+    private StyledLeftMenubutton btn_orderManagement;
+    // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
+
+    public LeftMenu() { 
+        
+        
+        setBackground(new Color(28, 173, 193));
+        setPreferredSize(new Dimension(230, getHeight()));
+        setLayout(new FlowLayout());
+        Border emptyBorder = BorderFactory.createEmptyBorder(0, 10, 0, 0);
+        setBorder(emptyBorder);
+
+        btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
+        btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
+        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí Order");
+
+        btn_home.addActionListener(this);
+        btn_sell.addActionListener(this);
+        btn_orderManagement.addActionListener(this);
+
+        add(btn_home);
+        add(btn_sell);
+        add(btn_orderManagement);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btn_sell) {
+            System.out.println("click btn_sell");
+            FrameEmployee.setPage("formOrder", "Bán Hàng");
+        }
+        if (e.getSource() == btn_home) {
+            System.out.println("click btn_home");
+            FrameEmployee.setPage("formHome", "Trang Chủ");
+        } 
+        if (e.getSource() == btn_orderManagement) {
+            System.out.println("click btn_orderManagement");
+            FrameEmployee.setPage("formOrderManagement", "Quản Lí Đơn Hàng");
+        }
+    }
+}

@@ -1,4 +1,4 @@
-/*package JDBC;
+package JDBC;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -94,4 +94,4 @@ public class DBConnection {
         DBConnection.query(cnt);
         DBConnection.closeConnection(cnt);
     }
-}*/
+}

@@ -51,5 +51,6 @@ public class PanelChucNang extends JPanel{
         btnInBaoCao.setHorizontalTextPosition(SwingConstants.RIGHT);
         add(btnInBaoCao, gbcPnlChucNang);
         
+        
     }
 }

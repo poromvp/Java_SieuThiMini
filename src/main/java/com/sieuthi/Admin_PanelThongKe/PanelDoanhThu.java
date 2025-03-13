@@ -1,97 +1,87 @@
 package com.sieuthi.Admin_PanelThongKe;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.*;
+import javax.swing.table.DefaultTableModel;
 
 public class PanelDoanhThu extends JPanel {
-    public PanelDoanhThu(JLabel lbTongDoanhThu, JLabel lbChuyenKhoan, JLabel lbTienMat, JLabel lbGiaVon,
-            JLabel lbLoiNhuan, JLabel lbChiPhi) {
-        setBorder(new CompoundBorder(new TitledBorder("Thống Kê"), new EmptyBorder(4, 4, 4, 4)));
+    JLabel tongdoanhthu, tongdonhang;
+    JComboBox<String> mocthoigian;
+    JTable tb;
+    DefaultTableModel model;
+    public ArrayList<hoadontemp> HoaDon= new ArrayList<>();
+    
+    public PanelDoanhThu() {
+        setBorder(new CompoundBorder(new TitledBorder("Báo cáo doanh thu tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        gbc.ipadx = -50; // Giảm chiều rộng nội bộ
-        gbc.ipady = -50; // Giảm chiều cao nội bộ
+        gbc.ipadx = -5; // Giảm chiều rộng nội bộ
+        gbc.ipady = -5; // Giảm chiều cao nội bộ
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel("Chuyển Khoản: "), gbc);
+        add(new JLabel("Tổng Doanh Thu:"),gbc);
 
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        lbChuyenKhoan.setForeground(new Color(18, 146, 81));
-        add(lbChuyenKhoan, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        add(new JLabel("VND"), gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(new JLabel("Tiền Mặt: "), gbc);
+        add(new JLabel("Tổng đơn hàng (hóa đơn):"),gbc);
+
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        tongdoanhthu = new JLabel("1,000,000");
+        add(tongdoanhthu,gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        lbTienMat.setForeground(new Color(18, 146, 81));
-        add(lbTienMat, gbc);
+        tongdonhang= new JLabel("96");
+        add(tongdonhang,gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 1;
-        add(new JLabel("VND"), gbc);
-
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(new JLabel("Tổng Doanh Thu: "), gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        lbTongDoanhThu.setForeground(new Color(18, 146, 81));
-        add(lbTongDoanhThu, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        add(new JLabel("VND"), gbc);
+        gbc.gridy = 0;
+        add(new JLabel("Doanh thu theo:"),gbc);
 
         gbc.gridx = 3;
         gbc.gridy = 0;
-        add(new JLabel("Giá Vốn: "), gbc);
+        mocthoigian = new JComboBox<>();
+        mocthoigian.addItem("Ngày");
+        mocthoigian.addItem("Tháng");
+        mocthoigian.addItem("Năm");
+        mocthoigian.addItem("Tùy chỉnh");
+        mocthoigian.setEditable(false);
+        add(mocthoigian,gbc);
 
-        gbc.gridx = 4;
-        gbc.gridy = 0;
-        lbGiaVon.setForeground(new Color(239, 38, 38));
-        add(lbGiaVon, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridheight=1;
+        gbc.gridwidth=4;
+        String[] tencot = {"ID", "Name", "Price", "Date"};
+        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
+        hoadontemp b = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
+        hoadontemp c = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
+        hoadontemp d = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
+        HoaDon.add(a);
+        HoaDon.add(b);
+        HoaDon.add(c);
+        HoaDon.add(d);
+        model = new DefaultTableModel(tencot, 0);
+        refreshTable();
+        tb = new JTable(model);
+        JScrollPane scr = new JScrollPane(tb);
+        add(scr,gbc);
+        
+    }
 
-        gbc.gridx = 5;
-        gbc.gridy = 0;
-        add(new JLabel("VND"), gbc);
-
-        gbc.gridx = 3;
-        gbc.gridy = 1;
-        add(new JLabel("Chi Phí: "), gbc);
-
-        gbc.gridx = 4;
-        gbc.gridy = 1;
-        lbChiPhi.setForeground(new Color(239, 38, 38));
-        add(lbChiPhi, gbc);
-
-        gbc.gridx = 5;
-        gbc.gridy = 1;
-        add(new JLabel("VND"), gbc);
-
-        gbc.gridx = 6;
-        gbc.gridy = 0;
-        add(new JLabel("Lợi Nhuận: "), gbc);
-
-        gbc.gridx = 7;
-        gbc.gridy = 0;
-        lbLoiNhuan.setForeground(new Color(18, 146, 81));
-        add(lbLoiNhuan, gbc);
-
-        gbc.gridx = 8;
-        gbc.gridy = 0;
-        add(new JLabel("VND"), gbc);
+    private void refreshTable() {
+        model.setRowCount(0);  // Xóa toàn bộ dữ liệu cũ
+        for (hoadontemp s : HoaDon) {
+            model.addRow(new Object[]{s.getId(), s.getName(), s.getPrice(), s.getDate()});
+        }
     }
 }

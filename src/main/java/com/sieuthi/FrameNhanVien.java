@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+/*import com.sieuthi.NhanVien_BaoCaoBanHang.ExportPDF;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PDFViewer;*/
 import com.sieuthi.NhanVien_BaoCaoBanHang.PanelChucNang;
 import com.sieuthi.NhanVien_BaoCaoBanHang.PanelTable;
 import com.sieuthi.NhanVien_BaoCaoBanHang.PanelThongKe;
@@ -159,6 +161,7 @@ public class FrameNhanVien extends JFrame implements ActionListener {
 
         btnTimKiem.addActionListener((ActionListener) this);
         btnXemChiTiet.addActionListener((ActionListener) this);
+        btnInBaoCao.addActionListener((ActionListener) this);
 
     }
 
@@ -208,6 +211,10 @@ public class FrameNhanVien extends JFrame implements ActionListener {
 
             // Hiển thị JOptionPane với panel tự thiết kế
             JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
+        }
+        if (e.getSource() ==  btnInBaoCao){
+            /*ExportPDF.exportToPDF(tableHoaDon, "doanh_thu.pdf");
+            SwingUtilities.invokeLater(() -> new PDFViewer("doanh_thu.pdf").setVisible(true));*/
         }
     }
 

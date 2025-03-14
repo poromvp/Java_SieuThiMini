@@ -5,6 +5,8 @@ import java.awt.event.*;
 import javax.swing.*;
 import com.FormNhanVien.FormMainNhanVien;
 import com.FormNhanVien.LeftSidebarMenu;
+import com.sieuthi.Admin_PanelThongKe.PanelMainThongKe;
+
 import FormTaiKhoan.FormMainAccount;
 
 public class FrameAdmin extends JFrame implements ActionListener {
@@ -59,11 +61,16 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public void panelBaoCao() {
-        rightPn.removeAll();
-        rightPn.setBackground(new Color(176, 90, 20));
+        PanelMainThongKe mainPanel=new PanelMainThongKe();
+
+        JScrollPane src = new JScrollPane(mainPanel);
+        src.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        src.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    
+        src.getVerticalScrollBar().setUnitIncrement(16);
+
         rightPn.revalidate();
         rightPn.repaint();
-        add(rightPn);
     }
 
     public void panelTaiKhoan() {

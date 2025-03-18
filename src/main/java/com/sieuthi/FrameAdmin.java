@@ -3,50 +3,34 @@ package com.sieuthi;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
+import com.FormNhanVien.FormMainNhanVien;
+import com.FormNhanVien.LeftSidebarMenu;
 import com.sieuthi.Admin_PanelThongKe.PanelMainThongKe;
-import com.toedter.calendar.JDateChooser;
+
+import FormTaiKhoan.FormMainAccount;
 
 public class FrameAdmin extends JFrame implements ActionListener {
-    JButton btn1, btn2, btn3, btn4, btn5, btn7;
-    JPanel pn2;
+
+    private JPanel rightPn;
+    private LeftSidebarMenu leftMenu;  
 
     public FrameAdmin() {
         setTitle("Frame Quản Lý");
-        setBounds(100, 100, 1390, 700);
+        setSize(1300, 750);
+        setLocationRelativeTo(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        btn1 = new JButton("<html><center>QUẢN LÝ<br>NHÂN VIÊN</center></html>");
-        btn2 = new JButton("<html><center>QUẢN LÝ<br>SẢN PHẨM</center></html>");
-        btn3 = new JButton("<html><center>QUẢN LÝ<br>DOANH THU</center></html>");
-        btn4 = new JButton("ĐĂNG XUẤT");
+        leftMenu = new LeftSidebarMenu();
+        leftMenu.setActionListener(this);  
 
-        JPanel pn1 = new JPanel();
-        pn1.setBackground(new Color(56, 57, 60));
-        pn1.setBounds(0, 0, 278, 700);
-        pn1.setLayout(new BoxLayout(pn1, BoxLayout.Y_AXIS));
-        pn1.add(btn1);
-        pn1.add(btn2);
-        pn1.add(btn3);
-        pn1.add(btn4);
+        add(leftMenu, BorderLayout.WEST);
 
-        pn2 = new JPanel();
-        panelBaoCao();
+        rightPn = new JPanel();
+        panelNhanVien();  
 
-        TienIch.quanlynutsidebar(btn1);
-        TienIch.quanlynutsidebar(btn2);
-        TienIch.quanlynutsidebar(btn3);
-        TienIch.quanlynutsidebar(btn4);
-
-        btn1.addActionListener((ActionListener) this);
-        btn2.addActionListener((ActionListener) this);
-        btn3.addActionListener((ActionListener) this);
-        btn4.addActionListener((ActionListener) this);
-
-        add(pn1, BorderLayout.WEST);
-        add(pn2, BorderLayout.CENTER);
+        add(rightPn, BorderLayout.CENTER);
 
         setVisible(true);
     }
@@ -56,59 +40,63 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public void panelNhanVien() {
-        pn2.removeAll();
-        pn2.setBackground(new Color(95, 200, 150));
-        btn7 = new JButton("Thêm Nhân Viên");
-        btn7.setMnemonic('T');
-        TienIch.quanlynutsidebar(btn7);
-        pn2.add(btn7);
-        pn2.revalidate();
-        pn2.repaint();
-        add(pn2);
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(95, 200, 150));
+        rightPn.setLayout(new BorderLayout());
+
+        FormMainNhanVien formNhanVien = new FormMainNhanVien();
+        rightPn.add(formNhanVien, BorderLayout.CENTER);
+
+        // Cập nhật lại giao diện
+        rightPn.revalidate();
+        rightPn.repaint();
     }
 
     public void panelSanPham() {
-        pn2.removeAll();
-        pn2.setBackground(new Color(53, 11, 77));
-        btn5 = new JButton("Cập Nhật Thông Tin Sản Phẩm");
-        btn5.setMnemonic('C');
-        TienIch.quanlynutsidebar(btn5);
-        pn2.add(btn5);
-        pn2.revalidate();
-        pn2.repaint();
-        add(pn2);
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(53, 11, 77));
+        rightPn.revalidate();
+        rightPn.repaint();
+        add(rightPn);
     }
 
-    JLabel lbTongDoanhThu, lbChuyenKhoan, lbTienMat, lbGiaVon, lbLoiNhuan, lbChiPhi;
-    JDateChooser to, from;
-    JComboBox<String> chonThoiGian, chonDoiTuong;
-    JTable tb;
-    JButton btnIn, btnGui;
-
     public void panelBaoCao() {
-        pn2.removeAll();
-        pn2.setBackground(new Color(176, 90, 20));
-        pn2.setLayout(new BorderLayout());
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(176, 90, 20));
+        rightPn.setLayout(new BorderLayout());
         PanelMainThongKe mainPanel=new PanelMainThongKe();
-        pn2.add(mainPanel,BorderLayout.CENTER);
-        pn2.revalidate();
-        pn2.repaint();
-        add(pn2);
+        rightPn.add(mainPanel,BorderLayout.CENTER);
+        rightPn.revalidate();
+        rightPn.repaint();
+        add(rightPn);
+    }
+    
+
+    public void panelTaiKhoan() {
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(55, 11, 77));
+
+        FormMainAccount accountPanel = new FormMainAccount();
+        rightPn.add(accountPanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btn1) {
+        if (e.getSource() == leftMenu.getBtnHome()) {
             panelNhanVien();
-        }
-        if (e.getSource() == btn3) {
-            panelBaoCao();
-        }
-        if (e.getSource() == btn2) {
+        } else if (e.getSource() == leftMenu.getBtnEmployee()) {
+            panelNhanVien();
+        } else if (e.getSource() == leftMenu.getBtnProduct()) {
             panelSanPham();
-        }
-        if (e.getSource() == btn4) {
-            JOptionPane.showMessageDialog(null, "Bạn Đã Nhấn Nút Đăng Xuất");
+        } else if (e.getSource() == leftMenu.getBtnReport()) {
+            panelBaoCao();
+        } else if (e.getSource() == leftMenu.getBtnAccount()) {
+            panelTaiKhoan();
+        } else if (e.getSource() == leftMenu.getBtnLogout()) {
+            JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
         }
     }
 }

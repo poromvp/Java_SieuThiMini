@@ -16,8 +16,6 @@ public class StyledTextField extends JTextField {
 
     public StyledTextField() {
         // super(columns);
-
- 
         setFont(new Font("SansSerif", Font.BOLD, 14));
         setForeground(Color.BLACK);
         setBackground(Color.WHITE);

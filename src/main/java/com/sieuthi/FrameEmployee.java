@@ -24,7 +24,6 @@ public class FrameEmployee extends JFrame implements ActionListener {
     private  LeftMenu pn_leftMenu;
     private  Header pn_header;
 
-
     private  InterfaceOrder pn_formOrder;
     private  InterfaceOrderManagement pn_formOrderManagement;
     private  InterfaceHome pn_formHome;
@@ -89,7 +88,6 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
 }

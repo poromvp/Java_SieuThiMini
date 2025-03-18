@@ -4,20 +4,34 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ButtonCustom extends JButton {
+    private boolean isRounded = false; //có cho phép bo góc ko
+
+    public ButtonCustom(String text, int fontsize) {
+        super(text);
+        setFont(new Font("Arial", Font.BOLD, fontsize));
+        setForeground(Color.WHITE);
+        setContentAreaFilled(false);
+        setFocusPainted(false);
+        setBorderPainted(false);
+        this.isRounded = true; //có bo góc
+    }
 
     public ButtonCustom(String text, String type, int fontsize, int w, int h) {
         initComponent(text, type, fontsize, w, h);
     }
-    public ButtonCustom(String text, int fontsize) {
-        this.setBackground(new Color(30,144,255));  // Thiết lập màu nền
-        this.setBorderPainted(false);    // Ẩn viền nút
-        this.setContentAreaFilled(true); // Cho phép vẽ màu nền
-        this.setOpaque(true);            // Đảm bảo nền không trong suốt
-        this.setFont(new Font("Arial", Font.PLAIN, fontsize));
-        this.setText(text);
-        this.setForeground(Color.WHITE);
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        if (isRounded) { // Chỉ bo góc nếu isRounded = true
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(new Color(52, 171, 235)); 
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
+            g2.dispose();
+        }
+        super.paintComponent(g);
     }
-    
+
 
     private void initComponent(String text, String type, int fontsize, int w, int h) {
         ImageIcon addURL = new ImageIcon("src/main/resources/images/icon/addIcon.png");
@@ -66,7 +80,7 @@ public class ButtonCustom extends JButton {
         frame.setSize(500, 300);
         frame.setLayout(new FlowLayout());
 
-        ButtonCustom button = new ButtonCustom("Click Me", "del", 16, 80, 80);
+        ButtonCustom button = new ButtonCustom("lưu",16);
         button.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Button Clicked!"));
 
         frame.add(button);

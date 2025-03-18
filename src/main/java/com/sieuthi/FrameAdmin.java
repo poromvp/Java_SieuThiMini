@@ -62,20 +62,13 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
     public void panelBaoCao() {
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
-        rightPn.setLayout(new BorderLayout()); 
-    
-        PanelMainThongKe mainPanel = new PanelMainThongKe();
-    
-        JScrollPane src = new JScrollPane(mainPanel);
-        src.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        src.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        src.getVerticalScrollBar().setUnitIncrement(16);
-    
-        rightPn.add(src, BorderLayout.CENTER); 
-    
+        rightPn.setBackground(new Color(176, 90, 20));
+        rightPn.setLayout(new BorderLayout());
+        PanelMainThongKe mainPanel=new PanelMainThongKe();
+        rightPn.add(mainPanel,BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
+        add(rightPn);
     }
     
 

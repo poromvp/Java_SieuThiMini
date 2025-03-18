@@ -1,12 +1,58 @@
 package com.sieuthi.NhanVien_BaoCaoBanHang;
 
 import java.awt.*;
-//import java.awt.event.*;
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
+/*import com.sieuthi.NhanVien_BaoCaoBanHang.ExportPDF;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PDFViewer;*/
 
-public class PanelChucNang extends JPanel{
-    public PanelChucNang(JButton btnTimKiem, JButton btnXemChiTiet, JButton btnInBaoCao){
+import com.sieuthi.TienIch;
+
+public class PanelChucNang extends JPanel implements ActionListener{
+
+    JButton btnTimKiem, btnInBaoCao;
+
+    public PanelChucNang() {
+        setBorder(new CompoundBorder(new TitledBorder("Chức Năng"), new EmptyBorder(4, 4, 4, 4)));
+        setLayout(new GridLayout(1, 2, 10, 50));
+
+        btnTimKiem = new JButton("Tìm Kiếm");
+        TienIch.nutStyle(btnTimKiem, "search.png", 24, 90,30);
+        add(btnTimKiem);
+        btnInBaoCao = new JButton("In Báo Cáo");
+        TienIch.nutStyle(btnInBaoCao, "printer.png", 24, 90, 30);
+        add(btnInBaoCao);
+
+        btnTimKiem.addActionListener((ActionListener)this);
+        btnInBaoCao.addActionListener((ActionListener)this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnTimKiem) {
+            PanelTimKiem panel = new PanelTimKiem();
+            // Hiển thị JOptionPane
+            int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            /*
+             * giá trị của biến result sẽ là:
+             * JOptionPane.OK_OPTION (0) nếu bạn nhấn OK.
+             * JOptionPane.CANCEL_OPTION (2) nếu bạn nhấn Cancel.
+             * JOptionPane.CLOSED_OPTION (-1) nếu bạn đóng hộp thoại bằng dấu X (góc trên
+             * phải).
+             */
+            if (result == 0) {
+                System.out.println("Bạn vừa nhập: " + panel.getTxtName());
+            }
+        }
+        if (e.getSource() ==  btnInBaoCao){
+            /*ExportPDF.exportToPDF(tableHoaDon, "doanh_thu.pdf");
+            SwingUtilities.invokeLater(() -> new PDFViewer("doanh_thu.pdf").setVisible(true));*/
+        }
+    }
+
+    public PanelChucNang(JButton btnTimKiem, JButton btnXemChiTiet, JButton btnInBaoCao) {
         setBorder(new CompoundBorder(new TitledBorder("Chức Năng"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbcPnlChucNang = new GridBagConstraints();
@@ -50,7 +96,6 @@ public class PanelChucNang extends JPanel{
         btnInBaoCao.setIcon(in);
         btnInBaoCao.setHorizontalTextPosition(SwingConstants.RIGHT);
         add(btnInBaoCao, gbcPnlChucNang);
-        
-        
+
     }
 }

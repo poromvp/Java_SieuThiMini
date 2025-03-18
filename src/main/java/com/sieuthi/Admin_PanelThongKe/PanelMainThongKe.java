@@ -7,35 +7,39 @@ import com.sieuthi.TienIch;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PanelMainThongKe extends JPanel implements ActionListener{
+public class PanelMainThongKe extends JPanel implements ActionListener {
     JButton btn1;
-    public PanelMainThongKe(){
+
+    public PanelMainThongKe() {
         setBackground(new Color(30, 144, 255));
-        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(1200, 1800));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JTabbedPane tab = new JTabbedPane();
         
         PanelDoanhThu pn1 = new PanelDoanhThu();
-        add(pn1);
+        tab.addTab("Báo cáo doanh thu tổng hợp", pn1);
         
         PanelKhoTongHop pn2 = new PanelKhoTongHop();
-        add(pn2);
-
+        tab.addTab("Báo cáo kho tổng hợp", pn2);
+        
         PanelBaoCaoNV pn3 = new PanelBaoCaoNV();
-        add(pn3);
+        tab.addTab("Báo cáo nhân viên", pn3);
 
-        btn1 = new JButton("In Báo Cáo");
-        TienIch.nutStyle(btn1);
-        btn1.setPreferredSize(new Dimension(120, 50));
-        btn1.setMaximumSize(new Dimension(120, 50));
+        PanelBaoCaoKH pn4 = new PanelBaoCaoKH();
+        tab.addTab("Báo cáo khách hàng", pn4);
+        
+        btn1 = new JButton("In báo cáo");
+        TienIch.nutStyle(btn1, "printer.png", 18, 20, 20);
+        add(tab);
         add(btn1);
 
-        btn1.addActionListener((ActionListener)this);
+        btn1.addActionListener(this);
     }
 
     @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == btn1){
-            DialogXuatBaoCaoTongHop dialog = new DialogXuatBaoCaoTongHop();
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btn1) {
+            new DialogXuatBaoCaoTongHop();
         }
     }
 }

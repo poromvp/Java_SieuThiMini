@@ -9,6 +9,8 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.sieuthi.TienIch;
+
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener{
     JPanel pn1, pn2, pn3;
     JScrollPane scr;
@@ -29,16 +31,20 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(new JLabel("Tổng số hàng nhập trong tháng: "), gbc);
+        JLabel tongdh = new JLabel("<html><center>Tổng số hàng<br>nhập trong tháng:<center></html>");
+        TienIch.labelStyle(tongdh, 1, 20, null);
+        add(tongdh, gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
         tongdonhang = new JLabel("555");
+        TienIch.labelStyle(tongdonhang, 2, 20, null);
         add(tongdonhang, gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        btnMore = new JButton("Xem danh sách hàng đã nhập");
+        btnMore = new JButton("<html><center>Xem danh sách<br>lô hàng đã nhập<center></html>");
+        TienIch.nutStyle(btnMore, "list.png", 20, 40, 20);
         add(btnMore, gbc);
 
         gbc.gridx = 0;
@@ -53,9 +59,15 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         HoaDon.add(b);
         HoaDon.add(c);
         HoaDon.add(d);
-        model = new DefaultTableModel(tencot, 0);
+        model = new DefaultTableModel(tencot, 0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
         refreshTable();
         tb = new JTable(model);
+        TableControl.TableStyle(tb, model);
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
@@ -105,7 +117,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     @Override
     public void actionPerformed(ActionEvent e){
         if(e.getSource() == btnMore){
-            PanelSapHet panel = new PanelSapHet(scr);
+            PanelSapHet panel = new PanelSapHet();
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
         }
     }

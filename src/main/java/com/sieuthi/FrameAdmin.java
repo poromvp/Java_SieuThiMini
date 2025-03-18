@@ -33,7 +33,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         pn1.add(btn4);
 
         pn2 = new JPanel();
-        panelNhanVien();
+        panelBaoCao();
 
         TienIch.quanlynutsidebar(btn1);
         TienIch.quanlynutsidebar(btn2);
@@ -90,16 +90,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         pn2.setBackground(new Color(176, 90, 20));
         pn2.setLayout(new BorderLayout());
         PanelMainThongKe mainPanel=new PanelMainThongKe();
-
-        JScrollPane src = new JScrollPane(mainPanel);
-        src.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        src.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-    
-        // Tăng tốc độ cuộn (tùy chọn)
-        src.getVerticalScrollBar().setUnitIncrement(16);
-
-        pn2.add(src,BorderLayout.CENTER);
-
+        pn2.add(mainPanel,BorderLayout.CENTER);
         pn2.revalidate();
         pn2.repaint();
         add(pn2);

@@ -11,12 +11,55 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class PanelBaoCaoNV extends JPanel implements ActionListener{
-    JButton btnTim, btnXem, btnDS;
+public class PanelBaoCaoNV extends JPanel implements ActionListener {
+    JButton btnTim, btnDS;
     JTable tb;
     DefaultTableModel model;
     JScrollPane scr;
     public ArrayList<hoadontemp> HoaDon = new ArrayList<>();
+    JPanel pn1, pn2;
+
+    public void initPanel1() {
+        pn1.setBorder(new CompoundBorder(new TitledBorder("Chức năng"), new EmptyBorder(4, 4, 4, 4)));
+        pn1.setLayout(new GridLayout(1, 2, 100, 5));
+
+        btnTim = new JButton("Tìm");
+        TienIch.nutStyle(btnTim, "search.png", 20, 50, 25);
+        pn1.add(btnTim);
+
+        btnDS = new JButton("Danh sách nhân viên có doanh số tốt nhất");
+        TienIch.nutStyle(btnDS, "list.png", 20, 50, 25);
+        pn1.add(btnDS);
+
+        btnTim.addActionListener((ActionListener) this);
+        btnDS.addActionListener((ActionListener) this);
+    }
+
+    public void initPanel2(){
+        pn2.setBorder(new CompoundBorder(new TitledBorder("Danh sách"), new EmptyBorder(4, 4, 4, 4)));
+        pn2.setLayout(new BorderLayout());
+        String[] tencot = { "ID", "Name", "Price", "Date" };
+        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
+        hoadontemp b = new hoadontemp("2", "Cam", "10,000", "10/10/2025");
+        hoadontemp c = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
+        hoadontemp d = new hoadontemp("4", "Cam", "10,000", "10/10/2025");
+        HoaDon.add(a);
+        HoaDon.add(b);
+        HoaDon.add(c);
+        HoaDon.add(d);
+        model = new DefaultTableModel(tencot, 0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        refreshTable();
+        tb = new JTable(model);
+        TableControl.TableStyle(tb,model);
+        TableControl.TableEvent(tb,model,"NV");
+        scr = new JScrollPane(tb);
+        pn2.add(scr, BorderLayout.CENTER);
+    }
 
     public PanelBaoCaoNV() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo nhân viên"), new EmptyBorder(4, 4, 4, 4)));
@@ -24,51 +67,19 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener{
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        btnTim = new JButton("Tìm");
-        TienIch.nutStyle(btnTim);
-        add(btnTim, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHWEST;
-        btnXem = new JButton("Xem");
-        TienIch.nutStyle(btnXem);
-        add(btnXem, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.NORTHEAST;
-        btnDS = new JButton("Danh sách nhân viên có doanh số tốt nhất");
-        TienIch.nutStyle(btnDS);
-        add(btnDS, gbc);
-
-        String[] tencot = { "ID", "Name", "Price", "Date" };
-        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp b = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp c = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp d = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        HoaDon.add(a);
-        HoaDon.add(b);
-        HoaDon.add(c);
-        HoaDon.add(d);
-        model = new DefaultTableModel(tencot, 0);
-        refreshTable();
-        tb = new JTable(model);
-        scr = new JScrollPane(tb);
+        pn1 = new JPanel();
+        initPanel1();
+        add(pn1,gbc);
         
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 3;
-        gbc.fill = GridBagConstraints.BOTH;
-        add(scr, gbc);
-
-        btnTim.addActionListener((ActionListener)this);
-        btnXem.addActionListener((ActionListener)this);
-        btnDS.addActionListener((ActionListener)this);
+        pn2 = new JPanel();
+        initPanel2();
+        add(pn2,gbc);
     }
 
     private void refreshTable() {
@@ -79,9 +90,9 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener{
     }
 
     @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == btnTim){
-            PanelTim panel = new PanelTim();
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnTim) {
+            PanelTimVN panel = new PanelTimVN();
             // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -97,26 +108,8 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener{
             }
         }
 
-        if(e.getSource() == btnXem){
-            int dong = tb.getSelectedRow();
-            if (dong == -1) { // Nếu không có dòng nào được chọn
-                JOptionPane.showMessageDialog(null, "Vui lòng chọn một dòng để xem chi tiết!", "Thông báo",
-                        JOptionPane.WARNING_MESSAGE);
-                return; // Thoát khỏi phương thức
-                /*
-                 * Dòng return; có tác dụng kết thúc phương thức ngay lập tức, tránh việc thực
-                 * hiện tiếp các dòng code bên dưới nếu người dùng chưa chọn dòng nào.
-                 */
-            }
-
-            PanelXem panel = new PanelXem(model, dong);
-
-            // Hiển thị JOptionPane với panel tự thiết kế
-            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
-        }
-
-        if(e.getSource() == btnDS){
-            PanelTotNhat panel = new PanelTotNhat(scr);
+        if (e.getSource() == btnDS) {
+            PanelTotNhat panel = new PanelTotNhat();
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
         }
     }

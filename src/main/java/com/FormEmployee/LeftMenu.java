@@ -10,8 +10,8 @@ import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import com.FrameEmployee;
 import com.ComponentCommon.StyledLeftMenubutton;
-import com.sieuthi.FrameEmployee;
 
 public class LeftMenu extends JPanel implements ActionListener {
 

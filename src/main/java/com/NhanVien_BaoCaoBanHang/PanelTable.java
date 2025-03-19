@@ -1,4 +1,4 @@
-package com.sieuthi.NhanVien_BaoCaoBanHang;
+package com.NhanVien_BaoCaoBanHang;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
-import com.sieuthi.Admin_PanelThongKe.TableControl;
-import com.sieuthi.Admin_PanelThongKe.hoadontemp;
+import com.Admin_PanelThongKe.TableControl;
+import com.Admin_PanelThongKe.hoadontemp;
 
 public class PanelTable extends JPanel {
     JTable tb;

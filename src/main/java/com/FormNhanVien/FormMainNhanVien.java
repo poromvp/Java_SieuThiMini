@@ -10,12 +10,18 @@ public class FormMainNhanVien extends JPanel {
         setBackground(Color.WHITE);
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        // Tạo các panel
+
+        // -------------top panel chung
+        JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         FormSearchNV searchPanel = new FormSearchNV();
+        FormFilterNV filterPanel = new FormFilterNV();
+        topPanel.add(searchPanel);
+        topPanel.add(filterPanel);
+
         DetailPanelNV detailPanel = new DetailPanelNV();
         EmployeeTablePanel employeeTablePanel = new EmployeeTablePanel();
 
-        panel.add(searchPanel, BorderLayout.NORTH);
+        panel.add(topPanel, BorderLayout.NORTH);
         panel.add(employeeTablePanel, BorderLayout.CENTER);
         add(panel, BorderLayout.CENTER);
         add(detailPanel, BorderLayout.EAST);

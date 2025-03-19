@@ -38,7 +38,7 @@ public class FormAddAccount extends JFrame {
         inputPanel.add(new JLabel("Trạng thái:"));
         inputPanel.add(cbTrangThai);
 
-        saveButton = new ButtonCustom("Thêm tài khoản",20);
+        saveButton = new ButtonCustom("Thêm tài khoản",20,"blue");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

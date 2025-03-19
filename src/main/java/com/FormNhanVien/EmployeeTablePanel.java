@@ -9,7 +9,7 @@ public class EmployeeTablePanel extends JPanel {
     public EmployeeTablePanel() {
         setLayout(new BorderLayout());
 
-        String[] columnNames = {"Mã NV", "Họ Tên", "Ngày Sinh","Giới tính", "Địa Chỉ", "Chức Vụ", "Số ĐT"};
+        String[] columnNames = {"Mã NV", "Họ Tên", "Ngày Sinh","Giới tính", "Địa Chỉ", "Chức Vụ", "Số ĐT","CCCD","Trạng thái"};
         Object[][] data = {
             {"1", "Nguyễn Văn A", "20","", "Hà Nội"},
             {"2", "Trần Thị B", "22", "","Hồ Chí Minh"},

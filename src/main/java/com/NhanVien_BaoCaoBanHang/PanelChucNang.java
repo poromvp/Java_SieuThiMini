@@ -1,4 +1,4 @@
-package com.sieuthi.NhanVien_BaoCaoBanHang;
+package com.NhanVien_BaoCaoBanHang;
 
 import java.awt.*;
 import java.awt.event.*;

@@ -2,10 +2,10 @@ package com.sieuthi.Admin_PanelThongKe;
 
 import javax.swing.*;
 
-public class PanelTim extends JPanel {
+public class PanelTimKH extends JPanel{
     JTextField txtName, txtAge, txtEmail;
 
-    public PanelTim() {
+    public PanelTimKH() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); // Sắp xếp dọc
         txtName = new JTextField(10);
         txtAge = new JTextField(10);

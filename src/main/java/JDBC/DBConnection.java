@@ -17,7 +17,7 @@ public class DBConnection {
             // Cập nhật URL kết nối cho đúng chuẩn MySQL 8+
             String url = "jdbc:mysql://localhost:3306/sieu_thi_mini?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
             String userName = "root";
-            String password = "#Bestngulon50024072#";
+            String password = "";
 
             // Kết nối đến MySQL
             c = DriverManager.getConnection(url, userName, password);

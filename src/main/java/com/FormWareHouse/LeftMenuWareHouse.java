@@ -1,49 +1,107 @@
 package com.FormWareHouse;
 
-import com.ComponentCommon.StyledLeftMenubutton;
-import com.sieuthi.FrameEmployee;
-import com.sieuthi.FrameQuanLyKho;
+import com.FormNhanVien.LeftSidebarMenu;
 
-import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.Border;
 
-public class LeftMenuWareHouse extends JPanel implements ActionListener {
-    private StyledLeftMenubutton btn_import;
-    private StyledLeftMenubutton btn_product;
-    private StyledLeftMenubutton btn_import_detail;
-    // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
+import static javax.swing.text.StyleConstants.setBackground;
 
-    public LeftMenuWareHouse() {
+public class LeftMenuWareHouse extends JPanel implements  ActionListener{
+    private JButton btnImport;
+    private JButton btnProduct;
+    private JButton btnLogout;
 
+    private ActionListener listener;
 
-        setBackground(new Color(28, 173, 193));
-        setPreferredSize(new Dimension(230, getHeight()));
-        setLayout(new FlowLayout());
-        Border emptyBorder = BorderFactory.createEmptyBorder(0, 10, 0, 0);
+    public JButton getBtnImport() {
+        return btnImport;
+    }
+
+    public JButton getBtnProduct() {
+        return btnProduct;
+    }
+
+    public ActionListener getListener() {
+        return listener;
+    }
+
+    public JButton getBtnLogout() {
+        return btnLogout;
+    }
+
+    public LeftMenuWareHouse(){
+        setBackground(Color.white);
+        setMaximumSize(new Dimension(230, getHeight()));
+        setLayout(new BorderLayout());
+        JPanel topPanel = new JPanel();
+        topPanel.setLayout(new GridLayout(5, 1, 2, 2));
+        topPanel.setBackground(Color.WHITE);
+        JPanel botPanel = new JPanel();
+        botPanel.setBackground(Color.WHITE);
+
+        btnImport = new JButton("Nhập hàng", new ImageIcon("src/main/resources/images/ImportLogo.png"));
+        btnProduct = new JButton("Sản phẩm", new ImageIcon("src/main/resources/images/product.png"));
+        btnLogout = new JButton("Đăng Xuất", new ImageIcon("src/main/resources/images/exit.png"));
+
+        setButtonStyle(btnImport);
+        setButtonStyle(btnProduct);
+        setButtonStyle(btnLogout);
+
+        btnImport.addActionListener(this);
+        btnProduct.addActionListener(this);
+        btnLogout.addActionListener(this);
+
+        topPanel.add(btnImport);
+        topPanel.add(btnProduct);
+        botPanel.add(btnLogout);
+        add(topPanel,BorderLayout.NORTH);
+        add(botPanel,BorderLayout.SOUTH);
+
+    }
+
+    public void setButtonStyle(JButton button) {
+        button.setBackground(Color.WHITE);
+        button.setForeground(Color.BLACK);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Arial", Font.BOLD, 14)); // Kiểu chữ
+        button.setPreferredSize(new Dimension(200, 60)); // Kích thước nút
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Con trỏ khi hover
+        Border emptyBorder = BorderFactory.createEmptyBorder(20,10,20,10);
         setBorder(emptyBorder);
-
-        btn_import = new StyledLeftMenubutton("src/main/resources/images/import.png", "Nhap hang");
-        btn_product = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quan ly san pham");
-
-        btn_import.addActionListener(this);
-        btn_product.addActionListener(this);
-
-        add(btn_import);
-        add(btn_product);
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(200, 200, 200)); // Màu nền khi hover
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(240, 240, 240)); // Màu nền khi không hover
+            }
+        });
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btn_import) {
-            System.out.println("click btn_import");
-            FrameQuanLyKho.setPage("formImport", "Nhập hàng");
+        if (listener != null) {
+            listener.actionPerformed(e);
         }
-        if (e.getSource() == btn_product) {
-            System.out.println("click btn_product");
-            FrameQuanLyKho.setPage("formProduct", "Quản lý sản phẩm");
-        }
+    }
+
+    public void setActionListener(ActionListener listener) {
+        this.listener = listener;
+    }
+
+    public static void main(String[] args) {
+        JFrame frame = new JFrame("Detail Panel Test");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(400, 700);
+
+        LeftMenuWareHouse TEST = new LeftMenuWareHouse();
+
+        frame.add(TEST);
+        frame.setVisible(true);
     }
 }

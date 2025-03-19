@@ -97,10 +97,10 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         setBorder(emptyBorder);
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(200, 200, 200)); // Màu nền khi hover
+                button.setBackground(new Color(240, 240, 240)); // Màu nền khi hover
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(240, 240, 240)); // Màu nền khi không hover
+                button.setBackground(Color.WHITE); // Màu nền khi không hover
             }
         });
     }

@@ -1,7 +1,5 @@
 package com.sieuthi;
 
-import com.ComponentCommon.Header;
-import com.FormEmployee.LeftMenu;
 import com.FormWareHouse.FormImport;
 import com.FormWareHouse.FormProduct;
 import com.FormWareHouse.LeftMenuWareHouse;
@@ -11,52 +9,66 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class FrameQuanLyKho extends JFrame  {
+public class FrameQuanLyKho extends JFrame  implements ActionListener{
+    private JPanel rightPn;
     private LeftMenuWareHouse pn_leftMenu;
-    private Header pn_header;
-    private FormImport pn_import;
-    private FormProduct pn_product;
-
-    private static  JLabel lbl_title = new JLabel("Quản lý sản phẩm");
-    private static JPanel pn_body;
-    private  static  JPanel pn_cardLayout;
-    private static CardLayout cardLayout;
 
     public FrameQuanLyKho(){
-        setLayout(new BorderLayout());
-        setSize(1300, 750);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Frame Quản Lý Kho");
+        setSize(1300,750);
         setLocationRelativeTo(null);
+        setResizable(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        pn_header =new Header();
-        pn_leftMenu=new LeftMenuWareHouse();
-        pn_import= new FormImport();
-        pn_product= new FormProduct();
+        pn_leftMenu = new LeftMenuWareHouse();
+        pn_leftMenu.setActionListener(this);
 
-        cardLayout = new CardLayout();
-        pn_cardLayout = new JPanel(cardLayout);
-
-        pn_cardLayout.add(pn_import,"formImport");
-        pn_cardLayout.add(pn_product,"formProduct");
-
-        pn_body = new JPanel(new BorderLayout());
-        lbl_title.setHorizontalAlignment(JLabel.CENTER);
-        pn_body.add(lbl_title, BorderLayout.NORTH);
-        pn_body.add(pn_cardLayout, BorderLayout.CENTER);
-
-
-        add(pn_header, BorderLayout.NORTH);
-      add(pn_body,BorderLayout.CENTER);
-        add(pn_leftMenu, BorderLayout.WEST);
+        add(pn_leftMenu,BorderLayout.WEST);
+        rightPn = new JPanel();
+        panelImport();
+        add(rightPn,BorderLayout.CENTER);
         setVisible(true);
+    }
+
+    public void panelImport(){
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(55, 11, 77));
+        rightPn.setLayout(new BorderLayout());
+
+        FormImport importPanel = new FormImport();
+        rightPn.add(importPanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
+    }
+
+    public void panelProduct(){
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(55, 11, 77));
+        rightPn.setLayout(new BorderLayout());
+
+        FormProduct productPanel= new FormProduct();
+        rightPn.add(productPanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
     }
 
     public static void main(String[] args) {
         new FrameQuanLyKho();
     }
-    public static void setPage(String pagename,String title){
-        lbl_title.setText(title);
-        cardLayout.show(pn_cardLayout,pagename);
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource()== pn_leftMenu.getBtnImport()){
+            panelImport();
+        } else if (e.getSource()== pn_leftMenu.getBtnProduct()) {
+            panelProduct();
+        }
+        else if(e.getSource()==pn_leftMenu.getBtnLogout()){
+            JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
+        }
     }
 }
 

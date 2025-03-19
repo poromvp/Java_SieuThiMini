@@ -16,7 +16,7 @@ public class FormProduct extends JPanel {
         timKiempnl.setLayout(new GridLayout(1, 3, 5, 5));
         String timKiemCombo[]={"Tìm theo mã",
                 "Tìm theo tên sản phẩm",
-                "Tìm theo loại sản phẩm"};
+                "Tìm theo loại sản phẩm "};
         JComboBox timKiemCb= new JComboBox(timKiemCombo);
         JTextField timKiemtxt = new JTextField();// Nhap thong tin tim kiem
         JButton timBtn = new JButton("Tìm");
@@ -28,7 +28,7 @@ public class FormProduct extends JPanel {
         // Tạo bảng
         JButton themBtn = new JButton("Thêm");
         themBtn.addActionListener(e -> {
-            JDialog info_product = new JDialog();
+            JDialog info_product = new JDialog((Frame) null,true);
             info_product.setSize(400,300);
             info_product.setLocationRelativeTo(null);
             info_product.setLayout(new BorderLayout());

@@ -15,7 +15,7 @@ import com.FormEmployee.InterfaceHome;
 import com.FormEmployee.InterfaceOrder;
 import com.FormEmployee.InterfaceOrderManagement;
 import com.FormEmployee.LeftMenu;
-import com.NhanVien_BaoCaoBanHang;
+import com.NhanVien_BaoCaoBanHang.PanelMainBaoCao;
 
 public class FrameEmployee extends JFrame implements ActionListener {
  

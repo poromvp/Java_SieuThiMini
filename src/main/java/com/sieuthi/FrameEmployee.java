@@ -6,7 +6,6 @@ import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,10 +15,10 @@ import com.FormEmployee.InterfaceHome;
 import com.FormEmployee.InterfaceOrder;
 import com.FormEmployee.InterfaceOrderManagement;
 import com.FormEmployee.LeftMenu;
+import com.sieuthi.NhanVien_BaoCaoBanHang.PanelMainBaoCao;
 
 public class FrameEmployee extends JFrame implements ActionListener {
-    JButton btn1, btn2, btn3, btn4, btn5, btn7;
-    JPanel pn2;
+ 
 
     private  LeftMenu pn_leftMenu;
     private  Header pn_header;
@@ -27,6 +26,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
     private  InterfaceOrder pn_formOrder;
     private  InterfaceOrderManagement pn_formOrderManagement;
     private  InterfaceHome pn_formHome;
+    private  PanelMainBaoCao panelMainBaoCao;
 
 
     private static  JLabel lbl_title = new JLabel("Trang Chủ");
@@ -56,10 +56,12 @@ public class FrameEmployee extends JFrame implements ActionListener {
         pn_formOrder = new InterfaceOrder();
         pn_formOrderManagement = new InterfaceOrderManagement();
         pn_formHome = new InterfaceHome();
+        panelMainBaoCao = new PanelMainBaoCao();
 
         pn_cardLayout.add(pn_formHome, "formHome");
         pn_cardLayout.add(pn_formOrder, "formOrder");
         pn_cardLayout.add(pn_formOrderManagement, "formOrderManagement");
+        pn_cardLayout.add(panelMainBaoCao, "formReport");
 
         
         pn_body = new JPanel(new BorderLayout());

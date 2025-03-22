@@ -69,48 +69,13 @@ public class FormImport  extends JPanel {
             );
 
             if (result == JOptionPane.YES_OPTION) {
-                //Tao dialog
-                JDialog info_import = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Nhập thông tin", true);
-                info_import.setLayout(new BorderLayout());
-                info_import.setSize(400,300);
-                info_import.setLocationRelativeTo(null);
-
-                // Panel thông tin
-                JPanel thongTinPnl = new JPanel();
-                thongTinPnl.setBorder(BorderFactory.createTitledBorder("Thông Tin"));
-                thongTinPnl.setLayout(new GridLayout(6, 2, 5, 5));
-
-                thongTinPnl.add(new JLabel("Mã sản phẩm: "));
-                StyledTextField maSP = new StyledTextField();
-                thongTinPnl.add(maSP);
-
-                thongTinPnl.add(new JLabel("Số lượng:"));
-                StyledTextField soLuong = new StyledTextField();
-                thongTinPnl.add(soLuong);
-
-                thongTinPnl.add(new JLabel("Giá:"));
-                StyledTextField gia = new StyledTextField();
-                thongTinPnl.add(gia);
-
-                thongTinPnl.add(new JLabel("Nhà cung cấp:"));
-                StyledTextField ngaySX = new StyledTextField();
-                thongTinPnl.add(ngaySX);
-
-                thongTinPnl.add(new JLabel("Lô hàng:"));
-                StyledTextField ngayHH = new StyledTextField();
-                thongTinPnl.add(ngayHH);
-
-                JButton btnXacNhan = new JButton("Xác nhận");
-                JButton btnHuy = new JButton("Hủy");
-
-                JPanel panelBtn = new JPanel();
-                panelBtn.setLayout(new FlowLayout(FlowLayout.CENTER));
-                panelBtn.add(btnXacNhan);
-                panelBtn.add(btnHuy);
-
-                info_import.add(thongTinPnl,BorderLayout.CENTER);
-                info_import.add(panelBtn, BorderLayout.SOUTH);
-                info_import.setVisible(true);
+               FormAddImport addImport = new FormAddImport();
+               JDialog addImportDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this),"Đơn nhập hàng",true);
+               addImportDialog.setSize(900,750);
+               addImportDialog.setLayout(new BorderLayout());
+               addImportDialog.setLocationRelativeTo(null);
+               addImportDialog.add(addImport,BorderLayout.CENTER);
+               addImportDialog.setVisible(true);
 
             }
         });

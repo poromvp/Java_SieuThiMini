@@ -43,6 +43,18 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
         JPanel botPanel = new JPanel();
         botPanel.setBackground(Color.WHITE);
 
+
+//        //Thay doi kich thuoc anh
+//        ImageIcon originalIcon = new ImageIcon("src/main/resources/images/icon/Logo_1.png");
+//        Image originalImage = originalIcon.getImage();
+//        Image resizedImage = originalImage.getScaledInstance(200,200,Image.SCALE_SMOOTH);
+//        ImageIcon resizedIcon = new ImageIcon(resizedImage);
+
+        //Logo
+        JLabel logoLabel = new JLabel( new ImageIcon("src/main/resources/images/icon/Logo_2.png"));
+        logoLabel.setHorizontalAlignment(JLabel.CENTER);
+        add(logoLabel,BorderLayout.NORTH);
+
         btnImport = new JButton("Nhập hàng", new ImageIcon("src/main/resources/images/ImportLogo.png"));
         btnProduct = new JButton("Sản phẩm", new ImageIcon("src/main/resources/images/product.png"));
         btnLogout = new JButton("Đăng Xuất", new ImageIcon("src/main/resources/images/exit.png"));
@@ -58,7 +70,7 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
         topPanel.add(btnImport);
         topPanel.add(btnProduct);
         botPanel.add(btnLogout);
-        add(topPanel,BorderLayout.NORTH);
+        add(topPanel,BorderLayout.CENTER);
         add(botPanel,BorderLayout.SOUTH);
 
     }

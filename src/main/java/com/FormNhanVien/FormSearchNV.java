@@ -7,14 +7,15 @@ import java.awt.*;
 
 public class FormSearchNV extends JPanel {
     public FormSearchNV() {
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new BorderLayout());  // BorderLayout giúp kéo giãn searchField
         setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
         setBackground(Color.WHITE);
         
         StyledTextField searchField = new StyledTextField();
-        add(searchField);
-    }
+        searchField.setColumns(50);
 
+        add(searchField, BorderLayout.NORTH); // Căn giữa và kéo giãn searchField
+    }
     public static void main(String[] args) {
         JFrame frame = new JFrame("Search Panel Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

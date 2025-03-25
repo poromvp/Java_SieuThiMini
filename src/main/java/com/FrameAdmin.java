@@ -91,6 +91,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
         rightPn.revalidate();
         rightPn.repaint();
+        add(rightPn);
     }
 
     @Override

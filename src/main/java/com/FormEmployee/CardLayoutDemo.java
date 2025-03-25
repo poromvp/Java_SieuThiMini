@@ -45,11 +45,11 @@ public class CardLayoutDemo {
         JButton btnShowCard2 = new JButton("Show Card 2");
 
         // Gán sự kiện cho các nút
-        btnNext.addActionListener(e -> cardLayout.next(cardPanel));
-        btnPrevious.addActionListener(e -> cardLayout.previous(cardPanel));
-        btnFirst.addActionListener(e -> cardLayout.first(cardPanel));
-        btnLast.addActionListener(e -> cardLayout.last(cardPanel));
-        btnShowCard2.addActionListener(e -> cardLayout.show(cardPanel, "Card2"));
+        btnNext.addActionListener(_ -> cardLayout.next(cardPanel));
+        btnPrevious.addActionListener(_ -> cardLayout.previous(cardPanel));
+        btnFirst.addActionListener(_ -> cardLayout.first(cardPanel));
+        btnLast.addActionListener(_ -> cardLayout.last(cardPanel));
+        btnShowCard2.addActionListener(_ -> cardLayout.show(cardPanel, "Card2"));
 
         // Thêm nút vào panel
         buttonPanel.add(btnPrevious);

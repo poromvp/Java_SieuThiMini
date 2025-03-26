@@ -1,5 +1,6 @@
 package com.FormWareHouse;
 
+import com.ComponentCommon.ButtonCustom;
 import com.ComponentCommon.StyledTable;
 
 import javax.swing.*;
@@ -26,7 +27,7 @@ public class FormProduct extends JPanel {
         add(timKiempnl,BorderLayout.NORTH);
 
         // Tạo bảng
-        JButton themBtn = new JButton("Thêm");
+        ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,20,20);
         themBtn.addActionListener(e -> {
             JDialog info_product = new JDialog((Frame) null,true);
             info_product.setSize(400,300);
@@ -36,9 +37,9 @@ public class FormProduct extends JPanel {
             info_product.setVisible(true);
         });
 
-        JButton suaBtn = new JButton("Sửa");
+        ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,20,20);
 
-        JButton xoaBtn = new JButton("Xóa");
+        ButtonCustom xoaBtn = new ButtonCustom("Xóa","del",16,20,20);
 
 
         String[] headerCol = {"Mã SP", "Tên SP", "Giá", "Loai","Nhà cung cấp"};

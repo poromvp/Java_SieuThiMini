@@ -8,6 +8,7 @@ import com.FormNhanVien.LeftSidebarMenu;
 import com.FormTaiKhoan.FormMainAccount;
 import com.Admin_PanelThongKe.PanelMainThongKe;
 import com.DashBoardPanel.MainDashBoard;
+import com.FormWareHouse.FormProduct;
 
 public class FrameAdmin extends JFrame implements ActionListener {
 
@@ -54,10 +55,14 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
     public void panelSanPham() {
         rightPn.removeAll();
-        rightPn.setBackground(new Color(53, 11, 77));
+        rightPn.setBackground(new Color(55, 11, 77));
+        rightPn.setLayout(new BorderLayout());
+
+        FormProduct productPanel= new FormProduct();
+        rightPn.add(productPanel, BorderLayout.CENTER);
+
         rightPn.revalidate();
         rightPn.repaint();
-        add(rightPn);
     }
 
     public void panelBaoCao() {

@@ -7,6 +7,7 @@ import com.FormNhanVien.FormMainNhanVien;
 import com.FormNhanVien.LeftSidebarMenu;
 import com.FormTaiKhoan.FormMainAccount;
 import com.Admin_PanelThongKe.PanelMainThongKe;
+import com.DashBoardPanel.MainDashBoard;
 
 public class FrameAdmin extends JFrame implements ActionListener {
 
@@ -27,7 +28,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
-        panelNhanVien();  
+        panelDashBoard();  
 
         add(rightPn, BorderLayout.CENTER);
 
@@ -69,7 +70,6 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
         add(rightPn);
     }
-    
 
     public void panelTaiKhoan() {
         rightPn.removeAll();
@@ -82,10 +82,22 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
     }
 
+    public void panelDashBoard(){
+        rightPn.removeAll();
+        rightPn.setLayout(new BorderLayout());
+
+        MainDashBoard homePanel = new MainDashBoard();
+        rightPn.add(homePanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
+        add(rightPn);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == leftMenu.getBtnHome()) {
-            panelNhanVien();
+            panelDashBoard();
         } else if (e.getSource() == leftMenu.getBtnEmployee()) {
             panelNhanVien();
         } else if (e.getSource() == leftMenu.getBtnProduct()) {

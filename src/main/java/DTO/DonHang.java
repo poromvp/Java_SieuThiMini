@@ -2,10 +2,10 @@ package DTO;
 import java.util.Date;
 
 public class DonHang {
-    private String maDH;       // Mã đơn hàng (Khóa chính)
-    private String maHK;       // Mã khách hàng (Khóa ngoại)
-    private String maKM;       // Mã khuyến mãi (Khóa ngoại)
-    private String maNV;       // Mã nhân viên (Khóa ngoại)
+    private int maDH;       // Mã đơn hàng (Khóa chính)
+    private int maHK;       // Mã khách hàng (Khóa ngoại)
+    private int maKM;       // Mã khuyến mãi (Khóa ngoại)
+    private int maNV;       // Mã nhân viên (Khóa ngoại)
     private String ptThanhToan; // Phương thức thanh toán
     private double tongTien;   // Tổng tiền
     private Date ngayTT;       // Ngày thanh toán
@@ -16,7 +16,7 @@ public class DonHang {
     }
 
     // Constructor có tham số
-    public DonHang(String maDH, String maHK, String maKM, String maNV, String ptThanhToan, double tongTien, Date ngayTT, boolean trangThai) {
+    public DonHang(int maDH, int maHK, int maKM, int maNV, String ptThanhToan, double tongTien, Date ngayTT, boolean trangThai) {
         this.maDH = maDH;
         this.maHK = maHK;
         this.maKM = maKM;
@@ -28,35 +28,35 @@ public class DonHang {
     }
 
     // Getter và Setter
-    public String getMaDH() {
+    public int getMaDH() {
         return maDH;
     }
 
-    public void setMaDH(String maDH) {
+    public void setMaDH(int maDH) {
         this.maDH = maDH;
     }
 
-    public String getMaHK() {
+    public int getMaHK() {
         return maHK;
     }
 
-    public void setMaHK(String maHK) {
+    public void setMaHK(int maHK) {
         this.maHK = maHK;
     }
 
-    public String getMaKM() {
+    public int getMaKM() {
         return maKM;
     }
 
-    public void setMaKM(String maKM) {
+    public void setMaKM(int maKM) {
         this.maKM = maKM;
     }
 
-    public String getMaNV() {
+    public int getMaNV() {
         return maNV;
     }
 
-    public void setMaNV(String maNV) {
+    public void setMaNV(int maNV) {
         this.maNV = maNV;
     }
 

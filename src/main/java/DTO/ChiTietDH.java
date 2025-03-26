@@ -1,8 +1,8 @@
 package DTO;
 
 public class ChiTietDH {
-    private String maDH;    // Mã đơn hàng (Khóa ngoại)
-    private String maSP;    // Mã sản phẩm (Khóa ngoại)
+    private int maDH;    // Mã đơn hàng (Khóa ngoại)
+    private int maSP;    // Mã sản phẩm (Khóa ngoại)
     private int soLuong;    // Số lượng sản phẩm
     private boolean trangThai; // Trạng thái của chi tiết đơn hàng
 
@@ -11,7 +11,7 @@ public class ChiTietDH {
     }
 
     // Constructor có tham số
-    public ChiTietDH(String maDH, String maSP, int soLuong, boolean trangThai) {
+    public ChiTietDH(int maDH, int maSP, int soLuong, boolean trangThai) {
         this.maDH = maDH;
         this.maSP = maSP;
         this.soLuong = soLuong;
@@ -19,19 +19,19 @@ public class ChiTietDH {
     }
 
     // Getter và Setter
-    public String getMaDH() {
+    public int getMaDH() {
         return maDH;
     }
 
-    public void setMaDH(String maDH) {
+    public void setMaDH(int maDH) {
         this.maDH = maDH;
     }
 
-    public String getMaSP() {
+    public int getMaSP() {
         return maSP;
     }
 
-    public void setMaSP(String maSP) {
+    public void setMaSP(int maSP) {
         this.maSP = maSP;
     }
 
@@ -51,14 +51,5 @@ public class ChiTietDH {
         this.trangThai = trangThai;
     }
 
-    // Phương thức hiển thị thông tin
-    @Override
-    public String toString() {
-        return "ChiTietDH{" +
-                "maDH='" + maDH + '\'' +
-                ", maSP='" + maSP + '\'' +
-                ", soLuong=" + soLuong +
-                ", trangThai=" + trangThai +
-                '}';
-    }
+  
 }

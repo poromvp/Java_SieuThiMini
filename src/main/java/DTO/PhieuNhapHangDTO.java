@@ -2,7 +2,7 @@ package DTO;
 
 import java.util.Date;
 
-public class PhieuNhapHang {
+public class PhieuNhapHangDTO {
     private int maPNH;       // Mã phiếu nhập hàng (PK)
     private String tenPNH;   // Tên phiếu nhập hàng
     private int maNCC;       // Mã nhà cung cấp (FK)
@@ -11,10 +11,10 @@ public class PhieuNhapHang {
     private String trangThai; // Trạng thái
 
     // Constructor không tham số
-    public PhieuNhapHang() {}
+    public PhieuNhapHangDTO() {}
 
     // Constructor đầy đủ tham số
-    public PhieuNhapHang(int maPNH, String tenPNH, int maNCC, int maNV, Date ngayNhap, String trangThai) {
+    public PhieuNhapHangDTO(int maPNH, String tenPNH, int maNCC, int maNV, Date ngayNhap, String trangThai) {
         this.maPNH = maPNH;
         this.tenPNH = tenPNH;
         this.maNCC = maNCC;

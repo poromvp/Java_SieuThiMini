@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-import DTO.SanPham;
+import DTO.SanPhamDTO;
 import JDBC.DBConnection;
 
 public class SanPhamDAL {
@@ -12,9 +12,9 @@ public class SanPhamDAL {
 
 
 
-    public static SanPham getSanPhamByMaSanPham(int id) {
+    public static SanPhamDTO getSanPhamByMaSanPham(int id) {
         String sql = "SELECT * FROM SanPham WHERE id = ?";
-        SanPham sanPham = null;
+        SanPhamDTO sanPham = null;
         
         try {
             Connection conn = DBConnection.getConnection();
@@ -23,7 +23,7 @@ public class SanPhamDAL {
             ResultSet rs = stmt.executeQuery();
             
             if (rs.next()) {
-                sanPham = new SanPham();
+                sanPham = new SanPhamDTO();
                 sanPham.setMaSP(rs.getInt("maSP"));
                 sanPham.setTenSP(rs.getString("tenSP"));
                 sanPham.setGia(rs.getDouble("gia"));

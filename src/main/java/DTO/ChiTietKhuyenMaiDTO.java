@@ -1,17 +1,17 @@
 package DTO;
 
-public class ChiTietKM {
+public class ChiTietKhuyenMaiDTO {
     private int maKM;  // Mã khuyến mãi (Khóa ngoại)
     private int maSP;  // Mã sản phẩm (Khóa ngoại)
     private double tiLeGiam; // Tỉ lệ giảm giá
     private boolean trangThai; // Trạng thái khuyến mãi
 
     // Constructor không tham số
-    public ChiTietKM() {
+    public ChiTietKhuyenMaiDTO() {
     }
 
     // Constructor có tham số
-    public ChiTietKM(int maKM, int maSP, double tiLeGiam, boolean trangThai) {
+    public ChiTietKhuyenMaiDTO(int maKM, int maSP, double tiLeGiam, boolean trangThai) {
         this.maKM = maKM;
         this.maSP = maSP;
         this.tiLeGiam = tiLeGiam;

@@ -1,17 +1,17 @@
 package DTO;
 
 
-public class QuayHang {
+public class QuayHangDTO {
     private int maQH;       // Mã quầy hàng (PK)
     private int maLSP;      // Mã loại sản phẩm (FK)
     private String tenQH;   // Tên quầy hàng
     private String trangThai; // Trạng thái (VD: "Hoạt động", "Không hoạt động")
 
     // Constructor không tham số
-    public QuayHang() {}
+    public QuayHangDTO() {}
 
     // Constructor đầy đủ tham số
-    public QuayHang(int maQH, int maLSP, String tenQH, String trangThai) {
+    public QuayHangDTO(int maQH, int maLSP, String tenQH, String trangThai) {
         this.maQH = maQH;
         this.maLSP = maLSP;
         this.tenQH = tenQH;

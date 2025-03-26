@@ -1,17 +1,17 @@
 package DTO;
 
-public class ChiTietDH {
+public class ChiTietDonHangDTO {
     private int maDH;    // Mã đơn hàng (Khóa ngoại)
     private int maSP;    // Mã sản phẩm (Khóa ngoại)
     private int soLuong;    // Số lượng sản phẩm
     private boolean trangThai; // Trạng thái của chi tiết đơn hàng
 
     // Constructor không tham số
-    public ChiTietDH() {
+    public ChiTietDonHangDTO() {
     }
 
     // Constructor có tham số
-    public ChiTietDH(int maDH, int maSP, int soLuong, boolean trangThai) {
+    public ChiTietDonHangDTO(int maDH, int maSP, int soLuong, boolean trangThai) {
         this.maDH = maDH;
         this.maSP = maSP;
         this.soLuong = soLuong;

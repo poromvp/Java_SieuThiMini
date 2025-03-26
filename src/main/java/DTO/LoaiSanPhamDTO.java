@@ -2,16 +2,16 @@ package DTO;
 
 
 
-public class LoaiSP {
+public class LoaiSanPhamDTO {
     private int maLSP;
     private String tenLoaiSP;
     private String trangThai;
 
     // Constructor không tham số
-    public LoaiSP() {}
+    public LoaiSanPhamDTO() {}
 
     // Constructor đầy đủ tham số
-    public LoaiSP(int maLSP, String tenLoaiSP, String trangThai) {
+    public LoaiSanPhamDTO(int maLSP, String tenLoaiSP, String trangThai) {
         this.maLSP = maLSP;
         this.tenLoaiSP = tenLoaiSP;
         this.trangThai = trangThai;

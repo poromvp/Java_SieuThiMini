@@ -1,6 +1,6 @@
 package DTO;
 
-public class TaiKhoan {
+public class TaiKhoanDTO {
     private int maNV;         // Mã nhân viên (FK)
     private String tenTK;     // Tên tài khoản
     private String matKhau;   // Mật khẩu
@@ -11,10 +11,10 @@ public class TaiKhoan {
     private String trangThai; // Trạng thái tài khoản (Hoạt động, Khóa, ...)
 
     // Constructor không tham số
-    public TaiKhoan() {}
+    public TaiKhoanDTO() {}
 
     // Constructor đầy đủ tham số
-    public TaiKhoan(int maNV, String tenTK, String matKhau, String sdt, String quyen, String gmail, String tenAnh, String trangThai) {
+    public TaiKhoanDTO(int maNV, String tenTK, String matKhau, String sdt, String quyen, String gmail, String tenAnh, String trangThai) {
         this.maNV = maNV;
         this.tenTK = tenTK;
         this.matKhau = matKhau;

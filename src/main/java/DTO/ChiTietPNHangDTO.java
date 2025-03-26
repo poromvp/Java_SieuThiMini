@@ -1,7 +1,7 @@
 package DTO;
 
 
-public class ChiTietPNH {
+public class ChiTietPNHangDTO {
     private int maCTPNH;   // Mã chi tiết phiếu nhập hàng (PK)
     private int maPNH;     // Mã phiếu nhập hàng (FK)
     private int maSP;      // Mã sản phẩm (FK)
@@ -11,10 +11,10 @@ public class ChiTietPNH {
     private String trangThai; // Trạng thái của chi tiết nhập hàng
 
     // Constructor không tham số
-    public ChiTietPNH() {}
+    public ChiTietPNHangDTO() {}
 
     // Constructor đầy đủ tham số
-    public ChiTietPNH(int maCTPNH, int maPNH, int maSP, int maLH, int soLuong, double giaNhap, String trangThai) {
+    public ChiTietPNHangDTO(int maCTPNH, int maPNH, int maSP, int maLH, int soLuong, double giaNhap, String trangThai) {
         this.maCTPNH = maCTPNH;
         this.maPNH = maPNH;
         this.maSP = maSP;

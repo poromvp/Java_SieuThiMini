@@ -1,6 +1,6 @@
 package DTO;
 
-public class NhaCCC {
+public class NhaCungCapDTO {
     private int maNCC;
     private String tenNCC;
     private String sdt;
@@ -8,10 +8,10 @@ public class NhaCCC {
     private String trangThai;
 
     // Constructor không tham số
-    public NhaCCC() {}
+    public NhaCungCapDTO() {}
 
     // Constructor đầy đủ tham số
-    public NhaCCC(int maNCC, String tenNCC, String sdt, String diaChi, String trangThai) {
+    public NhaCungCapDTO(int maNCC, String tenNCC, String sdt, String diaChi, String trangThai) {
         this.maNCC = maNCC;
         this.tenNCC = tenNCC;
         this.sdt = sdt;

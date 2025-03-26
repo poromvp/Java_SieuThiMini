@@ -2,17 +2,17 @@ package DTO;
 
 import java.util.Date;
 
-public class LoSX {
+public class LoSanXuatDTO {
     private int maLH;        // Mã lô hàng (PK)
     private String diaChi;   // Địa chỉ sản xuất
     private Date ngaySX;     // Ngày sản xuất
     private Date ngayHH;     // Ngày hết hạn
 
     // Constructor không tham số
-    public LoSX() {}
+    public LoSanXuatDTO() {}
 
     // Constructor đầy đủ tham số
-    public LoSX(int maLH, String diaChi, Date ngaySX, Date ngayHH) {
+    public LoSanXuatDTO(int maLH, String diaChi, Date ngaySX, Date ngayHH) {
         this.maLH = maLH;
         this.diaChi = diaChi;
         this.ngaySX = ngaySX;

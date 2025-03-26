@@ -4,7 +4,7 @@ package DTO;
 
 import java.util.Date;
 
-public class NhanVien {
+public class NhanVienDTO {
     private int maNV;       // Mã nhân viên (PK)
     private String tenNV;   // Tên nhân viên
     private String gioiThieu; // Giới thiệu nhân viên
@@ -17,10 +17,10 @@ public class NhanVien {
     private String trangThai; // Trạng thái nhân viên
 
     // Constructor không tham số
-    public NhanVien() {}
+    public NhanVienDTO() {}
 
     // Constructor đầy đủ tham số
-    public NhanVien(int maNV, String tenNV, String gioiThieu, Date ngaySinh, String diaChi, 
+    public NhanVienDTO(int maNV, String tenNV, String gioiThieu, Date ngaySinh, String diaChi, 
                     String cccd, String chucVu, String sdt, double luong, String trangThai) {
         this.maNV = maNV;
         this.tenNV = tenNV;

@@ -2,7 +2,7 @@ package DTO;
 
 import java.sql.Date;
 
-public class KhuyenMai {
+public class KhuyenMaiDTO {
     private int maKM;
     private String tenKM;
     private Date ngayKT;
@@ -11,11 +11,11 @@ public class KhuyenMai {
     private String trangThai;
 
     // Constructor không tham số
-    public KhuyenMai() {
+    public KhuyenMaiDTO() {
     }
 
     // Constructor có tham số
-    public KhuyenMai(int maKM, String tenKM, Date ngayKT, Date ngayHH, double tileGiam, String trangThai) {
+    public KhuyenMaiDTO(int maKM, String tenKM, Date ngayKT, Date ngayHH, double tileGiam, String trangThai) {
         this.maKM = maKM;
         this.tenKM = tenKM;
         this.ngayKT = ngayKT;

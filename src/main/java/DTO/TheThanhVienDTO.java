@@ -2,7 +2,7 @@ package DTO;
 
 import java.util.Date;
 
-public class TheThanhVien {
+public class TheThanhVienDTO {
     private int maTV;        // Mã thẻ thành viên (PK)
     private String tenTV;    // Tên thành viên
     private Date ngaySinh;   // Ngày sinh
@@ -15,10 +15,10 @@ public class TheThanhVien {
     private String trangThai;// Trạng thái thẻ (Còn hiệu lực/Hết hạn)
 
     // Constructor không tham số
-    public TheThanhVien() {}
+    public TheThanhVienDTO() {}
 
     // Constructor đầy đủ tham số
-    public TheThanhVien(int maTV, String tenTV, Date ngaySinh, String diaChi, int diemTL, String sdt, 
+    public TheThanhVienDTO(int maTV, String tenTV, Date ngaySinh, String diaChi, int diemTL, String sdt, 
                         Date ngayBD, Date ngayKT, String tenAnh, String trangThai) {
         this.maTV = maTV;
         this.tenTV = tenTV;

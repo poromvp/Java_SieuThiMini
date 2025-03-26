@@ -1,7 +1,7 @@
 package DTO;
 import java.util.Date;
 
-public class DonHang {
+public class DonHangDTO {
     private int maDH;       // Mã đơn hàng (Khóa chính)
     private int maHK;       // Mã khách hàng (Khóa ngoại)
     private int maKM;       // Mã khuyến mãi (Khóa ngoại)
@@ -12,11 +12,11 @@ public class DonHang {
     private boolean trangThai; // Trạng thái đơn hàng
 
     // Constructor không tham số
-    public DonHang() {
+    public DonHangDTO() {
     }
 
     // Constructor có tham số
-    public DonHang(int maDH, int maHK, int maKM, int maNV, String ptThanhToan, double tongTien, Date ngayTT, boolean trangThai) {
+    public DonHangDTO(int maDH, int maHK, int maKM, int maNV, String ptThanhToan, double tongTien, Date ngayTT, boolean trangThai) {
         this.maDH = maDH;
         this.maHK = maHK;
         this.maKM = maKM;

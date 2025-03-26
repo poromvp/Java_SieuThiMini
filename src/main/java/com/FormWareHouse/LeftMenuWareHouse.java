@@ -51,7 +51,7 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
 //        ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
         //Logo
-        JLabel logoLabel = new JLabel( new ImageIcon("src/main/resources/images/icon/Logo_2.png"));
+        JLabel logoLabel = new JLabel( new ImageIcon("src/main/resources/images/icon/Logo.png"));
         logoLabel.setHorizontalAlignment(JLabel.CENTER);
         add(logoLabel,BorderLayout.NORTH);
 

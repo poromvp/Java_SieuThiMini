@@ -3,19 +3,19 @@ package DTO;
 import java.sql.Date;
 
 public class KhuyenMai {
-    private String maKM;
+    private int maKM;
     private String tenKM;
     private Date ngayKT;
     private Date ngayHH;
     private double tileGiam;
-    private boolean trangThai;
+    private String trangThai;
 
     // Constructor không tham số
     public KhuyenMai() {
     }
 
     // Constructor có tham số
-    public KhuyenMai(String maKM, String tenKM, Date ngayKT, Date ngayHH, double tileGiam, boolean trangThai) {
+    public KhuyenMai(int maKM, String tenKM, Date ngayKT, Date ngayHH, double tileGiam, String trangThai) {
         this.maKM = maKM;
         this.tenKM = tenKM;
         this.ngayKT = ngayKT;
@@ -25,11 +25,11 @@ public class KhuyenMai {
     }
 
     // Getter và Setter
-    public String getMaKM() {
+    public int getMaKM() {
         return maKM;
     }
 
-    public void setMaKM(String maKM) {
+    public void setMaKM(int maKM) {
         this.maKM = maKM;
     }
 
@@ -65,11 +65,11 @@ public class KhuyenMai {
         this.tileGiam = tileGiam;
     }
 
-    public boolean isTrangThai() {
+    public String isTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 

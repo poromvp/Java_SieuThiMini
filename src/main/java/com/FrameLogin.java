@@ -9,14 +9,14 @@ public class FrameLogin extends JFrame {
     public FrameLogin() {
         setTitle("Login");
         setSize(600, 500);
-        setBackground(Color.WHITE);
+        setBackground(new Color(255,255,255));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
         setResizable(false); // Khóa kích thước của frame
 
         // Logo
-        JLabel logoLabel = new JLabel(new ImageIcon("src/main/resources/images/icon/Logo_2.png"));
+        JLabel logoLabel = new JLabel(new ImageIcon("src/main/resources/images/icon/Logo.png"));
         logoLabel.setHorizontalAlignment(JLabel.CENTER);
         add(logoLabel, BorderLayout.NORTH);
 

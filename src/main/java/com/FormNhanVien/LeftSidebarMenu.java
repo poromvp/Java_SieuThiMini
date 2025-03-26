@@ -51,6 +51,11 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         topPanel.setBackground(Color.WHITE);
         JPanel botPanel = new JPanel();
         botPanel.setBackground(Color.WHITE);
+
+        //Logo
+        JLabel logoLabel = new JLabel( new ImageIcon("src/main/resources/images/icon/Logo.png"));
+        logoLabel.setHorizontalAlignment(JLabel.CENTER);
+        add(logoLabel,BorderLayout.NORTH);
         
         btnHome = new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
         btnEmployee = new JButton("Nhân Viên", new ImageIcon("src/main/resources/images/employee.png"));
@@ -81,7 +86,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         topPanel.add(btnReport);
         topPanel.add(btnAccount);
         botPanel.add(btnLogout);
-        add(topPanel,BorderLayout.NORTH);
+        add(topPanel,BorderLayout.CENTER);
         add(botPanel,BorderLayout.SOUTH);
     }
 

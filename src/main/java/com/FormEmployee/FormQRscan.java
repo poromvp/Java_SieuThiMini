@@ -19,8 +19,9 @@ import javax.swing.JTextField;
 import com.ComponentCommon.StyledTextField;
 import com.QR.ScanQR;
 
-import DAL.ProductDAL;
-import DTO.Product;
+import DAL.SanPhamDAL;
+import DTO.SanPham;
+
 
 
 public class FormQRscan extends JPanel {
@@ -99,13 +100,13 @@ public class FormQRscan extends JPanel {
 	
 	
 	public static void insertProductInformation(int id) {
-		Product sp = ProductDAL.getSanPhamByMaSanPham(id);
+		SanPham sp = SanPhamDAL.getSanPhamByMaSanPham(id);
 		if(sp != null) {
 			txt_tenSP.setText(sp.getTenSP());
 			txt_giaSP.setText(sp.getGia() + "");
-			txt_soLuong.setText(sp.getSoLuong() + "");
-			txt_ngaySX.setText(sp.getNgaySX());
-			txt_ngayHH.setText(sp.getNgayHH());
+			txt_soLuong.setText(sp.getTenSP());
+			txt_ngaySX.setText(sp.getTenAnh());
+			txt_ngayHH.setText(sp.getTenAnh());
 		}
 	}
 

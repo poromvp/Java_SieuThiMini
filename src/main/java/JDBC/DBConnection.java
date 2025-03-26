@@ -17,7 +17,7 @@ public class DBConnection {
             // Cập nhật URL kết nối cho đúng chuẩn MySQL 8+
             String url = "jdbc:mysql://localhost:3306/sieu_thi_mini?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
             String userName = "root";
-            String password = "";
+            String password = "Bestngulon50024072#";
 
             // Kết nối đến MySQL
             c = DriverManager.getConnection(url, userName, password);
@@ -74,12 +74,12 @@ public class DBConnection {
                     int maKH = rs.getInt("maKH");
                     int maKM = rs.getInt("maKM");
                     int maNV = rs.getInt("maNV");
-                    float tongTien = rs.getFloat("tongTien");
+                   
                     String ngayTT = rs.getString("NgayTT");
-                    int trangThai = rs.getInt("trangThai");
+                    String trangThai = rs.getString("trangThai");
 
                     System.out.println("Đơn hàng: " + maDH + ", Khách hàng: " + maKH + 
-                                       ", Nhân viên: " + maNV + ", Tổng tiền: " + tongTien);
+                                       ", Nhân viên: " + maNV );
                 }
                 conn.close();
             } catch (SQLException e) {
@@ -90,7 +90,8 @@ public class DBConnection {
 
     public static void main(String[] args) {
         Connection cnt = DBConnection.getConnection();
-        DBConnection.printInfo(cnt);
+        // DBConnection.printInfo(cnt);
+        System.out.println(cnt);
         DBConnection.query(cnt);
         DBConnection.closeConnection(cnt);
     }

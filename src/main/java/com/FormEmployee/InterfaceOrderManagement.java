@@ -8,16 +8,25 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.io.FileOutputStream;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.Document;
+
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import com.itextpdf.kernel.pdf.PdfWriter;
+
 
 public class InterfaceOrderManagement extends JPanel implements ActionListener{
 
@@ -257,42 +266,125 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         frame.setVisible(true);
     }
 
-    @Override
+        @Override
     public void actionPerformed(ActionEvent e) {
         try {
             int selectedRow = tb_listOrder.getSelectedRow();
-    
+
             // Kiểm tra nếu không có hàng nào được chọn
             if (selectedRow == -1) {
                 System.out.println("Vui lòng chọn một hàng trước khi thao tác!");
-                return; // Thoát khỏi phương thức nếu không có hàng nào được chọn
+                return;
             }
-    
+
             if (e.getSource() == btn_delete) {
                 dftmd_listOrder.removeRow(selectedRow);
                 System.out.println("Đã xoá hàng: " + selectedRow);
             }
-    
+
             if (e.getSource() == btn_edit) {
-                System.out.println("Chức năng chỉnh sửa chưa được triển khai!");
+                editOrder(selectedRow);
             }
-    
+
             if (e.getSource() == btn_show) {
-                System.out.println("Chức năng hiển thị chưa được triển khai!");
+                showOrderDetails(selectedRow);
             }
-    
+
             if (e.getSource() == btn_excel) {
-                System.out.println("Xuất Excel chưa được triển khai!");
+                exportToExcel();
             }
-    
+
             if (e.getSource() == btn_pdf) {
-                System.out.println("Xuất PDF chưa được triển khai!");
+                exportToPDF();
             }
-    
+
         } catch (Exception ex) {
-            ex.printStackTrace(); // In lỗi ra console để dễ debug
+            ex.printStackTrace();
         }
     }
+
+    private void editOrder(int rowIndex) {
+        String newDate = JOptionPane.showInputDialog("Nhập ngày mới:", dftmd_listOrder.getValueAt(rowIndex, 1));
+        String newTotal = JOptionPane.showInputDialog("Nhập tổng tiền mới:", dftmd_listOrder.getValueAt(rowIndex, 2));
+
+        if (newDate != null && newTotal != null) {
+            dftmd_listOrder.setValueAt(newDate, rowIndex, 1);
+            dftmd_listOrder.setValueAt(newTotal, rowIndex, 2);
+            System.out.println("Cập nhật đơn hàng thành công!");
+        }
+    }
+
+    private void showOrderDetails(int rowIndex) {
+        String details = "Mã: " + dftmd_listOrder.getValueAt(rowIndex, 0) + "\n"
+                + "Ngày mua: " + dftmd_listOrder.getValueAt(rowIndex, 1) + "\n"
+                + "Tổng tiền: " + dftmd_listOrder.getValueAt(rowIndex, 2) + "\n"
+                + "Trạng thái: " + dftmd_listOrder.getValueAt(rowIndex, 3) + "\n"
+                + "Giảm giá: " + dftmd_listOrder.getValueAt(rowIndex, 4) + "%";
+        
+        JOptionPane.showMessageDialog(this, details, "Chi tiết đơn hàng", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void exportToExcel() {
+    try {
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Danh sách đơn hàng");
+
+        // Ghi tiêu đề
+        XSSFRow headerRow = sheet.createRow(0);
+        for (int i = 0; i < dftmd_listOrder.getColumnCount(); i++) {
+            headerRow.createCell(i).setCellValue(dftmd_listOrder.getColumnName(i));
+        }
+
+        // Ghi dữ liệu
+        for (int row = 0; row < dftmd_listOrder.getRowCount(); row++) {
+            XSSFRow excelRow = sheet.createRow(row + 1);
+            for (int col = 0; col < dftmd_listOrder.getColumnCount(); col++) {
+                excelRow.createCell(col).setCellValue(dftmd_listOrder.getValueAt(row, col).toString());
+            }
+        }
+
+        // Xuất file
+        FileOutputStream fileOut = new FileOutputStream("orders.xlsx");
+        workbook.write(fileOut);
+        fileOut.close();
+        workbook.close();
+
+        System.out.println("Xuất Excel thành công!");
+    } catch (Exception ex) {
+        ex.printStackTrace();
+    }
+    }
+
+    private void exportToPDF() {
+    // try {
+    //     Document document = new Document();
+    //     PdfWriter.getInstance(document, new FileOutputStream("orders.pdf"));
+    //     document.open();
+    //     PdfPTable table = new PdfPTable(dftmd_listOrder.getColumnCount());
+
+    //     // Thêm tiêu đề
+    //     for (int i = 0; i < dftmd_listOrder.getColumnCount(); i++) {
+    //         table.addCell(dftmd_listOrder.getColumnName(i));
+    //     }
+
+    //     // Thêm dữ liệu
+    //     for (int row = 0; row < dftmd_listOrder.getRowCount(); row++) {
+    //         for (int col = 0; col < dftmd_listOrder.getColumnCount(); col++) {
+    //             table.addCell(dftmd_listOrder.getValueAt(row, col).toString());
+    //         }
+    //     }
+
+    //     document.add(table);
+    //     document.close();
+    //     System.out.println("Xuất PDF thành công!");
+    // } catch (Exception ex) {
+    //     ex.printStackTrace();
+    // }
+}
+
+
+    
+
     
     
 }

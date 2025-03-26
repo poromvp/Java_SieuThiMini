@@ -118,7 +118,7 @@ public class ButtonCustom extends JButton {
         frame.setLayout(new FlowLayout());
 
         ButtonCustom button = new ButtonCustom("lưu",16,"blue");
-        button.addActionListener(e -> JOptionPane.showMessageDialog(frame, "Button Clicked!"));
+        button.addActionListener(_ -> JOptionPane.showMessageDialog(frame, "Button Clicked!"));
 
         frame.add(button);
         frame.setLocationRelativeTo(null);

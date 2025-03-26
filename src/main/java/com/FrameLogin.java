@@ -13,12 +13,21 @@ public class FrameLogin extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
-        setResizable(false); // Khóa kích thước của frame
+        setResizable(true); // Khóa kích thước của frame
 
+        String[] filepath = {
+            "/images/icon/Logo.png",
+            "/images/anhcho1.png",
+            "/images/anhcho2.png",
+            "/images/anhcho3.png"
+        };
         // Logo
-        JLabel logoLabel = new JLabel(new ImageIcon("src/main/resources/images/icon/Logo.png"));
+        //ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/" + fileIcon));
+        /*JLabel logoLabel = new JLabel(new ImageIcon(FrameLogin.class.getResource("/images/icon/" + filepath[0])));
         logoLabel.setHorizontalAlignment(JLabel.CENTER);
-        add(logoLabel, BorderLayout.NORTH);
+        add(logoLabel, BorderLayout.NORTH);*/
+        SlideshowPanel logo = new SlideshowPanel(filepath, 2000);
+        add(logo, BorderLayout.CENTER);
 
         // Panel nhập liệu
         JPanel infoPanel = new JPanel(new GridBagLayout());
@@ -50,7 +59,7 @@ public class FrameLogin extends JFrame {
         JButton loginBtn = new JButton("Đăng nhập");
         infoPanel.add(loginBtn, gbc);
 
-        add(infoPanel, BorderLayout.CENTER);
+        add(infoPanel, BorderLayout.EAST);
 
         setVisible(true);
     }

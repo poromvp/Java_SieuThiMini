@@ -96,7 +96,7 @@ public class StyledLeftMenubutton extends JButton {
 
         // Thêm nút test chuyển trạng thái
         JButton toggleButton = new JButton("Toggle Border");
-        toggleButton.addActionListener(e -> {
+        toggleButton.addActionListener(_ -> {
             menuItem.setClick(!menuItem.isClicked);
         });
 

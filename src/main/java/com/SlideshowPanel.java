@@ -13,8 +13,14 @@ class SlideshowPanel extends JPanel {
         // Load ảnh từ đường dẫn
         images = new Image[imagePaths.length];
         for (int i = 0; i < imagePaths.length; i++) {
-            images[i] = new ImageIcon(imagePaths[i]).getImage();
+            java.net.URL imgURL = getClass().getResource(imagePaths[i]);
+            if (imgURL != null) {
+                images[i] = new ImageIcon(imgURL).getImage();
+            } else {
+                System.err.println("Không tìm thấy ảnh: " + imagePaths[i]);
+            }
         }
+        
 
         // Tạo Timer để đổi ảnh
         timer = new Timer(delay, new ActionListener() {

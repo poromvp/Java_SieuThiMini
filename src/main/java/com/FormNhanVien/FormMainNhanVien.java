@@ -19,7 +19,7 @@ public class FormMainNhanVien extends JPanel {
         topPanel.add(filterPanel);
 
         DetailPanelNV detailPanel = new DetailPanelNV();
-        EmployeeTablePanel employeeTablePanel = new EmployeeTablePanel();
+        EmployeeTablePanel employeeTablePanel = new EmployeeTablePanel(detailPanel);
 
         panel.add(topPanel, BorderLayout.NORTH);
         panel.add(employeeTablePanel, BorderLayout.CENTER);

@@ -8,24 +8,26 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.*;
 
 public class DetailPanelNV extends JPanel {
+    StyledTextField maNVField = new StyledTextField();
+    StyledTextField hoTenField = new StyledTextField();
+    JDateChooser ngaySinhChooser = new JDateChooser();
+    String combo[]={"Nam","Nữ"};
+    JComboBox<String> cbGioiTinh = new JComboBox<>(combo);
+    StyledTextField diaChiField = new StyledTextField();
+    String chucVu[]={"Nhân Viên","Quản lý"};
+    JComboBox<String> cbChucVu = new JComboBox<>(chucVu);
+    StyledTextField soDTField = new StyledTextField();
+    StyledTextField CCCD = new StyledTextField();
+    JCheckBox cbTinhTrang = new JCheckBox("Đang làm việc");
+
     public DetailPanelNV() {
         setLayout(new BorderLayout());
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createTitledBorder("Thông Tin Nhân Viên"));
         setPreferredSize(new Dimension(240, 0));
 
-        StyledTextField maNVField = new StyledTextField();
-        StyledTextField hoTenField = new StyledTextField();
-        JDateChooser ngaySinhChooser = new JDateChooser();
+      
         ngaySinhChooser.setDateFormatString("dd-MM-yyyy"); 
-        String combo[]={"Nam","Nữ"};
-        JComboBox<String> cbGioiTinh = new JComboBox<>(combo);
-        StyledTextField diaChiField = new StyledTextField();
-        String chucVu[]={"Nhân Viên","Quản lý"};
-        JComboBox<String> cbChucVu = new JComboBox<>(chucVu);
-        StyledTextField soDTField = new StyledTextField();
-        StyledTextField CCCD = new StyledTextField();
-        JCheckBox cbTinhTrang = new JCheckBox("Đang làm việc");
         cbTinhTrang.setBackground(Color.WHITE);
         cbTinhTrang.setSelected(true);
 
@@ -61,7 +63,19 @@ public class DetailPanelNV extends JPanel {
         // setPreferredSize(new Dimension(350, 600)); // Tăng chiều rộng panel
 
     }
+    public void setEmployeeData(String maNV, String hoTen, String ngaySinh, String gioiTinh, String diaChi,
+        String chucVu, String soDT, String cccd, boolean tinhTrang) {
+        maNVField.setText(maNV);
+        hoTenField.setText(hoTen);
+        ngaySinhChooser.setDate(java.sql.Date.valueOf(ngaySinh)); // Định dạng yyyy-MM-dd
 
+        cbGioiTinh.setSelectedItem(gioiTinh);
+        diaChiField.setText(diaChi);
+        cbChucVu.setSelectedItem(chucVu);
+        soDTField.setText(soDT);
+        CCCD.setText(cccd);
+        cbTinhTrang.setSelected(tinhTrang);
+    }
     public static void main(String[] args) {
         JFrame frame = new JFrame("Detail Panel Test");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

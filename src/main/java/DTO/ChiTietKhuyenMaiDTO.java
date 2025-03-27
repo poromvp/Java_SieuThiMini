@@ -1,17 +1,17 @@
 package DTO;
 
-public class ChiTietKM {
-    private String maKM;  // Mã khuyến mãi (Khóa ngoại)
-    private String maSP;  // Mã sản phẩm (Khóa ngoại)
+public class ChiTietKhuyenMaiDTO {
+    private int maKM;  // Mã khuyến mãi (Khóa ngoại)
+    private int maSP;  // Mã sản phẩm (Khóa ngoại)
     private double tiLeGiam; // Tỉ lệ giảm giá
-    private boolean trangThai; // Trạng thái khuyến mãi
+    private String trangThai; // Trạng thái khuyến mãi
 
     // Constructor không tham số
-    public ChiTietKM() {
+    public ChiTietKhuyenMaiDTO() {
     }
 
     // Constructor có tham số
-    public ChiTietKM(String maKM, String maSP, double tiLeGiam, boolean trangThai) {
+    public ChiTietKhuyenMaiDTO(int maKM, int maSP, double tiLeGiam, String trangThai) {
         this.maKM = maKM;
         this.maSP = maSP;
         this.tiLeGiam = tiLeGiam;
@@ -19,19 +19,19 @@ public class ChiTietKM {
     }
 
     // Getter và Setter
-    public String getMaKM() {
+    public int getMaKM() {
         return maKM;
     }
 
-    public void setMaKM(String maKM) {
+    public void setMaKM(int maKM) {
         this.maKM = maKM;
     }
 
-    public String getMaSP() {
+    public int getMaSP() {
         return maSP;
     }
 
-    public void setMaSP(String maSP) {
+    public void setMaSP(int maSP) {
         this.maSP = maSP;
     }
 
@@ -43,11 +43,11 @@ public class ChiTietKM {
         this.tiLeGiam = tiLeGiam;
     }
 
-    public boolean isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 

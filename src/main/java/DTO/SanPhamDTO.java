@@ -1,6 +1,6 @@
 package DTO;
 
-public class SanPham {
+public class SanPhamDTO {
     private int maSP;     // Mã sản phẩm (Khóa chính)
     private int  maLH;     // Mã loại hàng (Khóa ngoại)
     private int maNCC;    // Mã nhà cung cấp (Khóa ngoại)
@@ -12,11 +12,11 @@ public class SanPham {
     private String trangThai; // Trạng thái sản phẩm (còn bán hay ngừng bán)
 
     // Constructor không tham số
-    public SanPham() {
+    public SanPhamDTO() {
     }
 
     // Constructor có tham số
-    public SanPham(int maSP, int maLH, int maNCC, int maLSP, String tenAnh, double gia, String tenSP, String moTa, String trangThai) {
+    public SanPhamDTO(int maSP, int maLH, int maNCC, int maLSP, String tenAnh, double gia, String tenSP, String moTa, String trangThai) {
         this.maSP = maSP;
         this.maLH = maLH;
         this.maNCC = maNCC;
@@ -93,7 +93,7 @@ public class SanPham {
         this.moTa = moTa;
     }
 
-    public String isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 

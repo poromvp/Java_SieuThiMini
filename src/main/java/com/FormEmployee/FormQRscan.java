@@ -20,7 +20,7 @@ import com.ComponentCommon.StyledTextField;
 import com.QR.ScanQR;
 
 import DAL.SanPhamDAL;
-import DTO.SanPham;
+import DTO.SanPhamDTO;
 
 
 
@@ -100,7 +100,7 @@ public class FormQRscan extends JPanel {
 	
 	
 	public static void insertProductInformation(int id) {
-		SanPham sp = SanPhamDAL.getSanPhamByMaSanPham(id);
+		SanPhamDTO sp = SanPhamDAL.getProductById(id);
 		if(sp != null) {
 			txt_tenSP.setText(sp.getTenSP());
 			txt_giaSP.setText(sp.getGia() + "");

@@ -2,34 +2,34 @@ package DTO;
 
 import java.sql.Date;
 
-public class KhuyenMai {
-    private String maKM;
+public class KhuyenMaiDTO {
+    private int maKM;
     private String tenKM;
     private Date ngayKT;
-    private Date ngayHH;
+    private Date ngayBD;
     private double tileGiam;
-    private boolean trangThai;
+    private String trangThai;
 
     // Constructor không tham số
-    public KhuyenMai() {
+    public KhuyenMaiDTO() {
     }
 
     // Constructor có tham số
-    public KhuyenMai(String maKM, String tenKM, Date ngayKT, Date ngayHH, double tileGiam, boolean trangThai) {
+    public KhuyenMaiDTO(int maKM, String tenKM, Date ngayKT, Date ngayBD, double tileGiam, String trangThai) {
         this.maKM = maKM;
         this.tenKM = tenKM;
         this.ngayKT = ngayKT;
-        this.ngayHH = ngayHH;
+        this.ngayBD = ngayBD;
         this.tileGiam = tileGiam;
         this.trangThai = trangThai;
     }
 
     // Getter và Setter
-    public String getMaKM() {
+    public int getMaKM() {
         return maKM;
     }
 
-    public void setMaKM(String maKM) {
+    public void setMaKM(int maKM) {
         this.maKM = maKM;
     }
 
@@ -49,12 +49,12 @@ public class KhuyenMai {
         this.ngayKT = ngayKT;
     }
 
-    public Date getNgayHH() {
-        return ngayHH;
+    public Date getNgayBD() {
+        return ngayBD;
     }
 
-    public void setNgayHH(Date ngayHH) {
-        this.ngayHH = ngayHH;
+    public void setNgayBD(Date ngayBD) {
+        this.ngayBD = ngayBD;
     }
 
     public double getTileGiam() {
@@ -65,11 +65,11 @@ public class KhuyenMai {
         this.tileGiam = tileGiam;
     }
 
-    public boolean isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 
@@ -80,7 +80,7 @@ public class KhuyenMai {
                 "maKM='" + maKM + '\'' +
                 ", tenKM='" + tenKM + '\'' +
                 ", ngayKT=" + ngayKT +
-                ", ngayHH=" + ngayHH +
+                ", ngayBD=" + ngayBD +
                 ", tileGiam=" + tileGiam +
                 ", trangThai=" + trangThai +
                 '}';

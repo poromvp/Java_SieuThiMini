@@ -52,7 +52,7 @@ public class NhaCungCapDTO {
         this.diaChi = diaChi;
     }
 
-    public String isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 

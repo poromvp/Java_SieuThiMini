@@ -3,96 +3,99 @@ package JDBC;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class DBConnection {
+    private static Connection connection;
+    private static final String URL = "jdbc:mysql://localhost:3306/sieu_thi_mini?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "Bestngulon50024072#";
+
+    // Mở kết nối đến CSDL
     public static Connection getConnection() {
-        Connection c = null;
+        if (connection == null) {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                System.out.println(" Ket noi thanh cong!");
+            } catch (ClassNotFoundException e) {
+                System.out.println(" Loi: Khong tim thay Driver MySQL!");
+                e.printStackTrace();
+            } catch (SQLException e) {
+                System.out.println(" Loi: Khong the ket noi den MySQL!");
+                e.printStackTrace();
+            }
+        }
+        return connection;
+    }
+
+    // Đóng kết nối
+    public static void closeConnection() {
         try {
-            // Không cần gọi registerDriver nữa, chỉ cần Class.forName()
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Cập nhật URL kết nối cho đúng chuẩn MySQL 8+
-            String url = "jdbc:mysql://localhost:3306/sieu_thi_mini?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
-            String userName = "root";
-            String password = "";
-
-            // Kết nối đến MySQL
-            c = DriverManager.getConnection(url, userName, password);
-            System.out.println("Kết nối thành công!");
-
-        } catch (ClassNotFoundException e) {
-            System.out.println("Lỗi: Không tìm thấy Driver MySQL!");
-            e.printStackTrace();
+            if (connection != null) {
+                connection.close();
+                connection = null;
+                System.out.println("Ket noi da dong!");
+            }
         } catch (SQLException e) {
-            System.out.println("Lỗi: Không thể kết nối đến MySQL!");
             e.printStackTrace();
         }
-
-        return c;
     }
-    
-    public static void closeConnection(Connection c) {
-        if (c != null) {
-            try {
-                c.close();
-                System.out.println("Đóng kết nối thành công!");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
+    // Thực thi INSERT, UPDATE, DELETE
+    public static int executeUpdate(String sql, Object... params) {
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            buildParams(stmt, params);
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return 0;
     }
-    
-    public static void printInfo(Connection c) {
-        if (c != null) {
-            try {
-                DatabaseMetaData mtdt = c.getMetaData();
-                System.out.println("Database Name: " + mtdt.getDatabaseProductName());
-                System.out.println("Database Version: " + mtdt.getDatabaseProductVersion());
-                System.out.println("JDBC Driver Name: " + mtdt.getDriverName());
-                System.out.println("JDBC Driver Version: " + mtdt.getDriverVersion());
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
+    // Thực thi SELECT (trả về ResultSet)
+    public static ResultSet executeQuery(String sql, Object... params) {
+        try {
+            Connection conn = getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            buildParams(stmt, params);
+            return stmt.executeQuery(); //  Cần đóng ResultSet và Statement ở DAL sau khi dùng xong!
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+        return null;
     }
-    
-    
-    
-    public static void query(Connection conn) {
-        
-        if (conn != null) {
-            try {
-                String sql = "SELECT * FROM DonHang";
-                Statement stmt = conn.createStatement();
-                ResultSet rs = stmt.executeQuery(sql);
 
-                while (rs.next()) {
-                    int maDH = rs.getInt("maDH");
-                    int maKH = rs.getInt("maKH");
-                    int maKM = rs.getInt("maKM");
-                    int maNV = rs.getInt("maNV");
-                   
-                    String ngayTT = rs.getString("NgayTT");
-                    String trangThai = rs.getString("trangThai");
-
-                    System.out.println("Đơn hàng: " + maDH + ", Khách hàng: " + maKH + 
-                                       ", Nhân viên: " + maNV );
-                }
-                conn.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    // Gán tham số vào PreparedStatement
+    private static void buildParams(PreparedStatement stmt, Object... params) throws SQLException {
+        for (int i = 0; i < params.length; i++) {
+            stmt.setObject(i + 1, params[i]);
         }
     }
 
+    // In thông tin CSDL
+    public static void printInfo() {
+        try {
+            if (connection != null) {
+                DatabaseMetaData metaData = connection.getMetaData();
+                System.out.println(" Database Name: " + metaData.getDatabaseProductName());
+                System.out.println(" Database Version: " + metaData.getDatabaseProductVersion());
+                System.out.println(" JDBC Driver Name: " + metaData.getDriverName());
+                System.out.println(" JDBC Driver Version: " + metaData.getDriverVersion());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Test kết nối
     public static void main(String[] args) {
         Connection cnt = DBConnection.getConnection();
-        // DBConnection.printInfo(cnt);
         System.out.println(cnt);
-        DBConnection.query(cnt);
-        DBConnection.closeConnection(cnt);
+        DBConnection.printInfo();
     }
 }

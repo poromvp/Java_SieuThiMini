@@ -4,14 +4,14 @@ public class ChiTietKhuyenMaiDTO {
     private int maKM;  // Mã khuyến mãi (Khóa ngoại)
     private int maSP;  // Mã sản phẩm (Khóa ngoại)
     private double tiLeGiam; // Tỉ lệ giảm giá
-    private boolean trangThai; // Trạng thái khuyến mãi
+    private String trangThai; // Trạng thái khuyến mãi
 
     // Constructor không tham số
     public ChiTietKhuyenMaiDTO() {
     }
 
     // Constructor có tham số
-    public ChiTietKhuyenMaiDTO(int maKM, int maSP, double tiLeGiam, boolean trangThai) {
+    public ChiTietKhuyenMaiDTO(int maKM, int maSP, double tiLeGiam, String trangThai) {
         this.maKM = maKM;
         this.maSP = maSP;
         this.tiLeGiam = tiLeGiam;
@@ -43,11 +43,11 @@ public class ChiTietKhuyenMaiDTO {
         this.tiLeGiam = tiLeGiam;
     }
 
-    public boolean isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 

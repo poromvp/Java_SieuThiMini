@@ -6,7 +6,7 @@ public class KhuyenMaiDTO {
     private int maKM;
     private String tenKM;
     private Date ngayKT;
-    private Date ngayHH;
+    private Date ngayBD;
     private double tileGiam;
     private String trangThai;
 
@@ -15,11 +15,11 @@ public class KhuyenMaiDTO {
     }
 
     // Constructor có tham số
-    public KhuyenMaiDTO(int maKM, String tenKM, Date ngayKT, Date ngayHH, double tileGiam, String trangThai) {
+    public KhuyenMaiDTO(int maKM, String tenKM, Date ngayKT, Date ngayBD, double tileGiam, String trangThai) {
         this.maKM = maKM;
         this.tenKM = tenKM;
         this.ngayKT = ngayKT;
-        this.ngayHH = ngayHH;
+        this.ngayBD = ngayBD;
         this.tileGiam = tileGiam;
         this.trangThai = trangThai;
     }
@@ -49,12 +49,12 @@ public class KhuyenMaiDTO {
         this.ngayKT = ngayKT;
     }
 
-    public Date getNgayHH() {
-        return ngayHH;
+    public Date getNgayBD() {
+        return ngayBD;
     }
 
-    public void setNgayHH(Date ngayHH) {
-        this.ngayHH = ngayHH;
+    public void setNgayBD(Date ngayBD) {
+        this.ngayBD = ngayBD;
     }
 
     public double getTileGiam() {
@@ -65,7 +65,7 @@ public class KhuyenMaiDTO {
         this.tileGiam = tileGiam;
     }
 
-    public String isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 
@@ -80,7 +80,7 @@ public class KhuyenMaiDTO {
                 "maKM='" + maKM + '\'' +
                 ", tenKM='" + tenKM + '\'' +
                 ", ngayKT=" + ngayKT +
-                ", ngayHH=" + ngayHH +
+                ", ngayBD=" + ngayBD +
                 ", tileGiam=" + tileGiam +
                 ", trangThai=" + trangThai +
                 '}';

@@ -34,7 +34,7 @@ public class LoaiSanPhamDTO {
         this.tenLoaiSP = tenLoaiSP;
     }
 
-    public String isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 

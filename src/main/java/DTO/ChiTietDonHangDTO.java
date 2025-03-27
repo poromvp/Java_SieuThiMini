@@ -4,14 +4,14 @@ public class ChiTietDonHangDTO {
     private int maDH;    // Mã đơn hàng (Khóa ngoại)
     private int maSP;    // Mã sản phẩm (Khóa ngoại)
     private int soLuong;    // Số lượng sản phẩm
-    private boolean trangThai; // Trạng thái của chi tiết đơn hàng
+    private String trangThai; // Trạng thái của chi tiết đơn hàng
 
     // Constructor không tham số
     public ChiTietDonHangDTO() {
     }
 
     // Constructor có tham số
-    public ChiTietDonHangDTO(int maDH, int maSP, int soLuong, boolean trangThai) {
+    public ChiTietDonHangDTO(int maDH, int maSP, int soLuong, String trangThai) {
         this.maDH = maDH;
         this.maSP = maSP;
         this.soLuong = soLuong;
@@ -43,11 +43,11 @@ public class ChiTietDonHangDTO {
         this.soLuong = soLuong;
     }
 
-    public boolean isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 
-    public void setTrangThai(boolean trangThai) {
+    public void setTrangThai(String trangThai) {
         this.trangThai = trangThai;
     }
 

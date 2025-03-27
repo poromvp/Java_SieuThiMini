@@ -12,8 +12,8 @@ public class SanPhamDAL {
 
 
 
-    public static SanPhamDTO getSanPhamByMaSanPham(int id) {
-        String sql = "SELECT * FROM SanPham WHERE id = ?";
+    public static SanPhamDTO getProductById(int id) {
+        String sql = "SELECT * FROM SanPham WHERE maSP = ?";
         SanPhamDTO sanPham = null;
         
         try {
@@ -25,8 +25,14 @@ public class SanPhamDAL {
             if (rs.next()) {
                 sanPham = new SanPhamDTO();
                 sanPham.setMaSP(rs.getInt("maSP"));
+                sanPham.setMaLH(rs.getInt("maLH"));
+                sanPham.setMaNCC(rs.getInt("maNCC"));
+                sanPham.setMaLSP(rs.getInt("maLSP"));
                 sanPham.setTenSP(rs.getString("tenSP"));
                 sanPham.setGia(rs.getDouble("gia"));
+                sanPham.setTenAnh(rs.getString("tenAnh"));
+                sanPham.setMoTa(rs.getString("moTa"));
+                sanPham.setTrangThai(rs.getString("trangThai"));
                 // Thêm các thuộc tính khác nếu cần
             }
         } catch (Exception e) {
@@ -34,5 +40,11 @@ public class SanPhamDAL {
         }
         
         return sanPham;
+    }
+
+
+    public static void main(String[] args) {
+        SanPhamDTO sp = getProductById(1);
+        System.out.println(sp.toString());
     }
 }

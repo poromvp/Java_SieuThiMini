@@ -93,7 +93,7 @@ public class SanPhamDTO {
         this.moTa = moTa;
     }
 
-    public String isTrangThai() {
+    public String getTrangThai() {
         return trangThai;
     }
 

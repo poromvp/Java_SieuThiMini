@@ -19,7 +19,7 @@ public class SanPhamBLL {
             System.out.println("Lỗi: Tên sản phẩm không được để trống và giá phải lớn hơn 0.");
             return false;
         }
-        return SanPhamDAL.insertProduct(sanPham);
+        return SanPhamDAL.insertProduct(sanPham) >0;
     }
 
     public static boolean updateProduct(SanPhamDTO sanPham) {

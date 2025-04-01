@@ -23,10 +23,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
 public class FormOrderDetailList extends JPanel {
-    private JTable tableProduct;
-    private DefaultTableModel tableModel;
-    private JScrollPane scrollPane;
-    private JPopupMenu popupMenu;
+    private static JTable tableProduct;
+    private static DefaultTableModel tableModel;
+    private static JScrollPane scrollPane;
+    private static JPopupMenu popupMenu;
     
     private static final String[] HEADER = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng"};
     private static final double[] WIDTH_COL = {0.1, 0.4, 0.2, 0.15, 0.15};
@@ -35,7 +35,6 @@ public class FormOrderDetailList extends JPanel {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Tạo model không cho chỉnh sửa
         tableModel = new DefaultTableModel(null, HEADER) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -43,22 +42,15 @@ public class FormOrderDetailList extends JPanel {
             }
         };
 
-        // Tạo JTable
         tableProduct = new JTable(tableModel);
         customizeTable();
 
-        // Tạo JScrollPane
         scrollPane = new JScrollPane(tableProduct);
-        // scrollPane.setBorder(BorderFactory.createLineBorder(Color.GRAY, 1));
+        updateColumnWidths();
         scrollPane.setPreferredSize(new Dimension(600, 300));
         add(scrollPane, BorderLayout.CENTER);
 
-        // Cập nhật kích thước cột
-        updateColumnWidths();
-
-        // Thêm menu chuột phải
         tableProduct.setComponentPopupMenu(createPopupMenu());
-
         tableProduct.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseReleased(MouseEvent e) {
@@ -68,7 +60,8 @@ public class FormOrderDetailList extends JPanel {
             }
         });
     }
-    private void customizeTable() {
+
+    private static void customizeTable() {
         tableProduct.setFont(new Font("Arial", Font.PLAIN, 14));
         tableProduct.setRowHeight(30);
         tableProduct.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
@@ -80,28 +73,23 @@ public class FormOrderDetailList extends JPanel {
         tableProduct.setShowVerticalLines(false);
         tableProduct.setShowHorizontalLines(false);
     
-        //  Tạo renderer tùy chỉnh căn giữa + màu xen kẽ
         DefaultTableCellRenderer customRenderer = new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
                 Component cell = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                setHorizontalAlignment(SwingConstants.CENTER); // 🛠 Căn giữa nội dung
+                setHorizontalAlignment(SwingConstants.CENTER);
                 if (!isSelected) {
-                    cell.setBackground(row % 2 == 0 ? Color.WHITE : new Color(235, 235, 235)); // Màu xen kẽ đẹp hơn
+                    cell.setBackground(row % 2 == 0 ? Color.WHITE : new Color(235, 235, 235)); 
                 }
                 return cell;
             }
         };
-    
-        //  Áp dụng renderer này cho tất cả các cột
         for (int i = 0; i < tableProduct.getColumnCount(); i++) {
             tableProduct.getColumnModel().getColumn(i).setCellRenderer(customRenderer);
         }
     }
     
-    
-
-    private void updateColumnWidths() {
+    private static void updateColumnWidths() {
         TableColumnModel columnModel = tableProduct.getColumnModel();
         int totalWidth = scrollPane.getViewport().getWidth();
         for (int i = 0; i < WIDTH_COL.length; i++) {
@@ -109,12 +97,13 @@ public class FormOrderDetailList extends JPanel {
         }
     }
 
-    private JPopupMenu createPopupMenu() {
+    private static JPopupMenu createPopupMenu() {
         popupMenu = new JPopupMenu();
         
-        JMenuItem viewItem = new JMenuItem("Xem chi tiết", new ImageIcon("src/main/resources/images/menuu.png"));
+         JMenuItem viewItem = new JMenuItem("Xem chi tiết", new ImageIcon("src/main/resources/images/menuu.png"));
         JMenuItem deleteItem = new JMenuItem("Xóa sản phẩm", new ImageIcon("src/main/resources/images/deletee.png"));
         JMenuItem editQtyItem = new JMenuItem("Sửa số lượng", new ImageIcon("src/main/resources/images/editt.png"));
+
 
         viewItem.addActionListener(e -> viewProduct());
         deleteItem.addActionListener(e -> deleteProduct());
@@ -127,7 +116,7 @@ public class FormOrderDetailList extends JPanel {
         return popupMenu;
     }
 
-    private void showPopup(MouseEvent e) {
+    private static void showPopup(MouseEvent e) {
         int row = tableProduct.rowAtPoint(e.getPoint());
         if (row >= 0) {
             tableProduct.setRowSelectionInterval(row, row);
@@ -135,39 +124,39 @@ public class FormOrderDetailList extends JPanel {
         }
     }
 
-    public void addRow(Object[] rowData) {
+    public static void addProductDetail(Object[] rowData) {
         tableModel.addRow(rowData);
     }
 
-    public void addRows(Object[][] rowsData) {
+    public static void addRows(Object[][] rowsData) {
         for (Object[] row : rowsData) {
             tableModel.addRow(row);
         }
     }
 
-    private void viewProduct() {
+    private static void viewProduct() {
         int row = tableProduct.getSelectedRow();
         if (row != -1) {
             String productName = tableProduct.getValueAt(row, 1).toString();
-            JOptionPane.showMessageDialog(this, "Thông tin chi tiết sản phẩm: " + productName, "Chi tiết", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Thông tin chi tiết sản phẩm: " + productName, "Chi tiết", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
-    private void deleteProduct() {
+    private static void deleteProduct() {
         int row = tableProduct.getSelectedRow();
         if (row != -1) {
-            int confirm = JOptionPane.showConfirmDialog(this, "Bạn có chắc muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
+            int confirm = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa sản phẩm này?", "Xác nhận", JOptionPane.YES_NO_OPTION);
             if (confirm == JOptionPane.YES_OPTION) {
                 tableModel.removeRow(row);
             }
         }
     }
 
-    private void editQuantity() {
+    private static void editQuantity() {
         int row = tableProduct.getSelectedRow();
         if (row != -1) {
             String currentQty = tableProduct.getValueAt(row, 4).toString();
-            String newQty = JOptionPane.showInputDialog(this, "Nhập số lượng mới:", currentQty);
+            String newQty = JOptionPane.showInputDialog(null, "Nhập số lượng mới:", currentQty);
             if (newQty != null && !newQty.trim().isEmpty()) {
                 tableModel.setValueAt(Integer.parseInt(newQty), row, 4);
             }
@@ -184,12 +173,8 @@ public class FormOrderDetailList extends JPanel {
         FormOrderDetailList orderList = new FormOrderDetailList();
         frame.add(orderList, BorderLayout.CENTER);
 
-        orderList.addRow(new Object[]{1, "Sản phẩm A", 100000, 3, 10});
-        orderList.addRows(new Object[][]{
-            {2, "Sản phẩm B", 200000, 2, 10},
-            {2, "Sản phẩm B", 200000, 2, 10},
-            {2, "Sản phẩm B", 200000, 2, 10},
-            {2, "Sản phẩm B", 200000, 2, 10},
+        addProductDetail(new Object[]{1, "Sản phẩm A", 100000, 3, 10});
+        addRows(new Object[][]{
             {2, "Sản phẩm B", 200000, 2, 10},
             {3, "Sản phẩm C", 300000, 1, 5}
         });

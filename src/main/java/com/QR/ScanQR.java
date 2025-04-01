@@ -37,7 +37,7 @@ public class ScanQR extends JPanel {
     private JTextField textField;
     private JButton toggleButton;
     private OpenCVFrameGrabber grabber;
-    private boolean isScanning = false; // Biến kiểm soát việc quét
+    private boolean isScanning = false; 
     private String txtOld = null;
     private Thread scanThread;
 
@@ -161,7 +161,7 @@ public class ScanQR extends JPanel {
     public static void main(String[] args) {
         JFrame frame = new JFrame("QR Code Scanner");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(340, 420);
+        frame.setSize(340, 120);
         frame.add(new ScanQR());
         frame.setVisible(true);
     }

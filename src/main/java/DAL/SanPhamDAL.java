@@ -35,12 +35,12 @@ public class SanPhamDAL {
         return productList;
     }
 
-    public static boolean insertProduct(SanPhamDTO sanPham) {
-        String sql = "INSERT INTO SanPham (maLH, maNCC, maLSP, tenSP, gia, tenAnh, moTa, trangThai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    public static int insertProduct(SanPhamDTO sanPham) {
+        String sql = "INSERT INTO SanPham (maLH, maNCC, maLSP, tenSP, gia, tenAnh, moTa, trangThai) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
         return DBConnection.executeUpdate(sql, 
                 sanPham.getMaLH(), sanPham.getMaNCC(), sanPham.getMaLSP(), 
                 sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(), 
-                sanPham.getMoTa(), sanPham.getTrangThai()) > 0;
+                sanPham.getMoTa(), sanPham.getTrangThai()) ;
     }
 
     public static boolean updateProduct(SanPhamDTO sanPham) {
@@ -57,16 +57,22 @@ public class SanPhamDAL {
     }
 
     private static SanPhamDTO mapResultSetToSanPham(ResultSet rs) throws SQLException {
-        return new SanPhamDTO(
-            rs.getInt("maSP"),
-            rs.getInt("maLH"),
-            rs.getInt("maNCC"),
-            rs.getInt("maLSP"),
-            rs.getString("tenSP"),
-            rs.getDouble("gia"),
-            rs.getString("tenAnh"),
-            rs.getString("moTa"),
-            rs.getString("trangThai")
-        );
+        SanPhamDTO sp = new SanPhamDTO();
+            sp.setMaSP(rs.getInt("maSP"));
+            rs.getInt("maLH");
+            rs.getInt("maNCC");
+            rs.getInt("maLSP");
+            rs.getString("tenSP");
+            rs.getDouble("gia");
+            rs.getString("tenAnh");
+            rs.getString("moTa");
+            rs.getString("trangThai");
+        
+        return sp;
+    }
+
+    public static void main(String[] args) {
+        SanPhamDTO sanPham = new SanPhamDTO(0, 1, 1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdonj");
+        System.out.println(insertProduct(sanPham));
     }
 }

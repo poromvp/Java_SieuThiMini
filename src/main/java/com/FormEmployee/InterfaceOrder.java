@@ -42,14 +42,14 @@ public class InterfaceOrder extends JPanel{
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 3.0; // Cột 0 rộng hơn
-        gbc.weighty = 0.2;
+        gbc.weighty = 0.1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         add(tabbedPane, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weighty = 0.8;
+        gbc.weighty = 0.9;
         add(formOrderDetailList, gbc);
         
         //  Cột 1 chiếm 1 phần (weightx = 1.0)

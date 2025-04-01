@@ -27,7 +27,7 @@ public class FormOrderInformation extends JPanel {
         // Labels (Cột 1)
         gbc.gridx = 0;
         gbc.weightx = 0.2; // Cột 1 nhỏ hơn
-        add(new JLabel("Hình thức mua:"), gbc);
+        // add(new JLabel("Hình thức mua:"), gbc);
         
         gbc.gridy = 1;
         add(new JLabel("SĐT:"), gbc);
@@ -69,7 +69,7 @@ public class FormOrderInformation extends JPanel {
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.weightx = 0.8; // Cột 2 lớn hơn
-        add(new JComboBox<>(new String[]{"Tại quầy", "Online"}), gbc);
+        // add(new JComboBox<>(new String[]{"Tại quầy", "Online"}), gbc);
         
         gbc.gridy = 1;
         add(new StyledTextField(), gbc);

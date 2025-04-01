@@ -16,6 +16,7 @@ public class InterfaceOrder extends JPanel{
     private FormOrderDetailList formOrderDetailList;
     private FormFindProduct formFindProduct;
     private FormOrderInformation formOrderInformation;
+    private OrderIformationForm formOrderInfo;
 
 
     public InterfaceOrder(){
@@ -24,6 +25,8 @@ public class InterfaceOrder extends JPanel{
         formFindProduct = new FormFindProduct();
         formOrderDetailList = new FormOrderDetailList();
         formOrderInformation = new FormOrderInformation();
+        formOrderInfo = new OrderIformationForm();
+        
         formQRscan = new FormQRscan();
 
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -58,7 +61,7 @@ public class InterfaceOrder extends JPanel{
         gbc.gridheight = 2;
         gbc.weightx = 0.5; // Cột 1 hẹp hơn
         gbc.weighty = 1.0;
-        add(formOrderInformation, gbc);
+        add(formOrderInfo, gbc);
 
     }
 

@@ -39,6 +39,7 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
+import com.itextpdf.layout.borders.Border;
 
 import BLL.ChiTietKhuyenMaBLL;
 import BLL.SanPhamBLL;
@@ -98,13 +99,14 @@ public class FormQRscan extends JPanel {
         containerQR.setLayout(new GridBagLayout());
 
         // Giảm kích thước font của JLabel
-        Font labelFont = new Font("Arial", Font.PLAIN, 10);
+        Font labelFont = new Font("Arial", Font.PLAIN, 14);
         lbl_tenSP.setFont(labelFont);
         lbl_giaSP.setFont(labelFont);
         lbl_soLuong.setFont(labelFont);
         lbl_loSX.setFont(labelFont);
         lbl_ngaySX.setFont(labelFont);
         lbl_ngayHH.setFont(labelFont);
+        lbl_id.setFont(labelFont);
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -129,7 +131,8 @@ public class FormQRscan extends JPanel {
         // addCell(label, 6, 0, 1, 1, 3);
 
         JPanel pn_qr = new JPanel();
-        pn_qr.add(label_qr);
+        pn_qr.setLayout(new BorderLayout());
+        pn_qr.add(label_qr, BorderLayout.CENTER);
 
         add(containerQR, BorderLayout.CENTER);
         add(pn_qr, BorderLayout.EAST);

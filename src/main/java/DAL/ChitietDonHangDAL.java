@@ -1,13 +1,11 @@
 package DAL;
 
-import DTO.ChiTietDonHangDTO;
-import JDBC.DBConnection;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import DTO.ChiTietDonHangDTO;
+import JDBC.DBConnection;
 
 public class ChiTietDonHangDAL {
     public static final String tableName = "ChiTietDH";

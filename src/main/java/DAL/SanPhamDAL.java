@@ -1,6 +1,7 @@
 package DAL;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,17 +37,17 @@ public class SanPhamDAL {
     }
 
     public static int insertProduct(SanPhamDTO sanPham) {
-        String sql = "INSERT INTO SanPham (maLH, maNCC, maLSP, tenSP, gia, tenAnh, moTa, trangThai) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO SanPham ( maNCC, maLSP, tenSP, gia, tenAnh, moTa, trangThai) VALUES ( ?, ?, ?, ?, ?, ?, ?)";
         return DBConnection.executeUpdate(sql, 
-                sanPham.getMaLH(), sanPham.getMaNCC(), sanPham.getMaLSP(), 
+                 sanPham.getMaNCC(), sanPham.getMaLSP(), 
                 sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(), 
                 sanPham.getMoTa(), sanPham.getTrangThai()) ;
     }
 
     public static boolean updateProduct(SanPhamDTO sanPham) {
-        String sql = "UPDATE SanPham SET maLH=?, maNCC=?, maLSP=?, tenSP=?, gia=?, tenAnh=?, moTa=?, trangThai=? WHERE maSP=?";
+        String sql = "UPDATE SanPham SET maNCC=?, maLSP=?, tenSP=?, gia=?, tenAnh=?, moTa=?, trangThai=? WHERE maSP=?";
         return DBConnection.executeUpdate(sql, 
-                sanPham.getMaLH(), sanPham.getMaNCC(), sanPham.getMaLSP(), 
+                sanPham.getMaNCC(), sanPham.getMaLSP(), 
                 sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(), 
                 sanPham.getMoTa(), sanPham.getTrangThai(), sanPham.getMaSP()) > 0;
     }
@@ -59,20 +60,18 @@ public class SanPhamDAL {
     private static SanPhamDTO mapResultSetToSanPham(ResultSet rs) throws SQLException {
         SanPhamDTO sp = new SanPhamDTO();
             sp.setMaSP(rs.getInt("maSP"));
-            rs.getInt("maLH");
-            rs.getInt("maNCC");
-            rs.getInt("maLSP");
-            rs.getString("tenSP");
-            rs.getDouble("gia");
-            rs.getString("tenAnh");
-            rs.getString("moTa");
-            rs.getString("trangThai");
+            sp.setMaNCC( rs.getInt("maNCC"));
+            sp.setMaLSP( rs.getInt("maLSP"));
+            sp.setTenSP(rs.getString("tenSP"));
+            sp.setGia( rs.getDouble("gia"));
+            sp.setMoTa( rs.getString("moTa"));
+            sp.setTrangThai( rs.getString("trangThai"));
         
         return sp;
     }
 
     public static void main(String[] args) {
-        SanPhamDTO sanPham = new SanPhamDTO(0, 1, 1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdonj");
+        SanPhamDTO sanPham = new SanPhamDTO(0,  1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdonj");
         System.out.println(insertProduct(sanPham));
     }
 }

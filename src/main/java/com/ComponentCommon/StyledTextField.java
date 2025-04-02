@@ -42,7 +42,9 @@ public class StyledTextField extends JTextField {
         setPreferredSize(new Dimension(w, h)); 
     }
 
-    public  void isAddColorBorder(boolean isAdd){
+    public  void SetEnabled(boolean isAdd){
+        setEnabled(isAdd);
+        setEditable(isAdd);
         int thickness = isAdd == true? 2: 0;
         setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(30, 144, 255), thickness, true), 
@@ -68,7 +70,7 @@ public class StyledTextField extends JTextField {
             JLabel emailLabel = new JLabel("Email:");
             StyledTextField emailField = new StyledTextField();
             JButton btnSubmit = new JButton("Gửi");
-
+            nameField.SetEnabled(false);
             //  Đặt vị trí từng thành phần
             nameLabel.setBounds(30, 30, 80, 25);
             nameField.setBounds(120, 30, 200, 35);

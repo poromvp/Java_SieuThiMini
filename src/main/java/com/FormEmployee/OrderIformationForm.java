@@ -49,7 +49,7 @@ public class OrderIformationForm extends JPanel {
         add(lblEmployeeName, gbc);
         txtemployeeName = new StyledTextField();
         txtemployeeName.setText("1");
-        txtemployeeName.isAddColorBorder(false);
+        txtemployeeName.SetEnabled(false);
         gbc.gridx = 1;
         add(txtemployeeName, gbc);
 
@@ -59,7 +59,7 @@ public class OrderIformationForm extends JPanel {
         gbc.gridy = 1; gbc.gridwidth = 1; 
         add(new JLabel("Mã hóa đơn:"), gbc);
         txtOrderId = new StyledTextField(102, 30);
-        txtOrderId.isAddColorBorder(false);
+        txtOrderId.SetEnabled(false);
         gbc.gridx = 1;
         add(txtOrderId, gbc);
         
@@ -67,14 +67,14 @@ public class OrderIformationForm extends JPanel {
         gbc.gridx = 0; gbc.gridy = 2;
         add(new JLabel("Tổng tiền:"), gbc);
         txtTotal = new StyledTextField();
-        txtTotal.isAddColorBorder(false);
+        txtTotal.SetEnabled(false);
         gbc.gridx = 1;
         add(txtTotal, gbc);
 
         gbc.gridx = 0; gbc.gridy = 3;
         add(new JLabel("Thành tiền:"), gbc);
         txtTotalFinaly = new StyledTextField();
-        txtTotalFinaly.isAddColorBorder(false);
+        txtTotalFinaly.SetEnabled(false);
         gbc.gridx = 1;
         add(txtTotalFinaly, gbc);
         
@@ -82,7 +82,7 @@ public class OrderIformationForm extends JPanel {
         gbc.gridx = 0; gbc.gridy = 4;
         add(new JLabel("% Khuyến mãi:"), gbc);
         txtDiscount = new StyledTextField();
-        txtDiscount.isAddColorBorder(false);
+        txtDiscount.SetEnabled(false);
         gbc.gridx = 1;
         add(txtDiscount, gbc);
         
@@ -171,10 +171,9 @@ public class OrderIformationForm extends JPanel {
         setVisible(true);
         
         // khong chỉnh sửa 
-        txtCustomerName.setEnabled(false);
-        txtPoint.setEnabled(false);
-        txtPoint.isAddColorBorder(false);
-        txtCustomerName.isAddColorBorder(false);
+        txtCustomerName.SetEnabled(false);
+        txtPoint.SetEnabled(false);
+        
    
     // render teen và điẻmTL
         txtPhone.addKeyListener(new KeyAdapter() {
@@ -200,8 +199,7 @@ public class OrderIformationForm extends JPanel {
 
     // toggle khi nhấn có /không có thẻ thành viên
     private static void toggleCustomerFields(boolean isEnabled) {
-        txtPhone.setEnabled(isEnabled);
-        txtPhone.isAddColorBorder(isEnabled);
+        txtPhone.SetEnabled(isEnabled);
         rbNoUsePoint.setEnabled(isEnabled);
         rbYesUsePoint.setEnabled(isEnabled);
         if(isEnabled == false){

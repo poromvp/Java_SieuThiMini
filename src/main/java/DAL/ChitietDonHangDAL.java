@@ -11,9 +11,9 @@ public class ChiTietDonHangDAL {
     public static final String tableName = "ChiTietDH";
 
     // Thêm chi tiết đơn hàng
-    public static boolean insert(ChiTietDonHangDTO chiTiet) {
+    public static int insert(ChiTietDonHangDTO chiTiet) {
         String sql = "INSERT INTO " + tableName + " (maDH, maSP, soLuong, trangThai) VALUES (?, ?, ?, ?)";
-        return DBConnection.executeUpdate(sql, chiTiet.getMaDH(), chiTiet.getMaSP(), chiTiet.getSoLuong(), chiTiet.getTrangThai()) > 0;
+        return DBConnection.executeUpdate(sql, chiTiet.getMaDH(), chiTiet.getMaSP(), chiTiet.getSoLuong(), chiTiet.getTrangThai()) ;
     }
 
     // Cập nhật chi tiết đơn hàng

@@ -8,7 +8,8 @@ import java.util.List;
 public class ChiTietDonHangBLL {
 
     // Thêm chi tiết đơn hàng
-    public static boolean addOrderDetail(ChiTietDonHangDTO chiTiet) {
+    public static int insertOrderDetail(ChiTietDonHangDTO chiTiet) {
+        
         return ChiTietDonHangDAL.insert(chiTiet);
     }
 

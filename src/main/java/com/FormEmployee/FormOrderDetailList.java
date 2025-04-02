@@ -23,6 +23,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 
+import BLL.ChiTietDonHangBLL;
+import DTO.ChiTietDonHangDTO;
+
 public class FormOrderDetailList extends JPanel {
     private static JTable tableProduct;
     private static DefaultTableModel tableModel;
@@ -206,6 +209,17 @@ public class FormOrderDetailList extends JPanel {
                 tableModel.setValueAt(newQty, row, 4);
                 tableModel.setValueAt(total, row, 5);
             }
+        }
+    }
+
+    public static void SaveOrderDetailList(int orderId){
+        for( int i = 0; i < tableModel.getRowCount(); i++){
+            ChiTietDonHangDTO orderDetail = new ChiTietDonHangDTO();
+            orderDetail.setMaDH(orderId);
+            orderDetail.setMaSP(Integer.parseInt( (tableModel.getValueAt(i, 0).toString())));
+            orderDetail.setSoLuong(Integer.parseInt( (tableModel.getValueAt(i, 4).toString())));
+            orderDetail.setTrangThai("ACTIVE");
+            ChiTietDonHangBLL.insertOrderDetail(orderDetail);
         }
     }
 

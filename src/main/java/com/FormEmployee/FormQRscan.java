@@ -77,7 +77,7 @@ public class FormQRscan extends JPanel {
     private static JButton toggleButton;
     private static OpenCVFrameGrabber grabber;
     private static boolean isScanning = false; 
-    private static String txtOld = null;
+    // private static String txtOld = null;
     private static Thread scanThread;
 
 
@@ -175,10 +175,9 @@ public class FormQRscan extends JPanel {
                         String qrText = decodeQRCode(img);
 
                         if (qrText != null) {
-                            if (!qrText.equals(txtOld)) {
                                 try {
                                     txt_id.setText(qrText);
-                                    txtOld = qrText;
+                                
                                     int id = Integer.parseInt(qrText);
                                     System.out.println("Quét thành công: " + qrText);
                                     FormQRscan.insertProductInformation(id);
@@ -188,9 +187,7 @@ public class FormQRscan extends JPanel {
                                 } catch (NumberFormatException ex) {
                                     System.out.println("QRcode không phải số");
                                 }
-                            } else {
-                                System.out.println("QRcode cũ");
-                            }
+                            
                         } else {
                             System.out.println("QRcode null");
                         }

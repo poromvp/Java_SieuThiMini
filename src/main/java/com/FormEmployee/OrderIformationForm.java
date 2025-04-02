@@ -313,7 +313,14 @@ public class OrderIformationForm extends JPanel {
         }
         boolean checkInsert =  DonHangBLL.insertOrder(order);
         if(checkInsert) {
-            System.out.println("them thanh cong");
+            FormOrderDetailList.SaveOrderDetailList(Integer.parseInt( txtOrderId.getText()));
+            System.out.println("them thanh cong dơn hang");
+            if(Member != null){
+                int totalTemp = (int) Math.floor( Double.parseDouble(txtTotal.getText().trim())); 
+                int points = totalTemp / 1000; // Tính điểm tích lũy
+                Member.setDiemTL(Member.getDiemTL() + points); // Cộng dồn điểm
+                TheThanhVienBLL.updateMember(Member);
+            }
         }else{
             System.out.println("them that bai");
         }
@@ -321,12 +328,18 @@ public class OrderIformationForm extends JPanel {
 
 
     // public static void main(String[] args) {
-    //     JFrame frame = new JFrame();
-    //     frame.add(new OrderIformationForm());
-    //     frame.setSize(500, 400);
-    //     frame.setLocationRelativeTo(null);
-    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    //     frame.setVisible(true);
+
+        // String aaa = "23352.34";
+        // int totalTemp = (int) Math.floor(Double.parseDouble(aaa.trim()));
+        // int points = totalTemp / 1000;
+        // System.out.println(points);
+        
+        // JFrame frame = new JFrame();
+        // frame.add(new OrderIformationForm());
+        // frame.setSize(500, 400);
+        // frame.setLocationRelativeTo(null);
+        // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        // frame.setVisible(true);
     // }
 
 }

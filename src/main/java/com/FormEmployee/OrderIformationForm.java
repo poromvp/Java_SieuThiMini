@@ -5,36 +5,45 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import com.ComponentCommon.StyledTextField;
 
+import BLL.DiemTichLuyBLL;
 import BLL.DonHangBLL;
 import BLL.KhuyenMaiBLL;
 import BLL.TheThanhVienBLL;
+import DTO.DiemTichLuyDTO;
+import DTO.DonHangDTO;
 import DTO.KhuyenMaiDTO;
 import DTO.TheThanhVienDTO;
 
 public class OrderIformationForm extends JPanel {
-    private static StyledTextField txtemployeeName , txtPhone, txtCustomerName, txtOrderId, txtTotal, txtTotalFinaly, txtDiscount, txtCash, txtPoint;
+    private static StyledTextField txtemployeeName , txtPhone, txtCustomerName, txtOrderId, txtTotal, txtTotalFinaly, txtDiscount, txtCash, txtPoint, txtPointRate, txtDiscountMax;
     private static JComboBox<String> cbPaymentMethod;
     private static JRadioButton rbYesMember, rbNoMember,  rbYesUsePoint, rbNoUsePoint;
     private static JButton btnSave, btnPrint;
-    private static JLabel lblEmployeeName, lblCash;
+    private static JLabel lblEmployeeName, lblCash, lblDiscountMax, lblPointRate;
     private static ButtonGroup group1;
+    private static int maNV = 1;
 
 
 
     private static int countOrder;
     private static KhuyenMaiDTO discount;
     private static double totalAmount, total;
+    // private static int  checkMember = -1;
+    private static TheThanhVienDTO  Member = null;
+    private static DiemTichLuyDTO  loyalyPoint = null;
+    
 
     public OrderIformationForm() {
         setSize(400, 400);
@@ -134,9 +143,26 @@ public class OrderIformationForm extends JPanel {
         panel1.add(rbNoUsePoint);
         gbc.gridx = 1;
         add(panel1, gbc);
-        
-        // Hình thức thanh toán
+
+
         gbc.gridx = 0; gbc.gridy = 10;
+        lblPointRate = new JLabel("đổi điểm giảm %:");
+        add(lblPointRate, gbc);
+        txtPointRate = new StyledTextField();
+        txtPointRate.SetEnabled(false);
+        gbc.gridx = 1;
+        add(txtPointRate, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 11;
+        lblDiscountMax = new JLabel("Giảm tối đa VND:");
+        add(lblDiscountMax, gbc);
+        txtDiscountMax = new StyledTextField();
+        txtDiscountMax.SetEnabled(false);
+        gbc.gridx = 1;
+        add(txtDiscountMax, gbc);
+
+        // Hình thức thanh toán
+        gbc.gridx = 0; gbc.gridy = 12;
         add(new JLabel("Hình thức TT:"), gbc);
         cbPaymentMethod = new JComboBox<>(new String[]{"Tiền mặt", "Chuyển khoản"});
         gbc.gridx = 1;
@@ -144,14 +170,14 @@ public class OrderIformationForm extends JPanel {
         
         // Tiền khách đưa (ẩn nếu không phải tiền mặt)
         lblCash = new JLabel("Tiền khách đưa:");
-        gbc.gridx = 0; gbc.gridy = 11;
+        gbc.gridx = 0; gbc.gridy = 13;
         add(lblCash, gbc);
         txtCash = new StyledTextField();
         gbc.gridx = 1;
         add(txtCash, gbc);
 
         // Nút lưu đơn hàng
-        gbc.gridx = 0; gbc.gridy = 12;
+        gbc.gridx = 0; gbc.gridy = 14;
         btnSave = new JButton("Lưu đơn hàng");
         add(btnSave, gbc);
 
@@ -160,12 +186,16 @@ public class OrderIformationForm extends JPanel {
         btnPrint = new JButton("In hóa đơn");
         add(btnPrint, gbc);
 
+        btnSave.addActionListener(e-> SaveOrder());
         // Xử lý sự kiện
         rbNoMember.addActionListener(e -> toggleCustomerFields(false));
         rbYesMember.addActionListener(e -> toggleCustomerFields(true));
         cbPaymentMethod.addActionListener(e -> toggleCashField());
+        rbNoUsePoint.addActionListener(e -> toggleDiemtichLuy(false));
+        rbYesUsePoint.addActionListener(e -> toggleDiemtichLuy(true));
 
         toggleCustomerFields(false); // Ẩn ban đầu
+        toggleDiemtichLuy(false);
         toggleCashField(); // Ẩn tiền khách đưa nếu không phải tiền mặt
         
         setVisible(true);
@@ -181,38 +211,62 @@ public class OrderIformationForm extends JPanel {
             public void keyReleased(KeyEvent e) {
                 String phone = txtPhone.getText().trim();
                 if (!phone.isEmpty()) {
-                    TheThanhVienDTO member = TheThanhVienBLL.getMemberByPhone(phone);
-                    if (member != null) {
-                        txtCustomerName.setText(member.getTenTV());
-                        txtPoint.setText(member.getDiemTL() + "");
+                    Member = TheThanhVienBLL.getMemberByPhone(phone);
+                    if (Member != null) {
+                        txtCustomerName.setText(Member.getTenTV());
+                        txtPoint.setText(Member.getDiemTL() + "");
+                        loyalyPoint = DiemTichLuyBLL.getDiemTichLuyByDiemTichLuy(Member.getDiemTL());
+                        if(loyalyPoint != null){
+                            txtPointRate.setText(loyalyPoint.getTiLeGiam() + "");
+                            txtDiscountMax.setText(loyalyPoint.getGiamMax() + "");
+                        }else{
+                            txtPointRate.setText("không đủ điểm");
+                            txtDiscountMax.setText("0.0");
+                        }
                     } else {
+                        
                         txtCustomerName.setText("lỗi thành viên!");
                         txtPoint.setText("lỗi thành viên!");
+                        txtPointRate.setText("lỗi");
                     }
                 }
             }
         });     
-
-
         rederOrderInformation();
     }
 
     // toggle khi nhấn có /không có thẻ thành viên
     private static void toggleCustomerFields(boolean isEnabled) {
-        txtPhone.SetEnabled(isEnabled);
-        rbNoUsePoint.setEnabled(isEnabled);
-        rbYesUsePoint.setEnabled(isEnabled);
         if(isEnabled == false){
+            rbNoUsePoint.setSelected(true);
+            txtPointRate.setVisible(false);
+            txtDiscountMax.setVisible(false);
+            lblPointRate.setVisible(false);
+            lblDiscountMax.setVisible(false);
+
+
             txtPhone.setText("");
             txtCustomerName.setText("");
             txtPoint.setText("");
         }
+        txtPhone.SetEnabled(isEnabled);
+        rbNoUsePoint.setEnabled(isEnabled);
+        rbYesUsePoint.setEnabled(isEnabled);
+        
     }
 
     private static void toggleCashField() {
         boolean isCash = cbPaymentMethod.getSelectedItem().equals("Tiền mặt");
         lblCash.setVisible(isCash);
         txtCash.setVisible(isCash);
+    }
+
+
+    private static void toggleDiemtichLuy(boolean setlected) {
+        txtPointRate.setVisible(setlected);
+        txtDiscountMax.setVisible(setlected);
+        lblPointRate.setVisible(setlected);
+        lblDiscountMax.setVisible(setlected);
     }
 
     public static void rederOrderInformation(){
@@ -227,17 +281,52 @@ public class OrderIformationForm extends JPanel {
         totalAmount = FormOrderDetailList.calCalculateTotalAmount() - total*discount.getTileGiam()/100;
         txtTotal.setText(total + "");
         txtTotalFinaly.setText(totalAmount + "");
-        
-
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.add(new OrderIformationForm());
-        frame.setSize(500, 400);
-        frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+    public static void SaveOrder(){
+        LocalDateTime now = LocalDateTime.now();
+
+        // Định dạng ngày giờ thành "yyyy-MM-dd HH:mm:ss"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedDateTime = now.format(formatter);
+        DonHangDTO order = new DonHangDTO();
+        order.setMaNV(maNV);
+        order.setNgayTT(formattedDateTime);
+        order.setPtThanhToan(cbPaymentMethod.getSelectedItem().equals("Tiền mặt") ? "CASH" : "BANK");
+        order.setTienKD( 213);
+        order.setTrangThai("FINISHED");
+        if(discount != null){
+            order.setMaKM(discount.getMaKM());
+        }else{
+            order.setMaKM(null);
+        }
+        if(rbYesMember.isSelected() == true){
+            order.setMaKH(Member.getMaTV());
+            if(rbYesUsePoint.isSelected() == true && loyalyPoint != null){
+                order.setMaDTL(loyalyPoint.getMaDTL());
+            }else{
+                order.setMaDTL(null);
+            }
+        }else{
+            order.setMaKH(null);
+            order.setMaDTL(null);
+        }
+        boolean checkInsert =  DonHangBLL.insertOrder(order);
+        if(checkInsert) {
+            System.out.println("them thanh cong");
+        }else{
+            System.out.println("them that bai");
+        }
     }
+
+
+    // public static void main(String[] args) {
+    //     JFrame frame = new JFrame();
+    //     frame.add(new OrderIformationForm());
+    //     frame.setSize(500, 400);
+    //     frame.setLocationRelativeTo(null);
+    //     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    //     frame.setVisible(true);
+    // }
 
 }

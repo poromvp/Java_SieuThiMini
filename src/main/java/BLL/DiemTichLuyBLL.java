@@ -18,10 +18,10 @@ public class DiemTichLuyBLL {
         return DiemTichLuyDAL.getDiemTichLuyById(maDTL);
     }
 
-    public static DiemTichLuyDTO getDiemTichLuyByDiem(int diemTL) {
-        return DiemTichLuyDAL.getDiemTichLuyByDiem(diemTL);
-    }
 
+    public static DiemTichLuyDTO getDiemTichLuyByDiemTichLuy(int diemTl){
+        return DiemTichLuyDAL.getDiemTichLuyByDiem(diemTl);
+    }
 
     // Thêm điểm tích lũy mới
     public static String addDiemTichLuy(DiemTichLuyDTO diem) {
@@ -66,22 +66,9 @@ public class DiemTichLuyBLL {
 
     // Test
     public static void main(String[] args) {
-        System.out.println("Danh sách điểm tích lũy:");
-        printAllDiemTichLuy();
+        System.out.println(getDiemTichLuyByDiemTichLuy(1200));
+        // printAllDiemTichLuy();
 
-        System.out.println("\nTìm điểm tích lũy có mã 1:");
-        System.out.println(getDiemTichLuyById(1));
-
-        // Thêm mới một bản ghi
-        DiemTichLuyDTO newDiem = new DiemTichLuyDTO(5, 100, 0.1, 50000, "Hoạt động");
-        System.out.println("\nThêm mới: " + addDiemTichLuy(newDiem));
-
-        // Cập nhật một bản ghi
-        newDiem.setDiemTL(120);
-        newDiem.setTrangThai("Tạm ngưng");
-        System.out.println("\nCập nhật: " + updateDiemTichLuy(newDiem));
-
-        // Xóa một bản ghi
-        System.out.println("\nXóa: " + deleteDiemTichLuy(5));
+        
     }
 }

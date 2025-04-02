@@ -28,7 +28,9 @@ public class DonHangDAL {
                     rs.getInt("maKM"),
                     rs.getInt("maNV"),
                     rs.getString("PTTToan"),
-                    rs.getDate("NgayTT"),
+                    rs.getString("NgayTT"),
+                    rs.getInt("maDTL"), 
+                    rs.getInt("tienKD"), 
                     rs.getString("trangThai")
                 );
                 dsDonHang.add(dh);
@@ -55,7 +57,9 @@ public class DonHangDAL {
                     rs.getInt("maKM"),
                     rs.getInt("maNV"),
                     rs.getString("PTTToan"),
-                    rs.getDate("NgayTT"),
+                    rs.getString("NgayTT"),
+                    rs.getInt("maDTL"), 
+                    rs.getInt("tienKD"), 
                     rs.getString("trangThai")
                 );
             }

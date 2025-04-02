@@ -9,27 +9,29 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static Connection connection;
-    private static final String URL = "jdbc:mysql://localhost:3306/SIEUTHIMINI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
+    private static final String URL = "jdbc:mysql://localhost:3306/SIEUTHIMINI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&autoReconnect=true";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Bestngulon50024072#";
+    private static final String PASSWORD = "";
 
     // Mở kết nối đến CSDL
     public static Connection getConnection() {
-        if (connection == null) {
-            try {
+        try {
+            if (connection == null || connection.isClosed()) {  // Kiểm tra nếu connection bị đóng
+                System.out.println("Tạo lại kết nối MySQL...");
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-                System.out.println(" Ket noi thanh cong!");
-            } catch (ClassNotFoundException e) {
-                System.out.println(" Loi: Khong tim thay Driver MySQL!");
-                e.printStackTrace();
-            } catch (SQLException e) {
-                System.out.println(" Loi: Khong the ket noi den MySQL!");
-                e.printStackTrace();
+                System.out.println("Kết nối thành công!");
             }
+        } catch (ClassNotFoundException e) {
+            System.out.println("Lỗi: Không tìm thấy Driver MySQL!");
+            e.printStackTrace();
+        } catch (SQLException e) {
+            System.out.println("Lỗi: Không thể kết nối đến MySQL!");
+            e.printStackTrace();
         }
         return connection;
     }
+    
 
     // Đóng kết nối
     public static void closeConnection() {

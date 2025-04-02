@@ -15,7 +15,6 @@ public class InterfaceOrder extends JPanel{
     private FormQRscan formQRscan ;
     private FormOrderDetailList formOrderDetailList;
     private FormFindProduct formFindProduct;
-    private FormOrderInformation formOrderInformation;
     private OrderIformationForm formOrderInfo;
 
 
@@ -24,7 +23,6 @@ public class InterfaceOrder extends JPanel{
 
         formFindProduct = new FormFindProduct();
         formOrderDetailList = new FormOrderDetailList();
-        formOrderInformation = new FormOrderInformation();
         formOrderInfo = new OrderIformationForm();
         
         formQRscan = new FormQRscan();

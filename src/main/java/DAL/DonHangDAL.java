@@ -83,6 +83,24 @@ public class DonHangDAL {
         return DBConnection.executeUpdate(sql, maDH);
     }
 
+    public static int countOrder() {
+        String sql = "SELECT COUNT(maDH) FROM DonHang";
+        int count = 0;
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+    
+            if (rs.next()) {
+                count = rs.getInt(1); // Lấy giá trị COUNT từ cột đầu tiên
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+    
+
 
     public static void printAllOrder() {
         ArrayList<DonHangDTO> orderList = getAllOrder(); 
@@ -93,6 +111,7 @@ public class DonHangDAL {
     
 
     public static void main(String[] args) {
-        printAllOrder();
+        
+        System.out.println(countOrder());
     }
 }

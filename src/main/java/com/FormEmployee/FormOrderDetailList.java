@@ -18,6 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -28,10 +29,33 @@ public class FormOrderDetailList extends JPanel {
     private static JScrollPane scrollPane;
     private static JPopupMenu popupMenu;
     
-    private static final String[] HEADER = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng"};
-    private static final double[] WIDTH_COL = {0.1, 0.4, 0.2, 0.15, 0.15};
+    private static final String[] HEADER = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng", "thành tiền"};
+    private static final double[] WIDTH_COL = {0.1, 0.4, 0.2, 0.1, 0.1, 0.1};
 
-    public FormOrderDetailList() {
+    public static double calCalculateTotalAmount(){
+        double total = 0;
+        for(int i = 0; i < tableProduct.getRowCount(); i++){
+            double price = Double.parseDouble(tableProduct.getValueAt(i, 2).toString());
+            double discount = Double.parseDouble(tableProduct.getValueAt(i, 3).toString());
+            int quantity = Integer.parseInt(tableProduct.getValueAt(i, 4).toString());
+            total += (price - (price * discount / 100)) * quantity;
+        }
+        return total;
+    }
+
+    public static double calCalculateTotal(){
+        double total = 0;
+        for(int i = 0; i < tableProduct.getRowCount(); i++){
+            double price = Double.parseDouble(tableProduct.getValueAt(i, 2).toString());
+            int quantity = Integer.parseInt(tableProduct.getValueAt(i, 4).toString());
+            total += (price ) * quantity;
+        }
+        return total;
+    }
+    
+    
+
+    public  FormOrderDetailList() {
         setLayout(new BorderLayout());
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -59,6 +83,17 @@ public class FormOrderDetailList extends JPanel {
                 }
             }
         });
+
+        tableModel.addTableModelListener(e -> {
+            if (e.getType() == TableModelEvent.INSERT) {
+                OrderIformationForm.rederOrderInformation();
+            } else if (e.getType() == TableModelEvent.DELETE) {
+                OrderIformationForm.rederOrderInformation();
+            } else if (e.getType() == TableModelEvent.UPDATE) {
+            OrderIformationForm.rederOrderInformation();
+        }
+        });
+
     }
 
     private static void customizeTable() {
@@ -124,6 +159,12 @@ public class FormOrderDetailList extends JPanel {
         }
     }
 
+    public static void addProductDetailById(int id){
+
+    }
+
+    
+
     public static void addProductDetail(Object[] rowData) {
         tableModel.addRow(rowData);
     }
@@ -158,10 +199,17 @@ public class FormOrderDetailList extends JPanel {
             String currentQty = tableProduct.getValueAt(row, 4).toString();
             String newQty = JOptionPane.showInputDialog(null, "Nhập số lượng mới:", currentQty);
             if (newQty != null && !newQty.trim().isEmpty()) {
-                tableModel.setValueAt(Integer.parseInt(newQty), row, 4);
+                double price = Double.parseDouble(tableProduct.getValueAt(row, 2).toString());
+                double discount = Double.parseDouble(tableProduct.getValueAt(row, 3).toString());
+                double total = (price - (price * discount / 100)) * Integer.parseInt(newQty);
+
+                tableModel.setValueAt(newQty, row, 4);
+                tableModel.setValueAt(total, row, 5);
             }
         }
     }
+
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Danh sách sản phẩm");
@@ -173,10 +221,10 @@ public class FormOrderDetailList extends JPanel {
         FormOrderDetailList orderList = new FormOrderDetailList();
         frame.add(orderList, BorderLayout.CENTER);
 
-        addProductDetail(new Object[]{1, "Sản phẩm A", 100000, 3, 10});
+        addProductDetail(new Object[]{1, "Sản phẩm A", 100000, 3, 10, 53});
         addRows(new Object[][]{
-            {2, "Sản phẩm B", 200000, 2, 10},
-            {3, "Sản phẩm C", 300000, 1, 5}
+            {2, "Sản phẩm B", 200000, 2, 10, 4353},
+            {3, "Sản phẩm C", 300000, 1, 5, 54335}
         });
 
         frame.setVisible(true);

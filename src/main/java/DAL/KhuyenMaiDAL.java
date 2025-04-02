@@ -1,12 +1,12 @@
 package DAL;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-
-import com.mysql.cj.jdbc.PreparedStatementWrapper;
 
 import DTO.KhuyenMaiDTO;
 import JDBC.DBConnection;
@@ -36,6 +36,36 @@ public class KhuyenMaiDAL {
         }    
         return discountList;
     }
+
+    
+public static KhuyenMaiDTO getDiscountToday() {
+    String sql = "SELECT * FROM KhuyenMai WHERE ngayBD <= ? AND ngayKT >= ?";
+    KhuyenMaiDTO discount = null;
+
+    try (Connection connection = DBConnection.getConnection();
+         PreparedStatement pstmt = connection.prepareStatement(sql)) {
+        
+        LocalDate today = LocalDate.now(); // Lấy ngày hôm nay
+        pstmt.setDate(1, Date.valueOf(today)); // Gán ngày bắt đầu <= hôm nay
+        pstmt.setDate(2, Date.valueOf(today)); // Gán ngày kết thúc >= hôm nay
+        
+        ResultSet rs = pstmt.executeQuery();
+        if (rs.next()) {
+            discount = new KhuyenMaiDTO(
+                rs.getInt("maKM"),
+                rs.getString("tenKM"),
+                rs.getDate("ngayKT"),
+                rs.getDate("ngayBD"),
+                rs.getDouble("tiLeGiam"),
+                rs.getString("trangThai")
+            );
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return discount;
+}
 
     public static KhuyenMaiDTO getDiscountById(int id){
         String sql = "SELECT * FROM KhuyenMai WHERE maKM = ?";

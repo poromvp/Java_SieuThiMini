@@ -1,9 +1,10 @@
 package com.FormEmployee;
 
-import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -12,16 +13,28 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JTextField;
 
 import com.ComponentCommon.StyledTextField;
 
+import BLL.DonHangBLL;
+import BLL.KhuyenMaiBLL;
+import BLL.TheThanhVienBLL;
+import DTO.KhuyenMaiDTO;
+import DTO.TheThanhVienDTO;
+
 public class OrderIformationForm extends JPanel {
-    private StyledTextField txtPhone, txtCustomerName, txtOrderId, txtTotal, txtDiscount, txtCash, txtPoint;
-    private JComboBox<String> cbPaymentMethod;
-    private JRadioButton rbYesMember, rbNoMember,  rbYesUsePoint, rbNoUsePoint;
-    private JButton btnSave, btnPrint;
-    private JLabel lblEmployeeName, lblCash;
+    private static StyledTextField txtemployeeName , txtPhone, txtCustomerName, txtOrderId, txtTotal, txtTotalFinaly, txtDiscount, txtCash, txtPoint;
+    private static JComboBox<String> cbPaymentMethod;
+    private static JRadioButton rbYesMember, rbNoMember,  rbYesUsePoint, rbNoUsePoint;
+    private static JButton btnSave, btnPrint;
+    private static JLabel lblEmployeeName, lblCash;
+    private static ButtonGroup group1;
+
+
+
+    private static int countOrder;
+    private static KhuyenMaiDTO discount;
+    private static double totalAmount, total;
 
     public OrderIformationForm() {
         setSize(400, 400);
@@ -31,14 +44,22 @@ public class OrderIformationForm extends JPanel {
         gbc.insets = new Insets(5, 5, 5, 5);
         
         // Nhân viên
-        lblEmployeeName = new JLabel("Nhân viên: Nguyễn Văn A");
-        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+        lblEmployeeName = new JLabel("Mã nhân viên:");
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 1;
         add(lblEmployeeName, gbc);
+        txtemployeeName = new StyledTextField();
+        txtemployeeName.setText("1");
+        txtemployeeName.isAddColorBorder(false);
+        gbc.gridx = 1;
+        add(txtemployeeName, gbc);
+
         
         // Mã hóa đơn
-        gbc.gridy = 1; gbc.gridwidth = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 1; gbc.gridwidth = 1; 
         add(new JLabel("Mã hóa đơn:"), gbc);
         txtOrderId = new StyledTextField(102, 30);
+        txtOrderId.isAddColorBorder(false);
         gbc.gridx = 1;
         add(txtOrderId, gbc);
         
@@ -46,18 +67,27 @@ public class OrderIformationForm extends JPanel {
         gbc.gridx = 0; gbc.gridy = 2;
         add(new JLabel("Tổng tiền:"), gbc);
         txtTotal = new StyledTextField();
+        txtTotal.isAddColorBorder(false);
         gbc.gridx = 1;
         add(txtTotal, gbc);
+
+        gbc.gridx = 0; gbc.gridy = 3;
+        add(new JLabel("Thành tiền:"), gbc);
+        txtTotalFinaly = new StyledTextField();
+        txtTotalFinaly.isAddColorBorder(false);
+        gbc.gridx = 1;
+        add(txtTotalFinaly, gbc);
         
         // % Khuyến mãi
-        gbc.gridx = 0; gbc.gridy = 3;
+        gbc.gridx = 0; gbc.gridy = 4;
         add(new JLabel("% Khuyến mãi:"), gbc);
         txtDiscount = new StyledTextField();
+        txtDiscount.isAddColorBorder(false);
         gbc.gridx = 1;
         add(txtDiscount, gbc);
         
         // Tích điểm?
-        gbc.gridx = 0; gbc.gridy = 4;
+        gbc.gridx = 0; gbc.gridy = 5;
         add(new JLabel("Có thẻ thành viên?"), gbc);
         rbYesMember = new JRadioButton("Có");
         rbNoMember= new JRadioButton("Không", true);
@@ -71,7 +101,7 @@ public class OrderIformationForm extends JPanel {
         add(panel, gbc);
         
         // Số điện thoại (ẩn nếu không tích điểm)
-        gbc.gridx = 0; gbc.gridy = 5;
+        gbc.gridx = 0; gbc.gridy = 6;
         add(new JLabel("SĐT KH:"), gbc);
         txtPhone = new StyledTextField();
         txtPhone.setText("khang");
@@ -79,24 +109,24 @@ public class OrderIformationForm extends JPanel {
         add(txtPhone, gbc);
         
         // Tên khách hàng
-        gbc.gridx = 0; gbc.gridy = 6;
+        gbc.gridx = 0; gbc.gridy = 7;
         add(new JLabel("Tên KH:"), gbc);
         txtCustomerName = new StyledTextField();
         gbc.gridx = 1;
         add(txtCustomerName, gbc);
 
-        gbc.gridx = 0; gbc.gridy = 7;
+        gbc.gridx = 0; gbc.gridy = 8;
         add(new JLabel("Điểm TL:"), gbc);
         txtPoint = new StyledTextField();
         gbc.gridx = 1;
         add(txtPoint, gbc);
 
 
-        gbc.gridx = 0; gbc.gridy = 8;
+        gbc.gridx = 0; gbc.gridy = 9;
         add(new JLabel("Mua với điểm TL?"), gbc);
         rbYesUsePoint = new JRadioButton("Có");
         rbNoUsePoint = new JRadioButton("Không", true);
-        ButtonGroup group1 = new ButtonGroup();
+        group1 = new ButtonGroup();
         group1.add(rbYesUsePoint);
         group1.add(rbNoUsePoint);
         JPanel panel1 = new JPanel();
@@ -106,7 +136,7 @@ public class OrderIformationForm extends JPanel {
         add(panel1, gbc);
         
         // Hình thức thanh toán
-        gbc.gridx = 0; gbc.gridy = 9;
+        gbc.gridx = 0; gbc.gridy = 10;
         add(new JLabel("Hình thức TT:"), gbc);
         cbPaymentMethod = new JComboBox<>(new String[]{"Tiền mặt", "Chuyển khoản"});
         gbc.gridx = 1;
@@ -114,14 +144,14 @@ public class OrderIformationForm extends JPanel {
         
         // Tiền khách đưa (ẩn nếu không phải tiền mặt)
         lblCash = new JLabel("Tiền khách đưa:");
-        gbc.gridx = 0; gbc.gridy = 10;
+        gbc.gridx = 0; gbc.gridy = 11;
         add(lblCash, gbc);
         txtCash = new StyledTextField();
         gbc.gridx = 1;
         add(txtCash, gbc);
 
         // Nút lưu đơn hàng
-        gbc.gridx = 0; gbc.gridy = 11;
+        gbc.gridx = 0; gbc.gridy = 12;
         btnSave = new JButton("Lưu đơn hàng");
         add(btnSave, gbc);
 
@@ -145,19 +175,62 @@ public class OrderIformationForm extends JPanel {
         txtPoint.setEnabled(false);
         txtPoint.isAddColorBorder(false);
         txtCustomerName.isAddColorBorder(false);
+   
+    // render teen và điẻmTL
+        txtPhone.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String phone = txtPhone.getText().trim();
+                if (!phone.isEmpty()) {
+                    TheThanhVienDTO member = TheThanhVienBLL.getMemberByPhone(phone);
+                    if (member != null) {
+                        txtCustomerName.setText(member.getTenTV());
+                        txtPoint.setText(member.getDiemTL() + "");
+                    } else {
+                        txtCustomerName.setText("lỗi thành viên!");
+                        txtPoint.setText("lỗi thành viên!");
+                    }
+                }
+            }
+        });     
 
+
+        rederOrderInformation();
     }
 
-    private void toggleCustomerFields(boolean isEnabled) {
+    // toggle khi nhấn có /không có thẻ thành viên
+    private static void toggleCustomerFields(boolean isEnabled) {
         txtPhone.setEnabled(isEnabled);
         txtPhone.isAddColorBorder(isEnabled);
-        txtPhone.setText("");
+        rbNoUsePoint.setEnabled(isEnabled);
+        rbYesUsePoint.setEnabled(isEnabled);
+        if(isEnabled == false){
+            txtPhone.setText("");
+            txtCustomerName.setText("");
+            txtPoint.setText("");
+        }
     }
 
-    private void toggleCashField() {
+    private static void toggleCashField() {
         boolean isCash = cbPaymentMethod.getSelectedItem().equals("Tiền mặt");
         lblCash.setVisible(isCash);
         txtCash.setVisible(isCash);
+    }
+
+    public static void rederOrderInformation(){
+        countOrder = DonHangBLL.countOrder() + 1;
+        txtOrderId.setText(countOrder + "");
+
+        discount = KhuyenMaiBLL.getDiscountToday();
+        if(discount != null){
+            txtDiscount.setText(discount.getTileGiam() + "");
+        }
+        total = FormOrderDetailList.calCalculateTotal();
+        totalAmount = FormOrderDetailList.calCalculateTotalAmount() - total*discount.getTileGiam()/100;
+        txtTotal.setText(total + "");
+        txtTotalFinaly.setText(totalAmount + "");
+        
+
     }
 
     public static void main(String[] args) {

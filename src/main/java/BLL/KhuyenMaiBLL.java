@@ -36,6 +36,10 @@ public class KhuyenMaiBLL {
         return result > 0;
     }
 
+    public static KhuyenMaiDTO getDiscountToday() {
+        return KhuyenMaiDAL.getDiscountToday();
+    }
+
     public static void printAllDiscounts() {
         ArrayList<KhuyenMaiDTO> discounts = getAllDiscounts();
         for (KhuyenMaiDTO km : discounts) {

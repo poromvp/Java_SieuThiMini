@@ -14,6 +14,10 @@ public class DonHangBLL {
         return DonHangDAL.getAllOrder();
     }
 
+    public static int countOrder() {
+        return DonHangDAL.countOrder();
+    }
+
     // Lấy đơn hàng theo ID (có thể kiểm tra ID hợp lệ)
     public static DonHangDTO getOrderById(int maDH) {
         if (maDH <= 0) {

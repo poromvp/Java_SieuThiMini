@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 
 
 public class StyledTextField extends JTextField {
-
+    private Color bgColor = new Color(17, 32, 51);
     public StyledTextField() {
         // super(columns);
         setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -22,7 +22,7 @@ public class StyledTextField extends JTextField {
         setCaretColor(Color.RED);
         setOpaque(true); 
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true), 
+                BorderFactory.createLineBorder(bgColor, 2, true), 
                 BorderFactory.createEmptyBorder(5, 10, 5, 10) 
         ));
         setPreferredSize(new Dimension(200, 30)); 
@@ -36,7 +36,7 @@ public class StyledTextField extends JTextField {
         setCaretColor(Color.RED);
         setOpaque(true); 
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true), 
+                BorderFactory.createLineBorder(bgColor, 2, true), 
                 BorderFactory.createEmptyBorder(5, 10, 5, 10) 
         ));
         setPreferredSize(new Dimension(w, h)); 
@@ -47,7 +47,7 @@ public class StyledTextField extends JTextField {
         setEditable(isAdd);
         int thickness = isAdd == true? 2: 0;
         setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(30, 144, 255), thickness, true), 
+            BorderFactory.createLineBorder(bgColor, thickness, true), 
             BorderFactory.createEmptyBorder(5, 10, 5, 10) 
         ));
     }

@@ -15,7 +15,7 @@ import javax.swing.table.JTableHeader;
 public class StyledTable extends JTable {
 
     private boolean isEditable = false; // Mặc định không cho chỉnh sửa
-
+    private Color bgColor = new Color(17, 32, 51);
     public StyledTable(Object[][] data, Object[] columnNames) {
         super(new DefaultTableModel(data, columnNames) {
             @Override
@@ -32,7 +32,7 @@ public class StyledTable extends JTable {
         JTableHeader header = getTableHeader();
         header.setFont(new Font("SansSerif", Font.BOLD, 14));
         header.setForeground(Color.WHITE);
-        header.setBackground(new Color(30, 144, 255));
+        header.setBackground(bgColor);
         header.setReorderingAllowed(false);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -40,7 +40,7 @@ public class StyledTable extends JTable {
         setDefaultRenderer(Object.class, centerRenderer);
         setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         setShowGrid(false);
-        setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true));
+        setBorder(BorderFactory.createLineBorder(bgColor, 2, true));
         setSelectionBackground(new Color(173, 216, 230));
         setRowHeight(30);
     }

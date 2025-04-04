@@ -1,14 +1,11 @@
-package com;
+package com.sieuthi;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import com.FormNhanVien.FormMainNhanVien;
 import com.FormNhanVien.LeftSidebarMenu;
-import com.FormTaiKhoan.FormMainAccount;
-import com.Admin_PanelThongKe.PanelMainThongKe;
-import com.DashBoardPanel.MainDashBoard;
-import com.FormWareHouse.FormProduct;
+import FormTaiKhoan.FormMainAccount;
 
 public class FrameAdmin extends JFrame implements ActionListener {
 
@@ -25,12 +22,11 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
         leftMenu = new LeftSidebarMenu();
         leftMenu.setActionListener(this);  
-        leftMenu.setPreferredSize(new Dimension(250, 0));
 
         add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
-        panelDashBoard();  
+        panelNhanVien();  
 
         add(rightPn, BorderLayout.CENTER);
 
@@ -56,22 +52,15 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
     public void panelSanPham() {
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
-        rightPn.setLayout(new BorderLayout());
-
-        FormProduct productPanel= new FormProduct();
-        rightPn.add(productPanel, BorderLayout.CENTER);
-
+        rightPn.setBackground(new Color(53, 11, 77));
         rightPn.revalidate();
         rightPn.repaint();
+        add(rightPn);
     }
 
     public void panelBaoCao() {
         rightPn.removeAll();
         rightPn.setBackground(new Color(176, 90, 20));
-        rightPn.setLayout(new BorderLayout());
-        PanelMainThongKe mainPanel=new PanelMainThongKe();
-        rightPn.add(mainPanel,BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
         add(rightPn);
@@ -88,22 +77,10 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
     }
 
-    public void panelDashBoard(){
-        rightPn.removeAll();
-        rightPn.setLayout(new BorderLayout());
-
-        MainDashBoard homePanel = new MainDashBoard();
-        rightPn.add(homePanel, BorderLayout.CENTER);
-
-        rightPn.revalidate();
-        rightPn.repaint();
-        add(rightPn);
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == leftMenu.getBtnHome()) {
-            panelDashBoard();
+            panelNhanVien();
         } else if (e.getSource() == leftMenu.getBtnEmployee()) {
             panelNhanVien();
         } else if (e.getSource() == leftMenu.getBtnProduct()) {

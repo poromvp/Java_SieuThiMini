@@ -2,6 +2,7 @@ package BLL;
 
 
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import DAL.DonHangDAL;
@@ -76,6 +77,45 @@ public class DonHangBLL {
             }
         }
     }
+
+    public static ArrayList<ArrayList<Object>> getFindSortOrder(
+        ArrayList<String> whereConditions,
+        ArrayList<String> having,
+        ArrayList<Object> param,
+        String orderBy,
+        String orderType,
+        Integer limit
+    ) {
+        // Bảo vệ null
+        if (whereConditions == null) whereConditions = new ArrayList<>();
+        if (having == null) having = new ArrayList<>();
+        if (param == null) param = new ArrayList<>();
+    
+        // Kiểm tra sắp xếp
+        if (orderBy != null && !orderBy.matches("^[a-zA-Z0-9_]+$")) {
+            throw new IllegalArgumentException("Trường orderBy không hợp lệ");
+        }
+    
+        if (orderType != null && !orderType.equalsIgnoreCase("ASC") && !orderType.equalsIgnoreCase("DESC")) {
+            throw new IllegalArgumentException("Thứ tự sắp xếp chỉ được là ASC hoặc DESC");
+        }
+    
+        // Kiểm tra param đủ số lượng cho WHERE và HAVING
+        int expectedParams = whereConditions.size() + having.size();
+        if (param.size() < expectedParams) {
+            throw new IllegalArgumentException("Số lượng tham số không khớp với điều kiện truy vấn");
+        }
+    
+        return DonHangDAL.getFindSortOrder(
+            whereConditions,
+            having,
+            param,
+            orderBy,
+            orderType,
+            limit
+        );
+    }
+    
 
     public static void main(String[] args) {
         printAllOrders();

@@ -9,10 +9,20 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileOutputStream;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -37,6 +47,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.toedter.calendar.JDateChooser;
 
+import BLL.DonHangBLL;
+
 
 public class InterfaceOrderManagement extends JPanel implements ActionListener{
 
@@ -57,51 +69,71 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         
    
  
-        JLabel lbl_orderId ;
+        private  static    JLabel lbl_orderId ;
        
-        JLabel lbl_startDate ;
+        private  static    JLabel lbl_startDate ;
 
      
-        JLabel lbl_endDate ;
-        JLabel lbl_minTotal ;
-        JLabel lbl_maxTotal ;
-        JLabel lbl_status ;
-        JLabel lbl_memberId ;
-        JLabel lbl_memberName ;
-        JLabel lbl_phone ;
-        JButton btn_findOrder ;
-        JLabel lbl_sort ;
-        JLabel lbl_column ;
-        JTextField txt_idOrder ;
-        JTextField txt_startDate ;
-        JTextField txt_endDate ;
-        JTextField txt_minTotal ;
-        JTextField txt_maxTotal ;
-        JTextField txt_status ;
-        JTextField txt_idMember;
-        JTextField txt_memberName ;
-        JTextField txt_memberPhone;
-        JTextField txt_sort ;
-        JTextField txt_column;
-        JButton btn_sort ;
+        private  static    JLabel lbl_endDate ;
+        private  static    JLabel lbl_minTotal ;
+        private  static    JLabel lbl_maxTotal ;
+        private  static JLabel lbl_status ;
+        private  static JLabel lbl_employeeId ;
+        private  static JLabel lbl_employeeName ;
+        private  static JLabel lbl_phone ;
+        private  static JButton btn_findOrder ;
+        private  static JLabel lbl_sort ;
+        private  static JLabel lbl_column ;
+        private  static JTextField txt_idOrder ;
+        private  static JTextField txt_startDate ;
+        private  static JTextField txt_endDate ;
+        private  static JTextField txt_minTotal ;
+        private  static JTextField txt_maxTotal ;
+        private  static JTextField txt_status ;
+        private  static JTextField txt_idMember;
+        private  static JTextField txt_memberName ;
+        private  static JTextField txt_memberPhone;
+        private  static JTextField txt_sort ;
+        private  static JTextField txt_column;
+        private  static JButton btn_sort ;
 
-        JDateChooser dateChooserStart = new JDateChooser();
-        JDateChooser dateChooserEnd = new JDateChooser();
-        String[] items = {"Tăng dần", "Giảm dần"};
-        JComboBox<String> comboBoxSort = new JComboBox<>(items);
-        JSpinner spinnerTotalMin = new JSpinner(new SpinnerNumberModel(100000, 0, 1000000, 1000));
-        JSpinner spinnerTotalMax = new JSpinner(new SpinnerNumberModel(1000000, 1, 10000000, 1000));
+        private  static JDateChooser dateChooserStart = new JDateChooser();
+        private  static JDateChooser dateChooserEnd = new JDateChooser();
+        private  static String[] items = {"Tăng dần", "Giảm dần"};
+        private  static JComboBox<String> comboBoxSort = new JComboBox<>(items);
+        private  static String[] column = {"Mã đơn hàng", "Tên nhân viên", "Ngày mua", "Tổng tiền"};
+        private  static JComboBox<String> comboBoxColumnSort = new JComboBox<>(column);
+        private  static JSpinner spinnerTotalMin = new JSpinner(new SpinnerNumberModel(100000, 0, 1000000, 1000));
+        private  static JSpinner spinnerTotalMax = new JSpinner(new SpinnerNumberModel(1000000, 1, 10000000, 1000));
 
+        private  static JLabel lbl_show = new JLabel("Hiển thị");
+        private  static JSpinner spinnerShow = new JSpinner(new SpinnerNumberModel(10, 1, 100000000, 1));
+
+        private  static String[] status = {"FINISHED", "UNFINISHED", "DELETED"};
+        private  static JComboBox<String> comboBoxStatus = new JComboBox<>(status);
+
+        private static String[] header = {"Mã DH", "Mã NV", "tên NV", "Ngày mua",  "Trạng thái","Tên KH", "Tổng tiền", "Giảm giá(%)"};
+        private static ArrayList<ArrayList<Object>> data = new ArrayList<>(Arrays.asList(
+            new ArrayList<>(Arrays.asList(101, 1, 1, "2025-04-01", 2500000, "Chưa thanh toán", 0)),
+            new ArrayList<>(Arrays.asList(102, 2, 2, "2025-04-02", 3200000, "Đã thanh toán", 10)),
+            new ArrayList<>(Arrays.asList(103, 3, 3, "2025-04-03", 1500000, "Đã thanh toán", 5)),
+            new ArrayList<>(Arrays.asList(104, 1, 4, "2025-04-04", 4200000, "Chưa thanh toán", 15)),
+            new ArrayList<>(Arrays.asList(105, 4, 5, "2025-04-05", 2800000, "Đã thanh toán", 0)),
+            new ArrayList<>(Arrays.asList(106, 2, 6, "2025-04-06", 3500000, "Đã thanh toán", 20)),
+            new ArrayList<>(Arrays.asList(107, 3, 7, "2025-04-07", 1900000, "Chưa thanh toán", 10)),
+            new ArrayList<>(Arrays.asList(108, 1, 8, "2025-04-08", 4000000, "Đã thanh toán", 5)),
+            new ArrayList<>(Arrays.asList(109, 4, 9, "2025-04-09", 2200000, "Đã thanh toán", 0)),
+            new ArrayList<>(Arrays.asList(110, 2, 10, "2025-04-10", 3100000, "Chưa thanh toán", 8))
+        ));
 
 
     public InterfaceOrderManagement(){
         setBackground(Color.pink);
         setLayout(new GridBagLayout());
-
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(7, 15, 15, 15);
-
-//  panel lamf thanh cong cuj---============================
+        
+        //  panel lamf thanh cong cuj---============================
         pn_toolBar = new JPanel(new FlowLayout());
         btn_show = new JButton("xem");
         btn_edit = new JButton("sửa");
@@ -121,33 +153,28 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         btn_excel.addActionListener(this);
         btn_pdf.addActionListener(this);
 
-
-// ======= panel table hiển thị list đơn hàng==============
-        pn_listOrder = new JPanel(new BorderLayout(15, 15));
-        String[] header = {"Mã", "Ngày mua","tổng tiền", "trạng thái", "giảm giá(%)"};
-        Object[][] data = {
-            {1, "2025-03-18", 100000, 3, "đã thanh toán", 5},
-            {2, "2025-03-18", 100000, 3, "đã thanh toán", 5},
-            {3, "2025-03-18", 100000, 3, "đã thanh toán", 5},
-            {4, "2025-03-18", 100000, 3, "đã thanh toán", 5},
-            {5, "2025-03-18", 100000, 3, "đã thanh toán", 5},
-        };
-        dftmd_listOrder = new DefaultTableModel(data, header);
-        tb_listOrder = new JTable(dftmd_listOrder);
-        // Đưa bảng vào JScrollPane để có thanh cuộn
-        scp_listOrder = new JScrollPane(tb_listOrder);
-        // Thêm JScrollPane vào panel
-        pn_listOrder.add(scp_listOrder, BorderLayout.CENTER);
         
-// ==============panel tìm kiếm =============================================
-        pn_findOrder = new JPanel(new GridLayout(0, 6, 15, 10));
-
-    
+        // ======= panel table hiển thị list đơn hàng==============
+        
+        pn_listOrder = new JPanel(new BorderLayout(15, 15));
+        // String[] header = {"Mã", "Ngày mua","tổng tiền", "trạng thái", "giảm giá(%)"};
+        // String[] header2 = {"Mã DH", "Mã NV", "Mã KH", "Ngày mua","tổng tiền",  "trạng thái", "giảm giá(%)"};
+        // dftmd_listOrder = new DefaultTableModel(data, header);
+        // tb_listOrder = new JTable(dftmd_listOrder);
+        // // Đưa bảng vào JScrollPane để có thanh cuộn
+        // scp_listOrder = new JScrollPane(tb_listOrder);
+        // // Thêm JScrollPane vào panel
+        // pn_listOrder.add(scp_listOrder, BorderLayout.CENTER);
+        
+        // ==============panel tìm kiếm =============================================
+        pn_findOrder = new JPanel(new GridLayout(0, 7, 15, 10));
+        
+        
         lbl_orderId = new JLabel("mã đơn hàng");
         txt_idOrder = new JTextField();
         pn_findOrder.add(styledItemInput(lbl_orderId, txt_idOrder));
-
-   
+        
+        
         lbl_startDate = new JLabel("ngày bắt đầu");
         txt_startDate = new JTextField();
         pn_findOrder.add(styledDateInput(lbl_startDate, dateChooserStart));
@@ -156,8 +183,8 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         lbl_endDate = new JLabel("ngày kết thúc");
         txt_endDate = new JTextField();
         pn_findOrder.add(styledDateInput(lbl_endDate, dateChooserEnd));
-
-
+        
+        
         lbl_minTotal = new JLabel("tổng tiền min");
         txt_minTotal = new JTextField();
         pn_findOrder.add(styledSpinnerInput(lbl_minTotal, spinnerTotalMin));
@@ -171,23 +198,26 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         
         lbl_status = new JLabel("trạng thái");
         txt_status = new JTextField();
-        pn_findOrder.add(styledItemInput(lbl_status, txt_status));
+        pn_findOrder.add(styledComboboxInput(lbl_status, comboBoxStatus));
         
         
-        lbl_memberId = new JLabel("mã thành viên");
+        btn_findOrder = new JButton("Tìm kiếm");
+        pn_findOrder.add(btn_findOrder);
+        
+        lbl_employeeId = new JLabel("mã nhân viên");
         txt_idMember = new JTextField();
-        pn_findOrder.add(styledItemInput(lbl_memberId, txt_idMember));
+        pn_findOrder.add(styledItemInput(lbl_employeeId, txt_idMember));
         
         
-        lbl_memberName = new JLabel("tên thành viên");
+        lbl_employeeName = new JLabel("tên nhân viên");
         txt_memberName = new JTextField();
-        pn_findOrder.add(styledItemInput(lbl_memberName, txt_memberName));
-
+        pn_findOrder.add(styledItemInput(lbl_employeeName, txt_memberName));
         
-        lbl_phone = new JLabel("số điện thoại");
+        
+        lbl_phone = new JLabel("số DT thành viên");
         txt_memberPhone = new JTextField();
         pn_findOrder.add(styledItemInput(lbl_phone, txt_memberPhone));
-
+        
         
         
         
@@ -198,12 +228,44 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         
         lbl_column = new JLabel("theo cột");
         txt_column = new JTextField();
-        pn_findOrder.add(styledItemInput(lbl_column, txt_column));
+        pn_findOrder.add(styledComboboxInput(lbl_column, comboBoxColumnSort));
         
+        pn_findOrder.add(styledSpinnerInput( lbl_show, spinnerShow));
         
-        btn_findOrder = new JButton("Tìm kiếm");
-        pn_findOrder.add(btn_findOrder);
 
+        dateChooserStart.getDateEditor().setEnabled(false);
+        dateChooserEnd.getDateEditor().setEnabled(false);
+        
+        
+        dftmd_listOrder = new DefaultTableModel(header, 0); // 0 là số dòng ban đầu
+        tb_listOrder = new JTable(dftmd_listOrder);
+        scp_listOrder = new JScrollPane(tb_listOrder);
+        pn_listOrder.add(scp_listOrder, BorderLayout.CENTER);
+        // =====================================================EVENT
+
+        JTextField dateField = ((JTextField) dateChooserStart.getDateEditor().getUiComponent());
+        // Bắt sự kiện click vào text field để xóa ngày
+        dateField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dateChooserStart.setDate(null);
+            }
+        });
+        
+        dateField = ((JTextField) dateChooserEnd.getDateEditor().getUiComponent());
+        // Bắt sự kiện click vào text field để xóa ngày
+        dateField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                dateChooserEnd.setDate(null);
+            }
+        });
+
+        btn_findOrder.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e){
+                renderOrderToTable();
+            }
+        });;
 
 
      
@@ -238,6 +300,7 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         pn_listOrder.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(pn_listOrder, gbc);
 
+        renderOrderToTable();
         customizeTable();
     }
 
@@ -385,6 +448,67 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         }
     }
 
+    public static void renderOrderToTable(){
+        ArrayList<String> whereConditions = new ArrayList<>();
+        ArrayList<String> having = new ArrayList<>();
+        ArrayList<Object> param = new ArrayList<>();
+        String orderBy = null;
+        String orderType = null;
+        Integer limit = null;
+        
+        String id = txt_idOrder.getText().trim();
+        if(!id.isEmpty()){
+            if (id.matches("\\d+")) {
+                whereConditions.add("donhang.maDH = ?"); // thiếu khoảng trắng ở cuối → sửa bên dưới luôn
+                param.add(Integer.parseInt(id));
+            } else {
+                data = new ArrayList<>(Arrays.asList()); 
+                JOptionPane.showMessageDialog(null, "Mã đơn hàng phải là số nguyên!", "Lỗi mã đơn hàng", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            
+        }
+        
+        Date date = dateChooserStart.getDate(); // Lấy ngày từ JDateChooser
+        if (date != null) {
+            whereConditions.add("donhang.NgayTT >= ?");
+            param.add(new java.sql.Date(date.getTime())); // Convert sang java.sql.Date
+        }
+        date = dateChooserEnd.getDate(); // Lấy ngày từ JDateChooser
+        if (date != null) {
+            whereConditions.add("donhang.NgayTT <= ?");
+            param.add(new java.sql.Date(date.getTime())); // Convert sang java.sql.Date
+        }
+        
+        // ==== Tổng tiền tối thiểu ====
+        Object minVal = spinnerTotalMin.getValue();
+        if (minVal instanceof Number) {
+            int min = ((Number) minVal).intValue();
+            having.add("SUM(chitietdh.SoLuong * sanpham.Gia) >= ?");
+            param.add(min);
+        }
+
+        // ==== Tổng tiền tối đa ====
+        Object maxVal = spinnerTotalMax.getValue();
+        if (maxVal instanceof Number) {
+            int max = ((Number) maxVal).intValue();
+            having.add("SUM(chitietdh.SoLuong * sanpham.Gia) <= ?");
+            param.add(max);
+        }
+
+
+        data = DonHangBLL.getFindSortOrder(whereConditions, having, param, orderBy, orderType, limit);
+        addDataToTable();
+    }
+
+    public static void addDataToTable(){
+        dftmd_listOrder.setRowCount(0); // Xóa hết dữ liệu cũ
+        for (ArrayList<Object> rowData : data) {
+            dftmd_listOrder.addRow(rowData.toArray());
+        }
+       
+    }
+
 
 
 
@@ -396,6 +520,9 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         JPanel panel = new  InterfaceOrderManagement();
         // panel.setBackground(Color.CYAN);
         frame.add(panel);
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/images/icon/Logo_market.png");  
+        frame.setIconImage(icon);  
+        
         frame.setVisible(true);
     }
 

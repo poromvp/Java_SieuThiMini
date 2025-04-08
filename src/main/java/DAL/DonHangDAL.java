@@ -1,10 +1,15 @@
 package DAL;
 
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import DTO.DonHangDTO;
 import JDBC.DBConnection;
@@ -40,6 +45,104 @@ public class DonHangDAL {
         }
         return dsDonHang;
     }
+
+    public static ArrayList<ArrayList<Object>> getFindSortOrder(
+        ArrayList<String> whereConditions,
+        ArrayList<String> having,
+        ArrayList<Object> param,
+        String orderBy,
+        String orderType, 
+        Integer limit
+    ) {
+        ArrayList<ArrayList<Object>> result = new ArrayList<>();
+    
+        String sql = "SELECT donhang.MaDH, donhang.MaNV, nhanvien.TenNV, \n" +
+                "       donhang.NgayTT, donhang.TrangThai, thethanhvien.TenTV, \n" +
+                "       SUM(chitietdh.SoLuong * sanpham.Gia) AS tongTien,\n" +
+                "       khuyenmai.TileGiam\n" +
+                "FROM sieuthimini.donhang\n" +
+                "JOIN nhanvien ON nhanvien.MaNV = donhang.MaNV\n" +
+                "LEFT JOIN thethanhvien ON thethanhvien.MaTV = donhang.MaKH\n" +
+                "LEFT JOIN chitietdh ON donhang.MaDH = chitietdh.MaDH\n" +
+                "LEFT JOIN sanpham ON sanpham.MaSP = chitietdh.MaSP\n" +
+                "LEFT JOIN khuyenmai ON donhang.MaKM = khuyenmai.MaKM";
+    
+        // WHERE
+        if (!whereConditions.isEmpty()) {
+            sql += " WHERE ";
+            for (int i = 0; i < whereConditions.size(); i++) {
+                sql += whereConditions.get(i) ;
+                if (i != whereConditions.size() - 1) {
+                    sql += " AND ";
+                }
+            }
+        }
+    
+        // GROUP BY
+      
+            sql += " GROUP BY donhang.MaDH " ;
+        
+    
+        // HAVING
+        if (!having.isEmpty()) {
+            sql += " HAVING ";
+            for (int i = 0; i < having.size(); i++) {
+                sql += having.get(i) ;
+                if (i != having.size() - 1) {
+                    sql += " AND ";
+                }
+            }
+        }
+    
+        // ORDER BY
+        if (orderBy != null && !orderBy.isEmpty()) {
+            sql += " ORDER BY " + orderBy + " " + (orderType != null ? orderType : "ASC");
+        }
+
+        if(limit != null){
+            sql += " LIMIT ?";
+        }
+    
+        try {
+            PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql);
+    
+            for (int i = 0; i < param.size(); i++) {
+                stmt.setObject(i + 1, param.get(i));
+            }
+    
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ArrayList<Object> row = new ArrayList<>();
+                row.add(rs.getInt("MaDH"));
+                row.add(rs.getString("MaNV"));
+                row.add(rs.getString("TenNV"));
+                row.add(rs.getDate("NgayTT"));
+                row.add(rs.getString("TrangThai"));
+                row.add(rs.getString("TenTV"));
+                row.add(rs.getDouble("tongTien"));
+                row.add(rs.getInt("TileGiam"));
+    
+                result.add(row);
+            }
+    
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        // In kết quả để debug (tuỳ bạn có giữ không)
+        for (ArrayList<Object> row : result) {
+            for (Object val : row) {
+                System.out.print(val + "\t");
+            }
+            System.out.println();
+        }
+    
+        return result;
+    }
+    
+
 
     // Lấy đơn hàng theo ID
     public static DonHangDTO getOrderById(int maDH) {
@@ -115,7 +218,14 @@ public class DonHangDAL {
     
 
     public static void main(String[] args) {
+        ArrayList<String> where = new ArrayList<>();
+        ArrayList<String> having = new ArrayList<>();
+        ArrayList<Object> params = new ArrayList<>();
         
-        System.out.println(countOrder());
+        String orderBy = null;
+        String orderType = null;
+        Integer limit = null;
+        
+        getFindSortOrder(where, having, params, orderBy, orderType, limit);        // System.out.println(countOrder());
     }
 }

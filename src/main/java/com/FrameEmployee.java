@@ -3,6 +3,8 @@ package com;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -42,7 +44,9 @@ public class FrameEmployee extends JFrame implements ActionListener {
         setSize(1300, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-
+        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/images/icon/Logo_market.png");  
+        this.setIconImage(icon);  
+        
 
        
 

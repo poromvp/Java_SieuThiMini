@@ -92,7 +92,7 @@ public class DonHangBLL {
         if (param == null) param = new ArrayList<>();
     
         // Kiểm tra sắp xếp
-        if (orderBy != null && !orderBy.matches("^[a-zA-Z0-9_]+$")) {
+        if (orderBy == null ) {
             throw new IllegalArgumentException("Trường orderBy không hợp lệ");
         }
     

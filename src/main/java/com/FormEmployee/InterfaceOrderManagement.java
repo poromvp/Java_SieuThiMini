@@ -90,8 +90,8 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         private  static JTextField txt_minTotal ;
         private  static JTextField txt_maxTotal ;
         private  static JTextField txt_status ;
-        private  static JTextField txt_idMember;
-        private  static JTextField txt_memberName ;
+        private  static JTextField txt_employeeId;
+        private  static JTextField txt_employeeName ;
         private  static JTextField txt_memberPhone;
         private  static JTextField txt_sort ;
         private  static JTextField txt_column;
@@ -205,13 +205,13 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
         pn_findOrder.add(btn_findOrder);
         
         lbl_employeeId = new JLabel("mã nhân viên");
-        txt_idMember = new JTextField();
-        pn_findOrder.add(styledItemInput(lbl_employeeId, txt_idMember));
+        txt_employeeId = new JTextField();
+        pn_findOrder.add(styledItemInput(lbl_employeeId, txt_employeeId));
         
         
         lbl_employeeName = new JLabel("tên nhân viên");
-        txt_memberName = new JTextField();
-        pn_findOrder.add(styledItemInput(lbl_employeeName, txt_memberName));
+        txt_employeeName = new JTextField();
+        pn_findOrder.add(styledItemInput(lbl_employeeName, txt_employeeName));
         
         
         lbl_phone = new JLabel("số DT thành viên");
@@ -465,8 +465,7 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
                 data = new ArrayList<>(Arrays.asList()); 
                 JOptionPane.showMessageDialog(null, "Mã đơn hàng phải là số nguyên!", "Lỗi mã đơn hàng", JOptionPane.WARNING_MESSAGE);
                 return;
-            }
-            
+            } 
         }
         
         Date date = dateChooserStart.getDate(); // Lấy ngày từ JDateChooser
@@ -479,6 +478,77 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
             whereConditions.add("donhang.NgayTT <= ?");
             param.add(new java.sql.Date(date.getTime())); // Convert sang java.sql.Date
         }
+        
+        Object status = comboBoxStatus.getSelectedItem();
+        if (status != null && !status.toString().isEmpty()) {
+            whereConditions.add("donhang.trangThai = ?");
+            param.add(status.toString());
+        }
+
+        id = txt_employeeId.getText().trim();
+        if(!id.isEmpty()){
+            if (id.matches("\\d+")) {
+                whereConditions.add("donhang.maNV = ?"); // thiếu khoảng trắng ở cuối → sửa bên dưới luôn
+                param.add(Integer.parseInt(id));
+            } else {
+                data = new ArrayList<>(Arrays.asList()); 
+                JOptionPane.showMessageDialog(null, "Mã nhân viên phải là số nguyên!", "Lỗi mã nhân viên", JOptionPane.WARNING_MESSAGE);
+                return;
+            } 
+        }
+
+        String name = txt_employeeName.getText().trim();
+        if (!name.isEmpty()) {
+            whereConditions.add("nhanvien.tenNV LIKE ?");
+            param.add("%" + name + "%"); // dùng LIKE để tìm gần đúng theo tên
+        }
+
+        String phone = txt_memberPhone.getText().trim();
+        if (!phone.isEmpty()) {
+            if (phone.matches("\\d+")) {
+                whereConditions.add("theThanhVien.SDT = ?");
+                param.add(phone);
+            } else {
+                data = new ArrayList<>(Arrays.asList()); 
+                JOptionPane.showMessageDialog(null, "Số điện thoại phải là số!", "Lỗi số điện thoại", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        // Lấy giá trị cột sắp xếp
+        Object columnSort = comboBoxColumnSort.getSelectedItem();
+        System.out.println(columnSort.toString().trim().toLowerCase());
+        if (columnSort != null) {
+            switch (columnSort.toString().trim().toLowerCase()) {
+                case "mã đơn hàng": orderBy = "donhang.maDH"; break;
+                case "tên nhân viên": orderBy = "nhanvien.tenNV"; break;
+                case "ngày mua": orderBy = "donhang.NgayTT"; break;
+                case "tổng tiền": orderBy = "tongTien"; break;
+                default:
+                    throw new IllegalArgumentException("Trường orderBy không hợp lệeeeee");
+            }
+        } else {
+            orderBy = "donhang.maDH"; // fallback mặc định
+        }
+        System.out.println(orderBy);
+
+                // Lấy thứ tự sắp xếp
+        Object sort = comboBoxSort.getSelectedItem();
+        if (sort != null && !sort.toString().isEmpty()) {
+            if (sort.toString().equals("Tăng dần")) {
+                orderType = "ASC";
+            } else {
+                orderType = "DESC";
+            }
+        } else {
+            // Mặc định tăng dần
+            orderType = "ASC";
+        }
+        System.out.println(orderType);
+
+
+        
+        
         
         // ==== Tổng tiền tối thiểu ====
         Object minVal = spinnerTotalMin.getValue();
@@ -496,7 +566,16 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
             param.add(max);
         }
 
+        // ==== Tổng tiền tối thiểu ====
+      Object limitShow = spinnerShow.getValue();
+      if (limitShow instanceof Number) {
+          limit =  ((Number) limitShow).intValue();
+          param.add(limit);
+      }else{
+          JOptionPane.showMessageDialog(null, "Số dòng phải là số nguyên!", "Lỗi số dòng", JOptionPane.WARNING_MESSAGE);
 
+      }
+        
         data = DonHangBLL.getFindSortOrder(whereConditions, having, param, orderBy, orderType, limit);
         addDataToTable();
     }
@@ -575,6 +654,8 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
     }
 
     private void showOrderDetails(int rowIndex) {
+     
+
         String details = "Mã: " + dftmd_listOrder.getValueAt(rowIndex, 0) + "\n"
                 + "Ngày mua: " + dftmd_listOrder.getValueAt(rowIndex, 1) + "\n"
                 + "Tổng tiền: " + dftmd_listOrder.getValueAt(rowIndex, 2) + "\n"

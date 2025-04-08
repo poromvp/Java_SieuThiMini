@@ -110,6 +110,7 @@ public class DonHangDAL {
                 stmt.setObject(i + 1, param.get(i));
             }
     
+            System.out.println(stmt);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 ArrayList<Object> row = new ArrayList<>();
@@ -130,7 +131,6 @@ public class DonHangDAL {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    
         // In kết quả để debug (tuỳ bạn có giữ không)
         for (ArrayList<Object> row : result) {
             for (Object val : row) {

@@ -30,6 +30,9 @@ public class ButtonCustom extends JButton {
             case "green":
                 originalColor = new Color(102, 255, 102);
                 break;
+            case "black":
+                originalColor = new Color(17, 32, 51);
+                break;
             default:
                 originalColor = Color.GRAY;
                 break;

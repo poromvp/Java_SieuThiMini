@@ -49,7 +49,7 @@ public class TableControl {
         JTableHeader header = tb.getTableHeader();
         header.setFont(new Font("Arial", Font.BOLD, 14));
         header.setForeground(Color.WHITE);
-        header.setBackground(new Color(30, 144, 255));
+        header.setBackground(new Color(17, 32, 51));
         header.setReorderingAllowed(false);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
@@ -57,7 +57,7 @@ public class TableControl {
         //tb.setDefaultRenderer(Object.class, centerRenderer);
         tb.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         tb.setShowGrid(false);
-        tb.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true));
+        tb.setBorder(BorderFactory.createLineBorder(new Color(17, 32, 51), 2, true));
         tb.setSelectionBackground(new Color(173, 216, 230));
         tb.setRowHeight(30);
     }

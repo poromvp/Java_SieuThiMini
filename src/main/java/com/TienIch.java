@@ -36,7 +36,7 @@ public class TienIch {
         nut.setOpaque(true); // Cho phép vẽ màu nền
 
         // Màu sắc
-        Color normalColor = new Color(30, 144, 255);
+        Color normalColor = new Color(17, 32, 51);
         Color hoverColor = new Color(0, 102, 204);
         Color clickColor = new Color(0, 51, 153);
 
@@ -93,13 +93,13 @@ public class TienIch {
         if (rank == 1) { //title
             label.setForeground(Color.BLACK); // Màu đen
         } else if (rank == 2) { //số thống kê
-            label.setForeground(new Color(30, 144, 255)); // Màu xanh dương
+            label.setForeground(new Color(17, 32, 51)); // Màu xanh dương
 
             // Đặt viền cho label (tùy chọn)
-            label.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 1, true));
+            label.setBorder(BorderFactory.createLineBorder(new Color(17, 32, 51), 1, true));
             label.setBackground(Color.WHITE);
             // Màu sắc
-            Color normalColor = new Color(30, 144, 255);
+            Color normalColor = new Color(17, 32, 51);
             Color hoverColor = new Color(210, 53, 29);
             // Sự kiện hover và click
             label.addMouseListener(new MouseAdapter() {
@@ -146,7 +146,7 @@ public class TienIch {
         rd.setOpaque(false);        // Làm trong suốt nền để thấy màu background
         
         // Màu sắc cho các trạng thái khác nhau
-        Color normalColor = new Color(30, 144, 255);
+        Color normalColor = new Color(17, 32, 51);
         Color hoverColor = new Color(0, 102, 204);
         Color clickColor = new Color(0, 51, 153);
 
@@ -189,7 +189,7 @@ public class TienIch {
     public static void comboBoxStyle(JComboBox<String> comboBox) {
         comboBox.setFont(new Font("Arial", Font.BOLD, 14));
         comboBox.setForeground(Color.WHITE);
-        comboBox.setBackground(new Color(30, 144, 255)); // Màu xanh dương đẹp
+        comboBox.setBackground(new Color(17, 32, 51)); // Màu xanh dương đẹp
         comboBox.setBorder(BorderFactory.createLineBorder(new Color(0, 102, 204), 2, true)); // Viền bo góc
         comboBox.setFocusable(false); // Bỏ viền focus
         comboBox.setOpaque(true);
@@ -212,8 +212,8 @@ public class TienIch {
         textField.setFont(new Font("Arial", Font.PLAIN, 14));
         textField.setForeground(Color.BLACK); // Màu chữ
         textField.setBackground(Color.WHITE); // Nền trắng
-        textField.setCaretColor(new Color(30, 144, 255)); // Màu con trỏ nhập liệu
-        textField.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true)); // Viền bo góc
+        textField.setCaretColor(new Color(17, 32, 51)); // Màu con trỏ nhập liệu
+        textField.setBorder(BorderFactory.createLineBorder(new Color(17, 32, 51), 2, true)); // Viền bo góc
         textField.setOpaque(true);
         textField.setMargin(new Insets(5, 10, 5, 10)); // Thêm padding
 

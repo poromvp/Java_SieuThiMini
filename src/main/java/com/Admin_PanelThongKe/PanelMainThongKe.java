@@ -11,7 +11,7 @@ public class PanelMainThongKe extends JPanel implements ActionListener {
     JButton btn1;
 
     public PanelMainThongKe() {
-        setBackground(new Color(30, 144, 255));
+        setBackground(new Color(17, 32, 51));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JTabbedPane tab = new JTabbedPane();

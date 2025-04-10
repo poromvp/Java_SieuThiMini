@@ -125,9 +125,13 @@ public class TienIch {
             label.setFont(new Font("Arial", Font.PLAIN, size));
             label.setHorizontalAlignment(SwingConstants.LEFT);
             label.setVerticalAlignment(SwingConstants.CENTER);
-        } else if (rank == 4){ //bên phải trong hóa đơn
+        } else if (rank == 4){ 
             label.setForeground(Color.BLACK);
             label.setHorizontalAlignment(SwingConstants.LEFT);
+        } else if (rank == 5){ //bên phải 
+            label.setForeground(Color.BLACK);
+            label.setHorizontalAlignment(SwingConstants.RIGHT);
+            label.setVerticalAlignment(SwingConstants.CENTER);
         }
 
         // Đặt khoảng cách đệm xung quanh nội dung
@@ -180,5 +184,40 @@ public class TienIch {
 
         // Bo góc nếu muốn
         rd.setBorder(BorderFactory.createLineBorder(normalColor, 1, true));
+    }
+
+    public static void comboBoxStyle(JComboBox<String> comboBox) {
+        comboBox.setFont(new Font("Arial", Font.BOLD, 14));
+        comboBox.setForeground(Color.WHITE);
+        comboBox.setBackground(new Color(30, 144, 255)); // Màu xanh dương đẹp
+        comboBox.setBorder(BorderFactory.createLineBorder(new Color(0, 102, 204), 2, true)); // Viền bo góc
+        comboBox.setFocusable(false); // Bỏ viền focus
+        comboBox.setOpaque(true);
+
+        // Tùy chỉnh dropdown list
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
+                                                          boolean isSelected, boolean cellHasFocus) {
+                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                label.setFont(new Font("Arial", Font.BOLD, 14));
+                label.setForeground(isSelected ? Color.WHITE : Color.BLACK);
+                label.setBackground(isSelected ? new Color(0, 102, 204) : Color.WHITE);
+                return label;
+            }
+        });
+    }
+
+    public static void textFieldStyle(JTextField textField) {
+        textField.setFont(new Font("Arial", Font.PLAIN, 14));
+        textField.setForeground(Color.BLACK); // Màu chữ
+        textField.setBackground(Color.WHITE); // Nền trắng
+        textField.setCaretColor(new Color(30, 144, 255)); // Màu con trỏ nhập liệu
+        textField.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true)); // Viền bo góc
+        textField.setOpaque(true);
+        textField.setMargin(new Insets(5, 10, 5, 10)); // Thêm padding
+
+        // Placeholder khi chưa nhập dữ liệu
+        textField.setForeground(Color.GRAY);
     }
 }

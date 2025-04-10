@@ -29,7 +29,7 @@ public class PanelMainThongKe extends JPanel implements ActionListener {
         tab.addTab("Báo cáo khách hàng", pn4);
         
         btn1 = new JButton("In báo cáo");
-        TienIch.nutStyle(btn1, "printer.png", 18, 0, 0);
+        TienIch.nutStyle(btn1, "printer.png", 18, 100, 50);
         add(tab);
         add(btn1);
 

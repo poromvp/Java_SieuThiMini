@@ -63,6 +63,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         mocthoigian.addItem("Tháng");
         mocthoigian.addItem("Năm");
         mocthoigian.setEditable(false);
+        TienIch.comboBoxStyle(mocthoigian);
         pn2.add(mocthoigian, gbc);
 
         gbc.gridx = 1;

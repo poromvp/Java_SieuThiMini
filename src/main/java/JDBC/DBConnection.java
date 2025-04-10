@@ -11,7 +11,7 @@ public class DBConnection {
     private static Connection connection;
     private static final String URL = "jdbc:mysql://localhost:3306/SIEUTHIMINI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&autoReconnect=true";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "Bestngulon50024072#";
+    private static final String PASSWORD = null;
 
     // Mở kết nối đến CSDL
     public static Connection getConnection() {
@@ -36,29 +36,11 @@ public class DBConnection {
     // Đóng kết nối
     public static void closeConnection() {
         try {
-<<<<<<< HEAD
-            // Không cần gọi registerDriver nữa, chỉ cần Class.forName()
-            Class.forName("com.mysql.cj.jdbc.Driver");
-
-            // Cập nhật URL kết nối cho đúng chuẩn MySQL 8+
-            String url = "jdbc:mysql://localhost:3306/sieu_thi_mini?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC";
-            String userName = "root";
-            String password = "";
-
-            // Kết nối đến MySQL
-            c = DriverManager.getConnection(url, userName, password);
-            System.out.println("Kết nối thành công!");
-
-        } catch (ClassNotFoundException e) {
-            System.out.println("Lỗi: Không tìm thấy Driver MySQL!");
-            e.printStackTrace();
-=======
             if (connection != null) {
                 connection.close();
                 connection = null;
                 System.out.println("Ket noi da dong!");
             }
->>>>>>> 5138dc1f9c8550b4b53ac30850e3c9d90e152c3a
         } catch (SQLException e) {
             e.printStackTrace();
         }

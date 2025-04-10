@@ -25,6 +25,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
         leftMenu = new LeftSidebarMenu();
         leftMenu.setActionListener(this);  
+        leftMenu.setPreferredSize(new Dimension(250, 0));
 
         add(leftMenu, BorderLayout.WEST);
 

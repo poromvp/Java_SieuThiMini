@@ -2,7 +2,6 @@ package DTO;
 
 public class SanPhamDTO {
     private int maSP;     // Mã sản phẩm (Khóa chính)
-    private int  maLH;     // Mã loại hàng (Khóa ngoại)
     private int maNCC;    // Mã nhà cung cấp (Khóa ngoại)
     private int maLSP;    // Mã loại sản phẩm (Khóa ngoại)
     private String tenAnh;   // Tên ảnh sản phẩm
@@ -16,9 +15,8 @@ public class SanPhamDTO {
     }
 
     // Constructor có tham số
-    public SanPhamDTO(int maSP, int maLH, int maNCC, int maLSP, String tenAnh, double gia, String tenSP, String moTa, String trangThai) {
+    public SanPhamDTO(int maSP,  int maNCC, int maLSP, String tenAnh, double gia, String tenSP, String moTa, String trangThai) {
         this.maSP = maSP;
-        this.maLH = maLH;
         this.maNCC = maNCC;
         this.maLSP = maLSP;
         this.tenAnh = tenAnh;
@@ -37,13 +35,6 @@ public class SanPhamDTO {
         this.maSP = maSP;
     }
 
-    public int getMaLH() {
-        return maLH;
-    }
-
-    public void setMaLH(int maLH) {
-        this.maLH = maLH;
-    }
 
     public int getMaNCC() {
         return maNCC;
@@ -106,7 +97,6 @@ public class SanPhamDTO {
     public String toString() {
         return "SanPham{" +
                 "maSP='" + maSP + '\'' +
-                ", maLH='" + maLH + '\'' +
                 ", maNCC='" + maNCC + '\'' +
                 ", maLSP='" + maLSP + '\'' +
                 ", tenAnh='" + tenAnh + '\'' +

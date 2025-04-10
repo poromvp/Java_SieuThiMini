@@ -90,7 +90,7 @@ public class FormFindProduct extends JPanel {
         JTable table = new StyledTable(data, headerCol);
       
         // Giới hạn số hàng hiển thị (5 hàng)
-        int rowCountToShow = 5;
+        int rowCountToShow = 4;
         int tableHeight = table.getRowHeight() * rowCountToShow;
 
         // Bọc bảng trong JScrollPane

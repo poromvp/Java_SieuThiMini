@@ -13,7 +13,7 @@ import javax.swing.SwingUtilities;
 
 
 public class StyledTextField extends JTextField {
-
+    private Color bgColor = new Color(17, 32, 51);
     public StyledTextField() {
         // super(columns);
         setFont(new Font("SansSerif", Font.BOLD, 14));
@@ -22,10 +22,34 @@ public class StyledTextField extends JTextField {
         setCaretColor(Color.RED);
         setOpaque(true); 
         setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true), 
+                BorderFactory.createLineBorder(bgColor, 2, true), 
                 BorderFactory.createEmptyBorder(5, 10, 5, 10) 
         ));
         setPreferredSize(new Dimension(200, 30)); 
+    }
+
+    public StyledTextField(int w, int h) {
+        // super(columns);
+        setFont(new Font("SansSerif", Font.BOLD, 14));
+        setForeground(Color.BLACK);
+        setBackground(Color.WHITE);
+        setCaretColor(Color.RED);
+        setOpaque(true); 
+        setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(bgColor, 2, true), 
+                BorderFactory.createEmptyBorder(5, 10, 5, 10) 
+        ));
+        setPreferredSize(new Dimension(w, h)); 
+    }
+
+    public  void SetEnabled(boolean isAdd){
+        setEnabled(isAdd);
+        setEditable(isAdd);
+        int thickness = isAdd == true? 2: 0;
+        setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(bgColor, thickness, true), 
+            BorderFactory.createEmptyBorder(5, 10, 5, 10) 
+        ));
     }
 
    
@@ -46,7 +70,7 @@ public class StyledTextField extends JTextField {
             JLabel emailLabel = new JLabel("Email:");
             StyledTextField emailField = new StyledTextField();
             JButton btnSubmit = new JButton("Gửi");
-
+            nameField.SetEnabled(false);
             //  Đặt vị trí từng thành phần
             nameLabel.setBounds(30, 30, 80, 25);
             nameField.setBounds(120, 30, 200, 35);

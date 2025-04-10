@@ -15,7 +15,7 @@ public class InterfaceOrder extends JPanel{
     private FormQRscan formQRscan ;
     private FormOrderDetailList formOrderDetailList;
     private FormFindProduct formFindProduct;
-    private FormOrderInformation formOrderInformation;
+    private OrderIformationForm formOrderInfo;
 
 
     public InterfaceOrder(){
@@ -23,7 +23,8 @@ public class InterfaceOrder extends JPanel{
 
         formFindProduct = new FormFindProduct();
         formOrderDetailList = new FormOrderDetailList();
-        formOrderInformation = new FormOrderInformation();
+        formOrderInfo = new OrderIformationForm();
+        
         formQRscan = new FormQRscan();
 
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -42,14 +43,14 @@ public class InterfaceOrder extends JPanel{
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 3.0; // Cột 0 rộng hơn
-        gbc.weighty = 0.2;
+        gbc.weighty = 0.1;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         add(tabbedPane, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.weighty = 0.8;
+        gbc.weighty = 0.9;
         add(formOrderDetailList, gbc);
         
         //  Cột 1 chiếm 1 phần (weightx = 1.0)
@@ -58,7 +59,7 @@ public class InterfaceOrder extends JPanel{
         gbc.gridheight = 2;
         gbc.weightx = 0.5; // Cột 1 hẹp hơn
         gbc.weighty = 1.0;
-        add(formOrderInformation, gbc);
+        add(formOrderInfo, gbc);
 
     }
 

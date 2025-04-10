@@ -17,6 +17,8 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
 
     private ActionListener listener;  
 
+    private Color bgColor = new Color(33,58,89);
+
     public JButton getBtnHome() {
         return btnHome;
     }
@@ -42,70 +44,61 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
     }
 
     public LeftSidebarMenu() {
+        setBackground(bgColor);
+        setMaximumSize(new Dimension(250, getHeight()));
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
+    
+        // Logo
+        JLabel logoLabel = new JLabel(new ImageIcon("src/main/resources/images/icon/Logo1.png"));
+        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Căn giữa logo
+        add(logoLabel);
+    
+        // Tạo các nút
+        btnHome = createButton("Trang Chủ", "src/main/resources/images/home.png");
+        btnEmployee = createButton("Nhân Viên", "src/main/resources/images/employee.png");
+        btnProduct = createButton("Sản Phẩm", "src/main/resources/images/product.png");
+        btnReport = createButton("Báo Cáo", "src/main/resources/images/report.png");
+        btnAccount = createButton("Tài Khoản", "src/main/resources/images/account.png");
+        btnLogout = createButton("Đăng Xuất", "src/main/resources/images/exit.png");
+    
+        // Thêm các nút vào panel
+        add(btnHome);
+        add(btnEmployee);
+        add(btnProduct);
+        add(btnReport);
+        add(btnAccount);
         
-        setBackground(Color.white);
-        setMaximumSize(new Dimension(230, getHeight()));
-        setLayout(new BorderLayout());  
-        JPanel topPanel = new JPanel();
-        topPanel.setLayout(new GridLayout(5, 1, 2, 2));  
-        topPanel.setBackground(Color.WHITE);
-        JPanel botPanel = new JPanel();
-        botPanel.setBackground(Color.WHITE);
-
-        //Logo
-        JLabel logoLabel = new JLabel( new ImageIcon("src/main/resources/images/icon/Logo.png"));
-        logoLabel.setHorizontalAlignment(JLabel.CENTER);
-        add(logoLabel,BorderLayout.NORTH);
+        // Thêm khoảng trống linh hoạt để đẩy nút đăng xuất xuống dưới cùng
+        add(Box.createVerticalGlue());
         
-        btnHome = new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
-        btnEmployee = new JButton("Nhân Viên", new ImageIcon("src/main/resources/images/employee.png"));
-        btnProduct = new JButton("Sản Phẩm", new ImageIcon("src/main/resources/images/product.png"));
-        btnReport = new JButton("Báo Cáo", new ImageIcon("src/main/resources/images/report.png"));
-        btnAccount = new JButton("Tài Khoản", new ImageIcon("src/main/resources/images/account.png"));
-        btnLogout = new JButton("Đăng Xuất", new ImageIcon("src/main/resources/images/exit.png"));
-
-        setButtonStyle(btnHome);
-        setButtonStyle(btnEmployee);
-        setButtonStyle(btnProduct);
-        setButtonStyle(btnReport);
-        setButtonStyle(btnAccount);
-        setButtonStyle(btnLogout);
-
-        btnHome.addActionListener(this);
-        btnEmployee.addActionListener(this);
-        btnProduct.addActionListener(this);
-        btnReport.addActionListener(this);
-        btnAccount.addActionListener(this);
-        btnLogout.addActionListener(this);
-
-        
-        
-        topPanel.add(btnHome);
-        topPanel.add(btnEmployee);
-        topPanel.add(btnProduct);
-        topPanel.add(btnReport);
-        topPanel.add(btnAccount);
-        botPanel.add(btnLogout);
-        add(topPanel,BorderLayout.CENTER);
-        add(botPanel,BorderLayout.SOUTH);
+        // Thêm nút đăng xuất
+        add(btnLogout);
+    }
+    
+    private JButton createButton(String text, String iconPath) {
+        JButton button = new JButton(text, new ImageIcon(iconPath));
+        setButtonStyle(button);
+        button.addActionListener(this);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT); // Căn giữa nút
+        return button;
     }
 
     public void setButtonStyle(JButton button) {
-        button.setBackground(Color.WHITE); 
-        button.setForeground(Color.BLACK); 
+        button.setBackground(bgColor); 
+        button.setForeground(Color.WHITE); 
         button.setFocusPainted(false);  
-        button.setBorderPainted(false);  
-        button.setFont(new Font("Arial", Font.BOLD, 14)); // Kiểu chữ
-        button.setPreferredSize(new Dimension(200, 60)); // Kích thước nút
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // Con trỏ khi hover
-        Border emptyBorder = BorderFactory.createEmptyBorder(20,10,20,10);
-        setBorder(emptyBorder);
+        button.setBorderPainted(false);
+        button.setFont(new Font("Arial", Font.BOLD, 14)); 
+        button.setMaximumSize(new Dimension(350, 60)); 
+         button.setPreferredSize(new Dimension(350, 60));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
+
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(240, 240, 240)); // Màu nền khi hover
+                button.setBackground(new Color(12, 192, 223)); // Màu nền khi hover
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(Color.WHITE); // Màu nền khi không hover
+                button.setBackground(bgColor); // Màu nền khi không hover
             }
         });
     }

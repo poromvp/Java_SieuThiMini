@@ -1,19 +1,21 @@
 package com.FormEmployee;
 
+import java.awt.Color;
+import java.awt.Cursor;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import com.ComponentCommon.StyledLeftMenubutton;
-
 import com.FrameEmployee;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import javax.swing.*;
-import javax.swing.border.Border;
 
 public class LeftMenu extends JPanel implements ActionListener {
 
@@ -35,7 +37,11 @@ public class LeftMenu extends JPanel implements ActionListener {
         btn_home =  new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
         btn_sell = new JButton("bán hàng", new ImageIcon("src/main/resources/images/selling.png"));
         btn_orderManagement = new JButton("Quản lí bán hàng", new ImageIcon("src/main/resources/images/product.png"));
-        btn_report =  new JButton("Báo cáo", new ImageIcon("src/main/resources/images/report.png"));
+        btn_report =  new StyledLeftMenubutton("src/main/resources/images/report.png", "Báo cáo");
+        
+        btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
+        btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
+        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí đơn hàng");
 
 
         setButtonStyle(btn_home);

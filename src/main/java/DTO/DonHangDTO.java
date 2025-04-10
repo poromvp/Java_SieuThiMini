@@ -1,13 +1,14 @@
 package DTO;
-import java.util.Date;
 
 public class DonHangDTO {
     private int maDH;       // Mã đơn hàng (Khóa chính)
-    private int maKH;       // Mã khách hàng (Khóa ngoại)
-    private int maKM;       // Mã khuyến mãi (Khóa ngoại)
+    private Integer maKH;       // Mã khách hàng (Khóa ngoại)
+    private Integer maKM;       // Mã khuyến mãi (Khóa ngoại)
     private int maNV;       // Mã nhân viên (Khóa ngoại)
     private String ptThanhToan; // Phương thức thanh toán
-    private Date ngayTT;       // Ngày thanh toán
+    private Integer maDTL;
+    private int tienKD;
+    private String ngayTT;       // Ngày thanh toán
     private String trangThai; // Trạng thái đơn hàng
 
     // Constructor không tham số
@@ -15,15 +16,34 @@ public class DonHangDTO {
     }
 
     // Constructor có tham số
-    public DonHangDTO(int maDH, int maKH, int maKM, int maNV, String ptThanhToan,  Date ngayTT, String trangThai) {
+    public DonHangDTO(int maDH, int maKH, int maKM, int maNV, String ptThanhToan,  String ngayTT, int dtl, int tienkd,  String trangThai) {
         this.maDH = maDH;
         this.maKH = maKH;
         this.maKM = maKM;
         this.maNV = maNV;
         this.ptThanhToan = ptThanhToan;
         this.ngayTT = ngayTT;
+        this.maDTL = dtl;
+        this.tienKD = tienkd;
         this.trangThai = trangThai;
     }
+
+    public int getMaDTL() {
+        return maDTL;
+    }
+    
+    public void setMaDTL(Integer maDTL) {
+        this.maDTL = maDTL;
+    }
+    
+    public int getTienKD() {
+        return tienKD;
+    }
+    
+    public void setTienKD(int tienKD) {
+        this.tienKD = tienKD;
+    }
+    
 
     // Getter và Setter
     public int getMaDH() {
@@ -34,19 +54,19 @@ public class DonHangDTO {
         this.maDH = maDH;
     }
 
-    public int getMaKH() {
+    public Integer getMaKH() {
         return maKH;
     }
 
-    public void setMaKH(int maHK) {
+    public void setMaKH(Integer maHK) {
         this.maKH = maHK;
     }
 
-    public int getMaKM() {
+    public Integer getMaKM() {
         return maKM;
     }
 
-    public void setMaKM(int maKM) {
+    public void setMaKM(Integer maKM) {
         this.maKM = maKM;
     }
 
@@ -67,11 +87,11 @@ public class DonHangDTO {
     }
 
  
-    public Date getNgayTT() {
+    public String getNgayTT() {
         return ngayTT;
     }
 
-    public void setNgayTT(Date ngayTT) {
+    public void setNgayTT(String ngayTT) {
         this.ngayTT = ngayTT;
     }
 

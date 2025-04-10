@@ -43,7 +43,7 @@ public class StyledLeftMenubutton extends JButton {
 
         JLabel lbl_btnName = new JLabel(this.buttonName, JLabel.CENTER);
         lbl_btnName.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lbl_btnName.setForeground(Color.WHITE);
+        lbl_btnName.setForeground(Color.BLACK);
         add(lbl_btnName, BorderLayout.CENTER);
     }
 

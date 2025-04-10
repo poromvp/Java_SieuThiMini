@@ -581,11 +581,15 @@ public class InterfaceOrderManagement extends JPanel implements ActionListener{
     }
 
     public static void addDataToTable(){
-        dftmd_listOrder.setRowCount(0); // Xóa hết dữ liệu cũ
-        for (ArrayList<Object> rowData : data) {
-            dftmd_listOrder.addRow(rowData.toArray());
+        dftmd_listOrder.setRowCount(0); 
+        if(!data.isEmpty()){
+            for (ArrayList<Object> rowData : data) {
+                dftmd_listOrder.addRow(rowData.toArray());
+            }
+        }else{
+            dftmd_listOrder.addRow(new Object[] {"" ,"", "Danh", "sách", "trống"});
+
         }
-       
     }
 
 

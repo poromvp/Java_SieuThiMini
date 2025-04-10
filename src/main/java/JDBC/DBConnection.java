@@ -9,9 +9,9 @@ import java.sql.SQLException;
 
 public class DBConnection {
     private static Connection connection;
-    private static final String URL = "jdbc:mysql://localhost:3306/SIEUTHIMINI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&autoReconnect=true";
+    private static final String URL = "jdbc:mysql://localhost:3306/sieu_thi_mini?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&autoReconnect=true";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = null;
+    private static final String PASSWORD = "";
 
     // Mở kết nối đến CSDL
     public static Connection getConnection() {

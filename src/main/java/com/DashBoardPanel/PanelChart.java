@@ -300,7 +300,7 @@ public class PanelChart extends JPanel {
         TienIch.textFieldStyle(yearField);
         pn1.add(yearField);
 
-        TienIch.nutStyle(animateButton, "arrow.png", 1, 70, 35);
+        TienIch.nutResetStyle(animateButton, "undo.png", 1, 70, 35);
         animateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         pn1.add(animateButton);
 

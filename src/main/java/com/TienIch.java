@@ -5,26 +5,57 @@ import java.awt.event.*;
 import java.awt.*;
 
 public class TienIch {
-    public static void quanlynutsidebar(JButton nut) {
-        nut.setPreferredSize(new Dimension(150, 150));
-        nut.setMaximumSize(new Dimension(278, 200));
-        nut.setFont(new Font("Arial", Font.BOLD, 18));
-        nut.setOpaque(true); // Đặt nền đục hay trong suốt
-        nut.setFocusPainted(false); // Bỏ viền xanh khi nhấn vào nút
-        nut.setContentAreaFilled(false); // Bỏ hiệu ứng nền mặc định của JButton
-        nut.setForeground(new Color(226, 224, 221)); // Đặt màu chữ trên nút
-        nut.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
-    }
+    public static void nutResetStyle(JButton nut, String fileIcon, int size, int dai, int rong) {
+        // Kích thước và font
+        nut.setPreferredSize(new Dimension(dai,rong));
+        nut.setFont(new Font("Arial", Font.BOLD, size));
+        nut.setFocusPainted(false); // Bỏ viền khi focus
+        nut.setContentAreaFilled(false); // Tắt nền mặc định
+        nut.setOpaque(true); // Cho phép vẽ màu nền
 
-    public static void nutStyle(JButton nut) {
-        nut.setPreferredSize(new Dimension(60, 50));
-        nut.setMaximumSize(new Dimension(60, 60));
-        nut.setFont(new Font("Arial", Font.BOLD, 18));
-        nut.setOpaque(true); // Đặt nền đục hay trong suốt
-        // nut.setFocusPainted(true); // Bỏ viền xanh khi nhấn vào nút
-        // nut.setContentAreaFilled(false); // Bỏ hiệu ứng nền mặc định của JButton
-        nut.setForeground(new Color(15, 16, 16)); // Đặt màu chữ trên nút
-        nut.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
+        // Màu sắc
+        Color normalColor = new Color(17, 32, 51);
+        Color hoverColor = Color.GREEN;
+        Color clickColor = new Color(0, 51, 153);
+
+        // Đặt màu ban đầu
+        nut.setForeground(Color.WHITE);
+
+        // Thêm icon nếu có
+        if (fileIcon != null && !fileIcon.isEmpty()) {
+            ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/" + fileIcon));
+            Image img = icon.getImage();
+            int iconSize = size + 30; // Tùy chỉnh kích thước icon so với chữ
+            Image resizedImg = img.getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
+            nut.setIcon(new ImageIcon(resizedImg));
+        }
+
+        // Viền bo góc
+        nut.setBorder(BorderFactory.createLineBorder(normalColor, 2, true));
+
+        // Sự kiện hover và click
+        nut.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                nut.setBackground(hoverColor);
+                nut.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                nut.setBackground(null);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                nut.setBackground(clickColor);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                nut.setBackground(hoverColor);
+            }
+        });
     }
 
     public static void nutStyle(JButton nut, String fileIcon, int size, int dai, int rong) {

@@ -69,7 +69,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         gbc.gridx = 1;
         gbc.gridy = 1;
         btnTim = new JButton("Tìm");
-        TienIch.nutStyle(btnTim, "search.png", 17, 0, 0);
+        TienIch.nutStyle(btnTim, null, 17, 0, 0);
         pn2.add(btnTim, gbc);
 
         btnTim.addActionListener((ActionListener) this);

@@ -50,7 +50,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        String[] tencot = {"ID", "Name", "Price", "Date"};
+        String[] tencot = {"ID", "Tên Sản Phẩm", "Đơn Giá", "Số Lượng"};
         hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
         hoadontemp b = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
         hoadontemp c = new hoadontemp("1", "Cam", "10,000", "10/10/2025");

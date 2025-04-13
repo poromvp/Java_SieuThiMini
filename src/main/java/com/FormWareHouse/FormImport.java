@@ -93,5 +93,17 @@ public class FormImport  extends JPanel {
             import_detail.setVisible(true);
         });
     }
+    public static void main(String[] args) {
+        JFrame f = new JFrame("Thêm sản phẩm");
+        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setSize(800,500);
+        f.setLayout(new BorderLayout());
+        f.setLocationRelativeTo(null);
+
+
+        FormImport test = new FormImport();
+        f.add(test, BorderLayout.CENTER);
+        f.setVisible(true);
+    }
 }
 

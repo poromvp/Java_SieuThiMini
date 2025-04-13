@@ -54,12 +54,13 @@ CREATE TABLE KhuyenMai (
 
 CREATE TABLE DonHang (
 	MaDH INT AUTO_INCREMENT PRIMARY KEY,
-    MaKH INT,
+    MaKH INT null,
     MaKM INT NULL,
     MaNV INT,
     PTTToan ENUM('CASH', 'BANK') NOT NULL DEFAULT 'CASH',
     NgayTT DATETIME,  
     maDTL int ,
+    tienKD int null, 
     TrangThai ENUM('FINISHED') NOT NULL DEFAULT 'FINISHED'
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -132,8 +133,8 @@ CREATE TABLE ChiTietDH (
     MaDH INT,
     MaSP INT,
     SoLuong INT,
-	TrangThai ENUM('ACTIVE', 'INACTIVE'),
-    PRIMARY KEY (MaDH, MaSP)
+	TrangThai ENUM('ACTIVE', 'INACTIVE')
+  --  PRIMARY KEY (MaDH, MaSP)
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE DiemTichLuy (
@@ -261,19 +262,19 @@ INSERT INTO ChiTietKM (MaKM, MaSP, TileGiam, TrangThai) VALUES
 
 
 -- 7. Chèn dữ liệu vào bảng DonHang
-INSERT INTO DonHang (MaKH, MaKM, MaNV, PTTToan, NgayTT, maDTL, TrangThai) VALUES
-(1, 1, 1, 'BANK', '2024-03-10',1, 'FINISHED'),
-(2, 2, 2, 'CASH', '2024-03-11', 2,  'FINISHED'),
-(3, 2, 3, 'BANK', '2024-03-12', 3,  'FINISHED'),
-(4, null, 4, 'CASH', '2024-03-13',4,  'FINISHED'),
-(5, 3, 5, 'CASH', '2024-03-14', 5, 'FINISHED');
+INSERT INTO DonHang (MaKH, MaKM, MaNV, PTTToan, NgayTT, maDTL, tienKD, TrangThai) VALUES
+(1, 1, 1, 'BANK', '2024-03-10',1, null, 'FINISHED'),
+(2, 2, 2, 'CASH', '2024-03-11', 2, 1000000,   'FINISHED'),
+(3, 2, 3, 'BANK', '2024-03-12', 3, null,  'FINISHED'),
+(4, null, 4, 'CASH', '2024-03-13',4, 1000000,  'FINISHED'),
+(5, 3, 5, 'CASH', '2024-03-14', 5, 1000000, 'FINISHED');
 
 -- 8. Chèn dữ liệu vào bảng ChiTietDH
 INSERT INTO ChiTietDH (MaDH, MaSP, SoLuong, TrangThai) VALUES
-(1, 1, 2, 'ACTIVE'),
-(2, 2, 1, 'ACTIVE'),
-(3, 3, 3, 'ACTIVE'),
-(4, 4, 1, 'ACTIVE'),
+(1, 1, 5, 'ACTIVE'),
+(2, 2, 5, 'ACTIVE'),
+(3, 3, 6, 'ACTIVE'),
+(4, 4, 8, 'ACTIVE'),
 (5, 5, 2, 'ACTIVE');
 
 
@@ -293,5 +294,18 @@ INSERT INTO ChiTietPNH (MaPNH, MaSP, MaLH, SoLuong, GiaNhap, TrangThai) VALUES
 (5, 5, 5, 220, 140000, 'ACTIVE');
 
 
-
+-- SELECT donhang.MaDH, donhang.MaNV, nhanvien.TenNV, 
+-- 		donhang.NgayTT, donhang.TrangThai, thethanhvien.TenTV , 
+-- 		sum(chitietdh.SoLuong * sanpham.Gia) AS Tongtien,
+--         khuyenmai.TileGiam
+-- FROM sieuthimini.donhang
+-- join nhanvien on nhanvien.MaNV = donhang.MaNV
+-- left join thethanhvien on thethanhvien.MaTV = donhang.MaKH
+-- left join chitietdh on donhang.MaDH = chitietdh.MaDH
+-- left join sanpham on sanpham.MaSP = chitietdh.MaSP
+-- left join khuyenmai on donhang.MaKM = khuyenmai.MaKM
+-- group by MaDH
+-- having Tongtien > 70000
+-- order by Tongtien desc;
+ -- select * from donhang
 

@@ -1,58 +1,84 @@
 package com.FormTaiKhoan;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-
+import BLL.TaiKhoanBLL;
+import DTO.TaiKhoanDTO;
 import com.ComponentCommon.StyledTextField;
 import com.ComponentCommon.ButtonCustom;
+import JDBC.DBConnection;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class FormAddAccount extends JFrame {
-    private StyledTextField maTKField;
+public class FormAddAccount extends JDialog {
+    private StyledTextField maNVField;
     private StyledTextField tenTKField;
-    private StyledTextField matKhauTKField;
+    private StyledTextField matKhauField;
+    private StyledTextField gmailField;
+    private JComboBox<String> cbQuyen;
+    private JComboBox<String> cbTrangThai;
     private ButtonCustom saveButton;
+    private FormTableAccount tablePanel;
 
-    public FormAddAccount(DefaultTableModel tableModel) {
-        setTitle("Thêm Tài Khoản");
-        setSize(300, 200);
-        setLocationRelativeTo(null);
+    public FormAddAccount(Frame parent, FormTableAccount tablePanel) {
+        super(parent, "Thêm Tài Khoản", true); // Modal dialog
+        this.tablePanel = tablePanel;
+        setSize(350, 300);
+        setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        maTKField = new StyledTextField();
+        maNVField = new StyledTextField();
         tenTKField = new StyledTextField();
-        matKhauTKField = new StyledTextField();
+        matKhauField = new StyledTextField();
+        gmailField = new StyledTextField();
 
-        String TrangThai[] = {"Đang hoạt động","Ngưng hoạt động"};
-        JComboBox cbTrangThai = new JComboBox<>(TrangThai);
-        JPanel inputPanel = new JPanel(new GridLayout(4, 2, 5, 5));
+        String[] quyenList = {"ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN"};
+        cbQuyen = new JComboBox<>(quyenList);
+
+        String[] trangThaiOptions = {"Đang hoạt động", "Ngưng hoạt động"};
+        cbTrangThai = new JComboBox<>(trangThaiOptions);
+
+        JPanel inputPanel = new JPanel(new GridLayout(6, 2, 5, 5));
+        inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         inputPanel.add(new JLabel("Mã nhân viên:"));
-        inputPanel.add(maTKField);
-        inputPanel.add(new JLabel("Tài khoản:"));
+        inputPanel.add(maNVField);
+        inputPanel.add(new JLabel("Tên tài khoản:"));
         inputPanel.add(tenTKField);
         inputPanel.add(new JLabel("Mật khẩu:"));
-        inputPanel.add(matKhauTKField);
+        inputPanel.add(matKhauField);
+        inputPanel.add(new JLabel("Quyền:"));
+        inputPanel.add(cbQuyen);
+        inputPanel.add(new JLabel("Gmail:"));
+        inputPanel.add(gmailField);
         inputPanel.add(new JLabel("Trạng thái:"));
         inputPanel.add(cbTrangThai);
 
-        saveButton = new ButtonCustom("Thêm tài khoản",20,"blue");
+        saveButton = new ButtonCustom("Thêm tài khoản", 20, "blue");
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String maNV = maTKField.getText();
-                String user = tenTKField.getText();
-                String psw = matKhauTKField.getText();
+                try {
+                    TaiKhoanDTO tk = new TaiKhoanDTO();
+                    tk.setMaNV(Integer.parseInt(maNVField.getText().trim()));
+                    tk.setTenTK(tenTKField.getText().trim());
+                    tk.setMatKhau(matKhauField.getText().trim());
+                    tk.setQuyen(cbQuyen.getSelectedItem().toString());
+                    tk.setGmail(gmailField.getText().trim());
+                    tk.setTrangThai(cbTrangThai.getSelectedItem().equals("Đang hoạt động") ? "ACTIVE" : "INACTIVE");
 
-                if (maNV.isEmpty() || user.isEmpty() || psw.isEmpty()) {
-                    JOptionPane.showMessageDialog(FormAddAccount.this, "Vui lòng nhập đầy đủ thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    return;
+                    TaiKhoanBLL bll = new TaiKhoanBLL();
+                    if (bll.addTaiKhoan(tk)) {
+                        tablePanel.refreshTable();
+                        JOptionPane.showMessageDialog(FormAddAccount.this, "Thêm tài khoản thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                        dispose();
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(FormAddAccount.this, "Mã nhân viên phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
-
-                tableModel.addRow(new Object[]{maNV, user, psw});
-                dispose(); // Đóng cửa sổ sau khi thêm
             }
         });
 
@@ -66,6 +92,8 @@ public class FormAddAccount extends JFrame {
     }
 
     public static void main(String[] args) {
-        new FormAddAccount(new DefaultTableModel(new Object[]{"Mã NV", "Tài khoản", "Mật khẩu"}, 0));
+        JFrame parent = new JFrame();
+        FormTableAccount tablePanel = new FormTableAccount();
+        new FormAddAccount(parent, tablePanel);
     }
 }

@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableModel;
 
 import com.ComponentCommon.ButtonCustom;
 
+import BLL.TaiKhoanBLL;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -38,16 +40,17 @@ public class FormMainAccount extends JPanel {
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new FormAddAccount(tablePanel.getTableModel());
+                new FormAddAccount(new JFrame(), tablePanel); 
+
             }
         });
-
+        
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = tablePanel.getAccountTable().getSelectedRow();
                 if (selectedRow != -1) {
-                    new FormEditAccount(tablePanel.getTableModel(), selectedRow);
+                    new FormEditAccount(new JFrame(), tablePanel.getTableModel(), selectedRow);
                 } else {
                     JOptionPane.showMessageDialog(null, "Vui lòng chọn tài khoản để sửa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }

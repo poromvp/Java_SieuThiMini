@@ -8,24 +8,21 @@ USE SIEUTHIMINI;
 CREATE TABLE NhanVien (
     MaNV INT AUTO_INCREMENT PRIMARY KEY,
     TenNV VARCHAR(100), 
-    GioiThieu VARCHAR(255), 
+    GioiTinh ENUM('Nam','Nữ'),
     NgaySinh DATE,
-    CCCD VARCHAR(20),  
+    CCCD VARCHAR(12),  
     DiaChi VARCHAR(255),
-    ChucVu VARCHAR(50),
-    SDT VARCHAR(20) UNIQUE,
+    SDT VARCHAR(10) UNIQUE,
     Luong DECIMAL(10,2),
-    TrangThai ENUM('ACTIVE', 'INACTIVE')
+    TrangThai BIT(1)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE TaiKhoan (
     MaNV INT PRIMARY KEY,
-    TenTK VARCHAR(50) ,
+    TenTK VARCHAR(100) ,
     MatKhau VARCHAR(255) ,
-    SDT VARCHAR(20) UNIQUE,
-    Quyen VARCHAR(50) ,
+    Quyen ENUM('ADMIN','QUẢN LÝ KHO','NHÂN VIÊN'),
     Gmail VARCHAR(100),
-    TenAnh VARCHAR(255) ,
     TrangThai ENUM('ACTIVE', 'INACTIVE') 
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -175,23 +172,17 @@ INSERT INTO DiemTichLuy (MaDTL, DiemTL, TileGiam, GiamMax, TrangThai) VALUES
 (5, 5000, 12.75, 50000,  'ACTIVE');
 
 
-INSERT INTO NhanVien (TenNV, GioiThieu, NgaySinh, DiaChi, ChucVu, SDT, Luong, TrangThai) VALUES
-('Nguyễn Văn An', 'Nhân viên kinh doanh', '1990-05-10', 'Hà Nội', 'Nhân viên', '0912345671', 10000000, 'ACTIVE'),
-('Trần Thị Bích', 'Nhân viên kế toán', '1992-07-15', 'Hải Phòng', 'Kế toán', '0912345672', 12000000, 'ACTIVE'),
-('Lê Văn Cường', 'Nhân viên IT', '1993-09-20', 'Đà Nẵng', 'IT', '0912345673', 15000000, 'ACTIVE'),
-('Phạm Thị Dung', 'Nhân viên HR', '1994-11-25', 'TP Hồ Chí Minh', 'HR', '0912345674', 11000000, 'ACTIVE'),
-('Võ Minh Tuấn', 'Nhân viên bán hàng', '1995-03-30', 'Cần Thơ', 'Bán hàng', '0912345675', 9000000, 'ACTIVE');
+INSERT INTO NhanVien (TenNV, GioiTinh, NgaySinh, CCCD, DiaChi, SDT, Luong, TrangThai) VALUES
+('Nguyễn Văn An', 'Nam', '1990-05-10', '123456789012', 'Hà Nội', '0912345671', 10000000, '1'),
+('Trần Thị Bích', 'Nữ', '1992-07-15', '234567890123', 'Hải Phòng', '0912345672', 12000000, '1'),
+('Lê Văn Cường', 'Nam', '1993-09-20', '345678901234', 'Đà Nẵng', '0912345673', 15000000, '1'),
+('Phạm Thị Dung', 'Nữ', '1994-11-25', '456789012345', 'TP Hồ Chí Minh', '0912345674', 11000000, '1'),
+('Võ Minh Tuấn', 'Nam', '1995-03-30', '567890123456', 'Cần Thơ', '0912345675', 9000000, '1');
 
-
-INSERT INTO TaiKhoan (MaNV, TenTK, MatKhau, SDT, Quyen, Gmail, TenAnh, TrangThai) VALUES
-(1, 'an_nv', '123456', '0912345671', 'Admin', 'an_nv@gmail.com', 'an.jpg', 'ACTIVE'),
-(2, 'bich_tt', 'abcdef', '0912345672', 'Kế toán', 'bich_tt@gmail.com', 'bich.jpg', 'ACTIVE'),
-(3, 'cuong_lv', 'pass123', '0912345673', 'IT', 'cuong_lv@gmail.com', 'cuong.jpg', 'ACTIVE'),
-(4, 'dung_pt', 'dung456', '0912345674', 'HR', 'dung_pt@gmail.com', 'dung.jpg', 'ACTIVE'),
-(5, 'tuan_vm', 'tuan789', '0912345675', 'Bán hàng', 'tuan_vm@gmail.com', 'tuan.jpg', 'ACTIVE');
-
-
-
+INSERT INTO TaiKhoan (MaNV, TenTK, MatKhau, Quyen, Gmail, TrangThai) VALUES
+(1, 'admin1', '123456', 'ADMIN', 'admin1@example.com', 'ACTIVE'),
+(2, 'kho01', 'kho123', 'QUẢN LÝ KHO', 'kho01@example.com', 'ACTIVE'),
+(3, 'nhanvien01', 'nv123', 'NHÂN VIÊN', 'nv01@example.com', 'INACTIVE');
 
 
 

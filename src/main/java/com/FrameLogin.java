@@ -1,5 +1,6 @@
 package com;
 
+import com.ComponentCommon.ButtonCustom;
 import com.ComponentCommon.StyledTextField;
 
 import javax.swing.*;
@@ -8,7 +9,7 @@ import java.awt.*;
 public class FrameLogin extends JFrame {
     public FrameLogin() {
         setTitle("Login");
-        setSize(600, 500);
+        setSize(700, 500);
         setBackground(new Color(255,255,255));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -56,7 +57,7 @@ public class FrameLogin extends JFrame {
         gbc.gridwidth = 2;
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
-        JButton loginBtn = new JButton("Đăng nhập");
+        ButtonCustom loginBtn = new ButtonCustom("Đăng nhập",16,"black");
         infoPanel.add(loginBtn, gbc);
 
         add(infoPanel, BorderLayout.EAST);

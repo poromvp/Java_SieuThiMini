@@ -2,6 +2,8 @@ package com;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+
 import javax.swing.*;
 import com.FormNhanVien.FormMainNhanVien;
 import com.FormNhanVien.LeftSidebarMenu;
@@ -9,6 +11,7 @@ import com.FormTaiKhoan.FormMainAccount;
 import com.Admin_PanelThongKe.PanelMainThongKe;
 import com.DashBoardPanel.MainDashBoard;
 import com.FormWareHouse.FormProduct;
+import JDBC.DBConnection;
 
 public class FrameAdmin extends JFrame implements ActionListener {
 
@@ -42,11 +45,12 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public void panelNhanVien() {
+        Connection conn = DBConnection.getConnection(); 
         rightPn.removeAll();
         rightPn.setBackground(new Color(95, 200, 150));
         rightPn.setLayout(new BorderLayout());
 
-        FormMainNhanVien formNhanVien = new FormMainNhanVien();
+        FormMainNhanVien formNhanVien = new FormMainNhanVien(conn);
         rightPn.add(formNhanVien, BorderLayout.CENTER);
 
         // Cập nhật lại giao diện

@@ -5,15 +5,15 @@ package DTO;
 public class DiemTichLuyDTO {
     private int maDTL;
     private int diemTL;
-    private double tiLeGiam;
-    private double giamMax;
+    private int tiLeGiam;
+    private int giamMax;
     private String trangThai;
 
     // Constructor mặc định
     public DiemTichLuyDTO() {}
 
     // Constructor có tham số
-    public DiemTichLuyDTO(int maDTL, int diemTL, double tiLeGiam, double giamMax, String trangThai) {
+    public DiemTichLuyDTO(int maDTL, int diemTL, int tiLeGiam, int giamMax, String trangThai) {
         this.maDTL = maDTL;
         this.diemTL = diemTL;
         this.tiLeGiam = tiLeGiam;
@@ -42,7 +42,7 @@ public class DiemTichLuyDTO {
         return tiLeGiam;
     }
 
-    public void setTiLeGiam(double tiLeGiam) {
+    public void setTiLeGiam(int tiLeGiam) {
         this.tiLeGiam = tiLeGiam;
     }
 
@@ -50,7 +50,7 @@ public class DiemTichLuyDTO {
         return giamMax;
     }
 
-    public void setGiamMax(double giamMax) {
+    public void setGiamMax(int giamMax) {
         this.giamMax = giamMax;
     }
 

@@ -19,7 +19,6 @@ import com.ComponentCommon.StyledTextField;
 
 import BLL.DiemTichLuyBLL;
 import BLL.DonHangBLL;
-import BLL.KhuyenMaiBLL;
 import BLL.TheThanhVienBLL;
 import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
@@ -273,12 +272,9 @@ public class OrderIformationForm extends JPanel {
         countOrder = DonHangBLL.countOrder() + 1;
         txtOrderId.setText(countOrder + "");
 
-        discount = KhuyenMaiBLL.getDiscountToday();
-        if(discount != null){
-            txtDiscount.setText(discount.getTileGiam() + "");
-        }
+        
         total = FormOrderDetailList.calCalculateTotal();
-        totalAmount = FormOrderDetailList.calCalculateTotalAmount() - total*discount.getTileGiam()/100;
+        totalAmount = FormOrderDetailList.calCalculateTotalAmount() ;
         txtTotal.setText(total + "");
         txtTotalFinaly.setText(totalAmount + "");
     }

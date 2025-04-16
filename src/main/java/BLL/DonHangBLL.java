@@ -5,7 +5,9 @@ package BLL;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+import DAL.DiemTichLuyDAL;
 import DAL.DonHangDAL;
+import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
 
 public class DonHangBLL {
@@ -26,6 +28,24 @@ public class DonHangBLL {
             return null;
         }
         return DonHangDAL.getOrderById(maDH);
+    }
+
+
+    public static int tinhTongTienByMaDonHang(int maDH){
+        if(maDH <= 0){
+            System.out.println("ma don hang khong dung.");
+            return  0;
+        }
+        DonHangDTO dh = DonHangDAL.getOrderById(maDH);
+        int tongTien = DonHangDAL.tinhTongTienByMaDonHang(maDH);
+        int tienGiam = 0;
+        System.out.println(dh.toString());
+        if(dh.getMaDTL() != 0){
+            DiemTichLuyDTO dtl = DiemTichLuyBLL.getDiemTichLuyById(dh.getMaDTL());
+            tienGiam = (int) (tongTien* (int)(dtl.getTiLeGiam()/100) <=  dtl.getGiamMax() ? tongTien* (int)(dtl.getTiLeGiam()/100) : dtl.getGiamMax());
+        }
+        return  tongTien - tienGiam;
+
     }
 
     // Thêm đơn hàng mới (có kiểm tra dữ liệu)
@@ -118,6 +138,7 @@ public class DonHangBLL {
     
 
     public static void main(String[] args) {
-        printAllOrders();
+        // printAllOrders();
+        System.out.println(tinhTongTienByMaDonHang(1));
     }
 }

@@ -1,15 +1,10 @@
 package DAL;
 
-import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import DTO.DonHangDTO;
 import JDBC.DBConnection;
@@ -57,15 +52,26 @@ public class DonHangDAL {
         ArrayList<ArrayList<Object>> result = new ArrayList<>();
     
         String sql = "SELECT donhang.MaDH, donhang.MaNV, nhanvien.TenNV, \n" +
-                "       donhang.NgayTT, donhang.TrangThai, thethanhvien.TenTV, \n" +
-                "       SUM(chitietdh.SoLuong * sanpham.Gia) AS tongTien,\n" +
-                "       khuyenmai.TileGiam\n" +
-                "FROM sieuthimini.donhang\n" +
-                "JOIN nhanvien ON nhanvien.MaNV = donhang.MaNV\n" +
-                "LEFT JOIN thethanhvien ON thethanhvien.MaTV = donhang.MaKH\n" +
-                "LEFT JOIN chitietdh ON donhang.MaDH = chitietdh.MaDH\n" +
-                "LEFT JOIN sanpham ON sanpham.MaSP = chitietdh.MaSP\n" +
-                "LEFT JOIN khuyenmai ON donhang.MaKM = khuyenmai.MaKM";
+        "       donhang.NgayTT, donhang.TrangThai, thethanhvien.TenTV, \n" +
+        "       SUM(chitietdh.SoLuong * (sanpham.Gia * (1 - IFNULL(chitietkm.TileGiam, 0) / 100))) \n" +
+        "       - \n" +
+        "       CASE \n" +
+        "           WHEN diemtichluy.TiLeGiam IS NOT NULL THEN \n" +
+        "               LEAST(\n" +
+        "                   SUM(chitietdh.SoLuong * (sanpham.Gia * (1 - IFNULL(chitietkm.TileGiam, 0) / 100))) * diemtichluy.TiLeGiam / 100,\n" +
+        "                   diemtichluy.GiamMax\n" +
+        "               )\n" +
+        "           ELSE 0\n" +
+        "       END AS tongTien\n" +
+
+        "FROM sieuthimini.donhang\n" +
+        "JOIN nhanvien ON nhanvien.MaNV = donhang.MaNV\n" +
+        "LEFT JOIN thethanhvien ON thethanhvien.MaTV = donhang.MaKH\n" +
+        "LEFT JOIN chitietdh ON donhang.MaDH = chitietdh.MaDH\n" +
+        "LEFT JOIN sanpham ON sanpham.MaSP = chitietdh.MaSP\n" +
+        "LEFT JOIN chitietkm ON chitietkm.MaSP = sanpham.MaSP AND chitietkm.MaKM = donhang.MaKM\n" +
+        "LEFT JOIN khuyenmai ON donhang.MaKM = khuyenmai.MaKM\n" +
+        "LEFT JOIN diemtichluy ON donhang.MaDTL = diemtichluy.MaDTL";
     
         // WHERE
         if (!whereConditions.isEmpty()) {
@@ -121,7 +127,6 @@ public class DonHangDAL {
                 row.add(rs.getString("TrangThai"));
                 row.add(rs.getString("TenTV"));
                 row.add(rs.getDouble("tongTien"));
-                row.add(rs.getInt("TileGiam"));
     
                 result.add(row);
             }
@@ -141,6 +146,39 @@ public class DonHangDAL {
     
         return result;
     }
+
+    public static int tinhTongTienByMaDonHang(int maDH) {
+        String sql = "SELECT " +
+                     "SUM(ChiTietDH.SoLuong * (SanPham.Gia * (1 - IFNULL(ChiTietKM.TileGiam, 0) / 100))) AS tongTien " +
+                     "FROM DonHang " +
+                     "JOIN TheThanhVien ON DonHang.MaKH = TheThanhVien.MaTV " +
+                     "LEFT JOIN ChiTietDH ON ChiTietDH.MaDH = DonHang.MaDH " +
+                     "LEFT JOIN SanPham ON SanPham.MaSP = ChiTietDH.MaSP " +
+                     "LEFT JOIN ChiTietKM ON ChiTietKM.MaSP = SanPham.MaSP AND ChiTietKM.MaKM = DonHang.MaKM " +
+                     "LEFT JOIN KhuyenMai ON KhuyenMai.MaKM = DonHang.MaKM " +
+                     "LEFT JOIN DiemTichLuy ON DonHang.MaDTL = DiemTichLuy.MaDTL " +
+                     "WHERE DonHang.MaDH = ?;";
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setInt(1, maDH);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                int tongTien = rs.getInt("tongTien");
+                return tongTien;
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return 0; 
+    }
+    
+
+    
     
 
 
@@ -218,14 +256,15 @@ public class DonHangDAL {
     
 
     public static void main(String[] args) {
-        ArrayList<String> where = new ArrayList<>();
-        ArrayList<String> having = new ArrayList<>();
-        ArrayList<Object> params = new ArrayList<>();
+        // ArrayList<String> where = new ArrayList<>();
+        // ArrayList<String> having = new ArrayList<>();
+        // ArrayList<Object> params = new ArrayList<>();
         
-        String orderBy = null;
-        String orderType = null;
-        Integer limit = null;
+        // String orderBy = null;
+        // String orderType = null;
+        // Integer limit = null;
         
-        getFindSortOrder(where, having, params, orderBy, orderType, limit);        // System.out.println(countOrder());
+        // getFindSortOrder(where, having, params, orderBy, orderType, limit);        
+        System.out.println(tinhTongTienByMaDonHang(1));
     }
 }

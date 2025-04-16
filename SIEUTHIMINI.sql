@@ -48,19 +48,18 @@ CREATE TABLE KhuyenMai (
     TenKM VARCHAR(100) ,
     NgayKT DATE,
     NgayBD DATE,
-    TileGiam DECIMAL(5,2),
 	TrangThai ENUM('ACTIVE', 'INACTIVE', 'DELETEED')
 );
 
 CREATE TABLE DonHang (
 	MaDH INT AUTO_INCREMENT PRIMARY KEY,
-    MaKH INT null,
-    MaKM INT NULL,
+    MaKH INT ,
+    MaKM INT ,
     MaNV INT,
     PTTToan ENUM('CASH', 'BANK') NOT NULL DEFAULT 'CASH',
     NgayTT DATETIME,  
     maDTL int ,
-    tienKD int null, 
+    tienKD int , 
     TrangThai ENUM('FINISHED') NOT NULL DEFAULT 'FINISHED'
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -91,12 +90,6 @@ CREATE TABLE SanPham (
    	TrangThai ENUM('ACTIVE', 'INACTIVE')
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE QuayHang (
-    MaQH INT AUTO_INCREMENT PRIMARY KEY,
-    MaLSP INT,
-    TenQH VARCHAR(100) ,
-   	TrangThai ENUM('ACTIVE', 'INACTIVE')
-)CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE PhieuNhapHang (
     MaPNH INT AUTO_INCREMENT PRIMARY KEY,
@@ -237,12 +230,12 @@ INSERT INTO NhaNCC (TenNCC, SDT, DiaChi, TrangThai) VALUES
 ('Công ty Ajinomoto', '0988885555', 'Đồng Nai', 'ACTIVE');
 
 
-INSERT INTO KhuyenMai (MaKM, TenKM, NgayKT, NgayBD, TileGiam, TrangThai) VALUES
-(1, 'Giảm giá 10%', '2025-12-31', '2025-01-01', 10.00, 'ACTIVE'),
-(2, 'Giảm giá 15%', '2024-12-31', '2024-01-01', 15.00, 'ACTIVE'),
-(3, 'Giảm giá 20%', '2025-06-30', '2025-01-01', 20.00, 'ACTIVE'),
-(4, 'Giảm giá 5%', '2025-03-31', '2025-01-01', 5.00, 'ACTIVE'),
-(5, 'Giảm giá 12.75%', '2025-09-30', '2025-06-01', 12.75, 'ACTIVE');
+INSERT INTO KhuyenMai (MaKM, TenKM, NgayKT, NgayBD,  TrangThai) VALUES
+(1, 'Giảm giá 10%', '2025-12-31', '2025-01-01',  'ACTIVE'),
+(2, 'Giảm giá 15%', '2024-12-31', '2024-01-01',  'ACTIVE'),
+(3, 'Giảm giá 20%', '2025-06-30', '2025-01-01',  'ACTIVE'),
+(4, 'Giảm giá 5%', '2025-03-31', '2025-01-01',  'ACTIVE'),
+(5, 'Giảm giá 12.75%', '2025-09-30', '2025-06-01', 'ACTIVE');
 
 
 INSERT INTO SanPham ( MaNCC, MaLSP, TenAnh, Gia, TenSP, MoTa, TrangThai) VALUES
@@ -263,16 +256,20 @@ INSERT INTO ChiTietKM (MaKM, MaSP, TileGiam, TrangThai) VALUES
 
 -- 7. Chèn dữ liệu vào bảng DonHang
 INSERT INTO DonHang (MaKH, MaKM, MaNV, PTTToan, NgayTT, maDTL, tienKD, TrangThai) VALUES
-(1, 1, 1, 'BANK', '2024-03-10',1, null, 'FINISHED'),
+(1, 1, 1, 'BANK', '2024-03-10',1, -1, 'FINISHED'),
 (2, 2, 2, 'CASH', '2024-03-11', 2, 1000000,   'FINISHED'),
-(3, 2, 3, 'BANK', '2024-03-12', 3, null,  'FINISHED'),
+(3, 2, 3, 'BANK', '2024-03-12', 3, -1,  'FINISHED'),
 (4, null, 4, 'CASH', '2024-03-13',4, 1000000,  'FINISHED'),
 (5, 3, 5, 'CASH', '2024-03-14', 5, 1000000, 'FINISHED');
 
 -- 8. Chèn dữ liệu vào bảng ChiTietDH
 INSERT INTO ChiTietDH (MaDH, MaSP, SoLuong, TrangThai) VALUES
 (1, 1, 5, 'ACTIVE'),
+(1, 3, 5, 'ACTIVE'),
+(1, 4, 5, 'ACTIVE'),
 (2, 2, 5, 'ACTIVE'),
+(2, 1, 5, 'ACTIVE'),
+(2, 4, 5, 'ACTIVE'),
 (3, 3, 6, 'ACTIVE'),
 (4, 4, 8, 'ACTIVE'),
 (5, 5, 2, 'ACTIVE');

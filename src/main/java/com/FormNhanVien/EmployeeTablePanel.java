@@ -30,42 +30,43 @@ public class EmployeeTablePanel extends JPanel {
     }
 
     public void loadNhanVienTable() {
-        String[] columnNames = {"Mã NV", "Họ Tên", "Ngày Sinh", "Giới tính", "Địa Chỉ", "Chức Vụ", "Số ĐT", "CCCD", "Trạng thái"};
-        
+        String[] columnNames = {"Mã NV", "Họ Tên", "Giới Tính", "Ngày Sinh", "CCCD", "Địa Chỉ", "Số ĐT", "Lương", "Trạng Thái"};
+    
         try {
             List<NhanVienDTO> ds = nhanVienBLL.getAllNhanVien();
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
+    
             data = new Object[ds.size()][columnNames.length];
-
+    
             for (int i = 0; i < ds.size(); i++) {
                 NhanVienDTO nv = ds.get(i);
                 data[i][0] = nv.getMaNV();
                 data[i][1] = nv.getTenNV();
-                data[i][2] = nv.getNgaySinh() != null ? sdf.format(nv.getNgaySinh()) : "";
-                data[i][3] = nv.getGioiTinh();
-                data[i][4] = nv.getDiaChi();
-                data[i][5] = nv.getChucVu();
+                data[i][2] = nv.getGioiTinh();
+                data[i][3] = nv.getNgaySinh() != null ? sdf.format(nv.getNgaySinh()) : "";
+                data[i][4] = nv.getCccd();
+                data[i][5] = nv.getDiaChi();
                 data[i][6] = nv.getSdt();
-                data[i][7] = nv.getCccd();
-                data[i][8] = nv.getTrangThai(); 
+                data[i][7] = nv.getLuong();
+                data[i][8] = nv.getTrangThai();
             }
-
+    
             tablePanel = new StyledTable(data, columnNames);
             JScrollPane scrollPane = new JScrollPane(tablePanel);
             scrollPane.setBackground(Color.WHITE);
             add(scrollPane, BorderLayout.CENTER);
-
-            addTableClickEvent(); 
+    
+            addTableClickEvent();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 
     public void reloadData() {
-        removeAll();  // Xóa tất cả component cũ
+        removeAll(); // Xóa các component cũ
     
-        String[] columnNames = {"Mã NV", "Họ Tên", "Ngày Sinh", "Giới tính", "Địa Chỉ", "Chức Vụ", "Số ĐT", "CCCD", "Trạng thái"};
+        String[] columnNames = {"Mã NV", "Họ Tên", "Giới Tính", "Ngày Sinh", "CCCD", "Địa Chỉ", "Số ĐT", "Lương", "Trạng Thái"};
     
         try {
             List<NhanVienDTO> ds = nhanVienBLL.getAllNhanVien();
@@ -77,12 +78,12 @@ public class EmployeeTablePanel extends JPanel {
                 NhanVienDTO nv = ds.get(i);
                 newData[i][0] = nv.getMaNV();
                 newData[i][1] = nv.getTenNV();
-                newData[i][2] = nv.getNgaySinh() != null ? sdf.format(nv.getNgaySinh()) : "";
-                newData[i][3] = nv.getGioiTinh();
-                newData[i][4] = nv.getDiaChi();
-                newData[i][5] = nv.getChucVu();
+                newData[i][2] = nv.getGioiTinh();
+                newData[i][3] = nv.getNgaySinh() != null ? sdf.format(nv.getNgaySinh()) : "";
+                newData[i][4] = nv.getCccd();
+                newData[i][5] = nv.getDiaChi();
                 newData[i][6] = nv.getSdt();
-                newData[i][7] = nv.getCccd();
+                newData[i][7] = nv.getLuong();
                 newData[i][8] = nv.getTrangThai();
             }
     
@@ -90,11 +91,8 @@ public class EmployeeTablePanel extends JPanel {
             JScrollPane scrollPane = new JScrollPane(tablePanel);
             scrollPane.setBackground(Color.WHITE);
     
-            // 👉 Đặt lại layout và component
             setLayout(new BorderLayout());
             add(scrollPane, BorderLayout.CENTER);
-    
-            // 👉 Thêm lại mouse listener
             addTableClickEvent();
     
             revalidate();
@@ -105,6 +103,7 @@ public class EmployeeTablePanel extends JPanel {
             JOptionPane.showMessageDialog(this, "Lỗi khi load lại dữ liệu bảng!");
         }
     }
+    
     private void addTableClickEvent() {
         tablePanel.addMouseListener(new MouseAdapter() {
             @Override
@@ -114,15 +113,16 @@ public class EmployeeTablePanel extends JPanel {
                     if (selectedRow != -1 && detailPanel != null) {
                         String maNV = String.valueOf(tablePanel.getValueAt(selectedRow, 0));
                         String hoTen = String.valueOf(tablePanel.getValueAt(selectedRow, 1));
-                        String ngaySinh = String.valueOf(tablePanel.getValueAt(selectedRow, 2));
-                        String gioiTinh = String.valueOf(tablePanel.getValueAt(selectedRow, 3));
-                        String diaChi = String.valueOf(tablePanel.getValueAt(selectedRow, 4));
-                        String chucVu = String.valueOf(tablePanel.getValueAt(selectedRow, 5));
+                        String gioiTinh = String.valueOf(tablePanel.getValueAt(selectedRow, 2));
+                        String ngaySinh = String.valueOf(tablePanel.getValueAt(selectedRow, 3));
+                        String cccd = String.valueOf(tablePanel.getValueAt(selectedRow, 4));
+                        String diaChi = String.valueOf(tablePanel.getValueAt(selectedRow, 5));
                         String soDT = String.valueOf(tablePanel.getValueAt(selectedRow, 6));
-                        String cccd = String.valueOf(tablePanel.getValueAt(selectedRow, 7));
+                        String luong = String.valueOf(tablePanel.getValueAt(selectedRow, 7));
                         String trangThai = String.valueOf(tablePanel.getValueAt(selectedRow, 8));
+
     
-                        detailPanel.setEmployeeData(maNV, hoTen, ngaySinh, gioiTinh, diaChi, chucVu, soDT, cccd, trangThai);
+                        detailPanel.setEmployeeData(maNV, hoTen,gioiTinh, ngaySinh,cccd, diaChi, soDT, luong, trangThai);
                     }
                 }
             }

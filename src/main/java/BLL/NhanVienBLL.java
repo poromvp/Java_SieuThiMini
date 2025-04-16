@@ -46,7 +46,6 @@ public class NhanVienBLL {
         if (nv.getTenNV() == null || nv.getTenNV().trim().isEmpty()) return false;
         if (nv.getGioiTinh() == null || nv.getGioiTinh().isEmpty()) return false;
         if (nv.getNgaySinh() == null) return false;
-        if (nv.getChucVu() == null || nv.getChucVu().isEmpty()) return false;
         if (nv.getSdt() == null || nv.getSdt().isEmpty()) return false;
         if (nv.getCccd() == null || nv.getCccd().isEmpty()) return false;
         return true;

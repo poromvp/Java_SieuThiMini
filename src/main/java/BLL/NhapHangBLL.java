@@ -20,7 +20,7 @@ public class NhapHangBLL {
     // Thêm phiếu nhập hàng
     public boolean insertPhieuNhapHang(PhieuNhapHangDTO phieuNhap) {
         // Validate dữ liệu trước khi thêm
-        if (validatePhieuNhap(phieuNhap)) {
+            if (validatePhieuNhap(phieuNhap)) {
             return nhapHangDAL.insertPhieuNhapHang(phieuNhap);
         }
         return false;
@@ -52,26 +52,22 @@ public class NhapHangBLL {
 
     // Validate dữ liệu phiếu nhập hàng
     private boolean validatePhieuNhap(PhieuNhapHangDTO phieuNhap) {
-        // Kiểm tra tên phiếu không rỗng
         if (phieuNhap.getTenPNH() == null || phieuNhap.getTenPNH().trim().isEmpty()) {
+            System.out.println("Lỗi validate: Tên phiếu nhập hàng rỗng");
             return false;
         }
-
-        // Kiểm tra ngày nhập không null
         if (phieuNhap.getNgayNhap() == null) {
+            System.out.println("Lỗi validate: Ngày nhập null");
             return false;
         }
-
-        // Kiểm tra ngày nhập không trong tương lai
         if (phieuNhap.getNgayNhap().after(new Date())) {
+            System.out.println("Lỗi validate: Ngày nhập trong tương lai");
             return false;
         }
-
-        // Kiểm tra mã NCC và mã NV phải > 0
         if (phieuNhap.getMaNCC() <= 0 || phieuNhap.getMaNV() <= 0) {
+            System.out.println("Lỗi validate: Mã NCC hoặc Mã NV không hợp lệ");
             return false;
         }
-
         return true;
     }
 

@@ -50,7 +50,7 @@ import com.toedter.calendar.JDateChooser;
 import BLL.DonHangBLL;
 
 
-public class InterfaceOrderManagement extends JPanel implements ActionListener{
+public class    InterfaceOrderManagement extends JPanel implements ActionListener{
 
     private  static JPanel pn_toolBar ;
     private  static JButton btn_show ;

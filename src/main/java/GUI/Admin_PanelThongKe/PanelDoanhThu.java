@@ -11,15 +11,12 @@ import javax.swing.table.DefaultTableModel;
 
 import GUI.TienIch;
 
-import DAL.DonHangDAL;
-import DTO.DonHangDTO;
-
 public class PanelDoanhThu extends JPanel implements ActionListener {
     JLabel tongdoanhthu, tongdonhang;
     JComboBox<String> mocthoigian;
     JTable tb;
     DefaultTableModel model;
-    public ArrayList<DonHangDTO> HoaDon = DonHangDAL.getAllOrder();
+    public ArrayList<hoadontemp> HoaDon = new ArrayList<>();
     JButton btnTim;
     JPanel pn1, pn2, pn3;
 
@@ -81,15 +78,15 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
     public void initPanel3() {
         pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách"), new EmptyBorder(4, 4, 4, 4)));
         pn3.setLayout(new BorderLayout());
-        String[] tencot = { "ID", "Nhân viên", "Phương thức thanh toán", "Ngày"};
-        /*hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
+        String[] tencot = { "ID", "Name", "Price", "Date" };
+        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
         hoadontemp b = new hoadontemp("2", "Cam", "10,000", "10/10/2025");
         hoadontemp c = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
         hoadontemp d = new hoadontemp("4", "Cam", "10,000", "10/10/2025");
         HoaDon.add(a);
         HoaDon.add(b);
         HoaDon.add(c);
-        HoaDon.add(d);*/
+        HoaDon.add(d);
         model = new DefaultTableModel(tencot, 0){
             public boolean isCellEditable(int row, int column){
                 return false;
@@ -133,8 +130,8 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
 
     private void refreshTable() {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (DonHangDTO s : HoaDon) {
-            model.addRow(new Object[] { s.getMaDH(), s.getMaNV(), s.getPtThanhToan(), s.getNgayTT() });
+        for (hoadontemp s : HoaDon) {
+            model.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate() });
         }
     }
 

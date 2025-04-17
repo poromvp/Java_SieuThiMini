@@ -1,9 +1,6 @@
 package GUI.DashBoardPanel;
 
 import javax.swing.*;
-
-import com.TienIch;
-
 import java.awt.*;
 import java.time.LocalDate;
 
@@ -212,7 +209,7 @@ public class PanelChart extends JPanel {
             }
         });
 
-        JButton animateButton = new JButton();
+        JButton animateButton = new JButton("Load lại");
         animateButton.addActionListener(_ -> {
             int numBars;
             int currentYear = today.getYear();
@@ -281,27 +278,18 @@ public class PanelChart extends JPanel {
         JPanel pn1 = new JPanel();
         pn1.setLayout(new FlowLayout());
 
-        JLabel loc = new JLabel("Lọc:");
-        TienIch.labelStyle(loc, 5, 14, null);
-        pn1.add(loc);
+        pn1.add(new JLabel("Lọc:"));
 
-        TienIch.comboBoxStyle(filterBox);
         pn1.add(filterBox);
 
-        TienIch.labelStyle(thang, 5, 14, null);
         pn1.add(thang);
 
-        TienIch.comboBoxStyle(monthBox);
         pn1.add(monthBox);
 
-        TienIch.labelStyle(yearLabel, 5, 14, null);
         pn1.add(yearLabel);
 
-        TienIch.textFieldStyle(yearField);
         pn1.add(yearField);
 
-        TienIch.nutResetStyle(animateButton, "undo.png", 1, 70, 35);
-        animateButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         pn1.add(animateButton);
 
         add(chart, BorderLayout.CENTER);

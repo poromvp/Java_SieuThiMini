@@ -11,7 +11,7 @@ public class PanelMainThongKe extends JPanel implements ActionListener {
     JButton btn1;
 
     public PanelMainThongKe() {
-        setBackground(new Color(17, 32, 51));
+        setBackground(new Color(30, 144, 255));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JTabbedPane tab = new JTabbedPane();
@@ -29,7 +29,7 @@ public class PanelMainThongKe extends JPanel implements ActionListener {
         tab.addTab("Báo cáo khách hàng", pn4);
         
         btn1 = new JButton("In báo cáo");
-        TienIch.nutStyle(btn1, "printer.png", 18, 100, 50);
+        TienIch.nutStyle(btn1, "printer.png", 18, 0, 0);
         add(tab);
         add(btn1);
 

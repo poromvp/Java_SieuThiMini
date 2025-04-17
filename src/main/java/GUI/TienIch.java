@@ -5,57 +5,26 @@ import java.awt.event.*;
 import java.awt.*;
 
 public class TienIch {
-    public static void nutResetStyle(JButton nut, String fileIcon, int size, int dai, int rong) {
-        // Kích thước và font
-        nut.setPreferredSize(new Dimension(dai,rong));
-        nut.setFont(new Font("Arial", Font.BOLD, size));
-        nut.setFocusPainted(false); // Bỏ viền khi focus
-        nut.setContentAreaFilled(false); // Tắt nền mặc định
-        nut.setOpaque(true); // Cho phép vẽ màu nền
+    public static void quanlynutsidebar(JButton nut) {
+        nut.setPreferredSize(new Dimension(150, 150));
+        nut.setMaximumSize(new Dimension(278, 200));
+        nut.setFont(new Font("Arial", Font.BOLD, 18));
+        nut.setOpaque(true); // Đặt nền đục hay trong suốt
+        nut.setFocusPainted(false); // Bỏ viền xanh khi nhấn vào nút
+        nut.setContentAreaFilled(false); // Bỏ hiệu ứng nền mặc định của JButton
+        nut.setForeground(new Color(226, 224, 221)); // Đặt màu chữ trên nút
+        nut.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
+    }
 
-        // Màu sắc
-        Color normalColor = new Color(17, 32, 51);
-        Color hoverColor = Color.GREEN;
-        Color clickColor = new Color(0, 51, 153);
-
-        // Đặt màu ban đầu
-        nut.setForeground(Color.WHITE);
-
-        // Thêm icon nếu có
-        if (fileIcon != null && !fileIcon.isEmpty()) {
-            ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/" + fileIcon));
-            Image img = icon.getImage();
-            int iconSize = size + 30; // Tùy chỉnh kích thước icon so với chữ
-            Image resizedImg = img.getScaledInstance(iconSize, iconSize, Image.SCALE_SMOOTH);
-            nut.setIcon(new ImageIcon(resizedImg));
-        }
-
-        // Viền bo góc
-        nut.setBorder(BorderFactory.createLineBorder(normalColor, 2, true));
-
-        // Sự kiện hover và click
-        nut.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                nut.setBackground(hoverColor);
-                nut.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                nut.setBackground(null);
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                nut.setBackground(clickColor);
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                nut.setBackground(hoverColor);
-            }
-        });
+    public static void nutStyle(JButton nut) {
+        nut.setPreferredSize(new Dimension(60, 50));
+        nut.setMaximumSize(new Dimension(60, 60));
+        nut.setFont(new Font("Arial", Font.BOLD, 18));
+        nut.setOpaque(true); // Đặt nền đục hay trong suốt
+        // nut.setFocusPainted(true); // Bỏ viền xanh khi nhấn vào nút
+        // nut.setContentAreaFilled(false); // Bỏ hiệu ứng nền mặc định của JButton
+        nut.setForeground(new Color(15, 16, 16)); // Đặt màu chữ trên nút
+        nut.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
     }
 
     public static void nutStyle(JButton nut, String fileIcon, int size, int dai, int rong) {
@@ -67,7 +36,7 @@ public class TienIch {
         nut.setOpaque(true); // Cho phép vẽ màu nền
 
         // Màu sắc
-        Color normalColor = new Color(17, 32, 51);
+        Color normalColor = new Color(30, 144, 255);
         Color hoverColor = new Color(0, 102, 204);
         Color clickColor = new Color(0, 51, 153);
 
@@ -124,13 +93,13 @@ public class TienIch {
         if (rank == 1) { //title
             label.setForeground(Color.BLACK); // Màu đen
         } else if (rank == 2) { //số thống kê
-            label.setForeground(new Color(17, 32, 51)); // Màu xanh dương
+            label.setForeground(new Color(30, 144, 255)); // Màu xanh dương
 
             // Đặt viền cho label (tùy chọn)
-            label.setBorder(BorderFactory.createLineBorder(new Color(17, 32, 51), 1, true));
+            label.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 1, true));
             label.setBackground(Color.WHITE);
             // Màu sắc
-            Color normalColor = new Color(17, 32, 51);
+            Color normalColor = new Color(30, 144, 255);
             Color hoverColor = new Color(210, 53, 29);
             // Sự kiện hover và click
             label.addMouseListener(new MouseAdapter() {
@@ -156,13 +125,9 @@ public class TienIch {
             label.setFont(new Font("Arial", Font.PLAIN, size));
             label.setHorizontalAlignment(SwingConstants.LEFT);
             label.setVerticalAlignment(SwingConstants.CENTER);
-        } else if (rank == 4){ 
+        } else if (rank == 4){ //bên phải trong hóa đơn
             label.setForeground(Color.BLACK);
             label.setHorizontalAlignment(SwingConstants.LEFT);
-        } else if (rank == 5){ //bên phải 
-            label.setForeground(Color.BLACK);
-            label.setHorizontalAlignment(SwingConstants.RIGHT);
-            label.setVerticalAlignment(SwingConstants.CENTER);
         }
 
         // Đặt khoảng cách đệm xung quanh nội dung
@@ -177,7 +142,7 @@ public class TienIch {
         rd.setOpaque(false);        // Làm trong suốt nền để thấy màu background
         
         // Màu sắc cho các trạng thái khác nhau
-        Color normalColor = new Color(17, 32, 51);
+        Color normalColor = new Color(30, 144, 255);
         Color hoverColor = new Color(0, 102, 204);
         Color clickColor = new Color(0, 51, 153);
 
@@ -215,40 +180,5 @@ public class TienIch {
 
         // Bo góc nếu muốn
         rd.setBorder(BorderFactory.createLineBorder(normalColor, 1, true));
-    }
-
-    public static void comboBoxStyle(JComboBox<String> comboBox) {
-        comboBox.setFont(new Font("Arial", Font.BOLD, 14));
-        comboBox.setForeground(Color.WHITE);
-        comboBox.setBackground(new Color(17, 32, 51)); // Màu xanh dương đẹp
-        comboBox.setBorder(BorderFactory.createLineBorder(new Color(0, 102, 204), 2, true)); // Viền bo góc
-        comboBox.setFocusable(false); // Bỏ viền focus
-        comboBox.setOpaque(true);
-
-        // Tùy chỉnh dropdown list
-        comboBox.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index,
-                                                          boolean isSelected, boolean cellHasFocus) {
-                JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                label.setFont(new Font("Arial", Font.BOLD, 14));
-                label.setForeground(isSelected ? Color.WHITE : Color.BLACK);
-                label.setBackground(isSelected ? new Color(0, 102, 204) : Color.WHITE);
-                return label;
-            }
-        });
-    }
-
-    public static void textFieldStyle(JTextField textField) {
-        textField.setFont(new Font("Arial", Font.PLAIN, 14));
-        textField.setForeground(Color.BLACK); // Màu chữ
-        textField.setBackground(Color.WHITE); // Nền trắng
-        textField.setCaretColor(new Color(17, 32, 51)); // Màu con trỏ nhập liệu
-        textField.setBorder(BorderFactory.createLineBorder(new Color(17, 32, 51), 2, true)); // Viền bo góc
-        textField.setOpaque(true);
-        textField.setMargin(new Insets(5, 10, 5, 10)); // Thêm padding
-
-        // Placeholder khi chưa nhập dữ liệu
-        textField.setForeground(Color.GRAY);
     }
 }

@@ -9,14 +9,11 @@ import GUI.TienIch;
 public class PanelTomTat extends JPanel{
     JPanel pn1, pn2, pn3;
     JLabel sp, luotmua, doanhthu;
-    TitledBorder title;
 
     public void initPanel1(){
-        title = new TitledBorder("Sản Phẩm");
-        title.setTitleColor(Color.WHITE);
-        pn1.setBorder(new CompoundBorder(title, new EmptyBorder(4, 4, 4, 4)));
+        pn1.setBorder(new CompoundBorder(new TitledBorder("Sản Phẩm"), new EmptyBorder(4, 4, 4, 4)));
         pn1.setLayout(new GridLayout(1,2,5,5));
-        pn1.setBackground(new Color(17, 32, 51));
+        pn1.setBackground(new Color(30, 144, 255));
 
         JLabel lbName = new JLabel("Sản Phẩm:");
         TienIch.labelStyle(lbName, 1, 18, null);
@@ -28,11 +25,9 @@ public class PanelTomTat extends JPanel{
     }
 
     public void initPanel2(){
-        title = new TitledBorder("Lượt Mua");
-        title.setTitleColor(Color.WHITE);
-        pn2.setBorder(new CompoundBorder(title, new EmptyBorder(4, 4, 4, 4)));
+        pn2.setBorder(new CompoundBorder(new TitledBorder("Lượt Mua"), new EmptyBorder(4, 4, 4, 4)));
         pn2.setLayout(new GridLayout(1,2,5,5));
-        pn2.setBackground(new Color(17, 32, 51));
+        pn2.setBackground(new Color(30, 144, 255));
 
         JLabel lbName = new JLabel("Lượt Mua:");
         TienIch.labelStyle(lbName, 1, 18, null);
@@ -44,11 +39,9 @@ public class PanelTomTat extends JPanel{
     }
 
     public void initPanel3(){
-        title = new TitledBorder("Doanh Thu");
-        title.setTitleColor(Color.WHITE);
-        pn3.setBorder(new CompoundBorder(title, new EmptyBorder(4, 4, 4, 4)));
+        pn3.setBorder(new CompoundBorder(new TitledBorder("Doanh Thu"), new EmptyBorder(4, 4, 4, 4)));
         pn3.setLayout(new GridLayout(1,2,5,5));
-        pn3.setBackground(new Color(17, 32, 51));
+        pn3.setBackground(new Color(30, 144, 255));
 
         JLabel lbName = new JLabel("Doanh Thu:");
         TienIch.labelStyle(lbName, 1, 18, null);

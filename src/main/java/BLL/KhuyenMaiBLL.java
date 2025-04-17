@@ -27,10 +27,7 @@ public class KhuyenMaiBLL {
             return false;
         }
 
-        if (khuyenMai.getTileGiam() <= 0 || khuyenMai.getTileGiam() > 100) {
-            System.out.println("Tỉ lệ giảm giá không hợp lệ!");
-            return false;
-        }
+        
 
         int result = KhuyenMaiDAL.insertDiscount(khuyenMai);
         return result > 0;
@@ -50,7 +47,7 @@ public class KhuyenMaiBLL {
     public static void main(String[] args) {
         printAllDiscounts();
 
-        KhuyenMaiDTO newDiscount = new KhuyenMaiDTO(10, "Khuyến mãi Tết", null, null, 15.0, "Đang diễn ra");
+        KhuyenMaiDTO newDiscount = new KhuyenMaiDTO(10, "Khuyến mãi Tết", null, null, "Đang diễn ra");
         boolean added = addDiscount(newDiscount);
         if (added) {
             System.out.println("Thêm khuyến mãi thành công!");

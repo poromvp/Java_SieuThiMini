@@ -8,24 +8,21 @@ USE SIEUTHIMINI;
 CREATE TABLE NhanVien (
     MaNV INT AUTO_INCREMENT PRIMARY KEY,
     TenNV VARCHAR(100), 
-    GioiThieu VARCHAR(255), 
+    GioiTinh ENUM('Nam','Nữ'),
     NgaySinh DATE,
-    CCCD VARCHAR(20),  
+    CCCD VARCHAR(12),  
     DiaChi VARCHAR(255),
-    ChucVu VARCHAR(50),
-    SDT VARCHAR(20) UNIQUE,
+    SDT VARCHAR(10) UNIQUE,
     Luong DECIMAL(10,2),
-    TrangThai ENUM('ACTIVE', 'INACTIVE')
+    TrangThai BIT(1)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE TaiKhoan (
     MaNV INT PRIMARY KEY,
-    TenTK VARCHAR(50) ,
+    TenTK VARCHAR(100) ,
     MatKhau VARCHAR(255) ,
-    SDT VARCHAR(20) UNIQUE,
-    Quyen VARCHAR(50) ,
+    Quyen ENUM('ADMIN','QUẢN LÝ KHO','NHÂN VIÊN'),
     Gmail VARCHAR(100),
-    TenAnh VARCHAR(255) ,
     TrangThai ENUM('ACTIVE', 'INACTIVE') 
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -48,19 +45,18 @@ CREATE TABLE KhuyenMai (
     TenKM VARCHAR(100) ,
     NgayKT DATE,
     NgayBD DATE,
-    TileGiam DECIMAL(5,2),
 	TrangThai ENUM('ACTIVE', 'INACTIVE', 'DELETEED')
 );
 
 CREATE TABLE DonHang (
 	MaDH INT AUTO_INCREMENT PRIMARY KEY,
-    MaKH INT null,
-    MaKM INT NULL,
+    MaKH INT ,
+    MaKM INT ,
     MaNV INT,
     PTTToan ENUM('CASH', 'BANK') NOT NULL DEFAULT 'CASH',
     NgayTT DATETIME,  
     maDTL int ,
-    tienKD int null, 
+    tienKD int , 
     TrangThai ENUM('FINISHED') NOT NULL DEFAULT 'FINISHED'
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -91,12 +87,6 @@ CREATE TABLE SanPham (
    	TrangThai ENUM('ACTIVE', 'INACTIVE')
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-CREATE TABLE QuayHang (
-    MaQH INT AUTO_INCREMENT PRIMARY KEY,
-    MaLSP INT,
-    TenQH VARCHAR(100) ,
-   	TrangThai ENUM('ACTIVE', 'INACTIVE')
-)CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE PhieuNhapHang (
     MaPNH INT AUTO_INCREMENT PRIMARY KEY,
@@ -182,23 +172,17 @@ INSERT INTO DiemTichLuy (MaDTL, DiemTL, TileGiam, GiamMax, TrangThai) VALUES
 (5, 5000, 12.75, 50000,  'ACTIVE');
 
 
-INSERT INTO NhanVien (TenNV, GioiThieu, NgaySinh, DiaChi, ChucVu, SDT, Luong, TrangThai) VALUES
-('Nguyễn Văn An', 'Nhân viên kinh doanh', '1990-05-10', 'Hà Nội', 'Nhân viên', '0912345671', 10000000, 'ACTIVE'),
-('Trần Thị Bích', 'Nhân viên kế toán', '1992-07-15', 'Hải Phòng', 'Kế toán', '0912345672', 12000000, 'ACTIVE'),
-('Lê Văn Cường', 'Nhân viên IT', '1993-09-20', 'Đà Nẵng', 'IT', '0912345673', 15000000, 'ACTIVE'),
-('Phạm Thị Dung', 'Nhân viên HR', '1994-11-25', 'TP Hồ Chí Minh', 'HR', '0912345674', 11000000, 'ACTIVE'),
-('Võ Minh Tuấn', 'Nhân viên bán hàng', '1995-03-30', 'Cần Thơ', 'Bán hàng', '0912345675', 9000000, 'ACTIVE');
+INSERT INTO NhanVien (TenNV, GioiTinh, NgaySinh, CCCD, DiaChi, SDT, Luong, TrangThai) VALUES
+('Nguyễn Văn An', 'Nam', '1990-05-10', '123456789012', 'Hà Nội', '0912345671', 10000000, '1'),
+('Trần Thị Bích', 'Nữ', '1992-07-15', '234567890123', 'Hải Phòng', '0912345672', 12000000, '1'),
+('Lê Văn Cường', 'Nam', '1993-09-20', '345678901234', 'Đà Nẵng', '0912345673', 15000000, '1'),
+('Phạm Thị Dung', 'Nữ', '1994-11-25', '456789012345', 'TP Hồ Chí Minh', '0912345674', 11000000, '1'),
+('Võ Minh Tuấn', 'Nam', '1995-03-30', '567890123456', 'Cần Thơ', '0912345675', 9000000, '1');
 
-
-INSERT INTO TaiKhoan (MaNV, TenTK, MatKhau, SDT, Quyen, Gmail, TenAnh, TrangThai) VALUES
-(1, 'an_nv', '123456', '0912345671', 'Admin', 'an_nv@gmail.com', 'an.jpg', 'ACTIVE'),
-(2, 'bich_tt', 'abcdef', '0912345672', 'Kế toán', 'bich_tt@gmail.com', 'bich.jpg', 'ACTIVE'),
-(3, 'cuong_lv', 'pass123', '0912345673', 'IT', 'cuong_lv@gmail.com', 'cuong.jpg', 'ACTIVE'),
-(4, 'dung_pt', 'dung456', '0912345674', 'HR', 'dung_pt@gmail.com', 'dung.jpg', 'ACTIVE'),
-(5, 'tuan_vm', 'tuan789', '0912345675', 'Bán hàng', 'tuan_vm@gmail.com', 'tuan.jpg', 'ACTIVE');
-
-
-
+INSERT INTO TaiKhoan (MaNV, TenTK, MatKhau, Quyen, Gmail, TrangThai) VALUES
+(1, 'admin1', '123456', 'ADMIN', 'admin1@example.com', 'ACTIVE'),
+(2, 'kho01', 'kho123', 'QUẢN LÝ KHO', 'kho01@example.com', 'ACTIVE'),
+(3, 'nhanvien01', 'nv123', 'NHÂN VIÊN', 'nv01@example.com', 'INACTIVE');
 
 
 
@@ -237,12 +221,12 @@ INSERT INTO NhaNCC (TenNCC, SDT, DiaChi, TrangThai) VALUES
 ('Công ty Ajinomoto', '0988885555', 'Đồng Nai', 'ACTIVE');
 
 
-INSERT INTO KhuyenMai (MaKM, TenKM, NgayKT, NgayBD, TileGiam, TrangThai) VALUES
-(1, 'Giảm giá 10%', '2025-12-31', '2025-01-01', 10.00, 'ACTIVE'),
-(2, 'Giảm giá 15%', '2024-12-31', '2024-01-01', 15.00, 'ACTIVE'),
-(3, 'Giảm giá 20%', '2025-06-30', '2025-01-01', 20.00, 'ACTIVE'),
-(4, 'Giảm giá 5%', '2025-03-31', '2025-01-01', 5.00, 'ACTIVE'),
-(5, 'Giảm giá 12.75%', '2025-09-30', '2025-06-01', 12.75, 'ACTIVE');
+INSERT INTO KhuyenMai (MaKM, TenKM, NgayKT, NgayBD,  TrangThai) VALUES
+(1, 'Giảm giá 10%', '2025-12-31', '2025-01-01',  'ACTIVE'),
+(2, 'Giảm giá 15%', '2024-12-31', '2024-01-01',  'ACTIVE'),
+(3, 'Giảm giá 20%', '2025-06-30', '2025-01-01',  'ACTIVE'),
+(4, 'Giảm giá 5%', '2025-03-31', '2025-01-01',  'ACTIVE'),
+(5, 'Giảm giá 12.75%', '2025-09-30', '2025-06-01', 'ACTIVE');
 
 
 INSERT INTO SanPham ( MaNCC, MaLSP, TenAnh, Gia, TenSP, MoTa, TrangThai) VALUES
@@ -263,16 +247,20 @@ INSERT INTO ChiTietKM (MaKM, MaSP, TileGiam, TrangThai) VALUES
 
 -- 7. Chèn dữ liệu vào bảng DonHang
 INSERT INTO DonHang (MaKH, MaKM, MaNV, PTTToan, NgayTT, maDTL, tienKD, TrangThai) VALUES
-(1, 1, 1, 'BANK', '2024-03-10',1, null, 'FINISHED'),
+(1, 1, 1, 'BANK', '2024-03-10',1, -1, 'FINISHED'),
 (2, 2, 2, 'CASH', '2024-03-11', 2, 1000000,   'FINISHED'),
-(3, 2, 3, 'BANK', '2024-03-12', 3, null,  'FINISHED'),
+(3, 2, 3, 'BANK', '2024-03-12', 3, -1,  'FINISHED'),
 (4, null, 4, 'CASH', '2024-03-13',4, 1000000,  'FINISHED'),
 (5, 3, 5, 'CASH', '2024-03-14', 5, 1000000, 'FINISHED');
 
 -- 8. Chèn dữ liệu vào bảng ChiTietDH
 INSERT INTO ChiTietDH (MaDH, MaSP, SoLuong, TrangThai) VALUES
 (1, 1, 5, 'ACTIVE'),
+(1, 3, 5, 'ACTIVE'),
+(1, 4, 5, 'ACTIVE'),
 (2, 2, 5, 'ACTIVE'),
+(2, 1, 5, 'ACTIVE'),
+(2, 4, 5, 'ACTIVE'),
 (3, 3, 6, 'ACTIVE'),
 (4, 4, 8, 'ACTIVE'),
 (5, 5, 2, 'ACTIVE');

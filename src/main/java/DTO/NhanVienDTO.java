@@ -1,132 +1,70 @@
 package DTO;
 
-
-
-import java.util.Date;
+import java.sql.Date;
 
 public class NhanVienDTO {
-    private int maNV;       // Mã nhân viên (PK)
-    private String tenNV;   // Tên nhân viên
-    private String gioiThieu; // Giới thiệu nhân viên
-    private Date ngaySinh;  // Ngày sinh
-    private String diaChi;  // Địa chỉ
-    private String cccd;    // Căn cước công dân
-    private String chucVu;  // Chức vụ
-    private String sdt;     // Số điện thoại
-    private double luong;   // Lương
-    private String trangThai; // Trạng thái nhân viên
+    private int maNV;       
+    private String tenNV;   
+    private Date ngaySinh;  
+    private String gioiTinh; 
+    private String diaChi;  
+    private String cccd;    
+    private String sdt;     
+    private double luong;   
+    private String trangThai;
 
-    // Constructor không tham số
     public NhanVienDTO() {}
 
-    // Constructor đầy đủ tham số
-    public NhanVienDTO(int maNV, String tenNV, String gioiThieu, Date ngaySinh, String diaChi, 
-                    String cccd, String chucVu, String sdt, double luong, String trangThai) {
+    public NhanVienDTO(int maNV, String tenNV, Date ngaySinh, String gioiTinh, String diaChi, 
+                       String sdt, String cccd, double luong, String trangThai) {
         this.maNV = maNV;
         this.tenNV = tenNV;
-        this.gioiThieu = gioiThieu;
         this.ngaySinh = ngaySinh;
+        this.gioiTinh = gioiTinh;
         this.diaChi = diaChi;
-        this.cccd = cccd;
-        this.chucVu = chucVu;
         this.sdt = sdt;
+        this.cccd = cccd;
         this.luong = luong;
         this.trangThai = trangThai;
     }
 
-    // Getter và Setter
-    public int getMaNV() {
-        return maNV;
-    }
+    public int getMaNV() { return maNV; }
+    public void setMaNV(int maNV) { this.maNV = maNV; }
 
-    public void setMaNV(int maNV) {
-        this.maNV = maNV;
-    }
+    public String getTenNV() { return tenNV; }
+    public void setTenNV(String tenNV) { this.tenNV = tenNV; }
 
-    public String getTenNV() {
-        return tenNV;
-    }
+    public Date getNgaySinh() { return ngaySinh; }
+    public void setNgaySinh(Date ngaySinh) { this.ngaySinh = ngaySinh; }
 
-    public void setTenNV(String tenNV) {
-        this.tenNV = tenNV;
-    }
+    public String getGioiTinh() { return gioiTinh; }
+    public void setGioiTinh(String gioiTinh) { this.gioiTinh = gioiTinh; }
 
-    public String getGioiThieu() {
-        return gioiThieu;
-    }
+    public String getDiaChi() { return diaChi; }
+    public void setDiaChi(String diaChi) { this.diaChi = diaChi; }
 
-    public void setGioiThieu(String gioiThieu) {
-        this.gioiThieu = gioiThieu;
-    }
+    public String getCccd() { return cccd; }
+    public void setCccd(String cccd) { this.cccd = cccd; }
 
-    public Date getNgaySinh() {
-        return ngaySinh;
-    }
+    public String getSdt() { return sdt; }
+    public void setSdt(String sdt) { this.sdt = sdt; }
 
-    public void setNgaySinh(Date ngaySinh) {
-        this.ngaySinh = ngaySinh;
-    }
+    public double getLuong() { return luong; }
+    public void setLuong(double luong) { this.luong = luong; }
 
-    public String getDiaChi() {
-        return diaChi;
-    }
+    public String getTrangThai() { return trangThai; }
+    public void setTrangThai(String trangThai) { this.trangThai = trangThai; }
 
-    public void setDiaChi(String diaChi) {
-        this.diaChi = diaChi;
-    }
-
-    public String getCccd() {
-        return cccd;
-    }
-
-    public void setCccd(String cccd) {
-        this.cccd = cccd;
-    }
-
-    public String getChucVu() {
-        return chucVu;
-    }
-
-    public void setChucVu(String chucVu) {
-        this.chucVu = chucVu;
-    }
-
-    public String getSdt() {
-        return sdt;
-    }
-
-    public void setSdt(String sdt) {
-        this.sdt = sdt;
-    }
-
-    public double getLuong() {
-        return luong;
-    }
-
-    public void setLuong(double luong) {
-        this.luong = luong;
-    }
-
-    public String getTrangThai() {
-        return trangThai;
-    }
-
-    public void setTrangThai(String trangThai) {
-        this.trangThai = trangThai;
-    }
-
-    // Phương thức hiển thị thông tin nhân viên
     @Override
     public String toString() {
-        return "NhanVien{" +
+        return "NhanVienDTO{" +
                 "maNV=" + maNV +
                 ", tenNV='" + tenNV + '\'' +
-                ", gioiThieu='" + gioiThieu + '\'' +
                 ", ngaySinh=" + ngaySinh +
+                ", gioiTinh='" + gioiTinh + '\'' +
                 ", diaChi='" + diaChi + '\'' +
-                ", cccd='" + cccd + '\'' +
-                ", chucVu='" + chucVu + '\'' +
                 ", sdt='" + sdt + '\'' +
+                ", cccd='" + cccd + '\'' +
                 ", luong=" + luong +
                 ", trangThai='" + trangThai + '\'' +
                 '}';

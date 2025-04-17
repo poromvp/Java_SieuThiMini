@@ -9,7 +9,7 @@ public class ChiTietDonHangBLL {
 
     // Thêm chi tiết đơn hàng
     public static int insertOrderDetail(ChiTietDonHangDTO chiTiet) {
-        
+
         return ChiTietDonHangDAL.insert(chiTiet);
     }
 
@@ -28,5 +28,5 @@ public class ChiTietDonHangBLL {
         return ChiTietDonHangDAL.getByMaDH(maDH);
     }
 
- 
+
 }

@@ -1,92 +1,161 @@
-
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.GridLayout;
-import javax.swing.BoxLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.*;
+import java.sql.*;
 
-public class NhanVienFrame extends JFrame{
-    public NhanVienFrame(){
-        init();
-    }
-    public void init(){
-        //JFrame
-        setTitle("Quản Lý Nhân Viên");
-        setSize(900, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+public class StudentForm extends JFrame {
+    private JTextField txtId, txtName, txtMajor;
+    private JComboBox<String> cbGender;
+    private DefaultTableModel tableModel;
+    private JTable table;
+
+    private Connection conn;
+
+    public StudentForm() {
+        setTitle("Quản lý sinh viên (MySQL + Statement)");
+        setSize(600, 400);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        setLayout(new BorderLayout());
-
-        // Panel Sidebar
-        JPanel sidebarPanel = new JPanel();
-        sidebarPanel.setPreferredSize(new Dimension(150, 500));
-        sidebarPanel.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
-        sidebarPanel.setLayout(new BoxLayout(sidebarPanel, BoxLayout.Y_AXIS));
-        sidebarPanel.add(new JLabel("THÔNG TIN", SwingConstants.CENTER));
-        sidebarPanel.add(Box.createVerticalGlue());
-        sidebarPanel.add(new JLabel("ĐĂNG XUẤT", SwingConstants.CENTER));
-
-        // Main Panel (Chứa bảng nhân viên) - Màu vàng
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createLineBorder(Color.YELLOW, 2));
-
-        // Tiêu đề
-        JLabel titleLabel = new JLabel("QUẢN LÝ NHÂN VIÊN", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 14));
-        mainPanel.add(titleLabel, BorderLayout.NORTH);
-
-        // Bảng Nhân Viên - Màu xanh dương
-        String[] columnNames = {"Mã NV", "Tên NV", "Chức Vụ", "Lương"};
-        Object[][] data = {
-                {"NV001", "Nguyễn Văn A", "Nhân viên", "10,000,000"},
-                {"NV002", "Trần Thị B", "Quản lý", "15,000,000"},
-                {"NV003", "Lê Văn C", "Kế toán", "12,000,000"}
-        };
-        
-        DefaultTableModel model = new DefaultTableModel(data, columnNames);
-        JTable employeeTable = new JTable(model);
-        JScrollPane tableScrollPane = new JScrollPane(employeeTable);
-        tableScrollPane.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-        
-        mainPanel.add(tableScrollPane, BorderLayout.CENTER);
-        
-        
-
-        // Panel Bảng Nhân Viên 
-        JPanel tablePanel = new JPanel();
-        tablePanel.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-        tablePanel.add(new JLabel("BẢNG NHÂN VIÊN"));
-        mainPanel.add(tablePanel, BorderLayout.CENTER);
-
-        // Panel Hành Động 
-        JPanel actionPanel = new JPanel();
-        actionPanel.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
-        actionPanel.setPreferredSize(new Dimension(100, 100));
-        actionPanel.setLayout(new GridLayout(3, 1, 5, 5));
-        actionPanel.add(new JButton("Thêm"));
-        actionPanel.add(new JButton("Sửa"));
-        actionPanel.add(new JButton("Xóa"));
-        mainPanel.add(actionPanel, BorderLayout.EAST);
-
-        // Panel Tìm Kiếm 
-        JPanel searchPanel = new JPanel();
-        searchPanel.setBorder(BorderFactory.createLineBorder(Color.MAGENTA, 2));
-        searchPanel.add(new JLabel("Tìm kiếm"));
-        searchPanel.add(new JTextField(15));
-        searchPanel.add(new JButton("Tìm"));
-        mainPanel.add(searchPanel, BorderLayout.SOUTH);
-
-        // Thêm vào JFrame
-        add(sidebarPanel, BorderLayout.WEST);
-        add(mainPanel, BorderLayout.CENTER);
-
-        setVisible(true);
-        
+        initUI();
+        connectToDatabase();
+        loadStudents();
     }
+
+    private void initUI() {
+        JPanel inputPanel = new JPanel(new GridLayout(5, 2, 5, 5));
+        inputPanel.setBorder(BorderFactory.createTitledBorder("Thông tin sinh viên"));
+
+        inputPanel.add(new JLabel("Mã SV:"));
+        txtId = new JTextField();
+        inputPanel.add(txtId);
+
+        inputPanel.add(new JLabel("Họ tên:"));
+        txtName = new JTextField();
+        inputPanel.add(txtName);
+
+        inputPanel.add(new JLabel("Giới tính:"));
+        cbGender = new JComboBox<>(new String[]{"Nam", "Nữ"});
+        inputPanel.add(cbGender);
+
+        inputPanel.add(new JLabel("Ngành học:"));
+        txtMajor = new JTextField();
+        inputPanel.add(txtMajor);
+
+        JPanel buttonPanel = new JPanel();
+        JButton btnAdd = new JButton("Thêm");
+        JButton btnUpdate = new JButton("Sửa");
+        JButton btnDelete = new JButton("Xóa");
+        JButton btnClear = new JButton("Làm mới");
+
+        buttonPanel.add(btnAdd);
+        buttonPanel.add(btnUpdate);
+        buttonPanel.add(btnDelete);
+        buttonPanel.add(btnClear);
+
+        String[] columns = {"Mã SV", "Họ tên", "Giới tính", "Ngành học"};
+        tableModel = new DefaultTableModel(columns, 0);
+        table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        btnAdd.addActionListener(e -> addStudent());
+        btnUpdate.addActionListener(e -> updateStudent());
+
+        table.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                int row = table.getSelectedRow();
+                if (row >= 0) {
+                    txtId.setText(tableModel.getValueAt(row, 0).toString());
+                    txtName.setText(tableModel.getValueAt(row, 1).toString());
+                    cbGender.setSelectedItem(tableModel.getValueAt(row, 2).toString());
+                    txtMajor.setText(tableModel.getValueAt(row, 3).toString());
+                }
+            }
+        });
+
+        setLayout(new BorderLayout());
+        add(inputPanel, BorderLayout.NORTH);
+        add(buttonPanel, BorderLayout.CENTER);
+        add(scrollPane, BorderLayout.SOUTH);
+    }
+
+    private void connectToDatabase() {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/studentdb", "root", ""
+            );
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi kết nối CSDL: " + ex.getMessage());
+        }
+    }
+
+    private void loadStudents() {
+        try {
+            tableModel.setRowCount(0);
+            String sql = "SELECT * FROM students";
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                tableModel.addRow(new Object[]{
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("gender"),
+                    rs.getString("major")
+                });
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void addStudent() {
+        String id = txtId.getText();
+        String name = txtName.getText();
+        String gender = cbGender.getSelectedItem().toString();
+        String major = txtMajor.getText();
+
+        try {
+            Statement stmt = conn.createStatement();
+            String sql = String.format("INSERT INTO students VALUES ('%s', '%s', '%s', '%s')",
+                    id, name, gender, major);
+            stmt.executeUpdate(sql);
+            loadStudents();
+            clearForm();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            JOptionPane.showMessageDialog(this, "Mã sinh viên đã tồn tại!");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void updateStudent() {
+        int row = table.getSelectedRow();
+        if (row >= 0) {
+            String id = txtId.getText();
+            String name = txtName.getText();
+            String gender = cbGender.getSelectedItem().toString();
+            String major = txtMajor.getText();
+
+            try {
+                Statement stmt = conn.createStatement();
+                String sql = String.format(
+                    "UPDATE students SET name='%s', gender='%s', major='%s' WHERE id='%s'",
+                    name, gender, major, id
+                );
+                stmt.executeUpdate(sql);
+                loadStudents();
+                clearForm();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Chọn sinh viên cần sửa.");
+        }
+    }
+
     public static void main(String[] args) {
-        new NhanVienFrame();
+        SwingUtilities.invokeLater(() -> new StudentForm().setVisible(true));
     }
 }

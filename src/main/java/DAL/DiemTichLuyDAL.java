@@ -23,8 +23,8 @@ public class DiemTichLuyDAL {
                 DiemTichLuyDTO diem = new DiemTichLuyDTO(
                     rs.getInt("maDTL"),
                     rs.getInt("DiemTL"),
-                    rs.getDouble("TiLeGiam"),
-                    rs.getDouble("giamMax"),
+                    rs.getInt("TiLeGiam"),
+                    rs.getInt("giamMax"),
                     rs.getString("TrangThai")
                 );
                 list.add(diem);
@@ -47,8 +47,8 @@ public class DiemTichLuyDAL {
                 return new DiemTichLuyDTO(
                     rs.getInt("maDTL"),
                     rs.getInt("DiemTL"),
-                    rs.getDouble("TiLeGiam"),
-                    rs.getDouble("giamMax"),
+                    rs.getInt("TiLeGiam"),
+                    rs.getInt("giamMax"),
                     rs.getString("TrangThai")
                 );
             }
@@ -69,8 +69,8 @@ public class DiemTichLuyDAL {
                 return new DiemTichLuyDTO(
                     rs.getInt("maDTL"),
                     rs.getInt("DiemTL"),
-                    rs.getDouble("TiLeGiam"),
-                    rs.getDouble("giamMax"),
+                    rs.getInt("TiLeGiam"),
+                    rs.getInt("giamMax"),
                     rs.getString("TrangThai")
                 );
             }

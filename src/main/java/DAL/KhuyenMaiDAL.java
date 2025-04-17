@@ -25,7 +25,6 @@ public class KhuyenMaiDAL {
                     rs.getString("tenKM"),
                     rs.getDate("ngayKT"), 
                     rs.getDate("ngayBD"),
-                    rs.getDouble("tiLeGiam"),
                     rs.getString("trangThai")
                 );
                 discountList.add(discount);
@@ -56,7 +55,6 @@ public static KhuyenMaiDTO getDiscountToday() {
                 rs.getString("tenKM"),
                 rs.getDate("ngayKT"),
                 rs.getDate("ngayBD"),
-                rs.getDouble("tiLeGiam"),
                 rs.getString("trangThai")
             );
         }
@@ -81,7 +79,6 @@ public static KhuyenMaiDTO getDiscountToday() {
                     rs.getString("tenKM"), 
                     rs.getDate("ngayKT"), 
                     rs.getDate("ngayBD"), 
-                    rs.getDouble("tiLeGiam"), 
                     rs.getString("trangThai")
                 );
             }
@@ -93,7 +90,7 @@ public static KhuyenMaiDTO getDiscountToday() {
 
     public static int insertDiscount( KhuyenMaiDTO khuyenMai){
         String sql = "INSERT INTO  INTO KhuyenMai(maKM, tenKM, NgayKT, NgayBD, tiLeGiam, trangThai) VALUES (?,?,?,?,?,?,?)";
-        return  DBConnection.executeUpdate(sql, khuyenMai.getMaKM(), khuyenMai.getTenKM(), khuyenMai.getNgayKT(), khuyenMai.getNgayBD(), khuyenMai.getTileGiam(), khuyenMai.getTrangThai());
+        return  DBConnection.executeUpdate(sql, khuyenMai.getMaKM(), khuyenMai.getTenKM(), khuyenMai.getNgayKT(), khuyenMai.getNgayBD(),  khuyenMai.getTrangThai());
     }
 
 

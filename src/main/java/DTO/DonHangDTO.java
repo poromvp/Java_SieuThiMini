@@ -113,6 +113,7 @@ public class DonHangDTO {
                 ", maNV='" + maNV + '\'' +
                 ", ptThanhToan='" + ptThanhToan + '\'' +
                 ", ngayTT=" + ngayTT +
+                ", maDTL=" + maDTL +
                 ", trangThai=" + trangThai +
                 '}';
     }

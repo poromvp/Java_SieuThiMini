@@ -19,7 +19,6 @@ public class ButtonCustom extends JButton {
         setContentAreaFilled(false);
         this.isRounded = true; 
 
-        // Xác định màu nền ban đầu
         switch (color.toLowerCase()) {
             case "blue":
                 originalColor = new Color(51, 204, 255);
@@ -77,6 +76,7 @@ public class ButtonCustom extends JButton {
         ImageIcon addURL = new ImageIcon("src/main/resources/images/icon/addIcon.png");
         ImageIcon delURL = new ImageIcon("src/main/resources/images/icon/delIcon.png");
         ImageIcon editURL = new ImageIcon("src/main/resources/images/icon/editIcon.png");
+        ImageIcon hisURL = new ImageIcon("src/main/resources/images/icon/hisIcon.png");
 
         switch (type) {
             case "del":
@@ -87,6 +87,9 @@ public class ButtonCustom extends JButton {
                 break;
             case "edit":
                 this.setIcon(resizeIcon(editURL, w, h));
+                break;
+            case "his":
+                this.setIcon(resizeIcon(hisURL, w, h));
                 break;
             default:
                 break;

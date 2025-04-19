@@ -1,10 +1,10 @@
-package com.FormWareHouse;
+package GUI.FormWareHouse;
 
 import BLL.ChiTietNhapHangBLL;
 import BLL.NhapHangBLL;
 import DTO.ChiTietPNHangDTO;
 import DTO.PhieuNhapHangDTO;
-import com.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.StyledTable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

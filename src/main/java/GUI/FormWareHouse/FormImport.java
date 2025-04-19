@@ -1,7 +1,7 @@
-package com.FormWareHouse;
+package GUI.FormWareHouse;
 
-import com.ComponentCommon.StyledTextField;
-import com.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.StyledTextField;
+import GUI.ComponentCommon.StyledTable;
 import BLL.NhapHangBLL;
 import DTO.PhieuNhapHangDTO;
 

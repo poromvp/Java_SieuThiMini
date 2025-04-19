@@ -1,8 +1,8 @@
-package com.FormWareHouse;
+package GUI.FormWareHouse;
 
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
-import com.ComponentCommon.StyledTextField;
+import GUI.ComponentCommon.StyledTextField;
 
 import javax.swing.*;
 import java.awt.*;

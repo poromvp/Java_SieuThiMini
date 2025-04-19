@@ -1,4 +1,4 @@
-package com.FormWareHouse;
+package GUI.FormWareHouse;
 
 import DTO.SanPhamDTO;
 import BLL.SanPhamBLL;
@@ -9,7 +9,7 @@ import java.awt.*;
 public class FormProductDetail extends JDialog {
     public FormProductDetail(Frame parent, SanPhamDTO product) {
         super(parent, "Chi tiết sản phẩm", true);
-        setSize(400, 400);
+        setSize(600, 400);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 

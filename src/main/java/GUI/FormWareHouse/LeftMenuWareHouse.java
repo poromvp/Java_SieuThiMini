@@ -14,6 +14,8 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
     private JButton btnImport;
     private JButton btnProduct;
     private JButton btnLogout;
+    private JButton btnProductType;
+    private JButton btnSupplier;
 
     private ActionListener listener;
 
@@ -34,6 +36,15 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
     public JButton getBtnLogout() {
         return btnLogout;
     }
+
+    public JButton getBtnProductType(){
+        return btnProductType;
+    }
+
+    public JButton getBtnSupplier(){
+        return  btnSupplier;
+    }
+
 
     public LeftMenuWareHouse(){
         setBackground(bgColor);
@@ -60,10 +71,14 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
         btnImport = createButton("Nhập hàng", "src/main/resources/images/ImportLogo.png");
         btnProduct = createButton("Sản phẩm", "src/main/resources/images/product.png");
         btnLogout = createButton("Đăng Xuất", "src/main/resources/images/exit.png");
+        btnProductType= createButton("Loại sản phẩm","src/main/resources/images/category.png");
+        btnSupplier= createButton("Nhà cung cấp","src/main/resources/images/supplier.png");
 
         setButtonStyle(btnImport);
         setButtonStyle(btnProduct);
         setButtonStyle(btnLogout);
+        setButtonStyle(btnProductType);
+        setButtonStyle(btnSupplier);
 
 //        btnImport.addActionListener(this);
 //        btnProduct.addActionListener(this);
@@ -71,6 +86,8 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
 
         add(btnImport);
         add(btnProduct);
+        add(btnProductType);
+        add(btnSupplier);
 
         add(Box.createVerticalGlue());
 

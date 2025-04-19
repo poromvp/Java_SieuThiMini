@@ -2,9 +2,7 @@ package GUI;
 
 import javax.swing.*;
 
-import GUI.FormWareHouse.FormImport;
-import GUI.FormWareHouse.FormProduct;
-import GUI.FormWareHouse.LeftMenuWareHouse;
+import GUI.FormWareHouse.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -56,6 +54,30 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
         rightPn.repaint();
     }
 
+    public void panelCategory(){
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(55, 11, 77));
+        rightPn.setLayout(new BorderLayout());
+
+        FormProductType productTypePanel= new FormProductType();
+        rightPn.add(productTypePanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
+    }
+
+    public void panelSupplier(){
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(55, 11, 77));
+        rightPn.setLayout(new BorderLayout());
+
+        FormSupplier supplierPanel= new FormSupplier();
+        rightPn.add(supplierPanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
+    }
+
     public static void main(String[] args) {
         new FrameQuanLyKho();
     }
@@ -66,8 +88,11 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
             panelImport();
         } else if (e.getSource()== pn_leftMenu.getBtnProduct()) {
             panelProduct();
-        }
-        else if(e.getSource()==pn_leftMenu.getBtnLogout()){
+        } else if (e.getSource()==pn_leftMenu.getBtnProductType()) {
+            panelCategory();
+        } else if (e.getSource()==pn_leftMenu.getBtnSupplier()) {
+            panelSupplier();
+        } else if(e.getSource()==pn_leftMenu.getBtnLogout()){
             JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
         }
     }

@@ -1,9 +1,9 @@
-package com.FormWareHouse;
+package GUI.FormWareHouse;
 
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
-import com.ComponentCommon.ButtonCustom;
-import com.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.ButtonCustom;
+import GUI.ComponentCommon.StyledTable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

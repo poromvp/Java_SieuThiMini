@@ -121,6 +121,37 @@ public class NhanVienDAL {
             return false;
         }
     }
+    public NhanVienDTO getNhanVienByID(int maNV) {
+        NhanVienDTO nhanVien = null;
+        String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
+        ResultSet rs = DBConnection.executeQuery(sql, maNV);
+
+        try {
+            if (rs != null && rs.next()) {
+                nhanVien = new NhanVienDTO();
+                nhanVien.setMaNV(rs.getInt("MaNV"));
+                nhanVien.setTenNV(rs.getString("TenNV"));
+                nhanVien.setGioiTinh(rs.getString("GioiTinh"));
+                nhanVien.setNgaySinh(rs.getDate("NgaySinh"));
+                nhanVien.setDiaChi(rs.getString("DiaChi"));
+                nhanVien.setSDT(rs.getString("SDT"));
+                nhanVien.setCCCD(rs.getString("CCCD"));
+                nhanVien.setLuong(rs.getDouble("Luong"));
+                nhanVien.setTrangThai(rs.getInt("TrangThai"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return nhanVien;
+    }
+
     public List<NhanVienDTO> searchNhanVien(String keyword) {
         List<NhanVienDTO> list = new ArrayList<>();
         // Thêm dấu ngoặc đơn để nhóm các điều kiện với OR

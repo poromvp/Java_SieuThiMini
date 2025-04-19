@@ -1,55 +1,191 @@
 package GUI.FormNhanVien;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import BLL.NhanVienBLL;
+import GUI.ComponentCommon.ButtonCustom;
+
 import java.awt.*;
 import java.sql.Connection;
-
-import JDBC.DBConnection;
+import java.sql.SQLException;
 
 public class FormMainNhanVien extends JPanel {
-    
+    private NhanVienBLL bll;
+    private FormTableNhanVien employeeTablePanel;
+    private InfoPanelNV infoPanel;
     public FormMainNhanVien(Connection conn) {
         setSize(1000, 600);
-        setLayout(new BorderLayout(5,5));
+        setLayout(new BorderLayout(5, 5));
         setBackground(Color.WHITE);
+        this.bll = new NhanVienBLL();
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
 
-        JPanel panel = new JPanel(new BorderLayout(5,5));
-
-        // -------------top panel: Tìm kiếm + Bộ lọc
+        // -------------Top panel: Tìm kiếm + Bộ lọc
         JPanel topPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-        FormSearchNV searchPanel = new FormSearchNV();
+        infoPanel = new InfoPanelNV();
+        employeeTablePanel = new FormTableNhanVien(conn, infoPanel);
+        FormSearchNhanVien searchPanel = new FormSearchNhanVien(employeeTablePanel);
         FormFilterNV filterPanel = new FormFilterNV();
         topPanel.add(searchPanel);
         topPanel.add(filterPanel);
 
-        // -------------Detail và Table
-        DetailPanelNV detailPanel = new DetailPanelNV();
-        EmployeeTablePanel employeeTablePanel = new EmployeeTablePanel(conn, detailPanel);
-        
-        detailPanel.setTablePanel(employeeTablePanel);
-        
+        // -------------Info và Table
+        infoPanel.setTablePanel(employeeTablePanel);
         
         panel.add(topPanel, BorderLayout.NORTH);
         panel.add(employeeTablePanel, BorderLayout.CENTER);
 
         add(panel, BorderLayout.CENTER);
-        add(detailPanel, BorderLayout.EAST);
+        add(infoPanel, BorderLayout.EAST);
+
+        // -------------Panel chứa các nút ở dưới cùng
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setBackground(Color.WHITE);
+
+        ButtonCustom btnThem = new ButtonCustom("Thêm", "add", 12, 40, 40);
+        btnThem.addActionListener(e -> openAddDialog());
+        buttonPanel.add(btnThem);
+
+        ButtonCustom btnSua = new ButtonCustom("Sửa", "edit", 12, 40, 40);
+        btnSua.addActionListener(e -> openEditDialog());
+        buttonPanel.add(btnSua);
+
+        ButtonCustom btnXoa = new ButtonCustom("Xóa", "del", 12, 40, 40);
+        btnXoa.addActionListener(e -> deleteNhanVien());
+        buttonPanel.add(btnXoa);
+
+        ButtonCustom btnXemNghiViec = new ButtonCustom("Lịch sử", "his", 12, 50, 40);
+
+        btnXemNghiViec.addActionListener(e -> xemLichSu());
+        buttonPanel.add(btnXemNghiViec);
+
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    public static void main(String[] args) {
-        try {
-            Connection conn = DBConnection.getConnection(); // đảm bảo bạn đã có class này
+    private void openAddDialog() {
+        AddNhanVienDialog dialog = new AddNhanVienDialog(new Frame(), employeeTablePanel);
+        dialog.setVisible(true);
+    }
 
-            JFrame frame = new JFrame("Quản lý Nhân viên");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.setSize(1000, 600);
-            frame.setLocationRelativeTo(null);
-            frame.setLayout(new BorderLayout());
-            frame.add(new FormMainNhanVien(conn));
-            frame.setVisible(true);
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "Lỗi kết nối CSDL!");
+    private void openEditDialog() {
+        int selectedRow = employeeTablePanel.getNhanVienTable().getSelectedRow();
+        if (selectedRow != -1) {
+            String maNV = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 0));
+            String hoTen = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 1));
+            String gioiTinh = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 2));
+            String ngaySinh = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 3));
+            String cccd = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 4));
+            String diaChi = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 5));
+            String soDT = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 6));
+            String luong = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 7));
+            String trangThai = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 8));
+    
+            EditNhanVienDialog dialog = new EditNhanVienDialog(
+                SwingUtilities.getWindowAncestor(this), 
+                employeeTablePanel, 
+                maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai
+            );
+            dialog.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, 
+                "Vui lòng chọn nhân viên để sửa!", 
+                "Thông báo", 
+                JOptionPane.WARNING_MESSAGE
+            );
         }
+    }
+
+private void deleteNhanVien() {
+    int selectedRow = employeeTablePanel.getNhanVienTable().getSelectedRow();
+
+    if (selectedRow != -1) {
+       int maNV = (int) employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 0);
+
+        // Hiển thị hộp thoại xác nhận xóa
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Bạn có chắc chắn muốn xóa nhân viên này?", 
+            "Xác nhận xóa", 
+            JOptionPane.YES_NO_OPTION, 
+            JOptionPane.WARNING_MESSAGE);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                boolean isDeleted = bll.deleteNhanVien(maNV);
+                if (isDeleted) {
+                    JOptionPane.showMessageDialog(this, 
+                        "Nhân viên đã được xóa (trạng thái đổi thành 0).", 
+                        "Thông báo", 
+                        JOptionPane.INFORMATION_MESSAGE
+                    );
+                    employeeTablePanel.refreshTable();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, 
+                        "Không thể xóa nhân viên này.", 
+                        "Lỗi", 
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, 
+                    "Lỗi khi xóa nhân viên: " + e.getMessage(), 
+                    "Lỗi", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, 
+            "Vui lòng chọn nhân viên để xóa!", 
+            "Thông báo", 
+            JOptionPane.WARNING_MESSAGE
+        );
+    }
+}
+
+    private void xemLichSu() {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Lịch Sử Nghỉ Việc", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(800, 400);
+        dialog.setLocationRelativeTo(this);
+        FormLichSuNghiViec formLichSu = new FormLichSuNghiViec(employeeTablePanel);
+        dialog.add(formLichSu);
+        dialog.setVisible(true);
+    }
+
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            try {
+                Connection conn = JDBC.DBConnection.getConnection();
+                if (conn == null) {
+                    JOptionPane.showMessageDialog(null, 
+                        "Không thể kết nối cơ sở dữ liệu!", 
+                        "Lỗi", 
+                        JOptionPane.ERROR_MESSAGE
+                    );
+                    return;
+                }
+
+                JFrame frame = new JFrame("Quản Lý Nhân Viên");
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                frame.setSize(1000, 600);
+                frame.setLocationRelativeTo(null);
+                frame.setLayout(new BorderLayout());
+
+                FormMainNhanVien mainPanel = new FormMainNhanVien(conn);
+                frame.add(mainPanel, BorderLayout.CENTER);
+
+                frame.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, 
+                    "Lỗi khởi tạo: " + e.getMessage(), 
+                    "Lỗi", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
+        });
     }
 }

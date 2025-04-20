@@ -49,7 +49,44 @@ public class TaiKhoanDAL {
         );
         return rowsAffected > 0;
     }
+    public boolean kiemTraMaNV (int maNV){
+        String sql = "SELECT * FROM NhanVien WHERE MANV = ?";
+        try (ResultSet rs = DBConnection.executeQuery(sql,maNV)){
+            return rs.next();
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean kiemTraExist (int maNV){
+        String sql = "Select * from TaiKhoan WHERE MANV = ?";
+        try(ResultSet rs = DBConnection.executeQuery(sql, maNV)){
+            return rs.next();
+        }catch (SQLException e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean kiemTraName(String name){
+        String sql = "SELECT * From TaiKhoan where TenTK = ?";
+        try (ResultSet rs = DBConnection.executeQuery(sql, name)){
+            return rs.next();
+        }catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
 
+    }
+    public boolean kiemTraGmail(String gmail) {
+        String sql = "SELECT * FROM TaiKhoan WHERE Gmail = ?";
+        try (ResultSet rs = DBConnection.executeQuery(sql, gmail)) {
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     public boolean updateTaiKhoan(TaiKhoanDTO tk) {
         String sql = "UPDATE TaiKhoan SET TenTK = ?, MatKhau = ?, Quyen = ?, Gmail = ?, TrangThai = ? WHERE MaNV = ?";
         int rowsAffected = DBConnection.executeUpdate(sql, 
@@ -95,4 +132,5 @@ public class TaiKhoanDAL {
         }
         return taiKhoanList;
     }
+    
 }

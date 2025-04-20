@@ -94,7 +94,7 @@ CREATE TABLE PhieuNhapHang (
     MaNCC INT,
     MaNV INT,
     NgayNhap DATE,
-    TrangThai ENUM('FINISHED', 'UNFINISHED', 'DELETED') NOT NULL DEFAULT 'UNFINISHED'
+    TrangThai ENUM('FINISHED') NOT NULL DEFAULT 'FINISHED'
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE ChiTietPNH (
@@ -106,7 +106,7 @@ CREATE TABLE ChiTietPNH (
     NgaySX date,
     SoLuong INT,
     GiaNhap DECIMAL(10,2),
-	TrangThai ENUM('ACTIVE', 'INACTIVE')
+	TrangThai ENUM('ACTIVE') NOT NULL DEFAULT 'ACTIVE'
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 

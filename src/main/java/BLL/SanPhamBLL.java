@@ -38,6 +38,10 @@ public class SanPhamBLL {
         return SanPhamDAL.deleteProduct(id);
     }
 
+    public static List<SanPhamDTO> searchProducts(String keyword, String searchType) {
+        return SanPhamDAL.searchProducts(keyword, searchType);
+    }
+
     public static void main(String[] args) {
         SanPhamDTO sp = getProductById(1);
         System.out.println(sp.toString());

@@ -45,7 +45,39 @@ public class FormTableAccount extends JPanel {
         revalidate();
         repaint();
     }
+    public void searchAndUpdateTable(String keyword) {
+        TaiKhoanBLL bll = new TaiKhoanBLL();
+        List<TaiKhoanDTO> taiKhoanList = bll.searchTaiKhoan(keyword);
+        String[] columnNames = {"Mã NV", "Tài khoản", "Mật khẩu", "Quyền", "Gmail", "Trạng thái"};
+        updateTableData(taiKhoanList, columnNames);
+    }
+    private void updateTableData(List<TaiKhoanDTO> taiKhoanList, String[] columnNames) {
+        Object[][] data = new Object[taiKhoanList.size()][6];
+        for (int i = 0; i < taiKhoanList.size(); i++) {
+            TaiKhoanDTO tk = taiKhoanList.get(i);
+            data[i] = new Object[]{
+                tk.getMaNV(),
+                tk.getTenTK(),
+                tk.getMatKhau(),
+                tk.getQuyen(),
+                tk.getGmail(),
+                tk.getTrangThai().equals("ACTIVE") ? "Đang hoạt động" : "Ngưng hoạt động"
+            };
+        }
 
+        tableModel = new DefaultTableModel(data, columnNames);
+        if (accountTable == null) {
+            accountTable = new StyledTable(data, columnNames);
+        } else {
+            accountTable.setModel(tableModel);
+        }
+
+        JScrollPane scrollPane = new JScrollPane(accountTable);
+        removeAll();
+        add(scrollPane, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
     public void refreshTable() {
         String[] columnNames = {"Mã NV", "Tài khoản", "Mật khẩu", "Quyền", "Gmail", "Trạng thái"};
         initTable(columnNames);

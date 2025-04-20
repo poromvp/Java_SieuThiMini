@@ -17,8 +17,8 @@ public class FormMainAccount extends JPanel {
     public FormMainAccount() {
         setLayout(new BorderLayout());
 
-        FormSearchAccount searchPanel = new FormSearchAccount();
         tablePanel = new FormTableAccount();
+        FormSearchAccount searchPanel = new FormSearchAccount(tablePanel);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(searchPanel, BorderLayout.NORTH);
@@ -55,6 +55,37 @@ public class FormMainAccount extends JPanel {
                 }
             }
         });
+        delButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int selectedRow = tablePanel.getAccountTable().getSelectedRow();
+                if (selectedRow != -1) {
+                    DefaultTableModel model = tablePanel.getTableModel();
+                    int maNV = Integer.parseInt(model.getValueAt(selectedRow, 0).toString());
+        
+                    int confirm = JOptionPane.showConfirmDialog(
+                        null,
+                        "Bạn có chắc muốn xóa tài khoản của Mã NV: " + maNV + "?",
+                        "Xác nhận xóa",
+                        JOptionPane.YES_NO_OPTION
+                    );
+        
+                    if (confirm == JOptionPane.YES_OPTION) {
+                        TaiKhoanBLL bll = new TaiKhoanBLL();
+                        if (bll.deleteTaiKhoan(maNV)) {
+                            model.removeRow(selectedRow);
+                            JOptionPane.showMessageDialog(null, "Xóa tài khoản thành công!");
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Xóa tài khoản thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn tài khoản để xóa!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        
+        
     }
 
     public static void main(String[] args) {

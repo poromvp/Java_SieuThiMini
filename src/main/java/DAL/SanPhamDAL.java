@@ -65,9 +65,35 @@ public class SanPhamDAL {
             sp.setTenSP(rs.getString("tenSP"));
             sp.setGia( rs.getDouble("gia"));
             sp.setMoTa( rs.getString("moTa"));
+            sp.setTenAnh(rs.getString("tenAnh"));
             sp.setTrangThai( rs.getString("trangThai"));
         
         return sp;
+    }
+
+    public static List<SanPhamDTO> searchProducts(String keyword,String searchType){
+        List<SanPhamDTO> productList = new ArrayList<>();
+        String sql="";
+        switch(searchType){
+            case "ma":
+                sql= "SELECT *FROM SanPham WHERE maSP= ?";
+                break;
+            case "ten":
+                sql= "SELECT *FROM SanPham WHERE tenSP LIKE ?";
+                keyword = "%"+keyword+"%";
+                break;
+            case "loai":
+                sql="SELECT * FROM SanPham WHERE maLSP=?";
+                break;
+        }
+        try(ResultSet rs = DBConnection.executeQuery(sql,keyword)){
+            while ((rs.next())){
+                productList.add(mapResultSetToSanPham(rs));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return productList;
     }
 
     public static void main(String[] args) {

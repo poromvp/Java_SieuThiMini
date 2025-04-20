@@ -3,7 +3,7 @@ package BLL;
 import DTO.ChiTietDonHangDTO;
 import DAL.*;
 
-import java.util.List;
+import java.util.*;
 
 public class ChiTietDonHangBLL {
 
@@ -24,9 +24,13 @@ public class ChiTietDonHangBLL {
     }
 
     // Lấy danh sách chi tiết đơn hàng theo mã đơn hàng
-    public static List<ChiTietDonHangDTO> getChiTietByMaDH(int maDH) {
+    public static ArrayList<ChiTietDonHangDTO> getChiTietByMaDH(int maDH) {
+        if (maDH <= 0) {
+            System.err.println("Mã đơn hàng không hợp lệ: " + maDH);
+            return new ArrayList<>(); // Trả về danh sách rỗng nếu mã không hợp lệ
+        }
+    
         return ChiTietDonHangDAL.getByMaDH(maDH);
     }
-
 
 }

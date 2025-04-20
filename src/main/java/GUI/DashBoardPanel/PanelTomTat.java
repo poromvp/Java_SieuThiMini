@@ -1,14 +1,20 @@
 package GUI.DashBoardPanel;
 
 import java.awt.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
+import BLL.DonHangBLL;
+import BLL.SanPhamBLL;
+import DTO.DonHangDTO;
 import GUI.TienIch;
 
 public class PanelTomTat extends JPanel{
     JPanel pn1, pn2, pn3;
     JLabel sp, luotmua, doanhthu;
+    public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
 
     public void initPanel1(){
         pn1.setBorder(new CompoundBorder(new TitledBorder("Sản Phẩm"), new EmptyBorder(4, 4, 4, 4)));
@@ -19,7 +25,7 @@ public class PanelTomTat extends JPanel{
         TienIch.labelStyle(lbName, 1, 18, null);
         pn1.add(lbName);
 
-        sp = new JLabel("128");
+        sp = new JLabel(SanPhamBLL.getAllProducts().size() + "");
         TienIch.labelStyle(sp, 2, 20, null);
         pn1.add(sp);
     }
@@ -33,7 +39,7 @@ public class PanelTomTat extends JPanel{
         TienIch.labelStyle(lbName, 1, 18, null);
         pn2.add(lbName);
 
-        luotmua = new JLabel("1200");
+        luotmua = new JLabel(DonHangBLL.countOrder()+"");
         TienIch.labelStyle(luotmua, 2, 20, null);
         pn2.add(luotmua);
     }
@@ -47,7 +53,11 @@ public class PanelTomTat extends JPanel{
         TienIch.labelStyle(lbName, 1, 18, null);
         pn3.add(lbName);
 
-        doanhthu = new JLabel("128,546,000");
+        double sumDoanhThu = 0;
+        for(DonHangDTO hd : HoaDon){
+            sumDoanhThu+=DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH());
+        }
+        doanhthu = new JLabel(TienIch.formatVND(sumDoanhThu));
         TienIch.labelStyle(doanhthu, 2, 20, null);
         pn3.add(doanhthu);
     }

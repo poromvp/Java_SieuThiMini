@@ -1,11 +1,7 @@
 package BLL;
 
-
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import DAL.DiemTichLuyDAL;
 import DAL.DonHangDAL;
 import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;

@@ -1,7 +1,6 @@
 package DAL;
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
 import DTO.ChiTietDonHangDTO;
 import JDBC.DBConnection;
@@ -47,8 +46,8 @@ public class ChiTietDonHangDAL {
     //     return list;
     // }
 
-    public static List<ChiTietDonHangDTO> getByMaDH(int maDH) {
-        List<ChiTietDonHangDTO> list = new ArrayList<>();
+    public static ArrayList<ChiTietDonHangDTO> getByMaDH(int maDH) {
+        ArrayList<ChiTietDonHangDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM " + tableName + " WHERE maDH = ?";
         try (ResultSet rs = DBConnection.executeQuery(sql, maDH)) {
             while (rs.next()) {

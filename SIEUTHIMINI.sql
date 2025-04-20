@@ -150,8 +150,6 @@ ALTER TABLE SanPham
 	ADD CONSTRAINT FK_SanPham_NhaNCC FOREIGN KEY (MaNCC) REFERENCES NhaNCC(MaNCC),
 	ADD CONSTRAINT FK_SanPham_LoaiSP FOREIGN KEY (MaLSP) REFERENCES LoaiSP(MaLSP);
 
-ALTER TABLE QuayHang ADD CONSTRAINT FK_QuayHang_LoaiSP FOREIGN KEY (MaLSP) REFERENCES LoaiSP(MaLSP);
-
 ALTER TABLE PhieuNhapHang ADD CONSTRAINT FK_PhieuNhapHang_NhaNCC FOREIGN KEY (MaNCC) REFERENCES NhaNCC(MaNCC),
 	ADD CONSTRAINT FK_PhieuNhapHang_NhanVien FOREIGN KEY (MaNV) REFERENCES NhanVien(MaNV);
 
@@ -203,14 +201,6 @@ INSERT INTO LoaiSP (TenLoaiSP, TrangThai) VALUES
 ('Gia dụng', 'ACTIVE'),
 ('Thời trang', 'ACTIVE'),
 ('Mỹ phẩm', 'ACTIVE');
-
-INSERT INTO QuayHang (MaLSP, TenQH, TrangThai) VALUES
-(1, 'Khu thực phẩm tươi sống', 'ACTIVE'),
-(2, 'Khu nước giải khát', 'ACTIVE'),
-(3, 'Khu gia dụng và bếp', 'ACTIVE'),
-(4, 'Khu thiết bị điện tử', 'ACTIVE'),
-(5, 'Khu thời trang', 'ACTIVE');
-
 
 -- 5. Chèn dữ liệu vào bảng NhaNCC
 INSERT INTO NhaNCC (TenNCC, SDT, DiaChi, TrangThai) VALUES

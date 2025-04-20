@@ -14,7 +14,7 @@ public class DonHangDAL {
     // Lấy tất cả đơn hàng từ CSDL
     public static ArrayList<DonHangDTO> getAllOrder() {
         ArrayList<DonHangDTO> dsDonHang = new ArrayList<>();
-        String sql = "SELECT * FROM DonHang";
+        String sql = "SELECT * FROM donhang";
 
         try {
             Connection conn = DBConnection.getConnection();

@@ -9,13 +9,14 @@ public class SanPhamDTO {
     private String tenSP;    // Tên sản phẩm
     private String moTa;     // Mô tả sản phẩm
     private String trangThai; // Trạng thái sản phẩm (còn bán hay ngừng bán)
+    private int soLuongTon;  // Số lượng tồn (Thuộc tính mới)
 
     // Constructor không tham số
     public SanPhamDTO() {
     }
 
     // Constructor có tham số
-    public SanPhamDTO(int maSP,  int maNCC, int maLSP, String tenAnh, double gia, String tenSP, String moTa, String trangThai) {
+    public SanPhamDTO(int maSP, int maNCC, int maLSP, String tenAnh, double gia, String tenSP, String moTa, String trangThai, int soLuongTon) {
         this.maSP = maSP;
         this.maNCC = maNCC;
         this.maLSP = maLSP;
@@ -24,6 +25,7 @@ public class SanPhamDTO {
         this.tenSP = tenSP;
         this.moTa = moTa;
         this.trangThai = trangThai;
+        this.soLuongTon = soLuongTon;
     }
 
     // Getter và Setter
@@ -34,7 +36,6 @@ public class SanPhamDTO {
     public void setMaSP(int maSP) {
         this.maSP = maSP;
     }
-
 
     public int getMaNCC() {
         return maNCC;
@@ -92,6 +93,14 @@ public class SanPhamDTO {
         this.trangThai = trangThai;
     }
 
+    public int getSoLuongTon() {
+        return soLuongTon;
+    }
+
+    public void setSoLuongTon(int soLuongTon) {
+        this.soLuongTon = soLuongTon;
+    }
+
     // Phương thức hiển thị thông tin
     @Override
     public String toString() {
@@ -104,6 +113,7 @@ public class SanPhamDTO {
                 ", tenSP='" + tenSP + '\'' +
                 ", moTa='" + moTa + '\'' +
                 ", trangThai=" + trangThai +
+                ", soLuongTon=" + soLuongTon +
                 '}';
     }
 }

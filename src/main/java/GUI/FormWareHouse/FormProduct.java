@@ -1,6 +1,10 @@
 package GUI.FormWareHouse;
 
 import BLL.SanPhamBLL;
+import BLL.NhaCungCapBLL;
+import BLL.LoaiSanPhamBLL;
+import DTO.LoaiSanPhamDTO;
+import DTO.NhaCungCapDTO;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
@@ -16,6 +20,8 @@ public class FormProduct extends JPanel {
     private FormAddProduct addProduct = new FormAddProduct();
     private JTable table;
     private DefaultTableModel tableModel;
+    private NhaCungCapBLL ncc = new NhaCungCapBLL();
+    private LoaiSanPhamBLL lsp = new LoaiSanPhamBLL();
 
     public FormProduct(){
         setLayout(new BorderLayout());
@@ -24,23 +30,44 @@ public class FormProduct extends JPanel {
         // Tạo panel Tìm Kiếm
         JPanel timKiempnl = new JPanel();
         timKiempnl.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
-        timKiempnl.setLayout(new GridLayout(1, 3, 5, 5));
-        String timKiemCombo[]={"Tìm theo mã",
-                "Tìm theo tên sản phẩm",
-                "Tìm theo loại sản phẩm "};
-        JComboBox timKiemCb= new JComboBox(timKiemCombo);
-        JTextField timKiemtxt = new JTextField();// Nhap thong tin tim kiem
-        JButton timBtn = new JButton("Tìm");
+        timKiempnl.setLayout(new GridLayout(2, 2, 5, 5));
 
+        JLabel mamSPLabel = new JLabel("Mã sản phẩm: ");
+        JTextField maSPText = new JTextField();
+
+        JLabel tenSPLabel = new JLabel("Tên sản phẩm:");
+        JTextField tenSPText = new JTextField();
+
+        JLabel loaiSPLabel = new JLabel("Loại sản phẩm:");
+        JComboBox<String> loaiSPCb = new JComboBox<>();
+        loaiSPCb.addItem("Tất cả");
+        List<LoaiSanPhamDTO> loaiSPList = lsp.getList();
+        for(LoaiSanPhamDTO loai : loaiSPList){
+            loaiSPCb.addItem(loai.getTenLoaiSP()+" ("+loai.getMaLSP()+") ");
+        }
+
+        ButtonCustom timBtn = new ButtonCustom("Tìm kiếm","search",12,17,17);
         timBtn.addActionListener(e->{
-            String keyword = timKiemtxt.getText();
-            String searchType = (String) timKiemCb.getSelectedItem();
-            List<SanPhamDTO> results = SanPhamBLL.searchProducts(keyword, searchType);
+            String maSP = maSPText.getText().trim();
+            String tenSP = tenSPText.getText().trim();
+            String loaiSP= loaiSPCb.getSelectedItem().toString();
+            int maLSP = -1;
+            if(!loaiSP.equals("Tất cả")){
+                maLSP = Integer.parseInt(loaiSP.substring(loaiSP.indexOf("(") + 1, loaiSP.indexOf(")")));
+            }
+            List<SanPhamDTO> results = SanPhamBLL.searchProducts(maSP,tenSP,maLSP);
             updateTableData(results);
         });
-        timKiempnl.add(timKiemCb);
-        timKiempnl.add(timKiemtxt);
+
+        timKiempnl.add(mamSPLabel);
+        timKiempnl.add(maSPText);
+        timKiempnl.add(tenSPLabel);
+        timKiempnl.add(tenSPText);
+        timKiempnl.add(loaiSPLabel);
+        timKiempnl.add(loaiSPCb);
+        timKiempnl.add(new JLabel());
         timKiempnl.add(timBtn);
+
         add(timKiempnl,BorderLayout.NORTH);
 
 
@@ -56,14 +83,18 @@ public class FormProduct extends JPanel {
         });
 
         ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,20,20);
-        suaBtn.addActionListener(e->{
+        suaBtn.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
-            if(selectedRow>=0){
-                int maSP = (int) tableModel.getValueAt(selectedRow,0);
+            if (selectedRow >= 0) {
+                int maSP = (int) tableModel.getValueAt(selectedRow, 0);
                 SanPhamDTO product = SanPhamBLL.getProductById(maSP);
-                JOptionPane.showMessageDialog(null,"Sửa chưa làm :)))");
-            }else{
-                JOptionPane.showMessageDialog(null,"Vui lòng chọn sản phẩm để sửa");
+                if (product != null) {
+                    FormEditProduct editDialog = new FormEditProduct(null, product);
+                    editDialog.setVisible(true);
+                    loadTableData(); // Làm mới bảng sau khi sửa
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm để sửa");
             }
         });
 
@@ -85,7 +116,7 @@ public class FormProduct extends JPanel {
         });
 
         // Bảng sản phẩm
-        String[] headerCol = {"Mã SP", "Tên SP", "Giá", "Loai","Nhà cung cấp"};
+        String[] headerCol = {"Mã SP", "Tên SP", "Giá","Số lượng tồn", "Loai","Nhà cung cấp"};
         tableModel = new DefaultTableModel(headerCol,0){
             @Override
             public boolean isCellEditable(int row, int column){
@@ -136,14 +167,21 @@ public class FormProduct extends JPanel {
     }
 
     private void updateTableData(List<SanPhamDTO> products){
+
         tableModel.setRowCount(0);
         for (SanPhamDTO product : products){
+            NhaCungCapDTO ncc = this.ncc.getNhaCungCap(product.getMaNCC());
+            LoaiSanPhamDTO lsp = this.lsp.getLoaiSanPham(product.getMaLSP());
+            String tenNcc = (ncc != null) ? ncc.getTenNCC() : "Chưa cập nhật";
+            String tenLoaiSP= (lsp!=null) ? lsp.getTenLoaiSP() :"Chưa cập nhật";
             tableModel.addRow(new Object[]{
                 product.getMaSP(),
                 product.getTenSP(),
                 product.getGia(),
-                product.getMaLSP(),
-                product.getMaNCC()
+                product.getSoLuongTon(),
+                tenLoaiSP,
+                tenNcc,
+
             });
         }
     }
@@ -152,7 +190,7 @@ public class FormProduct extends JPanel {
         FormProduct test = new FormProduct();
         JFrame frame = new JFrame("Thông tin sản phẩm");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1500, 1000);
+        frame.setSize(1200, 800);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
         frame.add(test,BorderLayout.CENTER);

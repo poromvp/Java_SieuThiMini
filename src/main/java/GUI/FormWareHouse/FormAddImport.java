@@ -2,8 +2,11 @@ package GUI.FormWareHouse;
 
 import BLL.ChiTietNhapHangBLL;
 import BLL.NhapHangBLL;
+import BLL.SanPhamBLL;
 import DTO.ChiTietPNHangDTO;
 import DTO.PhieuNhapHangDTO;
+import DTO.SanPhamDTO;
+import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
 import GUI.ComponentCommon.StyledTextField;
 import javax.swing.*;
@@ -21,6 +24,7 @@ public class FormAddImport extends JPanel {
     private ArrayList<ChiTietPNHangDTO> chiTietList = new ArrayList<>();
     private PhieuNhapHangDTO phieuNhap;
     private Runnable refreshCallback;
+    private SanPhamBLL sanPhamBLL = new SanPhamBLL();
 
     public FormAddImport(PhieuNhapHangDTO phieuNhap,Runnable refreshCallback) {
         this.phieuNhap = phieuNhap;
@@ -50,7 +54,7 @@ public class FormAddImport extends JPanel {
         StyledTextField gia = new StyledTextField();
         import_info.add(gia);
 
-        JButton btnThemSanPham = new JButton("Thêm sản phẩm");
+        ButtonCustom btnThemSanPham = new ButtonCustom("Thêm sản phẩm",12,"blue");
 
         btnThemSanPham.addActionListener(e->{
             try{
@@ -87,7 +91,7 @@ public class FormAddImport extends JPanel {
             }
         });
 
-        JButton btnHoanTat = new JButton("Hoàn tất đơn nhập hàng");
+        ButtonCustom btnHoanTat = new ButtonCustom("Hoàn tất đơn nhập hàng",12,"green");
 
         btnHoanTat.addActionListener(e ->{
             if (chiTietList.isEmpty()){
@@ -106,6 +110,19 @@ public class FormAddImport extends JPanel {
                         allChiTietSaved = false;
                         break;
                     }
+                    SanPhamDTO sanPham = sanPhamBLL.getProductById(chiTiet.getMaSP());
+                    if (sanPham != null) {
+                        sanPham.setSoLuongTon(sanPham.getSoLuongTon() + chiTiet.getSoLuong());
+                        if (!sanPhamBLL.updateProduct(sanPham)) {
+                            allChiTietSaved = false;
+                            JOptionPane.showMessageDialog(this, "Cập nhật số lượng tồn cho sản phẩm " + chiTiet.getMaSP() + " thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            break;
+                        }
+                    } else {
+                        allChiTietSaved = false;
+                        JOptionPane.showMessageDialog(this, "Không tìm thấy sản phẩm với mã " + chiTiet.getMaSP(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        break;
+                    }
                 }
                 if(allChiTietSaved){
                     JOptionPane.showMessageDialog(this, "Hoàn tất đơn nhập hàng thành công!");
@@ -120,7 +137,7 @@ public class FormAddImport extends JPanel {
 
         });
 
-        JButton btnHuy = new JButton("Hủy");
+        ButtonCustom btnHuy = new ButtonCustom("Hủy",12,"red");
         btnHuy.addActionListener(e -> SwingUtilities.getWindowAncestor(this).dispose());
 
         JPanel buttonPanel = new JPanel(new FlowLayout());

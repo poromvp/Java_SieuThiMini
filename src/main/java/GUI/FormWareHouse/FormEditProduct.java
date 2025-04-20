@@ -10,84 +10,95 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
-public class FormAddProduct extends JPanel {
-    private JComboBox trangThai;
-    private StyledTextField tenSP,giaSP,loaiSP,ncc,tenAnh,moTa;
+public class FormEditProduct extends JDialog {
+    private JComboBox<String> trangThai;
+    private StyledTextField tenSP, giaSP, loaiSP, ncc, tenAnh, moTa;
+    private JButton uploadImageBtn;
     private String selectedImageName;
-    public FormAddProduct(){
+    private SanPhamDTO product;
+
+    public FormEditProduct(Frame parent, SanPhamDTO product) {
+        super(parent, "Sửa sản phẩm", true);
+        this.product = product;
+        setSize(400, 400);
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         JPanel nhapPanel = new JPanel();
-        nhapPanel.setLayout(new GridLayout(7,2,5,5));
+        nhapPanel.setLayout(new GridLayout(7, 2, 5, 5));
 
         nhapPanel.add(new JLabel("Tên sản phẩm:"));
         tenSP = new StyledTextField();
+        tenSP.setText(product.getTenSP());
         nhapPanel.add(tenSP);
 
         nhapPanel.add(new JLabel("Giá sản phẩm:"));
         giaSP = new StyledTextField();
+        giaSP.setText(String.valueOf(product.getGia()));
         nhapPanel.add(giaSP);
 
         nhapPanel.add(new JLabel("Loại sản phẩm:"));
         loaiSP = new StyledTextField();
+        loaiSP.setText(String.valueOf(product.getMaLSP()));
         nhapPanel.add(loaiSP);
 
         nhapPanel.add(new JLabel("Nhà cung cấp:"));
         ncc = new StyledTextField();
+        ncc.setText(String.valueOf(product.getMaNCC()));
         nhapPanel.add(ncc);
 
+//        nhapPanel.add(new JLabel("Tên ảnh:"));
+//        tenAnh = new StyledTextField();
+//        tenAnh.setText(product.getTenAnh());
+//        tenAnh.setEditable(false);
+//        nhapPanel.add(tenAnh);
+
         nhapPanel.add(new JLabel("Tải ảnh:"));
-        JButton uploadImageBtn = new JButton("Chọn ảnh");
+        uploadImageBtn = new JButton("Chọn ảnh");
         uploadImageBtn.addActionListener(e -> uploadImage());
         nhapPanel.add(uploadImageBtn);
 
         nhapPanel.add(new JLabel("Mô tả:"));
         moTa = new StyledTextField();
+        moTa.setText(product.getMoTa());
         nhapPanel.add(moTa);
 
         nhapPanel.add(new JLabel("Trạng thái:"));
         String[] trangThaiOptions = {"ACTIVE", "INACTIVE"};
         trangThai = new JComboBox<>(trangThaiOptions);
+        trangThai.setSelectedItem(product.getTrangThai());
         nhapPanel.add(trangThai);
 
-        JButton btn1 = new JButton("Thêm sản phẩm");
-        btn1.addActionListener(e->{
-            try{
-                SanPhamDTO product = new SanPhamDTO(
-                        0,
+        JButton saveBtn = new JButton("Lưu");
+        saveBtn.addActionListener(e -> {
+            try {
+                SanPhamDTO updatedProduct = new SanPhamDTO(
+                        product.getMaSP(),
                         Integer.parseInt(ncc.getText()),
                         Integer.parseInt(loaiSP.getText()),
-                        selectedImageName != null ? selectedImageName : "product-default.png",
+                        selectedImageName != null ? selectedImageName : product.getTenAnh(),
                         Double.parseDouble(giaSP.getText()),
                         tenSP.getText(),
                         moTa.getText(),
                         (String) trangThai.getSelectedItem(),
-                        0
+                        product.getSoLuongTon()
                 );
-                if (SanPhamBLL.addProduct(product)){
-                    JOptionPane.showMessageDialog(null,"Thêm sản phẩm thành công !");
-                    clearFields();
-                }else{
-                    JOptionPane.showMessageDialog(null,"Thêm sản phẩm thất bại!");
+                if (SanPhamBLL.updateProduct(updatedProduct)) {
+                    JOptionPane.showMessageDialog(null, "Sửa sản phẩm thành công!");
+                    dispose();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Sửa sản phẩm thất bại!");
                 }
-            }catch (NumberFormatException ex){
-                JOptionPane.showMessageDialog(null,"Vui lòng nhập đúng định dạng số !");
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng số!");
             }
         });
+
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        btnPanel.add(btn1);
+        btnPanel.add(saveBtn);
 
-        add(nhapPanel,BorderLayout.CENTER);
-        add(btnPanel,BorderLayout.SOUTH);
-    }
-
-    private void clearFields() {
-        tenSP.setText("");
-        giaSP.setText("");
-        loaiSP.setText("");
-        ncc.setText("");
-        tenAnh.setText("");
-        moTa.setText("");
+        add(nhapPanel, BorderLayout.CENTER);
+        add(btnPanel, BorderLayout.SOUTH);
     }
 
     private void uploadImage() {
@@ -110,18 +121,5 @@ public class FormAddProduct extends JPanel {
                 JOptionPane.showMessageDialog(null, "Lỗi khi tải ảnh: " + ex.getMessage());
             }
         }
-    }
-
-    public static void main(String[] args) {
-        JFrame f = new JFrame("Thêm sản phẩm");
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        f.setSize(800,500);
-        f.setLayout(new BorderLayout());
-        f.setLocationRelativeTo(null);
-
-
-        FormAddProduct test = new FormAddProduct();
-        f.add(test, BorderLayout.CENTER);
-        f.setVisible(true);
     }
 }

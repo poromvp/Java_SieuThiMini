@@ -54,7 +54,7 @@ public class TableControl {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        //tb.setDefaultRenderer(Object.class, centerRenderer);
+        // tb.setDefaultRenderer(Object.class, centerRenderer);
         tb.setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
         tb.setShowGrid(false);
         tb.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 2, true));

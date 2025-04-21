@@ -11,19 +11,21 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
+import BLL.TheThanhVienBLL;
+import DTO.TheThanhVienDTO;
 import GUI.TienIch;
 
-public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListener{
+public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListener {
     JButton btnTim;
     JLabel lbMota;
     JTabbedPane tab;
     JTable tb;
     DefaultTableModel model;
     JScrollPane scr;
-    public ArrayList<hoadontemp> HoaDon = new ArrayList<>();
+    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
     JPanel pn1, pn2, pn3, pn4;
 
-    public PanelBaoCaoKH(){
+    public PanelBaoCaoKH() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo khách hàng"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -47,30 +49,21 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         gbc.gridy = 1;
         gbc.gridwidth = 3;
 
-        String[] tencot = { "ID", "Name", "Price", "Date" };
-        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp b = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp c = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp d = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        HoaDon.add(a);
-        HoaDon.add(b);
-        HoaDon.add(c);
-        HoaDon.add(d);
-        model = new DefaultTableModel(tencot, 0){
-            @Override
-            public boolean isCellEditable(int row, int column){
+        String[] tencot = { "Mã thành viên", "Họ tên", "Số điện thoại", "Điểm tích lũy" };
+        model = new DefaultTableModel(tencot, 0) {
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        refreshTable();
+        loadThanhVien(TTV);
         tb = new JTable(model);
         TableControl.TableStyle(tb, model);
         TableControl.TableEvent(tb, model, "KH");
         scr = new JScrollPane(tb);
-        
+
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
-        pn1.add(scr,BorderLayout.CENTER);
+        pn1.add(scr, BorderLayout.CENTER);
 
         pn2 = new JPanel();
         pn2.setLayout(new BorderLayout());
@@ -81,27 +74,32 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         pn4 = new JPanel();
         pn4.setLayout(new BorderLayout());
 
-
         tab = new JTabbedPane();
-        tab.addTab("Standard",pn1);
-        tab.addTab("Tiềm năng",pn2);
-        tab.addTab("VIP",pn3);
-        tab.addTab("Diamond",pn4);
-        add(tab,gbc);
+        tab.addTab("Standard", pn1);
+        tab.addTab("Tiềm năng", pn2);
+        tab.addTab("VIP", pn3);
+        tab.addTab("Diamond", pn4);
+        add(tab, gbc);
 
-        tab.addChangeListener((ChangeListener)this);
-        btnTim.addActionListener((ActionListener)this);
+        tab.addChangeListener((ChangeListener) this);
+        btnTim.addActionListener((ActionListener) this);
     }
 
-    private void refreshTable() {
-        model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (hoadontemp s : HoaDon) {
-            model.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate() });
+    private void loadThanhVien(ArrayList<TheThanhVienDTO> ttv) {
+        model.setRowCount(0);
+        for (TheThanhVienDTO tv : ttv) {
+            model.addRow(new Object[] {
+                    tv.getMaTV(),
+                    tv.getTenTV(),
+                    tv.getSdt(),
+                    tv.getDiemTL()
+            });
         }
     }
+
     @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() ==  btnTim){
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnTim) {
             PanelTimKH panel = new PanelTimKH();
             // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
@@ -120,26 +118,26 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
     }
 
     @Override
-    public void stateChanged(ChangeEvent e){
+    public void stateChanged(ChangeEvent e) {
         int tabSelected = tab.getSelectedIndex();
-        if(tabSelected == 0){
+        if (tabSelected == 0) {
             lbMota.setText("*Standard: dành cho thành viên chi tiêu dưới 1,000,000 VND.");
-            pn1.add(scr,BorderLayout.CENTER);
+            pn1.add(scr, BorderLayout.CENTER);
         }
-        
-        if(tabSelected == 1){
+
+        if (tabSelected == 1) {
             lbMota.setText("*Tiềm năng: dành cho thành viên chi tiêu từ 1,000,000 - 3,000,000 VND.");
-            pn2.add(scr,BorderLayout.CENTER);
+            pn2.add(scr, BorderLayout.CENTER);
         }
 
-        if(tabSelected == 2){
+        if (tabSelected == 2) {
             lbMota.setText("*VIP: dành cho thành viên chi tiêu trên 3,000,000 VND.");
-            pn3.add(scr,BorderLayout.CENTER);
+            pn3.add(scr, BorderLayout.CENTER);
         }
 
-        if(tabSelected == 3){
+        if (tabSelected == 3) {
             lbMota.setText("*Kim cương: dành cho thành viên chi tiêu trên 10,000,000 VND.");
-            pn4.add(scr,BorderLayout.CENTER);
+            pn4.add(scr, BorderLayout.CENTER);
         }
     }
 }

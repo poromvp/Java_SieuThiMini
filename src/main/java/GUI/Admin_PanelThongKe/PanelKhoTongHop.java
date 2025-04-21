@@ -12,6 +12,7 @@ import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
     JPanel pn1, pn2, pn3;
@@ -19,7 +20,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     JLabel tongdonhang;
     JButton btnMore;
     JTabbedPane tab;
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
@@ -54,17 +55,11 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm"};
-        model = new DefaultTableModel(tencot, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
         loadSanPham(DsSP);
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
-        // TableControl.TableEvent(tb, model, "NV");
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
@@ -88,14 +83,15 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         searchItem = new JMenuItem("Tìm Kiếm");
         exportItem = new JMenuItem("In Báo Cáo");
         searchItem.addActionListener(this);
+        exportItem.addActionListener(this);
         popupMenu.add(searchItem);
         popupMenu.add(exportItem);
 
         // Thêm sự kiện chuột phải cho bảng
         showpupop(tb);
         showpupop(scr);
-        tab.addChangeListener((ChangeListener) this);
-        btnMore.addActionListener((ActionListener) this);
+        tab.addChangeListener(this);
+        btnMore.addActionListener(this);
     }
 
     public void showpupop(Object obj) {
@@ -119,8 +115,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             });
-        }
-        else if(obj instanceof JScrollPane scr){
+        } else if (obj instanceof JScrollPane scr) {
             scr.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -145,7 +140,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
     private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (SanPhamDTO sp :  DsSP) {
+        for (SanPhamDTO sp : DsSP) {
             model.addRow(new Object[] {
                     sp.getMaSP(),
                     new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
@@ -159,13 +154,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         int tabSelected = tab.getSelectedIndex();
         if (tabSelected == 0) {
             pn1.add(scr, BorderLayout.CENTER);
-        }
-
-        if (tabSelected == 1) {
+        } else if (tabSelected == 1) {
             pn2.add(scr, BorderLayout.CENTER);
-        }
-
-        if (tabSelected == 2) {
+        } else if (tabSelected == 2) {
             pn3.add(scr, BorderLayout.CENTER);
         }
     }
@@ -176,7 +167,6 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             PanelSapHet panel = new PanelSapHet();
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
         } else if (e.getActionCommand().equals("Tìm Kiếm")) {
-            // Tạo panel tùy chỉnh cho tìm kiếm
             JPanel searchPanel = new JPanel(new GridLayout(2, 2, 5, 5));
             searchPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
             searchPanel.add(new JLabel("Từ khóa:"));
@@ -186,7 +176,6 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             JComboBox<String> columnBox = new JComboBox<>(new String[] { "ID", "Name", "Price", "Date" });
             searchPanel.add(columnBox);
 
-            // Hiển thị JOptionPane với panel tùy chỉnh
             int result = JOptionPane.showConfirmDialog(
                     null,
                     searchPanel,
@@ -194,12 +183,13 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                     JOptionPane.OK_CANCEL_OPTION,
                     JOptionPane.PLAIN_MESSAGE);
 
-            // Xử lý kết quả
             if (result == JOptionPane.OK_OPTION) {
                 String keyword = searchField.getText();
                 String column = (String) columnBox.getSelectedItem();
                 JOptionPane.showMessageDialog(null, "Tìm kiếm: " + keyword + " trong cột " + column);
             }
+        } else if (e.getSource() == exportItem) {
+            JOptionPane.showMessageDialog(null, "In báo cáo kho tổng hợp...");
         }
     }
 }

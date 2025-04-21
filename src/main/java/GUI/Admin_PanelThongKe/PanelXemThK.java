@@ -12,6 +12,7 @@ import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class PanelXemThK extends JPanel {
         pn2.add(lbTitle, BorderLayout.CENTER);
     }
 
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel modelMini;
     public ArrayList<ChiTietDonHangDTO> ChiTietDH;
 
@@ -61,24 +62,19 @@ public class PanelXemThK extends JPanel {
         pn3.setLayout(new FlowLayout());
         String[] tencot = { "ID", "Mặt hàng", "Số lượng", "Đơn giá", "Thành tiền" };
         ChiTietDH = ChiTietDonHangBLL.getChiTietByMaDH(Integer.parseInt(getid));
-        modelMini = new DefaultTableModel(tencot, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        modelMini = (DefaultTableModel) tb.getModel();
         loadChiTiet();
-        tb = new JTable(modelMini);
-        TableControl.TableStyle(tb, modelMini);
         JScrollPane scr = new JScrollPane(tb);
-        
+
         // Tính chiều cao theo số dòng của bảng
         int rowCount = tb.getRowCount();
         int rowHeight = tb.getRowHeight();
         int tableHeight = rowCount * rowHeight;
 
         // Đặt kích thước động (có padding)
-        scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // hoặc dùng pn3.getWidth() nếu panel cố định
+        scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // Giữ kích thước động
 
         pn3.add(scr);
     }
@@ -176,21 +172,10 @@ public class PanelXemThK extends JPanel {
         TienIch.labelStyle(lbNV, 1, 20, null);
     }
 
-    /*
-     * private void refreshTable() {
-     * modelMini.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-     * for (hoadontemp s : HoaDon) {
-     * modelMini.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(),
-     * s.getDate() });
-     * }
-     * }
-     */
-
     private void loadChiTiet() {
         modelMini.setRowCount(0);
         int sum = 0;
         for (ChiTietDonHangDTO ct : ChiTietDH) {
-
             modelMini.addRow(
                     new Object[] {
                             ct.getMaSP(),

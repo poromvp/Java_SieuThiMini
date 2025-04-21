@@ -11,6 +11,7 @@ import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
 import DTO.TheThanhVienDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -205,7 +206,7 @@ public class PanelXemKH extends JPanel {
         pn2.add(lbChiTieu);
     }
 
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel modelMini;
     JScrollPane scr;
     public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
@@ -216,18 +217,14 @@ public class PanelXemKH extends JPanel {
         for (DonHangDTO hd : HoaDon) {
             System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " + hd.getPtThanhToan() + " " + hd.getNgayTT());
         }
-        modelMini = new DefaultTableModel(tencot, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        modelMini = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
-        tb = new JTable(modelMini);
-        TableControl.TableStyle(tb, modelMini);
-        TableControl.TableEvent(tb, modelMini, "HD");
+        TableControl.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
-        scr.setPreferredSize(new Dimension(400, 120)); // Điều chỉnh chiều rộng và chiều cao của bảng
-        pn3.add(scr,BorderLayout.CENTER);
+        scr.setPreferredSize(new Dimension(400, 120)); // Giữ kích thước
+        pn3.add(scr, BorderLayout.CENTER);
         pn3.setBorder(
                 new CompoundBorder(new TitledBorder("Danh sách các hóa đơn đã mua"), new EmptyBorder(4, 4, 4, 4)));
     }

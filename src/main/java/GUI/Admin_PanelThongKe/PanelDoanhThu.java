@@ -8,15 +8,15 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
-
 import BLL.DonHangBLL;
 import DTO.DonHangDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
     JLabel tongdoanhthu, tongdonhang;
     JComboBox<String> mocthoigian;
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
     JButton btnTim;
@@ -59,7 +59,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         TienIch.nutStyle(btnTim, "search.png", 17, 0, 0);
         pn2.add(btnTim, gbc);
 
-        btnTim.addActionListener((ActionListener) this);
+        btnTim.addActionListener(this);
     }
 
     public void initPanel3() {
@@ -69,15 +69,11 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         for (DonHangDTO hd : HoaDon) {
             System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " + hd.getPtThanhToan() + " " + hd.getNgayTT());
         }
-        model = new DefaultTableModel(tencot, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
-        TableControl.TableEvent(tb, model, "HD");
+        TableControl.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
         JScrollPane scr = new JScrollPane(tb);
         pn3.add(scr, BorderLayout.CENTER);
         // Thêm sự kiện chuột phải cho bảng
@@ -117,7 +113,6 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         exportItem = new JMenuItem("In Báo Cáo");
         exportItem.addActionListener(this);
         popupMenu.add(exportItem);
-
     }
 
     public void showpupop(Object obj) {
@@ -141,8 +136,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             });
-        }
-        else if(obj instanceof JScrollPane scr){
+        } else if (obj instanceof JScrollPane scr) {
             scr.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -164,16 +158,6 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
             });
         }
     }
-
-    /*
-     * private void refreshTable() {
-     * model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-     * for (hoadontemp s : HoaDon) {
-     * model.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate()
-     * });
-     * }
-     * }
-     */
 
     private void loadDonHang(ArrayList<DonHangDTO> danhsach) {
         model.setRowCount(0);
@@ -201,30 +185,23 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTim) {
             PanelTimThK panel = new PanelTimThK();
-            // Đổi màu nền và chữ
-            UIManager.put("OptionPane.background", Color.BLACK); // Nền
-            UIManager.put("Panel.background", Color.ORANGE); // Nền bên trong
-            UIManager.put("Button.background", Color.BLACK); // Nền nút OK, Cancel
-            UIManager.put("Button.foreground", Color.WHITE); // Màu chữ nút
+            UIManager.put("OptionPane.background", Color.BLACK);
+            UIManager.put("Panel.background", Color.ORANGE);
+            UIManager.put("Button.background", Color.BLACK);
+            UIManager.put("Button.foreground", Color.WHITE);
             UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
-            // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            /*
-             * giá trị của biến result sẽ là:
-             * JOptionPane.OK_OPTION (0) nếu bạn nhấn OK.
-             * JOptionPane.CANCEL_OPTION (2) nếu bạn nhấn Cancel.
-             * JOptionPane.CLOSED_OPTION (-1) nếu bạn đóng hộp thoại bằng dấu X (góc trên
-             * phải).
-             */
-            UIManager.put("OptionPane.background", null); // Nền
-            UIManager.put("Panel.background", null); // Nền bên trong
-            UIManager.put("Button.background", null); // Nền nút OK, Cancel
-            UIManager.put("Button.foreground", null); // Màu chữ nút
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
             UIManager.put("Button.font", null);
             if (result == 0) {
                 panel.testt();
             }
+        } else if (e.getSource() == exportItem) {
+            JOptionPane.showMessageDialog(null, "In báo cáo doanh thu...");
         }
     }
 }

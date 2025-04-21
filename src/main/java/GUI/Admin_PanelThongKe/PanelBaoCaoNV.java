@@ -7,6 +7,7 @@ import javax.swing.table.*;
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -14,7 +15,7 @@ import java.util.*;
 
 public class PanelBaoCaoNV extends JPanel implements ActionListener {
     JButton btnTim, btnDS;
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
     public ArrayList<NhanVienDTO> DsNV = (ArrayList<NhanVienDTO>) new NhanVienBLL().getAllNhanVien();
@@ -78,24 +79,19 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
         TienIch.nutStyle(btnDS, "list.png", 20, 50, 25);
         pn1.add(btnDS);
 
-        btnTim.addActionListener((ActionListener) this);
-        btnDS.addActionListener((ActionListener) this);
+        btnTim.addActionListener(this);
+        btnDS.addActionListener(this);
     }
 
     public void initPanel2() {
         pn2.setBorder(new CompoundBorder(new TitledBorder("Danh sách"), new EmptyBorder(4, 4, 4, 4)));
         pn2.setLayout(new BorderLayout());
         String[] tencot = { "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại" };
-        model = new DefaultTableModel(tencot, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
         loadNhanVien(DsNV);
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
-        TableControl.TableEvent(tb, model, "NV");
+        TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         pn2.add(scr, BorderLayout.CENTER);
 
@@ -147,24 +143,16 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTim) {
             PanelTimVN panel = new PanelTimVN();
-            // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            /*
-             * giá trị của biến result sẽ là:
-             * JOptionPane.OK_OPTION (0) nếu bạn nhấn OK.
-             * JOptionPane.CANCEL_OPTION (2) nếu bạn nhấn Cancel.
-             * JOptionPane.CLOSED_OPTION (-1) nếu bạn đóng hộp thoại bằng dấu X (góc trên
-             * phải).
-             */
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: " + panel.getTxtName());
             }
-        }
-
-        if (e.getSource() == btnDS) {
+        } else if (e.getSource() == btnDS) {
             PanelTotNhat panel = new PanelTotNhat();
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
+        } else if (e.getSource() == exportItem) {
+            JOptionPane.showMessageDialog(null, "In báo cáo nhân viên...");
         }
     }
 }

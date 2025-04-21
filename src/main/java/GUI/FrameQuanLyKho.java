@@ -22,6 +22,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
         pn_leftMenu = new LeftMenuWareHouse();
         pn_leftMenu.setActionListener(this);
+        pn_leftMenu.setPreferredSize(new Dimension(250, 0));
 
         add(pn_leftMenu,BorderLayout.WEST);
         rightPn = new JPanel();
@@ -32,7 +33,6 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
     public void panelImport(){
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormImport importPanel = new FormImport();
@@ -44,7 +44,6 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
     public void panelProduct(){
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormProduct productPanel= new FormProduct();
@@ -56,7 +55,6 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
     public void panelCategory(){
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormProductType productTypePanel= new FormProductType();
@@ -68,7 +66,6 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
     public void panelSupplier(){
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormSupplier supplierPanel= new FormSupplier();

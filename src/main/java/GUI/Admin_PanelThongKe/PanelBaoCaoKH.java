@@ -11,12 +11,13 @@ import javax.swing.table.DefaultTableModel;
 import BLL.TheThanhVienBLL;
 import DTO.TheThanhVienDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
 public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListener {
     JButton btnTim;
     JLabel lbMota;
     JTabbedPane tab;
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
     private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
@@ -93,15 +94,11 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         gbc.gridwidth = 3;
 
         String[] tencot = { "Mã thành viên", "Họ tên", "Số điện thoại", "Điểm tích lũy" };
-        model = new DefaultTableModel(tencot, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
         loadThanhVien(TTV);
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
-        TableControl.TableEvent(tb, model, "KH");
+        TableControl.TableEvent(tb, model, "KH"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
@@ -124,8 +121,8 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         tab.addTab("Diamond", pn4);
         add(tab, gbc);
 
-        tab.addChangeListener((ChangeListener) this);
-        btnTim.addActionListener((ActionListener) this);
+        tab.addChangeListener(this);
+        btnTim.addActionListener(this);
 
         // Thêm popup menu
         popupMenu = new JPopupMenu();
@@ -153,19 +150,13 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTim) {
             PanelTimKH panel = new PanelTimKH();
-            // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            /*
-             * giá trị của biến result sẽ là:
-             * JOptionPane.OK_OPTION (0) nếu bạn nhấn OK.
-             * JOptionPane.CANCEL_OPTION (2) nếu bạn nhấn Cancel.
-             * JOptionPane.CLOSED_OPTION (-1) nếu bạn đóng hộp thoại bằng dấu X (góc trên
-             * phải).
-             */
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: " + panel.getTxtName());
             }
+        } else if (e.getSource() == exportItem) {
+            JOptionPane.showMessageDialog(null, "In báo cáo khách hàng...");
         }
     }
 
@@ -175,19 +166,13 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         if (tabSelected == 0) {
             lbMota.setText("*Standard: dành cho thành viên chi tiêu dưới 1,000,000 VND.");
             pn1.add(scr, BorderLayout.CENTER);
-        }
-
-        if (tabSelected == 1) {
+        } else if (tabSelected == 1) {
             lbMota.setText("*Tiềm năng: dành cho thành viên chi tiêu từ 1,000,000 - 3,000,000 VND.");
             pn2.add(scr, BorderLayout.CENTER);
-        }
-
-        if (tabSelected == 2) {
+        } else if (tabSelected == 2) {
             lbMota.setText("*VIP: dành cho thành viên chi tiêu trên 3,000,000 VND.");
             pn3.add(scr, BorderLayout.CENTER);
-        }
-
-        if (tabSelected == 3) {
+        } else if (tabSelected == 3) {
             lbMota.setText("*Kim cương: dành cho thành viên chi tiêu trên 10,000,000 VND.");
             pn4.add(scr, BorderLayout.CENTER);
         }

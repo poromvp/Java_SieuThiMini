@@ -10,9 +10,10 @@ import javax.swing.table.DefaultTableModel;
 import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.StyledTable;
 
 public class PanelSapHet extends JPanel {
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
     public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
@@ -22,15 +23,10 @@ public class PanelSapHet extends JPanel {
         setLayout(new BorderLayout());
 
         String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
-        model = new DefaultTableModel(tencot, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
         loadSanPham(DsSP);
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
         scr = new JScrollPane(tb);
 
         add(scr, BorderLayout.CENTER);

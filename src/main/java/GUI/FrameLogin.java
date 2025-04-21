@@ -10,7 +10,7 @@ import java.awt.*;
 public class FrameLogin extends JFrame {
     public FrameLogin() {
         setTitle("Login");
-        setSize(700, 500);
+        setSize(500, 300);
         setBackground(new Color(255,255,255));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -19,9 +19,9 @@ public class FrameLogin extends JFrame {
 
         String[] filepath = {
             "/images/icon/Logo.png",
-            "/images/anhcho1.png",
-            "/images/anhcho2.png",
-            "/images/anhcho3.png"
+//            "/images/anhcho1.png",
+//            "/images/anhcho2.png",
+//            "/images/anhcho3.png"
         };
         // Logo
         //ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/" + fileIcon));

@@ -1,14 +1,11 @@
 package GUI.Admin_PanelThongKe;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
-
+import javax.swing.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.TheThanhVienBLL;
@@ -24,6 +21,52 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
     JScrollPane scr;
     private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
     JPanel pn1, pn2, pn3, pn4;
+    JPopupMenu popupMenu;
+    JMenuItem exportItem;
+
+    public void showpupop(Object obj) {
+        if (obj instanceof JTable tb) {
+            tb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        } else if (obj instanceof JScrollPane scr) {
+            scr.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        }
+    }
 
     public PanelBaoCaoKH() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo khách hàng"), new EmptyBorder(4, 4, 4, 4)));
@@ -83,6 +126,15 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
 
         tab.addChangeListener((ChangeListener) this);
         btnTim.addActionListener((ActionListener) this);
+
+        // Thêm popup menu
+        popupMenu = new JPopupMenu();
+        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem.addActionListener(this);
+        popupMenu.add(exportItem);
+        // Thêm sự kiện chuột phải cho bảng
+        showpupop(tb);
+        showpupop(scr);
     }
 
     private void loadThanhVien(ArrayList<TheThanhVienDTO> ttv) {

@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import BLL.NhanVienBLL;
+import DTO.NhanVienDTO;
 import GUI.TienIch;
 
 import java.awt.*;
@@ -49,6 +51,7 @@ public class PanelXemNV extends JPanel {
     
     JTextArea GioiThieu;
     JLabel lbTenNV, lbNgSInh, lbDchi, lbSDT, lbChucVu, lbID;
+    //NhanVienDTO nv = new NhanVienBLL().get
     public void initPanel1(DefaultTableModel model, int dong){
         pn1.setBorder(new CompoundBorder(new TitledBorder("Thông tin chi tiết"), new EmptyBorder(4, 4, 4, 4)));
         pn1.setLayout(new GridBagLayout());

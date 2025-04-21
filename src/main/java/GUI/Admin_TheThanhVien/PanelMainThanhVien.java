@@ -73,7 +73,7 @@ public class PanelMainThanhVien extends JPanel {
         loadThanhVien(TTV);
         tb = new JTable(model);
         TableControl.TableStyle(tb, model);
-        TableControl.TableEvent(tb, model, "HD");
+        TableControl.TableEvent(tb, model, "KH");
         JScrollPane scr = new JScrollPane(tb);
         pn2.add(scr, BorderLayout.CENTER);
     }

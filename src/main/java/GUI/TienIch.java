@@ -367,4 +367,11 @@ public class TienIch {
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         lb.setIcon(new ImageIcon(resizedImg));
     }
+
+    public static void anhAVT(JLabel lb, String file, int width, int height) {
+        ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+        Image img = icon.getImage();
+        Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        lb.setIcon(new ImageIcon(resizedImg));
+    }
 }

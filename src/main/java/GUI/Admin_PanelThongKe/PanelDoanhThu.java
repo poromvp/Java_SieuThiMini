@@ -1,13 +1,13 @@
 package GUI.Admin_PanelThongKe;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
+
 
 import BLL.DonHangBLL;
 import DTO.DonHangDTO;
@@ -21,6 +21,8 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
     public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
     JButton btnTim;
     JPanel pn1, pn2, pn3;
+    JPopupMenu popupMenu;
+    JMenuItem exportItem;
 
     public void initPanel1() {
         loadThongKe(HoaDon);
@@ -78,6 +80,9 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         TableControl.TableEvent(tb, model, "HD");
         JScrollPane scr = new JScrollPane(tb);
         pn3.add(scr, BorderLayout.CENTER);
+        // Thêm sự kiện chuột phải cho bảng
+        showpupop(tb);
+        showpupop(scr);
     }
 
     public PanelDoanhThu() {
@@ -106,6 +111,58 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         pn3 = new JPanel();
         initPanel3();
         add(pn3, gbc);
+
+        // Thêm popup menu
+        popupMenu = new JPopupMenu();
+        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem.addActionListener(this);
+        popupMenu.add(exportItem);
+
+    }
+
+    public void showpupop(Object obj) {
+        if (obj instanceof JTable tb) {
+            tb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        }
+        else if(obj instanceof JScrollPane scr){
+            scr.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        }
     }
 
     /*

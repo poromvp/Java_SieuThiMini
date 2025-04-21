@@ -14,6 +14,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
     private JButton btnReport;
     private JButton btnAccount;
     private JButton btnLogout;
+    private JButton btnTheTV;
 
     private ActionListener listener;  
 
@@ -43,6 +44,10 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         return btnLogout;
     }
 
+    public JButton getBtnTheTV(){
+        return btnTheTV;
+    }
+
     public LeftSidebarMenu() {
         setBackground(bgColor);
         setMaximumSize(new Dimension(250, getHeight()));
@@ -60,13 +65,15 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         btnReport = createButton("Báo Cáo", "src/main/resources/images/report.png");
         btnAccount = createButton("Tài Khoản", "src/main/resources/images/account.png");
         btnLogout = createButton("Đăng Xuất", "src/main/resources/images/exit.png");
+        btnTheTV = createButton("Thẻ Thành Viên", "src/main/resources/images/thethanhvien.png");
     
         // Thêm các nút vào panel
         add(btnHome);
         add(btnEmployee);
         add(btnProduct);
-        add(btnReport);
         add(btnAccount);
+        add(btnTheTV);
+        add(btnReport);
         
         // Thêm khoảng trống linh hoạt để đẩy nút đăng xuất xuống dưới cùng
         add(Box.createVerticalGlue());

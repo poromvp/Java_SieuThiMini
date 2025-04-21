@@ -9,6 +9,8 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
+import BLL.DonHangBLL;
+import DTO.DonHangDTO;
 import GUI.TienIch;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
@@ -16,11 +18,12 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
     JComboBox<String> mocthoigian;
     JTable tb;
     DefaultTableModel model;
-    public ArrayList<hoadontemp> HoaDon = new ArrayList<>();
+    public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
     JButton btnTim;
     JPanel pn1, pn2, pn3;
 
     public void initPanel1() {
+        loadThongKe(HoaDon);
         pn1.setBorder(new CompoundBorder(new TitledBorder("Thống kê"), new EmptyBorder(4, 4, 4, 4)));
         pn1.setLayout(new GridLayout(2, 2));
 
@@ -28,7 +31,6 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         TienIch.labelStyle(tong, 4, 20, null);
         pn1.add(tong);
 
-        tongdoanhthu = new JLabel("1,000,000" + " VND");
         TienIch.labelStyle(tongdoanhthu, 2, 20, null);
         pn1.add(tongdoanhthu);
 
@@ -36,7 +38,6 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         TienIch.labelStyle(tonghd, 4, 20, null);
         pn1.add(tonghd);
 
-        tongdonhang = new JLabel("96" + " Đơn");
         TienIch.labelStyle(tongdonhang, 2, 20, null);
         pn1.add(tongdonhang);
     }
@@ -52,21 +53,6 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        JLabel doanhthutheo = new JLabel("Doanh thu theo:");
-        TienIch.labelStyle(doanhthutheo, 4, 17, null);
-        pn2.add(doanhthutheo, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        mocthoigian = new JComboBox<>();
-        mocthoigian.addItem("Ngày");
-        mocthoigian.addItem("Tháng");
-        mocthoigian.addItem("Năm");
-        mocthoigian.setEditable(false);
-        pn2.add(mocthoigian, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 1;
         btnTim = new JButton("Tìm");
         TienIch.nutStyle(btnTim, "search.png", 17, 0, 0);
         pn2.add(btnTim, gbc);
@@ -77,26 +63,21 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
     public void initPanel3() {
         pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách"), new EmptyBorder(4, 4, 4, 4)));
         pn3.setLayout(new BorderLayout());
-        String[] tencot = { "ID", "Name", "Price", "Date" };
-        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp b = new hoadontemp("2", "Cam", "10,000", "10/10/2025");
-        hoadontemp c = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
-        hoadontemp d = new hoadontemp("4", "Cam", "10,000", "10/10/2025");
-        HoaDon.add(a);
-        HoaDon.add(b);
-        HoaDon.add(c);
-        HoaDon.add(d);
-        model = new DefaultTableModel(tencot, 0){
-            public boolean isCellEditable(int row, int column){
+        String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
+        for (DonHangDTO hd : HoaDon) {
+            System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " + hd.getPtThanhToan() + " " + hd.getNgayTT());
+        }
+        model = new DefaultTableModel(tencot, 0) {
+            public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        refreshTable();
+        loadDonHang(HoaDon);
         tb = new JTable(model);
         TableControl.TableStyle(tb, model);
         TableControl.TableEvent(tb, model, "HD");
         JScrollPane scr = new JScrollPane(tb);
-        pn3.add(scr,BorderLayout.CENTER);
+        pn3.add(scr, BorderLayout.CENTER);
     }
 
     public PanelDoanhThu() {
@@ -127,17 +108,48 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         add(pn3, gbc);
     }
 
-    private void refreshTable() {
-        model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (hoadontemp s : HoaDon) {
-            model.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate() });
+    /*
+     * private void refreshTable() {
+     * model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
+     * for (hoadontemp s : HoaDon) {
+     * model.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate()
+     * });
+     * }
+     * }
+     */
+
+    private void loadDonHang(ArrayList<DonHangDTO> danhsach) {
+        model.setRowCount(0);
+        for (DonHangDTO hd : danhsach) {
+            model.addRow(new Object[] {
+                    hd.getMaDH(),
+                    hd.getMaNV(),
+                    hd.getPtThanhToan(),
+                    TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                    TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
+    }
+
+    private void loadThongKe(ArrayList<DonHangDTO> danhsach) {
+        double sumDoanhThu = 0;
+        int sumDonHang = danhsach.size();
+        for (DonHangDTO hd : danhsach) {
+            sumDoanhThu += DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH());
+        }
+        tongdoanhthu = new JLabel(TienIch.formatVND(sumDoanhThu));
+        tongdonhang = new JLabel(sumDonHang + " Đơn");
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTim) {
             PanelTimThK panel = new PanelTimThK();
+            // Đổi màu nền và chữ
+            UIManager.put("OptionPane.background", Color.BLACK); // Nền
+            UIManager.put("Panel.background", Color.ORANGE); // Nền bên trong
+            UIManager.put("Button.background", Color.BLACK); // Nền nút OK, Cancel
+            UIManager.put("Button.foreground", Color.WHITE); // Màu chữ nút
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             // Hiển thị JOptionPane
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
@@ -148,8 +160,13 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
              * JOptionPane.CLOSED_OPTION (-1) nếu bạn đóng hộp thoại bằng dấu X (góc trên
              * phải).
              */
+            UIManager.put("OptionPane.background", null); // Nền
+            UIManager.put("Panel.background", null); // Nền bên trong
+            UIManager.put("Button.background", null); // Nền nút OK, Cancel
+            UIManager.put("Button.foreground", null); // Màu chữ nút
+            UIManager.put("Button.font", null);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: " + panel.getTxtName());
+                panel.testt();
             }
         }
     }

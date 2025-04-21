@@ -10,9 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
-import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
-import DTO.TheThanhVienDTO;
 import GUI.TienIch;
 
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
@@ -24,7 +22,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     JTable tb;
     DefaultTableModel model;
     JPopupMenu popupMenu;
-    JMenuItem searchItem;
+    JMenuItem searchItem, exportItem;
     public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
 
     public PanelKhoTongHop() {
@@ -88,8 +86,10 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
+        exportItem = new JMenuItem("In Báo Cáo");
         searchItem.addActionListener(this);
         popupMenu.add(searchItem);
+        popupMenu.add(exportItem);
 
         // Thêm sự kiện chuột phải cho bảng
         showpupop(tb);

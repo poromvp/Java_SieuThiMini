@@ -51,12 +51,42 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
     public LeftSidebarMenu() {
         setBackground(bgColor);
         setMaximumSize(new Dimension(250, getHeight()));
-        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); 
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+        JPanel employeePanel = new JPanel();
+        employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
+        employeePanel.setBackground(new Color(25,45,70));
+        employeePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+
+        // Avatar nhân viên (có thể thay bằng ảnh thật sau này)
+        ImageIcon baseAvata = new ImageIcon("src/main/resources/images/icon/boy.png");
+        Image resizeAvata = baseAvata.getImage().getScaledInstance(50,50,Image.SCALE_SMOOTH);
+        JLabel avtLabel = new JLabel(new ImageIcon(resizeAvata));
+        avtLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        avtLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+        employeePanel.add(avtLabel);
+
+        // Tên nhân viên
+        JLabel nameLabel = new JLabel("Nguyễn Văn A");
+        nameLabel.setForeground(Color.WHITE);
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        employeePanel.add(nameLabel);
+
+        // Chức vụ
+        JLabel roleLabel = new JLabel("Nhân viên kho");
+        roleLabel.setForeground(Color.LIGHT_GRAY);
+        roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        employeePanel.add(roleLabel);
+
+        add(employeePanel);
+        add(Box.createVerticalGlue());
     
-        // Logo
-        JLabel logoLabel = new JLabel(new ImageIcon("src/main/resources/images/icon/Logo1.png"));
-        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Căn giữa logo
-        add(logoLabel);
+//        // Logo
+//        JLabel logoLabel = new JLabel(new ImageIcon("src/main/resources/images/icon/Logo1.png"));
+//        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Căn giữa logo
+//        add(logoLabel);
     
         // Tạo các nút
         btnHome = createButton("Trang Chủ", "src/main/resources/images/home.png");

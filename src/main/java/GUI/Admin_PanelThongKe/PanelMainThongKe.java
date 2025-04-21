@@ -1,14 +1,9 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
-
-import GUI.TienIch;
-
 import java.awt.*;
-import java.awt.event.*;
 
-public class PanelMainThongKe extends JPanel implements ActionListener {
-    JButton btn1;
+public class PanelMainThongKe extends JPanel{
 
     public PanelMainThongKe() {
         setBackground(new Color(30, 144, 255));
@@ -28,18 +23,7 @@ public class PanelMainThongKe extends JPanel implements ActionListener {
         PanelBaoCaoKH pn4 = new PanelBaoCaoKH();
         tab.addTab("Báo cáo khách hàng", pn4);
         
-        btn1 = new JButton("In báo cáo");
-        TienIch.nutStyle(btn1, "printer.png", 18, 0, 0);
         add(tab);
-        add(btn1);
 
-        btn1.addActionListener(this);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btn1) {
-            new DialogXuatBaoCaoTongHop();
-        }
     }
 }

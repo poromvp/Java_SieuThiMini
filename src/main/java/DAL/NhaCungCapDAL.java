@@ -71,4 +71,5 @@ public class NhaCungCapDAL {
         }
         return list;
     }
+
 }

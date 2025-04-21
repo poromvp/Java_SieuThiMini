@@ -55,17 +55,17 @@ public class FormImportDetail extends JPanel {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Panel nút chức năng
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        JButton addButton = new JButton("Thêm sản phẩm");
-        JButton deleteButton = new JButton("Xóa sản phẩm");
-
-        addButton.addActionListener(e -> showAddProductDialog());
-        deleteButton.addActionListener(e -> deleteSelectedProduct());
-
-        buttonPanel.add(addButton);
-        buttonPanel.add(deleteButton);
-        add(buttonPanel, BorderLayout.SOUTH);
+//        // Panel nút chức năng
+//        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+//        JButton addButton = new JButton("Thêm sản phẩm");
+//        JButton deleteButton = new JButton("Xóa sản phẩm");
+//
+//        addButton.addActionListener(e -> showAddProductDialog());
+//        deleteButton.addActionListener(e -> deleteSelectedProduct());
+//
+//        buttonPanel.add(addButton);
+//        buttonPanel.add(deleteButton);
+//        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private Object[][] convertDTOToArray(ArrayList<ChiTietPNHangDTO> list) {

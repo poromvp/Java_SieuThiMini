@@ -15,16 +15,16 @@ public class SanPhamBLL {
     }
 
     public static boolean addProduct(SanPhamDTO sanPham) {
-        if (sanPham.getTenSP().isEmpty() || sanPham.getGia() <= 0) {
-            System.out.println("Lỗi: Tên sản phẩm không được để trống và giá phải lớn hơn 0.");
+        if (sanPham.getTenSP().isEmpty() || sanPham.getGia() <= 0 || sanPham.getSoLuongTon() < 0) {
+            System.out.println("Lỗi: Tên sản phẩm không được để trống, giá phải lớn hơn 0 và số lượng tồn không được âm.");
             return false;
         }
-        return SanPhamDAL.insertProduct(sanPham) >0;
+        return SanPhamDAL.insertProduct(sanPham) > 0;
     }
 
     public static boolean updateProduct(SanPhamDTO sanPham) {
-        if (sanPham.getMaSP() <= 0) {
-            System.out.println("Lỗi: Mã sản phẩm không hợp lệ.");
+        if (sanPham.getMaSP() <= 0 || sanPham.getSoLuongTon() < 0) {
+            System.out.println("Lỗi: Mã sản phẩm không hợp lệ hoặc số lượng tồn không được âm.");
             return false;
         }
         return SanPhamDAL.updateProduct(sanPham);
@@ -38,12 +38,16 @@ public class SanPhamBLL {
         return SanPhamDAL.deleteProduct(id);
     }
 
-    public static List<SanPhamDTO> searchProducts(String keyword, String searchType) {
-        return SanPhamDAL.searchProducts(keyword, searchType);
+    public static List<SanPhamDTO> searchProducts(String maSP, String tenSP, int maLSP) {
+        return SanPhamDAL.searchProducts(maSP, tenSP, maLSP);
     }
 
     public static void main(String[] args) {
         SanPhamDTO sp = getProductById(1);
-        System.out.println(sp.toString());
+        if (sp != null) {
+            System.out.println(sp.toString());
+        } else {
+            System.out.println("Không tìm thấy sản phẩm với ID = 1");
+        }
     }
 }

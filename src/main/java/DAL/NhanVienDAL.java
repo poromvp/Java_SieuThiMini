@@ -4,10 +4,13 @@ import DTO.NhanVienDTO;
 import DTO.NhanVienDTO;
 import JDBC.DBConnection;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.zxing.Result;
 
 public class NhanVienDAL {
 
@@ -121,35 +124,32 @@ public class NhanVienDAL {
             return false;
         }
     }
-    public NhanVienDTO getNhanVienByID(int maNV) {
-        NhanVienDTO nhanVien = null;
-        String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
-        ResultSet rs = DBConnection.executeQuery(sql, maNV);
-
+    public NhanVienDTO getNhanVienByMa(String maNV) {
         try {
-            if (rs != null && rs.next()) {
-                nhanVien = new NhanVienDTO();
-                nhanVien.setMaNV(rs.getInt("MaNV"));
-                nhanVien.setTenNV(rs.getString("TenNV"));
-                nhanVien.setGioiTinh(rs.getString("GioiTinh"));
-                nhanVien.setNgaySinh(rs.getDate("NgaySinh"));
-                nhanVien.setDiaChi(rs.getString("DiaChi"));
-                nhanVien.setSDT(rs.getString("SDT"));
-                nhanVien.setCCCD(rs.getString("CCCD"));
-                nhanVien.setLuong(rs.getDouble("Luong"));
-                nhanVien.setTrangThai(rs.getInt("TrangThai"));
+            String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
+            ResultSet rs = DBConnection.executeQuery(sql,maNV);
+            
+            if (rs.next()) {
+                NhanVienDTO nv = new NhanVienDTO();
+                nv.setMaNV(rs.getInt("MaNV"));
+                nv.setTenNV(rs.getString("TenNV"));
+                nv.setGioiTinh(rs.getString("GioiTinh"));
+                nv.setNgaySinh(rs.getDate("NgaySinh"));
+                nv.setCCCD(rs.getString("CCCD"));
+                nv.setDiaChi(rs.getString("DiaChi"));
+                nv.setSDT(rs.getString("SDT"));
+                nv.setLuong(rs.getDouble("Luong"));
+                nv.setTrangThai(rs.getInt("TrangThai"));
+                
+                nv.setImage(rs.getString("Image"));
+                
+                return nv;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
-
-        return nhanVien;
+        
+        return null;
     }
 
     public List<NhanVienDTO> searchNhanVien(String keyword) {

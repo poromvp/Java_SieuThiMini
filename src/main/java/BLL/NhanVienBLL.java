@@ -35,7 +35,9 @@ public class NhanVienBLL {
         return dal.addNhanVien(nv);
     }
     
-    
+    public NhanVienDTO getNhanVienByMa(String maNV) {
+        return dal.getNhanVienByMa(maNV);
+    }
     
 
     public boolean updateNhanVien(NhanVienDTO nv) {

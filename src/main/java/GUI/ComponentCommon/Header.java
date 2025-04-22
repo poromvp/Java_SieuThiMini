@@ -7,8 +7,10 @@ import javax.swing.JPanel;
 
 
 public class Header extends JPanel{
+	private Color COLOR = new Color(33,58,89);
+	
     public Header() {
-		setBackground(new Color(38, 140, 232));
+		setBackground(COLOR);
 		setPreferredSize(new Dimension( getWidth(), 50));
 
 	}

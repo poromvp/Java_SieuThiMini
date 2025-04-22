@@ -17,13 +17,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class StyledLeftMenubutton extends JButton {
+    private Color COLOR = new Color(33,58,89);
     private String buttonName;
     private int radius = 50;
     private boolean isClicked = false; // Ban đầu không có viền bo góc
 
     public StyledLeftMenubutton(String pathImg, String buttonName) {
         setPreferredSize(new Dimension(230, 45));
-        setBackground(new Color(28, 173, 193)); // Màu mặc định chưa nhấn
+        setBackground(COLOR); // Màu mặc định chưa nhấn
         this.buttonName = buttonName;
         setLayout(new BorderLayout());
 
@@ -43,7 +44,7 @@ public class StyledLeftMenubutton extends JButton {
 
         JLabel lbl_btnName = new JLabel(this.buttonName, JLabel.CENTER);
         lbl_btnName.setFont(new Font("Tahoma", Font.BOLD, 15));
-        lbl_btnName.setForeground(Color.BLACK);
+        lbl_btnName.setForeground(Color.WHITE);
         add(lbl_btnName, BorderLayout.CENTER);
     }
 
@@ -62,10 +63,10 @@ public class StyledLeftMenubutton extends JButton {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (isClicked) {
-            g2.setColor(getBackground());
+            g2.setColor(new Color(17, 32, 51));
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
         } else {
-            g2.setColor(getBackground());
+            g2.setColor(COLOR);
             g2.fillRect(0, 0, getWidth(), getHeight());
         }
 
@@ -79,7 +80,7 @@ public class StyledLeftMenubutton extends JButton {
             Graphics2D g2 = (Graphics2D) g;
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            g2.setColor(Color.WHITE);
+            g2.setColor(new Color(17, 32, 51));
             g2.setStroke(new BasicStroke(5));
             g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, radius, radius);
         }

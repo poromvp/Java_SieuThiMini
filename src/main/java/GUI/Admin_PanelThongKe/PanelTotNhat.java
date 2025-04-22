@@ -7,44 +7,41 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
-public class PanelTotNhat extends JPanel{
-    JTable tb;
+import BLL.NhanVienBLL;
+import DTO.NhanVienDTO;
+import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
+
+public class PanelTotNhat extends JPanel {
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    public ArrayList<hoadontemp> HoaDon = new ArrayList<>();
+    public ArrayList<NhanVienDTO> DsNV = (ArrayList<NhanVienDTO>) new NhanVienBLL().getAllNhanVien();
+
     public PanelTotNhat() {
         setBorder(new CompoundBorder(new TitledBorder("Danh sách nhân viên có doanh số tốt nhất"),
                 new EmptyBorder(4, 4, 4, 4)));
         setLayout(new BorderLayout());
 
-        String[] tencot = { "ID", "Name", "Price", "Date" };
-        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp b = new hoadontemp("2", "Cam", "10,000", "10/10/2025");
-        hoadontemp c = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
-        hoadontemp d = new hoadontemp("4", "Cam", "10,000", "10/10/2025");
-        HoaDon.add(a);
-        HoaDon.add(b);
-        HoaDon.add(c);
-        HoaDon.add(d);
-        model = new DefaultTableModel(tencot, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Không cho chỉnh sửa tất cả các ô
-            }
-        };
-
-        refreshTable();
-        tb = new JTable(model);
-        TableControl.TableStyle(tb,model);
-        TableControl.TableEvent(tb, model, "NV");
+        String[] tencot = { "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại" };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
+        loadNhanVien(DsNV);
+        TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         add(scr, BorderLayout.CENTER);
     }
 
-    private void refreshTable() {
+    private void loadNhanVien(ArrayList<NhanVienDTO> dsnv) {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (hoadontemp s : HoaDon) {
-            model.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate() });
+        for (NhanVienDTO nv : dsnv) {
+            model.addRow(new Object[] {
+                    nv.getMaNV(),
+                    nv.getTenNV(),
+                    TienIch.ddmmyyyy(nv.getNgaySinh()),
+                    nv.getSDT()
+            });
         }
     }
 }

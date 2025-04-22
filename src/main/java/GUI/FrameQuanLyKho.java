@@ -2,9 +2,7 @@ package GUI;
 
 import javax.swing.*;
 
-import GUI.FormWareHouse.FormImport;
-import GUI.FormWareHouse.FormProduct;
-import GUI.FormWareHouse.LeftMenuWareHouse;
+import GUI.FormWareHouse.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -24,6 +22,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
         pn_leftMenu = new LeftMenuWareHouse();
         pn_leftMenu.setActionListener(this);
+        pn_leftMenu.setPreferredSize(new Dimension(250, 0));
 
         add(pn_leftMenu,BorderLayout.WEST);
         rightPn = new JPanel();
@@ -34,7 +33,6 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
     public void panelImport(){
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormImport importPanel = new FormImport();
@@ -46,11 +44,32 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
 
     public void panelProduct(){
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormProduct productPanel= new FormProduct();
         rightPn.add(productPanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
+    }
+
+    public void panelCategory(){
+        rightPn.removeAll();
+        rightPn.setLayout(new BorderLayout());
+
+        FormProductType productTypePanel= new FormProductType();
+        rightPn.add(productTypePanel, BorderLayout.CENTER);
+
+        rightPn.revalidate();
+        rightPn.repaint();
+    }
+
+    public void panelSupplier(){
+        rightPn.removeAll();
+        rightPn.setLayout(new BorderLayout());
+
+        FormSupplier supplierPanel= new FormSupplier();
+        rightPn.add(supplierPanel, BorderLayout.CENTER);
 
         rightPn.revalidate();
         rightPn.repaint();
@@ -66,8 +85,11 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
             panelImport();
         } else if (e.getSource()== pn_leftMenu.getBtnProduct()) {
             panelProduct();
-        }
-        else if(e.getSource()==pn_leftMenu.getBtnLogout()){
+        } else if (e.getSource()==pn_leftMenu.getBtnProductType()) {
+            panelCategory();
+        } else if (e.getSource()==pn_leftMenu.getBtnSupplier()) {
+            panelSupplier();
+        } else if(e.getSource()==pn_leftMenu.getBtnLogout()){
             JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
         }
     }

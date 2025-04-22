@@ -1,33 +1,76 @@
 package GUI.FormWareHouse;
 
-import javax.swing.*;
-
+import BLL.SanPhamBLL;
+import BLL.NhaCungCapBLL;
+import BLL.LoaiSanPhamBLL;
+import DTO.LoaiSanPhamDTO;
+import DTO.NhaCungCapDTO;
+import DTO.SanPhamDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.List;
 
 public class FormProduct extends JPanel {
     private FormAddProduct addProduct = new FormAddProduct();
+    private JTable table;
+    private DefaultTableModel tableModel;
+    private NhaCungCapBLL ncc = new NhaCungCapBLL();
+    private LoaiSanPhamBLL lsp = new LoaiSanPhamBLL();
+
     public FormProduct(){
         setLayout(new BorderLayout());
         setBackground(Color.white);
+
         // Tạo panel Tìm Kiếm
         JPanel timKiempnl = new JPanel();
         timKiempnl.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
-        timKiempnl.setLayout(new GridLayout(1, 3, 5, 5));
-        String timKiemCombo[]={"Tìm theo mã",
-                "Tìm theo tên sản phẩm",
-                "Tìm theo loại sản phẩm "};
-        JComboBox timKiemCb= new JComboBox(timKiemCombo);
-        JTextField timKiemtxt = new JTextField();// Nhap thong tin tim kiem
-        JButton timBtn = new JButton("Tìm");
-        timKiempnl.add(timKiemCb);
-        timKiempnl.add(timKiemtxt);
+        timKiempnl.setLayout(new GridLayout(2, 2, 5, 5));
+
+        JLabel mamSPLabel = new JLabel("Mã sản phẩm: ");
+        JTextField maSPText = new JTextField();
+
+        JLabel tenSPLabel = new JLabel("Tên sản phẩm:");
+        JTextField tenSPText = new JTextField();
+
+        JLabel loaiSPLabel = new JLabel("Loại sản phẩm:");
+        JComboBox<String> loaiSPCb = new JComboBox<>();
+        loaiSPCb.addItem("Tất cả");
+        List<LoaiSanPhamDTO> loaiSPList = lsp.getList();
+        for(LoaiSanPhamDTO loai : loaiSPList){
+            loaiSPCb.addItem(loai.getTenLoaiSP()+" ("+loai.getMaLSP()+") ");
+        }
+
+        ButtonCustom timBtn = new ButtonCustom("Tìm kiếm","search",12,17,17);
+        timBtn.addActionListener(e->{
+            String maSP = maSPText.getText().trim();
+            String tenSP = tenSPText.getText().trim();
+            String loaiSP= loaiSPCb.getSelectedItem().toString();
+            int maLSP = -1;
+            if(!loaiSP.equals("Tất cả")){
+                maLSP = Integer.parseInt(loaiSP.substring(loaiSP.indexOf("(") + 1, loaiSP.indexOf(")")));
+            }
+            List<SanPhamDTO> results = SanPhamBLL.searchProducts(maSP,tenSP,maLSP);
+            updateTableData(results);
+        });
+
+        timKiempnl.add(mamSPLabel);
+        timKiempnl.add(maSPText);
+        timKiempnl.add(tenSPLabel);
+        timKiempnl.add(tenSPText);
+        timKiempnl.add(loaiSPLabel);
+        timKiempnl.add(loaiSPCb);
+        timKiempnl.add(new JLabel());
         timKiempnl.add(timBtn);
+
         add(timKiempnl,BorderLayout.NORTH);
 
-        // Tạo bảng
+
         ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,20,20);
         themBtn.addActionListener(e -> {
             JDialog info_product = new JDialog((Frame) null,true);
@@ -36,25 +79,67 @@ public class FormProduct extends JPanel {
             info_product.setLayout(new BorderLayout());
             info_product.add(addProduct,BorderLayout.CENTER);
             info_product.setVisible(true);
+            loadTableData();
         });
 
         ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,20,20);
+        suaBtn.addActionListener(e -> {
+            int selectedRow = table.getSelectedRow();
+            if (selectedRow >= 0) {
+                int maSP = (int) tableModel.getValueAt(selectedRow, 0);
+                SanPhamDTO product = SanPhamBLL.getProductById(maSP);
+                if (product != null) {
+                    FormEditProduct editDialog = new FormEditProduct(null, product);
+                    editDialog.setVisible(true);
+                    loadTableData(); // Làm mới bảng sau khi sửa
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm để sửa");
+            }
+        });
+
 
         ButtonCustom xoaBtn = new ButtonCustom("Xóa","del",16,20,20);
+        xoaBtn.addActionListener(e ->{
+            int selectedRow = table.getSelectedRow();
+            if(selectedRow >= 0){
+                int maSP = (int) tableModel.getValueAt(selectedRow,0);
+                if(SanPhamBLL.deleteProduct(maSP)){
+                    JOptionPane.showMessageDialog(null,"Xóa sản phẩm thành công");
+                    loadTableData();
+                }else {
+                    JOptionPane.showMessageDialog(null,"Xóa sản phẩm thất bại !!!");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Vui lòng chọn sản phẩm để xóa !!!");
+            }
+        });
 
-
-        String[] headerCol = {"Mã SP", "Tên SP", "Giá", "Loai","Nhà cung cấp"};
-        Object[][] data = {
-                {1, "Sản phẩm A", 100000, "Bánh","Công ty A"},
-                {2, "Sản phẩm B", 200000, "Nước","Công ty B"},
-                {3, "Sản phẩm C", 150000, "Bánh","Công ty C"},
-                {4, "Sản phẩm D", 180000, "Nước","Công ty A"},
-                {5, "Sản phẩm E", 210000, "Bánh","Công ty A"}
+        // Bảng sản phẩm
+        String[] headerCol = {"Mã SP", "Tên SP", "Giá","Số lượng tồn", "Loai","Nhà cung cấp"};
+        tableModel = new DefaultTableModel(headerCol,0){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
         };
+        table = new StyledTable(new Object[][]{},headerCol);
+        table.setModel(tableModel);
+        loadTableData();
 
-
-
-        JTable table = new StyledTable(data, headerCol);
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2 && table.getSelectedRow() >= 0) {
+                    int maSP = (int) tableModel.getValueAt(table.getSelectedRow(), 0);
+                    SanPhamDTO product = SanPhamBLL.getProductById(maSP);
+                    if (product != null) {
+                        FormProductDetail detailDialog = new FormProductDetail(null, product);
+                        detailDialog.setVisible(true);
+                    }
+                }
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -75,11 +160,37 @@ public class FormProduct extends JPanel {
         add(infoProduct,BorderLayout.CENTER);
     }
 
+    private void loadTableData(){
+        tableModel.setRowCount(0);
+        List<SanPhamDTO> products = SanPhamBLL.getAllProducts();
+        updateTableData(products);
+    }
+
+    private void updateTableData(List<SanPhamDTO> products){
+
+        tableModel.setRowCount(0);
+        for (SanPhamDTO product : products){
+            NhaCungCapDTO ncc = this.ncc.getNhaCungCap(product.getMaNCC());
+            LoaiSanPhamDTO lsp = this.lsp.getLoaiSanPham(product.getMaLSP());
+            String tenNcc = (ncc != null) ? ncc.getTenNCC() : "Chưa cập nhật";
+            String tenLoaiSP= (lsp!=null) ? lsp.getTenLoaiSP() :"Chưa cập nhật";
+            tableModel.addRow(new Object[]{
+                product.getMaSP(),
+                product.getTenSP(),
+                product.getGia(),
+                product.getSoLuongTon(),
+                tenLoaiSP,
+                tenNcc,
+
+            });
+        }
+    }
+
     public static void main (String[] args) {
         FormProduct test = new FormProduct();
         JFrame frame = new JFrame("Thông tin sản phẩm");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1500, 1000);
+        frame.setSize(1200, 800);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
         frame.add(test,BorderLayout.CENTER);

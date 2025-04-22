@@ -17,8 +17,9 @@ public class ButtonCustom extends JButton {
         setFocusPainted(false);
         setBorderPainted(false);
         setContentAreaFilled(false);
-        this.isRounded = true; 
+        this.isRounded = true;
 
+        // Xác định màu nền ban đầu
         switch (color.toLowerCase()) {
             case "blue":
                 originalColor = new Color(51, 204, 255);
@@ -42,18 +43,18 @@ public class ButtonCustom extends JButton {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                bgColor = bgColor.darker(); 
+                bgColor = bgColor.darker();
                 repaint();
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                bgColor = originalColor; 
+                bgColor = originalColor;
                 repaint();
             }
         });
     }
-    
+
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -63,8 +64,8 @@ public class ButtonCustom extends JButton {
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setColor(bgColor);
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), 20, 20);
-            super.paintComponent(g); 
-        } 
+            super.paintComponent(g);
+        }
     }
 
     public ButtonCustom(String text, String type, int fontsize, int w, int h) {
@@ -76,8 +77,9 @@ public class ButtonCustom extends JButton {
         ImageIcon addURL = new ImageIcon("src/main/resources/images/icon/addIcon.png");
         ImageIcon delURL = new ImageIcon("src/main/resources/images/icon/delIcon.png");
         ImageIcon editURL = new ImageIcon("src/main/resources/images/icon/editIcon.png");
+        ImageIcon resetURL = new ImageIcon("src/main/resources/images/reset_button.png");
+        ImageIcon searchURL = new ImageIcon("src/main/resources/images/icon/search.png");
         ImageIcon hisURL = new ImageIcon("src/main/resources/images/icon/hisIcon.png");
-
         switch (type) {
             case "del":
                 this.setIcon(resizeIcon(delURL, w, h));
@@ -87,6 +89,12 @@ public class ButtonCustom extends JButton {
                 break;
             case "edit":
                 this.setIcon(resizeIcon(editURL, w, h));
+                break;
+            case "reset":
+                this.setIcon(resizeIcon(resetURL,w,h));
+                break;
+            case "search":
+                this.setIcon(resizeIcon(searchURL,w,h));
                 break;
             case "his":
                 this.setIcon(resizeIcon(hisURL, w, h));
@@ -102,10 +110,10 @@ public class ButtonCustom extends JButton {
         this.setFont(new Font("Arial", Font.PLAIN, fontsize));
 
         // Xóa viền và background
-        this.setBorderPainted(false);  
-        this.setContentAreaFilled(false); 
+        this.setBorderPainted(false);
+        this.setContentAreaFilled(false);
         this.setFocusPainted(false);
-         
+
     }
 
     private ImageIcon resizeIcon(ImageIcon icon, int width, int height) {

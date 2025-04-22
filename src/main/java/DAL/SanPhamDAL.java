@@ -37,19 +37,19 @@ public class SanPhamDAL {
     }
 
     public static int insertProduct(SanPhamDTO sanPham) {
-        String sql = "INSERT INTO SanPham ( maNCC, maLSP, tenSP, gia, tenAnh, moTa, trangThai) VALUES ( ?, ?, ?, ?, ?, ?, ?)";
-        return DBConnection.executeUpdate(sql, 
-                 sanPham.getMaNCC(), sanPham.getMaLSP(), 
-                sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(), 
-                sanPham.getMoTa(), sanPham.getTrangThai()) ;
+        String sql = "INSERT INTO SanPham (maNCC, maLSP, tenSP, gia, tenAnh, moTa, trangThai, SoLuongTon) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        return DBConnection.executeUpdate(sql,
+                sanPham.getMaNCC(), sanPham.getMaLSP(),
+                sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(),
+                sanPham.getMoTa(), sanPham.getTrangThai(), sanPham.getSoLuongTon());
     }
 
     public static boolean updateProduct(SanPhamDTO sanPham) {
-        String sql = "UPDATE SanPham SET maNCC=?, maLSP=?, tenSP=?, gia=?, tenAnh=?, moTa=?, trangThai=? WHERE maSP=?";
-        return DBConnection.executeUpdate(sql, 
-                sanPham.getMaNCC(), sanPham.getMaLSP(), 
-                sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(), 
-                sanPham.getMoTa(), sanPham.getTrangThai(), sanPham.getMaSP()) > 0;
+        String sql = "UPDATE SanPham SET maNCC=?, maLSP=?, tenSP=?, gia=?, tenAnh=?, moTa=?, trangThai=?, SoLuongTon=? WHERE maSP=?";
+        return DBConnection.executeUpdate(sql,
+                sanPham.getMaNCC(), sanPham.getMaLSP(),
+                sanPham.getTenSP(), sanPham.getGia(), sanPham.getTenAnh(),
+                sanPham.getMoTa(), sanPham.getTrangThai(), sanPham.getSoLuongTon(), sanPham.getMaSP()) > 0;
     }
 
     public static boolean deleteProduct(int id) {
@@ -59,19 +59,53 @@ public class SanPhamDAL {
 
     private static SanPhamDTO mapResultSetToSanPham(ResultSet rs) throws SQLException {
         SanPhamDTO sp = new SanPhamDTO();
-            sp.setMaSP(rs.getInt("maSP"));
-            sp.setMaNCC( rs.getInt("maNCC"));
-            sp.setMaLSP( rs.getInt("maLSP"));
-            sp.setTenSP(rs.getString("tenSP"));
-            sp.setGia( rs.getDouble("gia"));
-            sp.setMoTa( rs.getString("moTa"));
-            sp.setTrangThai( rs.getString("trangThai"));
-        
+        sp.setMaSP(rs.getInt("maSP"));
+        sp.setMaNCC(rs.getInt("maNCC"));
+        sp.setMaLSP(rs.getInt("maLSP"));
+        sp.setTenSP(rs.getString("tenSP"));
+        sp.setGia(rs.getDouble("gia"));
+        sp.setMoTa(rs.getString("moTa"));
+        sp.setTenAnh(rs.getString("tenAnh"));
+        sp.setTrangThai(rs.getString("trangThai"));
+        sp.setSoLuongTon(rs.getInt("SoLuongTon")); // Ánh xạ cột mới
         return sp;
     }
 
+    public static List<SanPhamDTO> searchProducts(String maSP, String tenSP, int maLSP) {
+        List<SanPhamDTO> productList = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM SanPham WHERE 1=1");
+        List<Object> params = new ArrayList<>();
+
+        // Thêm điều kiện tìm theo mã sản phẩm
+        if (maSP != null && !maSP.isEmpty()) {
+            sql.append(" AND maSP = ?");
+            params.add(Integer.parseInt(maSP));
+        }
+
+        // Thêm điều kiện tìm theo tên sản phẩm
+        if (tenSP != null && !tenSP.isEmpty()) {
+            sql.append(" AND tenSP LIKE ?");
+            params.add("%" + tenSP + "%");
+        }
+
+        // Thêm điều kiện lọc theo loại sản phẩm
+        if (maLSP != -1) {
+            sql.append(" AND maLSP = ?");
+            params.add(maLSP);
+        }
+
+        try (ResultSet rs = DBConnection.executeQuery(sql.toString(), params.toArray())) {
+            while (rs.next()) {
+                productList.add(mapResultSetToSanPham(rs));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return productList;
+    }
+
     public static void main(String[] args) {
-        SanPhamDTO sanPham = new SanPhamDTO(0,  1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdonj");
+        SanPhamDTO sanPham = new SanPhamDTO(0, 1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdong", 100); // Thêm SoLuongTon
         System.out.println(insertProduct(sanPham));
     }
 }

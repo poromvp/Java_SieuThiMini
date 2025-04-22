@@ -1,25 +1,30 @@
 package GUI.Admin_PanelThongKe;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
+import BLL.LoaiSanPhamBLL;
+import BLL.SanPhamBLL;
+import DTO.SanPhamDTO;
 import GUI.TienIch;
+import GUI.ComponentCommon.StyledTable;
 
-public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener{
+public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
     JPanel pn1, pn2, pn3;
     JScrollPane scr;
     JLabel tongdonhang;
     JButton btnMore;
     JTabbedPane tab;
-    JTable tb;
+    StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
-    public ArrayList<hoadontemp> HoaDon = new ArrayList<>();
+    JPopupMenu popupMenu;
+    JMenuItem searchItem, exportItem;
+    public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
 
     public PanelKhoTongHop() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo kho tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
@@ -50,29 +55,16 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        String[] tencot = {"ID", "Name", "Price", "Date"};
-        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp b = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp c = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp d = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        HoaDon.add(a);
-        HoaDon.add(b);
-        HoaDon.add(c);
-        HoaDon.add(d);
-        model = new DefaultTableModel(tencot, 0){
-            @Override
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        };
-        refreshTable();
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
+        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
+        loadSanPham(DsSP);
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
-        pn1.add(scr,BorderLayout.CENTER);
+        pn1.add(scr, BorderLayout.CENTER);
 
         pn2 = new JPanel();
         pn2.setLayout(new BorderLayout());
@@ -80,45 +72,124 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         pn3 = new JPanel();
         pn3.setLayout(new BorderLayout());
 
-
         tab = new JTabbedPane();
-        tab.addTab("Danh sách bán chạy",pn1);
-        tab.addTab("Danh sách tồn nhiều",pn2);
-        tab.addTab("Danh sách hàng sắp hết",pn3);
-        add(tab,gbc);
+        tab.addTab("Danh sách bán chạy", pn1);
+        tab.addTab("Danh sách tồn nhiều", pn2);
+        tab.addTab("Danh sách hàng sắp hết", pn3);
+        add(tab, gbc);
 
-        tab.addChangeListener((ChangeListener)this);
-        btnMore.addActionListener((ActionListener)this);
+        // Thêm popup menu
+        popupMenu = new JPopupMenu();
+        searchItem = new JMenuItem("Tìm Kiếm");
+        exportItem = new JMenuItem("In Báo Cáo");
+        searchItem.addActionListener(this);
+        exportItem.addActionListener(this);
+        popupMenu.add(searchItem);
+        popupMenu.add(exportItem);
+
+        // Thêm sự kiện chuột phải cho bảng
+        showpupop(tb);
+        showpupop(scr);
+        tab.addChangeListener(this);
+        btnMore.addActionListener(this);
     }
 
-    private void refreshTable() {
-        model.setRowCount(0);  // Xóa toàn bộ dữ liệu cũ
-        for (hoadontemp s : HoaDon) {
-            model.addRow(new Object[]{s.getId(), s.getName(), s.getPrice(), s.getDate()});
+    public void showpupop(Object obj) {
+        if (obj instanceof JTable tb) {
+            tb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        } else if (obj instanceof JScrollPane scr) {
+            scr.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        }
+    }
+
+    private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
+        model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
+        for (SanPhamDTO sp : DsSP) {
+            model.addRow(new Object[] {
+                    sp.getMaSP(),
+                    new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
+                    sp.getTenSP()
+            });
         }
     }
 
     @Override
-    public void stateChanged(ChangeEvent e){
+    public void stateChanged(ChangeEvent e) {
         int tabSelected = tab.getSelectedIndex();
-        if(tabSelected == 0){
-            pn1.add(scr,BorderLayout.CENTER);
-        }
-        
-        if(tabSelected == 1){
-            pn2.add(scr,BorderLayout.CENTER);
-        }
-
-        if(tabSelected == 2){
-            pn3.add(scr,BorderLayout.CENTER);
+        if (tabSelected == 0) {
+            pn1.add(scr, BorderLayout.CENTER);
+        } else if (tabSelected == 1) {
+            pn2.add(scr, BorderLayout.CENTER);
+        } else if (tabSelected == 2) {
+            pn3.add(scr, BorderLayout.CENTER);
         }
     }
-    
+
     @Override
-    public void actionPerformed(ActionEvent e){
-        if(e.getSource() == btnMore){
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == btnMore) {
             PanelSapHet panel = new PanelSapHet();
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
+        } else if (e.getActionCommand().equals("Tìm Kiếm")) {
+            JPanel searchPanel = new JPanel(new GridLayout(2, 2, 5, 5));
+            searchPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
+            searchPanel.add(new JLabel("Từ khóa:"));
+            JTextField searchField = new JTextField(15);
+            searchPanel.add(searchField);
+            searchPanel.add(new JLabel("Cột:"));
+            JComboBox<String> columnBox = new JComboBox<>(new String[] { "ID", "Name", "Price", "Date" });
+            searchPanel.add(columnBox);
+
+            int result = JOptionPane.showConfirmDialog(
+                    null,
+                    searchPanel,
+                    "Tìm Kiếm",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE);
+
+            if (result == JOptionPane.OK_OPTION) {
+                String keyword = searchField.getText();
+                String column = (String) columnBox.getSelectedItem();
+                JOptionPane.showMessageDialog(null, "Tìm kiếm: " + keyword + " trong cột " + column);
+            }
+        } else if (e.getSource() == exportItem) {
+            JOptionPane.showMessageDialog(null, "In báo cáo kho tổng hợp...");
         }
     }
 }

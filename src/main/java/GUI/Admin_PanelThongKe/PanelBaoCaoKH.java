@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import BLL.TheThanhVienBLL;
 import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
-import GUI.ComponentCommon.StyledTable;
 
 public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListener {
     JButton btnTim;
@@ -151,13 +150,37 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTim) {
             PanelTimKH panel = new PanelTimKH();
+            UIManager.put("OptionPane.background", new Color(33,58,89));
+            UIManager.put("Panel.background", new Color(33,58,89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: " + panel.getTxtName());
+                System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == exportItem) {
-            JOptionPane.showMessageDialog(null, "In báo cáo khách hàng...");
+            PanelExport panel = new PanelExport();
+            int result = JOptionPane.showConfirmDialog(null, panel, "Export",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                if(panel.getSelectedFormat().equals("excel")){
+                    panel.XuatExccel(model);
+                }
+                else{
+                    panel.XuatPDF(model);
+                }
+            } else if (result == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            }
         }
     }
 

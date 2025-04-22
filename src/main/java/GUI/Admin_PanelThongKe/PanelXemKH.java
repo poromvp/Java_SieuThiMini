@@ -6,18 +6,24 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+
 import BLL.DonHangBLL;
+import BLL.LoaiSanPhamBLL;
 import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
+import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-public class PanelXemKH extends JPanel {
+public class PanelXemKH extends JPanel implements ActionListener{
     JPanel pn1, pn2, pn3;
     TheThanhVienDTO kh;
+    JPopupMenu popupMenu;
+    JMenuItem searchItem, exportItem;
 
     public PanelXemKH(DefaultTableModel model, int dong) {
         kh = TheThanhVienBLL.getMemberById(Integer.parseInt(model.getValueAt(dong, 0).toString()));
@@ -49,6 +55,19 @@ public class PanelXemKH extends JPanel {
         gbc.gridwidth = 1;
         initPanel3();
         add(pn3, gbc);
+
+        // Thêm popup menu
+        popupMenu = new JPopupMenu();
+        searchItem = new JMenuItem("Tìm Kiếm");
+        exportItem = new JMenuItem("In Báo Cáo");
+        searchItem.addActionListener(this);
+        exportItem.addActionListener(this);
+        popupMenu.add(searchItem);
+        popupMenu.add(exportItem);
+
+        // Thêm sự kiện chuột phải cho bảng
+        showpupop(tb);
+        showpupop(scr);
     }
 
     public String LayChuoiTuBang(DefaultTableModel model, int dong, int cot) {
@@ -223,7 +242,7 @@ public class PanelXemKH extends JPanel {
         StyledTable.hoverTable(tb, modelMini);
         StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
-        scr.setPreferredSize(new Dimension(400, 120)); // Giữ kích thước
+        scr.setPreferredSize(new Dimension(600, 120)); // Giữ kích thước
         pn3.add(scr, BorderLayout.CENTER);
         pn3.setBorder(
                 new CompoundBorder(new TitledBorder("Danh sách các hóa đơn đã mua"), new EmptyBorder(4, 4, 4, 4)));
@@ -238,6 +257,97 @@ public class PanelXemKH extends JPanel {
                     hd.getPtThanhToan(),
                     TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
+        }
+    }
+
+    public void showpupop(Object obj) {
+        if (obj instanceof JTable tb) {
+            tb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        } else if (obj instanceof JScrollPane scr) {
+            scr.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == searchItem) {
+            PanelTimKH panel = new PanelTimKH();
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+            int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
+            if (result == 0) {
+                System.out.println("Bạn vừa nhập: ");
+            }
+        } else if (e.getSource() == exportItem) {
+            PanelExport panel = new PanelExport();
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+            int result = JOptionPane.showConfirmDialog(null, panel, "Export",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
+            if (result == JOptionPane.OK_OPTION) {
+                if (panel.getSelectedFormat().equals("excel")) {
+                    panel.XuatExccel(modelMini);
+                } else {
+                    panel.XuatPDF(modelMini);
+                }
+            } else if (result == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            }
         }
     }
 }

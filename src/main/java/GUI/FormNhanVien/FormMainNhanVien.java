@@ -4,6 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.NhanVienBLL;
+import DTO.NhanVienDTO;
 import GUI.ComponentCommon.ButtonCustom;
 
 import java.awt.*;
@@ -71,22 +72,34 @@ public class FormMainNhanVien extends JPanel {
     private void openEditDialog() {
         int selectedRow = employeeTablePanel.getNhanVienTable().getSelectedRow();
         if (selectedRow != -1) {
-            String maNV = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 0));
-            String hoTen = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 1));
-            String gioiTinh = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 2));
-            String ngaySinh = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 3));
-            String cccd = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 4));
-            String diaChi = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 5));
-            String soDT = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 6));
-            String luong = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 7));
-            String trangThai = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 8));
+            try {
+                String maNV = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 0));
+                String hoTen = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 1));
+                String gioiTinh = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 2));
+                String ngaySinh = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 3));
+                String cccd = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 4));
+                String diaChi = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 5));
+                String soDT = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 6));
+                String luong = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 7));
+                String trangThai = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 8));
     
-            EditNhanVienDialog dialog = new EditNhanVienDialog(
-                SwingUtilities.getWindowAncestor(this), 
-                employeeTablePanel, 
-                maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai
-            );
-            dialog.setVisible(true);
+                NhanVienDTO nv = bll.getNhanVienByMa(maNV);
+                String anhNV = (nv != null && nv.getImage() != null) ? nv.getImage() : "default.png";
+    
+                EditNhanVienDialog dialog = new EditNhanVienDialog(
+                    SwingUtilities.getWindowAncestor(this),
+                    employeeTablePanel,
+                    maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai, anhNV
+                );
+                dialog.setVisible(true);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, 
+                    "Lỗi khi lấy dữ liệu nhân viên: " + e.getMessage(), 
+                    "Lỗi", 
+                    JOptionPane.ERROR_MESSAGE
+                );
+            }
         } else {
             JOptionPane.showMessageDialog(this, 
                 "Vui lòng chọn nhân viên để sửa!", 
@@ -95,14 +108,12 @@ public class FormMainNhanVien extends JPanel {
             );
         }
     }
-
 private void deleteNhanVien() {
     int selectedRow = employeeTablePanel.getNhanVienTable().getSelectedRow();
 
     if (selectedRow != -1) {
        int maNV = (int) employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 0);
 
-        // Hiển thị hộp thoại xác nhận xóa
         int confirm = JOptionPane.showConfirmDialog(this, 
             "Bạn có chắc chắn muốn xóa nhân viên này?", 
             "Xác nhận xóa", 

@@ -152,12 +152,7 @@ public class FormTableNhanVien extends JPanel {
     }
     
     
-    private void addTableClickEvent() {
-        // Xóa các listener cũ
-        for (java.awt.event.MouseListener listener : tablePanel.getMouseListeners()) {
-            tablePanel.removeMouseListener(listener);
-        }
-        
+    private void addTableClickEvent() {        
         tablePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -167,7 +162,7 @@ public class FormTableNhanVien extends JPanel {
                 } else {
                     tablePanel.clearSelection();
                 }
-    
+        
                 if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
                     int selectedRow = tablePanel.getSelectedRow();
                     if (selectedRow != -1) {
@@ -187,13 +182,9 @@ public class FormTableNhanVien extends JPanel {
                             String trangThai = tablePanel.getValueAt(selectedRow, 8) != null ? String.valueOf(tablePanel.getValueAt(selectedRow, 8)) : "";
                             
                             NhanVienDTO nv = nhanVienBLL.getNhanVienByMa(maNV);
-                            if (nv != null) {
-                                String anhNV = nv.getImage();
-                                System.out.println("Đường dẫn ảnh: " + anhNV); // In ra đường dẫn ảnh để kiểm tra
-                                // Tiếp tục xử lý
-                                infoPanel.setEmployeeData(maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai, anhNV);
-                            }
+                            String anhNV = nv != null && nv.getImage() != null ? nv.getImage() : "default.png";
                             
+                            infoPanel.setEmployeeData(maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai, anhNV);
                         } catch (Exception ex) {
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(FormTableNhanVien.this, "Lỗi khi truyền dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

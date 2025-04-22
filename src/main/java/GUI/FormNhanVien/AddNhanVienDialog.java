@@ -8,8 +8,14 @@ import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.imageio.ImageIO;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AddNhanVienDialog extends JDialog {
     private StyledTextField hoTenField = new StyledTextField();
@@ -20,13 +26,18 @@ public class AddNhanVienDialog extends JDialog {
     private StyledTextField soDTField = new StyledTextField();
     private StyledTextField luongField = new StyledTextField();
     private JCheckBox cbTinhTrang = new JCheckBox("Đang làm việc");
+    private JLabel imageLabel = new JLabel();
+    private JButton btnChonAnh = new JButton("Chọn ảnh");
+    private String anhNV = null; 
     private FormTableNhanVien tablePanel;
     NhanVienDTO nv = new NhanVienDTO();
     NhanVienBLL bll = new NhanVienBLL();
+    private final String IMAGE_FOLDER = "src/main/resources/images/avtMember/"; 
+
     public AddNhanVienDialog(Window parent, FormTableNhanVien tablePanel) {
         super(parent, "Thêm Nhân Viên", ModalityType.APPLICATION_MODAL);
         this.tablePanel = tablePanel;
-        setSize(300, 400);
+        setSize(350, 550); 
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -34,7 +45,23 @@ public class AddNhanVienDialog extends JDialog {
         cbTinhTrang.setBackground(Color.WHITE);
         cbTinhTrang.setSelected(true);
 
-        JPanel inputPanel = new JPanel(new GridLayout(8, 2, 5, 5));
+        JPanel imagePanel = new JPanel(new BorderLayout());
+        imagePanel.setBackground(Color.WHITE);
+        imagePanel.setBorder(BorderFactory.createTitledBorder("Ảnh nhân viên"));
+        
+        imageLabel.setHorizontalAlignment(JLabel.CENTER);
+        imageLabel.setPreferredSize(new Dimension(150, 150));
+        imagePanel.add(imageLabel, BorderLayout.CENTER);
+        
+        btnChonAnh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                chonAnh();
+            }
+        });
+        imagePanel.add(btnChonAnh, BorderLayout.SOUTH);
+
+        JPanel inputPanel = new JPanel(new GridLayout(9, 2, 5, 5));
         inputPanel.setBackground(Color.WHITE);
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         inputPanel.add(new JLabel("Họ tên:"));
@@ -54,7 +81,11 @@ public class AddNhanVienDialog extends JDialog {
         inputPanel.add(new JLabel("Tình trạng:"));
         inputPanel.add(cbTinhTrang);
 
-        add(inputPanel, BorderLayout.CENTER);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(inputPanel, BorderLayout.CENTER);
+        mainPanel.add(imagePanel, BorderLayout.NORTH);
+
+        add(mainPanel, BorderLayout.CENTER);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.WHITE);
@@ -69,32 +100,87 @@ public class AddNhanVienDialog extends JDialog {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    private void chonAnh() {
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter(
+                "Image files", "jpg", "jpeg", "png", "gif");
+        fileChooser.setFileFilter(filter);
+        
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                ImageIcon icon = new ImageIcon(selectedFile.getPath());
+                Image img = icon.getImage().getScaledInstance(
+                        imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+                imageLabel.setIcon(new ImageIcon(img));
+                
+                anhNV = selectedFile.getName();
+                
+                File dest = new File(IMAGE_FOLDER + anhNV);
+                if (!dest.exists()) {
+                    java.nio.file.Files.copy(
+                        selectedFile.toPath(), 
+                        dest.toPath(),
+                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
+                    );
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Lỗi khi chọn ảnh: " + ex.getMessage(),
+                        "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
     private void saveNhanVien() {
         try {
-            nv.setTenNV(hoTenField.getText().trim());
+            String hoTen = hoTenField.getText().trim();
+    
+            String cccd = cccdField.getText().trim();
+    
+            String soDT = soDTField.getText().trim();
+    
+            String luongText = luongField.getText().trim();
+    
+            nv.setTenNV(hoTen);
             nv.setGioiTinh((String) cbGioiTinh.getSelectedItem());
             Date ngaySinh = ngaySinhChooser.getDate();
             nv.setNgaySinh(ngaySinh != null ? new java.sql.Date(ngaySinh.getTime()) : null);
-            nv.setCCCD(cccdField.getText().trim());
+            nv.setCCCD(cccd);
             nv.setDiaChi(diaChiField.getText().trim());
-            nv.setSDT(soDTField.getText().trim());
-
-            try {
-                nv.setLuong(Double.parseDouble(luongField.getText().trim()));
-            } catch (NumberFormatException e) {
-                nv.setLuong(-1); 
+            nv.setSDT(soDT);
+            
+            if (anhNV != null && !anhNV.isEmpty()) {
+                nv.setImage(anhNV); 
+            } else {
+                nv.setImage("default.png"); 
             }
-
+    
+            try {
+                double luong = Double.parseDouble(luongText);
+                if (luong < 0) {
+                    JOptionPane.showMessageDialog(this, "Lương phải là số không âm!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                nv.setLuong(luong);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Lương phải là số hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+    
             nv.setTrangThai(cbTinhTrang.isSelected() ? 1 : 0);
-
+    
             if (bll.addNhanVien(nv)) {
                 JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
                 if (tablePanel != null) {
                     tablePanel.refreshTable();
                 }
                 dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại. Vui lòng thử lại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage(), "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
         }
     }

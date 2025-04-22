@@ -9,6 +9,7 @@ import javax.swing.*;
 import GUI.Admin_PanelThongKe.PanelMainThongKe;
 import GUI.Admin_TheThanhVien.PanelMainThanhVien;
 import GUI.DashBoardPanel.MainDashBoard;
+import GUI.DiscountManagementPanel;
 import GUI.FormNhanVien.FormMainNhanVien;
 import GUI.FormNhanVien.LeftSidebarMenu;
 import GUI.FormTaiKhoan.FormMainAccount;
@@ -117,6 +118,17 @@ public class FrameAdmin extends JFrame implements ActionListener {
         add(rightPn);
     }
 
+    public void panelKhuyenMai() {
+        rightPn.removeAll();
+        rightPn.setBackground(new Color(176, 90, 20));
+        rightPn.setLayout(new BorderLayout());
+        DiscountManagementPanel mainPanel = new DiscountManagementPanel();
+        rightPn.add(mainPanel,BorderLayout.CENTER);
+        rightPn.revalidate();
+        rightPn.repaint();
+        add(rightPn);
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == leftMenu.getBtnHome()) {
@@ -133,6 +145,8 @@ public class FrameAdmin extends JFrame implements ActionListener {
             JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
         } else if (e.getSource() == leftMenu.getBtnTheTV()){
             panelTheThanhVien();
+        }else if (e.getSource() == leftMenu.getBtnKM()){
+            panelKhuyenMai();
         }
     }
 }

@@ -38,7 +38,7 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
-import BLL.ChiTietKhuyenMaBLL;
+import BLL.ChiTietKhuyenMaiBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.StyledTextField;
@@ -252,7 +252,7 @@ public class FormQRscan extends JPanel {
 			txt_soLuong.setText(sp.getTenSP());
 			txt_ngaySX.setText(sp.getTenAnh());
 			txt_ngayHH.setText(sp.getTenAnh());
-            double tiLeGiam = ChiTietKhuyenMaBLL.getProductOnSaleToday(id);
+            double tiLeGiam = ChiTietKhuyenMaiBLL.getProductOnSaleToday(id);
             double price = sp.getGia()*(1 - tiLeGiam/100);
             FormOrderDetailList.addProductDetail(new Object[]{id, sp.getTenSP(), sp.getGia(), tiLeGiam, 1 , price});
 		}else{

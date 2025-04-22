@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import com.toedter.calendar.JDateChooser;
 
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 
 public class PanelTimThK extends JPanel {
 

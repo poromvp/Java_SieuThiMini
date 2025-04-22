@@ -8,8 +8,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
-import GUI.TienIch;
-import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -25,6 +24,8 @@ public class PanelXemNV extends JPanel {
         pn1 = new JPanel();
         pn2 = new JPanel();
         pn3 = new JPanel();
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -59,6 +60,7 @@ public class PanelXemNV extends JPanel {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
+        gbc.ipadx = 10;
         gbc.fill = GridBagConstraints.BOTH;
 
         gbc.gridx = 0;
@@ -191,7 +193,7 @@ public class PanelXemNV extends JPanel {
     public ArrayList<hoadontemp> dsHoaDon = new ArrayList<>();
 
     public void initPanel3() {
-        pn3.setLayout(new FlowLayout());
+        pn3.setLayout(new BorderLayout());
         pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách các đơn hàng đã thanh toán"), new EmptyBorder(4, 4, 4, 4)));
         String[] tencot = { "ID", "Tên", "Price", "Date" };
         hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
@@ -206,10 +208,11 @@ public class PanelXemNV extends JPanel {
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         modelMini = (DefaultTableModel) tb.getModel();
         refreshTable();
-        TableControl.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
+        StyledTable.hoverTable(tb, modelMini);
+        StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         scr.setPreferredSize(new Dimension(400, 120)); // Giữ kích thước
-        pn3.add(scr);
+        pn3.add(scr, BorderLayout.CENTER);
     }
 
     private void refreshTable() {

@@ -4,15 +4,17 @@ package GUI;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import GUI.ComponentCommon.Header;
+import GUI.ComponentCommon.TienIch;
 import GUI.FormEmployee.InterfaceHome;
 import GUI.FormEmployee.InterfaceOrder;
 import GUI.FormEmployee.InterfaceOrderManagement;
@@ -44,8 +46,15 @@ public class FrameEmployee extends JFrame implements ActionListener {
         setSize(1300, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/images/icon/Logo_market.png");  
-        this.setIconImage(icon);  
+        Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+            if (event.getID() == WindowEvent.WINDOW_OPENED) {
+                Window window = (Window) event.getSource();
+                ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/supermarket.png"));
+                Image img = icon.getImage();
+                Image resizedImg = img.getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+                window.setIconImage(new ImageIcon(resizedImg).getImage());
+            }
+        }, AWTEvent.WINDOW_EVENT_MASK);
         
 
        
@@ -77,6 +86,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
         add(pn_header, BorderLayout.NORTH);
         add(pn_leftMenu, BorderLayout.WEST);
         add(pn_body, BorderLayout.CENTER);
+        
         setVisible(true);
     }
 

@@ -6,7 +6,7 @@ import javax.swing.table.*;
 
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 import GUI.ComponentCommon.StyledTable;
 
 import java.awt.*;
@@ -90,8 +90,9 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
+        StyledTable.hoverTable(tb, model);
         loadNhanVien(DsNV);
-        TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         pn2.add(scr, BorderLayout.CENTER);
 

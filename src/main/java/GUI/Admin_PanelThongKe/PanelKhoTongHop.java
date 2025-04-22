@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 import GUI.ComponentCommon.StyledTable;
 
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
@@ -59,6 +59,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
+        StyledTable.hoverTable(tb, model);
         loadSanPham(DsSP);
         scr = new JScrollPane(tb);
 

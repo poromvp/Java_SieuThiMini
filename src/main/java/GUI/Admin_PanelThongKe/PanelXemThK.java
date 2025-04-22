@@ -11,8 +11,7 @@ import DTO.ChiTietDonHangDTO;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
 import DTO.TheThanhVienDTO;
-import GUI.TienIch;
-import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -65,6 +64,7 @@ public class PanelXemThK extends JPanel {
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         modelMini = (DefaultTableModel) tb.getModel();
+        StyledTable.hoverTable(tb, modelMini);
         loadChiTiet();
         JScrollPane scr = new JScrollPane(tb);
 

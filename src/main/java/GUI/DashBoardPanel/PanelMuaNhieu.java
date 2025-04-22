@@ -5,7 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.*;
 
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 
 public class PanelMuaNhieu extends JPanel {
     JPanel pn1, pn2, pn3, pn4, pn5;

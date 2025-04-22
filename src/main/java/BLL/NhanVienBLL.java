@@ -32,6 +32,10 @@ public class NhanVienBLL {
             JOptionPane.showMessageDialog(null, "SDT này đã tồn tại");
             return false;
         }
+        if(dal.checkCCCD(nv.getCCCD())){
+            JOptionPane.showMessageDialog(null, "CCCD này đã tồn tại");
+            return false;
+        }
         return dal.addNhanVien(nv);
     }
     

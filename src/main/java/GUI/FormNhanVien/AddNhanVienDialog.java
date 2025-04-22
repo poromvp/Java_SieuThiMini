@@ -37,7 +37,7 @@ public class AddNhanVienDialog extends JDialog {
     public AddNhanVienDialog(Window parent, FormTableNhanVien tablePanel) {
         super(parent, "Thêm Nhân Viên", ModalityType.APPLICATION_MODAL);
         this.tablePanel = tablePanel;
-        setSize(350, 550); 
+        setSize(350, 650); 
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -50,7 +50,7 @@ public class AddNhanVienDialog extends JDialog {
         imagePanel.setBorder(BorderFactory.createTitledBorder("Ảnh nhân viên"));
         
         imageLabel.setHorizontalAlignment(JLabel.CENTER);
-        imageLabel.setPreferredSize(new Dimension(150, 150));
+        imageLabel.setPreferredSize(new Dimension(100, 100));
         imagePanel.add(imageLabel, BorderLayout.CENTER);
         
         btnChonAnh.addActionListener(new ActionListener() {
@@ -105,22 +105,22 @@ public class AddNhanVienDialog extends JDialog {
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Image files", "jpg", "jpeg", "png", "gif");
         fileChooser.setFileFilter(filter);
-        
+    
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             try {
                 ImageIcon icon = new ImageIcon(selectedFile.getPath());
-                Image img = icon.getImage().getScaledInstance(
-                        imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+                Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 imageLabel.setIcon(new ImageIcon(img));
                 
                 anhNV = selectedFile.getName();
-                
+                nv.setImage(anhNV);
+    
                 File dest = new File(IMAGE_FOLDER + anhNV);
                 if (!dest.exists()) {
                     java.nio.file.Files.copy(
-                        selectedFile.toPath(), 
+                        selectedFile.toPath(),
                         dest.toPath(),
                         java.nio.file.StandardCopyOption.REPLACE_EXISTING
                     );
@@ -131,6 +131,7 @@ public class AddNhanVienDialog extends JDialog {
             }
         }
     }
+    
 
     private void saveNhanVien() {
         try {
@@ -176,8 +177,6 @@ public class AddNhanVienDialog extends JDialog {
                     tablePanel.refreshTable();
                 }
                 dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Thêm nhân viên thất bại. Vui lòng thử lại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();

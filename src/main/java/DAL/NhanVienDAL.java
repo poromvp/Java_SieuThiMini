@@ -79,22 +79,7 @@ public class NhanVienDAL {
     
 
     public boolean addNhanVien(NhanVienDTO nv) {
-        String sql = "INSERT INTO NhanVien (TenNV, GioiTinh, NgaySinh, CCCD, DiaChi, SDT, Luong, TrangThai) VALUES (?, ?, ?, ?, ?, ?, ?, 1)";
-        int rowsAffected = DBConnection.executeUpdate(sql,
-                nv.getTenNV(),
-                nv.getGioiTinh(),
-                nv.getNgaySinh() != null ? new java.sql.Date(nv.getNgaySinh().getTime()) : null,
-                nv.getCCCD(),
-                nv.getDiaChi(),
-                nv.getSDT(),
-                nv.getLuong()
-        );
-        return rowsAffected > 0;
-    }
-
-    public boolean updateNhanVien(NhanVienDTO nv) {
-
-        String sql = "UPDATE NhanVien SET TenNV = ?, GioiTinh = ?, NgaySinh = ?, CCCD = ?, DiaChi = ?, SDT = ?, Luong = ?, TrangThai = ? WHERE MaNV = ?";
+        String sql = "INSERT INTO NhanVien (TenNV, GioiTinh, NgaySinh, CCCD, DiaChi, SDT, Luong, Image, TrangThai) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)";
         int rowsAffected = DBConnection.executeUpdate(sql,
                 nv.getTenNV(),
                 nv.getGioiTinh(),
@@ -103,6 +88,23 @@ public class NhanVienDAL {
                 nv.getDiaChi(),
                 nv.getSDT(),
                 nv.getLuong(),
+                nv.getImage()
+        );
+        return rowsAffected > 0;
+    }
+
+    public boolean updateNhanVien(NhanVienDTO nv) {
+
+        String sql = "UPDATE NhanVien SET TenNV = ?, GioiTinh = ?, NgaySinh = ?, CCCD = ?, DiaChi = ?, SDT = ?, Luong = ?,Image = ?, TrangThai = ? WHERE MaNV = ?";
+        int rowsAffected = DBConnection.executeUpdate(sql,
+                nv.getTenNV(),
+                nv.getGioiTinh(),
+                nv.getNgaySinh() != null ? new java.sql.Date(nv.getNgaySinh().getTime()) : null,
+                nv.getCCCD(),
+                nv.getDiaChi(),
+                nv.getSDT(),
+                nv.getLuong(),
+                nv.getImage(),
                 nv.getTrangThai(),
                 nv.getMaNV()
         );
@@ -118,6 +120,16 @@ public class NhanVienDAL {
         String sql = "Select * from nhanvien where SDT=?";
         try {
             ResultSet rs = DBConnection.executeQuery(sql, SDT);
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public boolean checkCCCD(String CCCD){
+        String sql = "Select * from nhanvien where CCCD=?";
+        try {
+            ResultSet rs = DBConnection.executeQuery(sql, CCCD);
             return rs.next();
         } catch (Exception e) {
             e.printStackTrace();
@@ -154,8 +166,7 @@ public class NhanVienDAL {
 
     public List<NhanVienDTO> searchNhanVien(String keyword) {
         List<NhanVienDTO> list = new ArrayList<>();
-        // Thêm dấu ngoặc đơn để nhóm các điều kiện với OR
-        String sql = "SELECT * FROM NhanVien WHERE (TenNV LIKE ? OR SDT LIKE ?) AND TrangThai = 1";
+        String sql = "SELECT * FROM NhanVien WHERE (TenNV LIKE ? OR SDT LIKE ? ) AND TrangThai = 1";
         ResultSet rs = DBConnection.executeQuery(sql, "%" + keyword + "%", "%" + keyword + "%");
     
         try {

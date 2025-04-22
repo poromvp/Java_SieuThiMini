@@ -132,8 +132,7 @@ public class EditNhanVienDialog extends JDialog {
         if (imageFile.exists()) {
             try {
                 ImageIcon icon = new ImageIcon(imageFile.getPath());
-                Image img = icon.getImage().getScaledInstance(
-                        imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_SMOOTH);
+                Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 imageLabel.setIcon(new ImageIcon(img));
             } catch (Exception e) {
                 System.out.println("Lỗi khi tải ảnh: " + e.getMessage());

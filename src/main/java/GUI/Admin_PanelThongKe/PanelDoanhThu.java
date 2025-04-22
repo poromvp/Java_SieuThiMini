@@ -3,14 +3,13 @@ package GUI.Admin_PanelThongKe;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 
 import BLL.DonHangBLL;
 import DTO.DonHangDTO;
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 import GUI.ComponentCommon.StyledTable;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
@@ -73,7 +72,8 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
-        TableControl.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
+        StyledTable.hoverTable(tb,model);
         JScrollPane scr = new JScrollPane(tb);
         pn3.add(scr, BorderLayout.CENTER);
         // Thêm sự kiện chuột phải cho bảng

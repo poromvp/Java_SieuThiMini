@@ -10,13 +10,12 @@ import DTO.TheThanhVienDTO;
 import java.awt.*;
 import java.util.ArrayList;
 
-import GUI.TienIch;
-import GUI.Admin_PanelThongKe.TableControl;
+import GUI.ComponentCommon.*;
 
 public class PanelMainThanhVien extends JPanel {
     JPanel pn1, pn2;
     JButton btnThem, btnXoa, btnSua, btnTim, btnXemBlock;
-    JTable tb;
+    StyledTable tb;
     DefaultTableModel model;
     private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
 
@@ -65,15 +64,12 @@ public class PanelMainThanhVien extends JPanel {
         initPanel(pn2, "Danh sách");
         pn2.setLayout(new BorderLayout());
         String[] tencot = { "Mã thành viên", "Họ tên", "Số điện thoại", "Điểm tích lũy" };
-        model = new DefaultTableModel(tencot, 0) {
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
+        Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
         loadThanhVien(TTV);
-        tb = new JTable(model);
-        TableControl.TableStyle(tb, model);
-        TableControl.TableEvent(tb, model, "KH");
+        StyledTable.hoverTable(tb, model);        
+        StyledTable.TableEvent(tb, model, "KH");
         JScrollPane scr = new JScrollPane(tb);
         pn2.add(scr, BorderLayout.CENTER);
     }

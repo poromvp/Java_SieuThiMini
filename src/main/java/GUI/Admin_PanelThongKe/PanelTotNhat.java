@@ -9,7 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 import GUI.ComponentCommon.StyledTable;
 
 public class PanelTotNhat extends JPanel {

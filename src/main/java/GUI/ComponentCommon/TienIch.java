@@ -1,4 +1,4 @@
-package GUI;
+package GUI.ComponentCommon;
 
 import javax.swing.*;
 
@@ -82,9 +82,9 @@ public class TienIch {
         nut.setOpaque(true); // Cho phép vẽ màu nền
 
         // Màu sắc
-        Color normalColor = new Color(30, 144, 255);
-        Color hoverColor = new Color(0, 102, 204);
-        Color clickColor = new Color(0, 51, 153);
+        Color normalColor = new Color(33,58,89);
+        Color hoverColor = Color.GRAY;
+        Color clickColor = new Color(18, 31, 47);
 
         // Đặt màu ban đầu
         nut.setBackground(normalColor);
@@ -139,13 +139,13 @@ public class TienIch {
         if (rank == 1) { // title
             label.setForeground(Color.BLACK); // Màu đen
         } else if (rank == 2) { // số thống kê
-            label.setForeground(new Color(30, 144, 255)); // Màu xanh dương
+            label.setForeground(new Color(33,58,89)); // Màu xanh dương
 
             // Đặt viền cho label (tùy chọn)
-            label.setBorder(BorderFactory.createLineBorder(new Color(30, 144, 255), 1, true));
+            label.setBorder(BorderFactory.createLineBorder(new Color(33,58,89), 1, true));
             label.setBackground(Color.WHITE);
             // Màu sắc
-            Color normalColor = new Color(30, 144, 255);
+            Color normalColor = new Color(33,58,89);
             Color hoverColor = new Color(210, 53, 29);
             // Sự kiện hover và click
             label.addMouseListener(new MouseAdapter() {

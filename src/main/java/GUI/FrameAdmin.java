@@ -8,6 +8,7 @@ import javax.swing.*;
 
 import GUI.Admin_PanelThongKe.PanelMainThongKe;
 import GUI.Admin_TheThanhVien.PanelMainThanhVien;
+import GUI.ComponentCommon.TienIch;
 import GUI.DashBoardPanel.MainDashBoard;
 import GUI.DiscountManagementPanel;
 import GUI.FormNhanVien.FormMainNhanVien;
@@ -19,7 +20,7 @@ import JDBC.DBConnection;
 public class FrameAdmin extends JFrame implements ActionListener {
 
     private JPanel rightPn;
-    private LeftSidebarMenu leftMenu;  
+    private LeftSidebarMenu leftMenu;
 
     public FrameAdmin() {
         setTitle("Frame Quản Lý");
@@ -30,15 +31,25 @@ public class FrameAdmin extends JFrame implements ActionListener {
         setLayout(new BorderLayout());
 
         leftMenu = new LeftSidebarMenu();
-        leftMenu.setActionListener(this);  
+        leftMenu.setActionListener(this);
         leftMenu.setPreferredSize(new Dimension(250, 0));
 
         add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
-        panelDashBoard();  
+        panelDashBoard();
 
         add(rightPn, BorderLayout.CENTER);
+
+        Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+            if (event.getID() == WindowEvent.WINDOW_OPENED) {
+                Window window = (Window) event.getSource();
+                ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/supermarket.png"));
+                Image img = icon.getImage();
+                Image resizedImg = img.getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+                window.setIconImage(new ImageIcon(resizedImg).getImage());
+            }
+        }, AWTEvent.WINDOW_EVENT_MASK);
 
         setVisible(true);
     }
@@ -48,7 +59,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public void panelNhanVien() {
-        Connection conn = DBConnection.getConnection(); 
+        Connection conn = DBConnection.getConnection();
         rightPn.removeAll();
         rightPn.setBackground(new Color(95, 200, 150));
         rightPn.setLayout(new BorderLayout());
@@ -66,7 +77,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
-        FormProduct productPanel= new FormProduct();
+        FormProduct productPanel = new FormProduct();
         rightPn.add(productPanel, BorderLayout.CENTER);
 
         rightPn.revalidate();
@@ -77,8 +88,8 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.removeAll();
         rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
-        PanelMainThongKe mainPanel=new PanelMainThongKe();
-        rightPn.add(mainPanel,BorderLayout.CENTER);
+        PanelMainThongKe mainPanel = new PanelMainThongKe();
+        rightPn.add(mainPanel, BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
         add(rightPn);
@@ -95,7 +106,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
     }
 
-    public void panelDashBoard(){
+    public void panelDashBoard() {
         rightPn.removeAll();
         rightPn.setLayout(new BorderLayout());
 
@@ -112,7 +123,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
         PanelMainThanhVien mainPanel = new PanelMainThanhVien();
-        rightPn.add(mainPanel,BorderLayout.CENTER);
+        rightPn.add(mainPanel, BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
         add(rightPn);
@@ -143,7 +154,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
             panelTaiKhoan();
         } else if (e.getSource() == leftMenu.getBtnLogout()) {
             JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
-        } else if (e.getSource() == leftMenu.getBtnTheTV()){
+        } else if (e.getSource() == leftMenu.getBtnTheTV()) {
             panelTheThanhVien();
         }else if (e.getSource() == leftMenu.getBtnKM()){
             panelKhuyenMai();

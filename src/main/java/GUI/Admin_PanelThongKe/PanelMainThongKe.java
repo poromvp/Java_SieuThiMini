@@ -6,7 +6,7 @@ import java.awt.*;
 public class PanelMainThongKe extends JPanel{
 
     public PanelMainThongKe() {
-        setBackground(new Color(30, 144, 255));
+        setBackground(new Color(33,58,89));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JTabbedPane tab = new JTabbedPane();

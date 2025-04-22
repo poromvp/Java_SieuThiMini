@@ -14,8 +14,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import GUI.FrameEmployee;
 import GUI.ComponentCommon.StyledLeftMenubutton;
+import GUI.FrameEmployee;
 
 public class LeftMenu extends JPanel implements ActionListener {
 
@@ -24,11 +24,11 @@ public class LeftMenu extends JPanel implements ActionListener {
     private JButton btn_orderManagement;
     private JButton btn_report;
     // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
-
+    private Color bgColor = new Color(33,58,89);
     public LeftMenu() { 
         
         
-        setBackground(Color.white);
+        setBackground(bgColor);
         setPreferredSize(new Dimension(230, getHeight()));
         setLayout(new FlowLayout());
         Border emptyBorder = BorderFactory.createEmptyBorder(0, 10, 0, 0);

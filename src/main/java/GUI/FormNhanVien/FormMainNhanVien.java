@@ -27,7 +27,7 @@ public class FormMainNhanVien extends JPanel {
         infoPanel = new InfoPanelNV();
         employeeTablePanel = new FormTableNhanVien(conn, infoPanel);
         FormSearchNhanVien searchPanel = new FormSearchNhanVien(employeeTablePanel);
-        FormFilterNV filterPanel = new FormFilterNV();
+        FormFilterNV filterPanel = new FormFilterNV(employeeTablePanel);
         topPanel.add(searchPanel);
         topPanel.add(filterPanel);
 

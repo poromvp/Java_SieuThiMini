@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +23,8 @@ public class FormTableNhanVien extends JPanel {
     private NhanVienBLL nhanVienBLL;
     private Object[][] data;
     private Connection conn;
-
+    String[] columnNames = {"Mã NV", "Họ Tên", "Giới Tính", "Ngày Sinh", "CCCD", "Địa Chỉ", "Số ĐT", "Lương", "Trạng Thái"};
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     public FormTableNhanVien(Connection conn, InfoPanelNV infoPanel) {
         this.conn = conn;
         this.infoPanel = infoPanel;
@@ -37,11 +39,9 @@ public class FormTableNhanVien extends JPanel {
         loadNhanVienTable();
     }
     public void loadNhanVienTable() {
-        String[] columnNames = {"Mã NV", "Họ Tên", "Giới Tính", "Ngày Sinh", "CCCD", "Địa Chỉ", "Số ĐT", "Lương", "Trạng Thái"};
     
         try {
             List<NhanVienDTO> ds = nhanVienBLL.getAllNhanVien();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     
             data = new Object[ds.size()][columnNames.length];
     
@@ -72,11 +72,9 @@ public class FormTableNhanVien extends JPanel {
         }
     }
     public void searchAndUpdateTable(String keyword) {
-        String[] columnNames = {"Mã NV", "Họ Tên", "Giới Tính", "Ngày Sinh", "CCCD", "Địa Chỉ", "Số ĐT", "Lương", "Trạng Thái"};
     
         try {
             List<NhanVienDTO> ds = nhanVienBLL.searchNhanVien(keyword);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
     
             Object[][] newData = new Object[ds.size()][columnNames.length];
             for (int i = 0; i < ds.size(); i++) {
@@ -113,11 +111,11 @@ public class FormTableNhanVien extends JPanel {
         removeAll();
         setLayout(new BorderLayout()); 
     
-        String[] columnNames = {"Mã NV", "Họ Tên", "Giới Tính", "Ngày Sinh", "CCCD", "Địa Chỉ", "Số ĐT", "Lương", "Trạng Thái"};
+        
     
         try {
             List<NhanVienDTO> ds = nhanVienBLL.getAllNhanVien();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            
     
             Object[][] newData = new Object[ds.size()][columnNames.length];
     
@@ -196,7 +194,85 @@ public class FormTableNhanVien extends JPanel {
             }
         });
     }
+    public void locNhanVien(String doTuoi, String gioiTinh, String khuVuc) {
+        int currentYear = java.time.Year.now().getValue();
+        
+        try {
+            List<NhanVienDTO> ds = nhanVienBLL.getAllNhanVien();
+            List<NhanVienDTO> filteredList = new java.util.ArrayList<>();
+        
+            int minAge = -1;
+            int maxAge = -1;
+        
+            if (doTuoi != null && doTuoi.matches("\\d{2}-\\d{2,3}")) {
+                String[] parts = doTuoi.split("-");
+                minAge = Integer.parseInt(parts[0]);
+                maxAge = Integer.parseInt(parts[1]);
+            }
+        
+            for (NhanVienDTO nv : ds) {
+                boolean match = true;
+        
+                if (gioiTinh != null && !nv.getGioiTinh().equalsIgnoreCase(gioiTinh)) {
+                    match = false;
+                }
+        
+                if (khuVuc != null && (nv.getDiaChi() == null || !nv.getDiaChi().toLowerCase().contains(khuVuc.toLowerCase()))) {
+                    match = false;
+                }
+        
+                if (minAge != -1 && nv.getNgaySinh() != null) {
+                    java.util.Date utilDate = nv.getNgaySinh();
+                    java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); 
+                    LocalDate birthDate = sqlDate.toLocalDate(); 
+                    
+                    int birthYear = birthDate.getYear();
+                    int age = currentYear - birthYear;
+                    if (age < minAge || age > maxAge) {
+                        match = false;
+                    }
+                }
+                
+        
+                if (match) {
+                    filteredList.add(nv);
+                }
+            }
+        
+            Object[][] newData = new Object[filteredList.size()][columnNames.length];
+        
+            for (int i = 0; i < filteredList.size(); i++) {
+                NhanVienDTO nv = filteredList.get(i);
+                newData[i][0] = nv.getMaNV();
+                newData[i][1] = nv.getTenNV();
+                newData[i][2] = nv.getGioiTinh();
+                newData[i][3] = nv.getNgaySinh() != null ? sdf.format(nv.getNgaySinh()) : "";
+                newData[i][4] = nv.getCCCD();
+                newData[i][5] = nv.getDiaChi();
+                newData[i][6] = nv.getSDT();
+                newData[i][7] = nv.getLuong();
+                newData[i][8] = nv.getTrangThai() == 1 ? "Đang làm việc" : "Nghỉ việc";
+            }
+        
+            removeAll();
+            tablePanel = new StyledTable(newData, columnNames);
+            tablePanel.setRowSelectionAllowed(true);
+            tablePanel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+            JScrollPane scrollPane = new JScrollPane(tablePanel);
+            scrollPane.setBackground(Color.WHITE);
+            add(scrollPane, BorderLayout.CENTER);
+            addTableClickEvent();
+            revalidate();
+            repaint();
+        
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Lỗi khi lọc dữ liệu: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 
+        
+    
     public void refreshTable() {
         reloadData();
     }

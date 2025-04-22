@@ -17,11 +17,12 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 
 import GUI.ComponentCommon.ButtonCustom;
+import GUI.ComponentCommon.CustomComboBox;
 import GUI.ComponentCommon.StyledTextField;
 
 public class FormFilterNV extends JPanel implements ActionListener {
-        private JComboBox<String> doTuoiComb;
-        private JComboBox<String> gioiTinhComb;
+        private CustomComboBox doTuoiComb;
+        private CustomComboBox gioiTinhComb;
         private StyledTextField khuVucField;
         private ButtonCustom btnFilter = new ButtonCustom("Lọc",16,"blue");
         
@@ -40,9 +41,10 @@ public class FormFilterNV extends JPanel implements ActionListener {
             JLabel doTuoiLabel = new JLabel("Độ tuổi:");
             JLabel gioiTinhLabel = new JLabel("Giới tính:");
             JLabel khuVucLabel = new JLabel("Khu vực:");
+            filterPanel.setBackground(Color.WHITE);
             
-            doTuoiComb = new JComboBox<>(doTuoiStr);
-            gioiTinhComb = new JComboBox<>(gioiTinhStr);
+            doTuoiComb = new CustomComboBox(doTuoiStr);
+            gioiTinhComb = new CustomComboBox(gioiTinhStr);
             khuVucField = new StyledTextField(); 
     
             filterPanel.add(doTuoiLabel);
@@ -55,7 +57,7 @@ public class FormFilterNV extends JPanel implements ActionListener {
             JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 5));
             btnPanel.add(btnFilter);
             btnPanel.add(btnCancel);
-    
+            btnPanel.setBackground(Color.WHITE);
             btnCancel.addActionListener(this);
             btnFilter.addActionListener(this);
             add(filterPanel, BorderLayout.CENTER); 

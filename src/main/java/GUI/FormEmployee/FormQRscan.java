@@ -84,7 +84,7 @@ public class FormQRscan extends JPanel {
     public FormQRscan() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(600, 100));
-        setBackground(new Color(30, 144, 255));
+        setBackground(new Color(17, 32, 51));
 
         label_qr = new JLabel();
         label_qr.setPreferredSize(new Dimension(150, 150));

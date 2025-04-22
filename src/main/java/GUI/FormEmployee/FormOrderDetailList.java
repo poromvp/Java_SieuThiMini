@@ -31,6 +31,7 @@ public class FormOrderDetailList extends JPanel {
     private static DefaultTableModel tableModel;
     private static JScrollPane scrollPane;
     private static JPopupMenu popupMenu;
+    private Color bgColor = new Color(17, 32, 51);
     
     private static final String[] HEADER = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng", "thành tiền"};
     private static final double[] WIDTH_COL = {0.1, 0.4, 0.2, 0.1, 0.1, 0.1};
@@ -103,7 +104,7 @@ public class FormOrderDetailList extends JPanel {
         tableProduct.setFont(new Font("Arial", Font.PLAIN, 14));
         tableProduct.setRowHeight(30);
         tableProduct.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        tableProduct.getTableHeader().setBackground(new Color(30, 144, 255));
+        tableProduct.getTableHeader().setBackground(new Color(17, 32, 51));
         tableProduct.getTableHeader().setForeground(Color.WHITE);
         tableProduct.setSelectionBackground(new Color(200, 230, 255));
         tableProduct.setSelectionForeground(Color.BLACK);

@@ -14,10 +14,10 @@ public class FormSearchNhanVien extends JPanel {
         this.tablePanel = tablePanel;
         setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
         setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
-
+        setBackground(Color.white);
         searchField = new StyledTextField();
-        searchField.setPreferredSize(new Dimension(200, 30));
-
+        searchField.setPreferredSize(new Dimension(300, 30));
+        searchField.setPlaceholder("Nhập tên, sdt, cccd,...");
         searchField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {

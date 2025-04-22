@@ -3,6 +3,7 @@ package GUI.FormNhanVien;
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
 import GUI.ComponentCommon.ButtonCustom;
+import GUI.ComponentCommon.CustomComboBox;
 import GUI.ComponentCommon.StyledTextField;
 import com.toedter.calendar.JDateChooser;
 
@@ -19,7 +20,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class AddNhanVienDialog extends JDialog {
     private StyledTextField hoTenField = new StyledTextField();
-    private JComboBox<String> cbGioiTinh = new JComboBox<>(new String[]{"Nam", "Nữ"});
+    String[] listGioiTinh = {"Nam", "Nữ"};
+    private CustomComboBox cbGioiTinh = new CustomComboBox (listGioiTinh);
     private JDateChooser ngaySinhChooser = new JDateChooser();
     private StyledTextField cccdField = new StyledTextField();
     private StyledTextField diaChiField = new StyledTextField();
@@ -89,11 +91,11 @@ public class AddNhanVienDialog extends JDialog {
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setBackground(Color.WHITE);
-        ButtonCustom btnSave = new ButtonCustom("Lưu", "save", 12, 40, 40);
+        ButtonCustom btnSave = new ButtonCustom("Thêm", 12,"black");
         btnSave.addActionListener(e -> saveNhanVien());
         buttonPanel.add(btnSave);
 
-        ButtonCustom btnCancel = new ButtonCustom("Hủy", "cancel", 12, 40, 40);
+        ButtonCustom btnCancel = new ButtonCustom("Hủy",12, "red");
         btnCancel.addActionListener(e -> dispose());
         buttonPanel.add(btnCancel);
 

@@ -16,6 +16,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
     private JButton btnLogout;
     private JButton btnTheTV;
     private JButton btnKM;
+    private JButton selectedButton = null;
 
     private ActionListener listener;  
 
@@ -79,7 +80,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         employeePanel.add(nameLabel);
 
         // Chức vụ
-        JLabel roleLabel = new JLabel("Nhân viên kho");
+        JLabel roleLabel = new JLabel("Quản lý");
         roleLabel.setForeground(Color.LIGHT_GRAY);
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -139,19 +140,37 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(12, 192, 223)); // Màu nền khi hover
+                if (button != selectedButton) {
+                    button.setBackground(new Color(145, 228, 243)); // Hover
+                }
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor); // Màu nền khi không hover
+                if (button != selectedButton) {
+                    button.setBackground(bgColor); // Trở về bình thường
+                }
             }
         });
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (listener != null) {
-            listener.actionPerformed(e); 
+        if (e.getSource() instanceof JButton) {
+            JButton clickedButton = (JButton) e.getSource();
+            highlightSelectedButton(clickedButton);
         }
+
+        if (listener != null) {
+            listener.actionPerformed(e);
+        }
+    }
+
+    private void highlightSelectedButton(JButton button) {
+        if (selectedButton != null) {
+            selectedButton.setBackground(bgColor); // reset nút trước đó
+        }
+        button.setBackground(new Color(12, 192, 223)); // màu khi chọn
+        selectedButton = button;
     }
 
     public void setActionListener(ActionListener listener) {

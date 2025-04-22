@@ -153,26 +153,25 @@ public class FormTableNhanVien extends JPanel {
     
     
     private void addTableClickEvent() {
+        // Xóa các listener cũ
         for (java.awt.event.MouseListener listener : tablePanel.getMouseListeners()) {
             tablePanel.removeMouseListener(listener);
         }
+        
         tablePanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int rowAtPoint = tablePanel.rowAtPoint(e.getPoint());
                 if (rowAtPoint != -1) {
                     tablePanel.setRowSelectionInterval(rowAtPoint, rowAtPoint);
-                    System.out.println("Row selected: " + rowAtPoint);
                 } else {
                     tablePanel.clearSelection();
-                    System.out.println("No row at click point, selection cleared");
                 }
-
+    
                 if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
                     int selectedRow = tablePanel.getSelectedRow();
                     if (selectedRow != -1) {
                         if (infoPanel == null) {
-                            System.out.println("Error: infoPanel is null");
                             JOptionPane.showMessageDialog(FormTableNhanVien.this, "Lỗi: Không thể truy cập panel thông tin!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
@@ -186,17 +185,20 @@ public class FormTableNhanVien extends JPanel {
                             String soDT = tablePanel.getValueAt(selectedRow, 6) != null ? String.valueOf(tablePanel.getValueAt(selectedRow, 6)) : "";
                             String luong = tablePanel.getValueAt(selectedRow, 7) != null ? String.valueOf(tablePanel.getValueAt(selectedRow, 7)) : "";
                             String trangThai = tablePanel.getValueAt(selectedRow, 8) != null ? String.valueOf(tablePanel.getValueAt(selectedRow, 8)) : "";
-                            System.out.println("Setting data: MaNV=" + maNV + ", HoTen=" + hoTen + ", GioiTinh=" + gioiTinh + 
-                                               ", NgaySinh=" + ngaySinh + ", CCCD=" + cccd + ", DiaChi=" + diaChi + 
-                                               ", SoDT=" + soDT + ", Luong=" + luong + ", TrangThai=" + trangThai);
-                            infoPanel.setEmployeeData(maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai);
+                            
+                            NhanVienDTO nv = nhanVienBLL.getNhanVienByMa(maNV);
+                            if (nv != null) {
+                                String anhNV = nv.getImage();
+                                System.out.println("Đường dẫn ảnh: " + anhNV); // In ra đường dẫn ảnh để kiểm tra
+                                // Tiếp tục xử lý
+                                infoPanel.setEmployeeData(maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai, anhNV);
+                            }
+                            
                         } catch (Exception ex) {
-                            System.out.println("Error in double-click: " + ex.getMessage());
                             ex.printStackTrace();
                             JOptionPane.showMessageDialog(FormTableNhanVien.this, "Lỗi khi truyền dữ liệu: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                         }
                     } else {
-                        System.out.println("No row selected after double-click");
                         JOptionPane.showMessageDialog(FormTableNhanVien.this, "Vui lòng chọn một hàng trong bảng!", "Lỗi", JOptionPane.WARNING_MESSAGE);
                     }
                 }

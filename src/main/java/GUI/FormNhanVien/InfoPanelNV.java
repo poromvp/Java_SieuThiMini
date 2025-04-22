@@ -5,6 +5,7 @@ import javax.swing.*;
 import GUI.ComponentCommon.ButtonCustom;
 
 import java.awt.*;
+import java.io.File;
 
 public class InfoPanelNV extends JPanel {
     private JLabel hoTenLabel = new JLabel();
@@ -57,9 +58,8 @@ public class InfoPanelNV extends JPanel {
         infoPanel.add(tinhTrangLabel);
         add(infoPanel, BorderLayout.CENTER);
     }
-
     public void setEmployeeData(String maNV, String hoTen, String gioiTinh, String ngaySinh, String cccd,
-                               String diaChi, String soDT, String luong, String trangThai) {
+    String diaChi, String soDT, String luong, String trangThai, String anhNV) {
 
         this.currentMaNV = maNV;
         hoTenLabel.setText(hoTen != null ? hoTen : "");
@@ -70,11 +70,43 @@ public class InfoPanelNV extends JPanel {
         soDTLabel.setText(soDT != null ? soDT : "");
         luongLabel.setText(luong != null ? luong : "");
         tinhTrangLabel.setText(trangThai != null ? trangThai : "");
-        avatarLabel.setText("No Image"); // Placeholder
 
-        revalidate();
-        repaint();
-    }
+        // Xử lý hiển thị ảnh
+        if (anhNV != null && !anhNV.isEmpty()) {
+            try {
+                String imageFolderPath = "src/main/resources/images/avtMember/";
+                String fullImagePath = imageFolderPath + anhNV;
+                System.out.println("Đang cố gắng tải ảnh từ: " + fullImagePath);
+
+                File imageFile = new File(fullImagePath);
+                if (!imageFile.exists()) {
+                    System.out.println("File không tồn tại: " + fullImagePath);
+                    avatarLabel.setText("No Image");
+                    avatarLabel.setIcon(null);
+                    return;
+            }
+
+                ImageIcon imageIcon = new ImageIcon(fullImagePath);
+                Image image = imageIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                avatarLabel.setIcon(new ImageIcon(image));
+                avatarLabel.setText(""); 
+
+                System.out.println("Tải ảnh thành công!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Lỗi khi tải ảnh: " + e.getMessage());
+                avatarLabel.setText("No Image");
+                avatarLabel.setIcon(null);
+            }
+            } else {
+                System.out.println("Không có tên tệp ảnh hoặc tên rỗng");
+                avatarLabel.setText("No Image");
+                avatarLabel.setIcon(null);
+            }
+
+            revalidate();
+            repaint();
+        }
 
     public void setTablePanel(FormTableNhanVien tablePanel) {
         this.tablePanel = tablePanel;

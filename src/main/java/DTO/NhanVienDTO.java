@@ -12,6 +12,7 @@ public class NhanVienDTO {
     private String sdt;
     private String chucVu;
     private double luong;
+    private String image;
     private int trangThai;
 
     public NhanVienDTO() {}
@@ -56,6 +57,8 @@ public class NhanVienDTO {
 
     public double getLuong() { return luong; }
     public void setLuong(double luong) { this.luong = luong; }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
 
     public int getTrangThai() { return trangThai; }
     public void setTrangThai(int trangThai) { this.trangThai = trangThai; }

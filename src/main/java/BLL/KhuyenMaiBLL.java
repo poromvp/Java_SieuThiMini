@@ -1,6 +1,5 @@
 package BLL;
 
-
 import java.util.ArrayList;
 
 import DAL.KhuyenMaiDAL;
@@ -27,9 +26,25 @@ public class KhuyenMaiBLL {
             return false;
         }
 
-        
-
         int result = KhuyenMaiDAL.insertDiscount(khuyenMai);
+        return result > 0;
+    }
+
+    public static boolean updateDiscount(KhuyenMaiDTO khuyenMai) {
+        if (khuyenMai == null || khuyenMai.getMaKM() <= 0 || khuyenMai.getTenKM().trim().isEmpty()) {
+            System.out.println("Dữ liệu khuyến mãi không hợp lệ!");
+            return false;
+        }
+        int result = KhuyenMaiDAL.updateDiscount(khuyenMai);
+        return result > 0;
+    }
+
+    public static boolean deleteDiscount(int maKM) {
+        if (maKM <= 0) {
+            System.out.println("Mã khuyến mãi không hợp lệ!");
+            return false;
+        }
+        int result = KhuyenMaiDAL.deleteDiscount(maKM);
         return result > 0;
     }
 
@@ -46,13 +61,5 @@ public class KhuyenMaiBLL {
 
     public static void main(String[] args) {
         printAllDiscounts();
-
-        KhuyenMaiDTO newDiscount = new KhuyenMaiDTO(10, "Khuyến mãi Tết", null, null, "Đang diễn ra");
-        boolean added = addDiscount(newDiscount);
-        if (added) {
-            System.out.println("Thêm khuyến mãi thành công!");
-        } else {
-            System.out.println("Thêm khuyến mãi thất bại!");
-        }
     }
 }

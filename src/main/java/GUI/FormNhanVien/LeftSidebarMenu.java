@@ -15,6 +15,8 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
     private JButton btnAccount;
     private JButton btnLogout;
     private JButton btnTheTV;
+    private JButton btnKM;
+    private JButton selectedButton = null;
 
     private ActionListener listener;  
 
@@ -48,6 +50,10 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         return btnTheTV;
     }
 
+    public JButton getBtnKM(){
+        return btnKM;
+    }
+
     public LeftSidebarMenu() {
         setBackground(bgColor);
         setMaximumSize(new Dimension(250, getHeight()));
@@ -74,7 +80,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         employeePanel.add(nameLabel);
 
         // Chức vụ
-        JLabel roleLabel = new JLabel("Nhân viên kho");
+        JLabel roleLabel = new JLabel("Quản lý");
         roleLabel.setForeground(Color.LIGHT_GRAY);
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -96,6 +102,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         btnAccount = createButton("Tài Khoản", "src/main/resources/images/account.png");
         btnLogout = createButton("Đăng Xuất", "src/main/resources/images/exit.png");
         btnTheTV = createButton("Thẻ Thành Viên", "src/main/resources/images/thethanhvien.png");
+        btnKM = createButton("Khuyến Mãi", "src/main/resources/images/discount.png");
     
         // Thêm các nút vào panel
         add(btnHome);
@@ -103,6 +110,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         add(btnProduct);
         add(btnAccount);
         add(btnTheTV);
+        add(btnKM);
         add(btnReport);
         
         // Thêm khoảng trống linh hoạt để đẩy nút đăng xuất xuống dưới cùng
@@ -132,19 +140,37 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(12, 192, 223)); // Màu nền khi hover
+                if (button != selectedButton) {
+                    button.setBackground(new Color(145, 228, 243)); // Hover
+                }
             }
+
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor); // Màu nền khi không hover
+                if (button != selectedButton) {
+                    button.setBackground(bgColor); // Trở về bình thường
+                }
             }
         });
     }
     
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (listener != null) {
-            listener.actionPerformed(e); 
+        if (e.getSource() instanceof JButton) {
+            JButton clickedButton = (JButton) e.getSource();
+            highlightSelectedButton(clickedButton);
         }
+
+        if (listener != null) {
+            listener.actionPerformed(e);
+        }
+    }
+
+    private void highlightSelectedButton(JButton button) {
+        if (selectedButton != null) {
+            selectedButton.setBackground(bgColor); // reset nút trước đó
+        }
+        button.setBackground(new Color(12, 192, 223)); // màu khi chọn
+        selectedButton = button;
     }
 
     public void setActionListener(ActionListener listener) {

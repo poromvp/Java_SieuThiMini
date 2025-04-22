@@ -1,17 +1,10 @@
 package GUI.FormEmployee;
 
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
 
 import GUI.ComponentCommon.StyledLeftMenubutton;
@@ -33,6 +26,36 @@ public class LeftMenu extends JPanel implements ActionListener {
         setLayout(new FlowLayout());
         Border emptyBorder = BorderFactory.createEmptyBorder(0, 10, 0, 0);
         setBorder(emptyBorder);
+
+        JPanel employeePanel = new JPanel();
+        employeePanel.setLayout(new BoxLayout(employeePanel, BoxLayout.Y_AXIS));
+        employeePanel.setBackground(new Color(25,45,70));
+        employeePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+
+        // Avatar nhân viên (có thể thay bằng ảnh thật sau này)
+        ImageIcon baseAvata = new ImageIcon("src/main/resources/images/icon/boy.png");
+        Image resizeAvata = baseAvata.getImage().getScaledInstance(50,50,Image.SCALE_SMOOTH);
+        JLabel avtLabel = new JLabel(new ImageIcon(resizeAvata));
+        avtLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        avtLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+        employeePanel.add(avtLabel);
+
+        // Tên nhân viên
+        JLabel nameLabel = new JLabel("Nguyễn Văn A");
+        nameLabel.setForeground(Color.WHITE);
+        nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        employeePanel.add(nameLabel);
+
+        // Chức vụ
+        JLabel roleLabel = new JLabel("Quản lý");
+        roleLabel.setForeground(Color.LIGHT_GRAY);
+        roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        employeePanel.add(roleLabel);
+
+        add(employeePanel);
+        add(Box.createVerticalGlue());
 
         btn_home =  new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
         btn_sell = new JButton("bán hàng", new ImageIcon("src/main/resources/images/selling.png"));

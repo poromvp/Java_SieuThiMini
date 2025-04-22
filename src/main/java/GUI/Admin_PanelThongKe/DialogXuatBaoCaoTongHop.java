@@ -9,7 +9,7 @@ import java.util.Date;
 
 import com.toedter.calendar.JDateChooser;
 
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 
 public class DialogXuatBaoCaoTongHop extends JDialog implements ActionListener, ItemListener {
     JRadioButton rdNgay, rdThang, rdNam, rdTuyChinh, rdTonKho, rdNhap, rdNhanvien, rdPDF, rdExcel, rdTxt;

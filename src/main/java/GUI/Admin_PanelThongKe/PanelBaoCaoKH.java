@@ -10,7 +10,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.TheThanhVienBLL;
 import DTO.TheThanhVienDTO;
-import GUI.TienIch;
+import GUI.ComponentCommon.*;
 import GUI.ComponentCommon.StyledTable;
 
 public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListener {
@@ -98,7 +98,8 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
         loadThanhVien(TTV);
-        TableControl.TableEvent(tb, model, "KH"); // Giữ sự kiện double-click
+        StyledTable.hoverTable(tb, model);
+        StyledTable.TableEvent(tb, model, "KH"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();

@@ -4,8 +4,10 @@ import javax.swing.*;
 
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
+import GUI.ComponentCommon.TienIch;
 
 import java.awt.*;
+import java.awt.event.*;
 
 public class FrameLogin extends JFrame {
     public FrameLogin() {
@@ -63,6 +65,15 @@ public class FrameLogin extends JFrame {
 
         add(infoPanel, BorderLayout.EAST);
 
+        Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+            if (event.getID() == WindowEvent.WINDOW_OPENED) {
+                Window window = (Window) event.getSource();
+                ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/supermarket.png"));
+                Image img = icon.getImage();
+                Image resizedImg = img.getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+                window.setIconImage(new ImageIcon(resizedImg).getImage());
+            }
+        }, AWTEvent.WINDOW_EVENT_MASK);
         setVisible(true);
     }
 

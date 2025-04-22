@@ -10,8 +10,7 @@ import BLL.DonHangBLL;
 import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
 import DTO.TheThanhVienDTO;
-import GUI.TienIch;
-import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.*;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -221,7 +220,8 @@ public class PanelXemKH extends JPanel {
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         modelMini = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
-        TableControl.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
+        StyledTable.hoverTable(tb, modelMini);
+        StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         scr.setPreferredSize(new Dimension(400, 120)); // Giữ kích thước
         pn3.add(scr, BorderLayout.CENTER);

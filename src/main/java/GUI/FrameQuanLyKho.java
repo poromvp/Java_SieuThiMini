@@ -2,11 +2,11 @@ package GUI;
 
 import javax.swing.*;
 
+import GUI.ComponentCommon.TienIch;
 import GUI.FormWareHouse.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public class FrameQuanLyKho extends JFrame  implements ActionListener{
     private JPanel rightPn;
@@ -29,6 +29,15 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
         panelImport();
         add(rightPn,BorderLayout.CENTER);
         setVisible(true);
+        Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+            if (event.getID() == WindowEvent.WINDOW_OPENED) {
+                Window window = (Window) event.getSource();
+                ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/supermarket.png"));
+                Image img = icon.getImage();
+                Image resizedImg = img.getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+                window.setIconImage(new ImageIcon(resizedImg).getImage());
+            }
+        }, AWTEvent.WINDOW_EVENT_MASK);
     }
 
     public void panelImport(){

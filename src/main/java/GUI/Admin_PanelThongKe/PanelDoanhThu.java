@@ -10,7 +10,6 @@ import javax.swing.table.*;
 import BLL.DonHangBLL;
 import DTO.DonHangDTO;
 import GUI.ComponentCommon.*;
-import GUI.ComponentCommon.StyledTable;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
     JLabel tongdoanhthu, tongdonhang;
@@ -73,7 +72,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         model = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
         StyledTable.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
-        StyledTable.hoverTable(tb,model);
+        StyledTable.hoverTable(tb, model);
         JScrollPane scr = new JScrollPane(tb);
         pn3.add(scr, BorderLayout.CENTER);
         // Thêm sự kiện chuột phải cho bảng
@@ -185,9 +184,9 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTim) {
             PanelTimThK panel = new PanelTimThK();
-            UIManager.put("OptionPane.background", Color.BLACK);
-            UIManager.put("Panel.background", Color.ORANGE);
-            UIManager.put("Button.background", Color.BLACK);
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
             UIManager.put("Button.foreground", Color.WHITE);
             UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
@@ -201,7 +200,30 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                 panel.testt();
             }
         } else if (e.getSource() == exportItem) {
-            JOptionPane.showMessageDialog(null, "In báo cáo doanh thu...");
+            PanelExport panel = new PanelExport();
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+            int result = JOptionPane.showConfirmDialog(null, panel, "Export",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
+            if (result == JOptionPane.OK_OPTION) {
+                if (panel.getSelectedFormat().equals("excel")) {
+                    panel.XuatExccel(model);
+                } else {
+                    panel.XuatPDF(model);
+                }
+            } else if (result == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            }
         }
     }
 }

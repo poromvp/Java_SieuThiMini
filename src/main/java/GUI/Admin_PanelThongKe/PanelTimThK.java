@@ -29,7 +29,7 @@ public class PanelTimThK extends JPanel {
     private JTextField txtMaLoaiSanPham;
 
     public PanelTimThK() {
-        setBackground(Color.ORANGE);
+        setBackground(new Color(33,58,89));
         // Thiết lập layout chính cho panel
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

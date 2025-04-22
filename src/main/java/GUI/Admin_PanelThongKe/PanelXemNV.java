@@ -11,10 +11,13 @@ import DTO.NhanVienDTO;
 import GUI.ComponentCommon.*;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.ArrayList;
 
-public class PanelXemNV extends JPanel {
+public class PanelXemNV extends JPanel implements ActionListener {
     JPanel pn1, pn2, pn3;
+    JPopupMenu popupMenu;
+    JMenuItem searchItem, exportItem;
 
     public PanelXemNV(DefaultTableModel model, int dong) {
         setBackground(new Color(226, 224, 221));
@@ -44,6 +47,19 @@ public class PanelXemNV extends JPanel {
         gbc.gridwidth = 1;
         initPanel3();
         add(pn3, gbc);
+
+        // Thêm popup menu
+        popupMenu = new JPopupMenu();
+        searchItem = new JMenuItem("Tìm Kiếm");
+        exportItem = new JMenuItem("In Báo Cáo");
+        searchItem.addActionListener(this);
+        exportItem.addActionListener(this);
+        popupMenu.add(searchItem);
+        popupMenu.add(exportItem);
+
+        // Thêm sự kiện chuột phải cho bảng
+        showpupop(tb);
+        showpupop(scr);
     }
 
     public String LayChuoiTuBang(DefaultTableModel model, int dong, int cot) {
@@ -194,7 +210,8 @@ public class PanelXemNV extends JPanel {
 
     public void initPanel3() {
         pn3.setLayout(new BorderLayout());
-        pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách các đơn hàng đã thanh toán"), new EmptyBorder(4, 4, 4, 4)));
+        pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách các đơn hàng đã thanh toán"),
+                new EmptyBorder(4, 4, 4, 4)));
         String[] tencot = { "ID", "Tên", "Price", "Date" };
         hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
         hoadontemp b = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
@@ -211,7 +228,7 @@ public class PanelXemNV extends JPanel {
         StyledTable.hoverTable(tb, modelMini);
         StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
-        scr.setPreferredSize(new Dimension(400, 120)); // Giữ kích thước
+        scr.setPreferredSize(new Dimension(600, 120)); // Giữ kích thước
         pn3.add(scr, BorderLayout.CENTER);
     }
 
@@ -219,6 +236,97 @@ public class PanelXemNV extends JPanel {
         modelMini.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
         for (hoadontemp s : dsHoaDon) {
             modelMini.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate() });
+        }
+    }
+
+    public void showpupop(Object obj) {
+        if (obj instanceof JTable tb) {
+            tb.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        } else if (obj instanceof JScrollPane scr) {
+            scr.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    if (e.isPopupTrigger()) {
+                        showPopup(e);
+                    }
+                }
+
+                private void showPopup(MouseEvent e) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            });
+        }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource() == searchItem) {
+            PanelTimVN panel = new PanelTimVN();
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+            int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
+            if (result == 0) {
+                System.out.println("Bạn vừa nhập: ");
+            }
+        } else if (e.getSource() == exportItem) {
+            PanelExport panel = new PanelExport();
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+            int result = JOptionPane.showConfirmDialog(null, panel, "Export",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
+            if (result == JOptionPane.OK_OPTION) {
+                if (panel.getSelectedFormat().equals("excel")) {
+                    panel.XuatExccel(modelMini);
+                } else {
+                    panel.XuatPDF(modelMini);
+                }
+            } else if (result == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            }
         }
     }
 }

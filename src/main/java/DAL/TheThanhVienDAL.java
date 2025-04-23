@@ -141,9 +141,9 @@ public class TheThanhVienDAL {
         );
     }
 
-    // Xóa thẻ thành viên theo mã
+    // Khóa thẻ thành viên theo mã
     public static int deleteMember(int maTV) {
-        String sql = "DELETE FROM TheThanhVien WHERE maTV=?";
+        String sql = "UPDATE TheThanhVien SET trangthai = 'INACTIVE' WHERE maTV=?";
         return DBConnection.executeUpdate(sql, maTV);
     }
 

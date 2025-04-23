@@ -2,6 +2,9 @@ package GUI.ComponentCommon;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -13,6 +16,7 @@ import javax.swing.SwingUtilities;
 
 
 public class StyledTextField extends JTextField {
+    private String placeholder;
     private Color bgColor = new Color(17, 32, 51);
     public StyledTextField() {
         // super(columns);
@@ -51,7 +55,30 @@ public class StyledTextField extends JTextField {
             BorderFactory.createEmptyBorder(5, 10, 5, 10) 
         ));
     }
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
+        repaint();
+    }
 
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+
+        if (placeholder != null && getText().isEmpty() && !isFocusOwner()) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setFont(getFont().deriveFont(Font.ITALIC));
+            g2.setColor(Color.GRAY);
+
+            Insets insets = getInsets();
+            g2.drawString(placeholder, insets.left + 5, getHeight() / 2 + getFont().getSize() / 2 - 2);
+
+            g2.dispose();
+        }
+    }
    
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {

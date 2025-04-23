@@ -80,6 +80,8 @@ public class TienIch {
         nut.setFocusPainted(false); // Bỏ viền khi focus
         nut.setContentAreaFilled(false); // Tắt nền mặc định
         nut.setOpaque(true); // Cho phép vẽ màu nền
+        nut.setVerticalTextPosition(SwingConstants.BOTTOM); // Chữ ở dưới
+        nut.setHorizontalTextPosition(SwingConstants.CENTER); // Chữ căn giữa theo chiều ngang
 
         // Màu sắc
         Color normalColor = new Color(33,58,89);
@@ -279,7 +281,7 @@ public class TienIch {
     public static void timStyle(Object obj) {
         if (obj instanceof JLabel label) {
             label.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            label.setForeground(Color.BLACK);
+            label.setForeground(Color.WHITE);
             label.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -288,7 +290,7 @@ public class TienIch {
 
                 @Override
                 public void mouseExited(MouseEvent e) {
-                    label.setForeground(Color.BLACK);
+                    label.setForeground(Color.WHITE);
                 }
             });
 

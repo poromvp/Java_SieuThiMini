@@ -80,6 +80,7 @@ public class ButtonCustom extends JButton {
         ImageIcon resetURL = new ImageIcon("src/main/resources/images/reset_button.png");
         ImageIcon searchURL = new ImageIcon("src/main/resources/images/icon/search.png");
         ImageIcon hisURL = new ImageIcon("src/main/resources/images/icon/hisIcon.png");
+        ImageIcon exportPDF = new ImageIcon("src/main/resources/images/icon/printer.png");
         switch (type) {
             case "del":
                 this.setIcon(resizeIcon(delURL, w, h));
@@ -98,6 +99,9 @@ public class ButtonCustom extends JButton {
                 break;
             case "his":
                 this.setIcon(resizeIcon(hisURL, w, h));
+                break;
+            case "printer":
+                this.setIcon(resizeIcon(exportPDF, w, h));
                 break;
             default:
                 break;

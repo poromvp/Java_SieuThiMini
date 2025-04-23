@@ -9,6 +9,7 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.DonHangBLL;
 import DTO.DonHangDTO;
+import GUI.Admin_PanelThongKe.PanelExport;
 import GUI.Admin_PanelThongKe.PanelTimThK;
 import GUI.ComponentCommon.*;
 
@@ -62,12 +63,18 @@ public class PanelMainBaoCao extends JPanel implements ActionListener {
         TienIch.nutStyle(btnInBaoCao, "printer.png", 24, 90, 30);
         pn2.add(btnInBaoCao);
 
+        btnTimKiem.setVerticalTextPosition(SwingConstants.BOTTOM); // Chữ ở dưới
+        btnTimKiem.setHorizontalTextPosition(SwingConstants.CENTER); // Chữ căn giữa theo chiều ngang
+        btnInBaoCao.setVerticalTextPosition(SwingConstants.BOTTOM); // Chữ ở dưới
+        btnInBaoCao.setHorizontalTextPosition(SwingConstants.CENTER); // Chữ căn giữa theo chiều ngang
+
         btnTimKiem.addActionListener(this);
         btnInBaoCao.addActionListener(this);
     }
 
     public void initPanel3() {
-        pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách các đơn hàng đã thanh toán"), new EmptyBorder(4, 4, 4, 4)));
+        pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách các đơn hàng đã thanh toán"),
+                new EmptyBorder(4, 4, 4, 4)));
         pn3.setLayout(new BorderLayout());
 
         String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
@@ -127,9 +134,9 @@ public class PanelMainBaoCao extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnTimKiem) {
             PanelTimThK panel = new PanelTimThK();
-            UIManager.put("OptionPane.background", Color.BLACK);
-            UIManager.put("Panel.background", Color.ORANGE);
-            UIManager.put("Button.background", Color.BLACK);
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
             UIManager.put("Button.foreground", Color.WHITE);
             UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
@@ -142,11 +149,31 @@ public class PanelMainBaoCao extends JPanel implements ActionListener {
             if (result == 0) {
                 panel.testt();
             }
-        }
-        if (e.getSource() == btnInBaoCao) {
-            // Placeholder for PDF export functionality
-            // ExportPDF.exportToPDF(tb, "doanh_thu.pdf");
-            // SwingUtilities.invokeLater(() -> new PDFViewer("doanh_thu.pdf").setVisible(true));
+        } else if (e.getSource() == btnInBaoCao) {
+            PanelExport panel = new PanelExport();
+            UIManager.put("OptionPane.background", new Color(33, 58, 89));
+            UIManager.put("Panel.background", new Color(33, 58, 89));
+            UIManager.put("Button.background", Color.GRAY);
+            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+            int result = JOptionPane.showConfirmDialog(null, panel, "Export",
+                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            UIManager.put("OptionPane.background", null);
+            UIManager.put("Panel.background", null);
+            UIManager.put("Button.background", null);
+            UIManager.put("Button.foreground", null);
+            UIManager.put("Button.font", null);
+            if (result == JOptionPane.OK_OPTION) {
+                if (panel.getSelectedFormat().equals("excel")) {
+                    panel.XuatExccel(model);
+                } else {
+                    panel.XuatPDF(model);
+                }
+            } else if (result == JOptionPane.CANCEL_OPTION) {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            } else {
+                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+            }
         }
     }
 }

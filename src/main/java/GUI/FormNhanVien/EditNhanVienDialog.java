@@ -246,7 +246,10 @@ public class EditNhanVienDialog extends JDialog {
                 }
 
                 nv.setTrangThai(cbTinhTrang.isSelected() ? 1 : 0);
-
+                if (!AddNhanVienDialog.validateNhanVien(nv)) {
+                    return ;
+                }
+                
                 if (bll.updateNhanVien(nv)) {
                     JOptionPane.showMessageDialog(this, "Cập nhật nhân viên thành công!");
                     if (tablePanel != null) {

@@ -167,7 +167,7 @@ public class FormMainNhanVien extends JPanel {
     }
 private void deleteNhanVien() {
     int selectedRow = employeeTablePanel.getNhanVienTable().getSelectedRow();
-
+    
     if (selectedRow != -1) {
        int maNV = (int) employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 0);
 
@@ -179,6 +179,10 @@ private void deleteNhanVien() {
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
+                if (maNV <= 0) {
+                    JOptionPane.showMessageDialog(null, "Mã nhân viên không hợp lệ");
+                    return ;
+                }
                 boolean isDeleted = bll.deleteNhanVien(maNV);
                 if (isDeleted) {
                     JOptionPane.showMessageDialog(this, 

@@ -2,6 +2,7 @@ package GUI.FormWareHouse;
 
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ import java.nio.file.StandardCopyOption;
 public class FormEditProduct extends JDialog {
     private JComboBox<String> trangThai;
     private StyledTextField tenSP, giaSP, loaiSP, ncc, tenAnh, moTa;
-    private JButton uploadImageBtn;
+    private ButtonCustom uploadImageBtn;
     private String selectedImageName;
     private SanPhamDTO product;
 
@@ -54,7 +55,7 @@ public class FormEditProduct extends JDialog {
 //        nhapPanel.add(tenAnh);
 
         nhapPanel.add(new JLabel("Tải ảnh:"));
-        uploadImageBtn = new JButton("Chọn ảnh");
+        uploadImageBtn = new ButtonCustom("Chọn ảnh",16,"blue");
         uploadImageBtn.addActionListener(e -> uploadImage());
         nhapPanel.add(uploadImageBtn);
 
@@ -69,7 +70,7 @@ public class FormEditProduct extends JDialog {
         trangThai.setSelectedItem(product.getTrangThai());
         nhapPanel.add(trangThai);
 
-        JButton saveBtn = new JButton("Lưu");
+        ButtonCustom saveBtn = new ButtonCustom("Lưu",16,"green");
         saveBtn.addActionListener(e -> {
             try {
                 SanPhamDTO updatedProduct = new SanPhamDTO(

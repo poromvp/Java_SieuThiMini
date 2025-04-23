@@ -21,7 +21,7 @@ public class DiscountManagementPanel extends JPanel {
     private StyledTable discountTable;
     private DefaultTableModel tableModel;
     private StyledTextField txtMaKM, txtTenKM, txtNgayBD, txtNgayKT, txtTrangThai;
-    private ButtonCustom btnAdd, btnEdit, btnDelete, btnClear, btnViewDetails;
+    private ButtonCustom btnAdd, btnEdit, btnDelete, btnClear;
     private JDialog detailDialog;
 
     public DiscountManagementPanel() {
@@ -56,17 +56,16 @@ public class DiscountManagementPanel extends JPanel {
 
         // Buttons
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        btnAdd = new ButtonCustom("Thêm", 16, "blue");
-        btnEdit = new ButtonCustom("Sửa", 16, "green");
-        btnDelete = new ButtonCustom("Xóa", 16, "red");
-        btnClear = new ButtonCustom("Xóa Form", 16, "black");
-        btnViewDetails = new ButtonCustom("Xem Chi Tiết", 16, "blue");
+        btnAdd = new ButtonCustom("Thêm","add",14,20,20);
+        btnEdit = new ButtonCustom("Chỉnh sửa","edit",14,20,20);
+        btnDelete = new ButtonCustom("Xóa","del",14,20,20);
+        btnClear = new ButtonCustom("Làm mới","reset",14,20,20);
+
 
         buttonPanel.add(btnAdd);
         buttonPanel.add(btnEdit);
         buttonPanel.add(btnDelete);
         buttonPanel.add(btnClear);
-        buttonPanel.add(btnViewDetails);
 
         gbc.gridx = 0;
         gbc.gridy = labels.length;
@@ -94,7 +93,7 @@ public class DiscountManagementPanel extends JPanel {
         btnEdit.addActionListener(e -> editDiscount());
         btnDelete.addActionListener(e -> deleteDiscount());
         btnClear.addActionListener(e -> clearForm());
-        btnViewDetails.addActionListener(e -> viewDetails());
+
 
         // Double-click to view details
         discountTable.addMouseListener(new MouseAdapter() {

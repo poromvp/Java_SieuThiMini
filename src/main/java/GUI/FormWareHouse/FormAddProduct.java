@@ -2,6 +2,7 @@ package GUI.FormWareHouse;
 
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
 
 import javax.swing.*;
@@ -37,7 +38,7 @@ public class FormAddProduct extends JPanel {
         nhapPanel.add(ncc);
 
         nhapPanel.add(new JLabel("Tải ảnh:"));
-        JButton uploadImageBtn = new JButton("Chọn ảnh");
+        ButtonCustom uploadImageBtn = new ButtonCustom("Chọn ảnh",16,"blue");
         uploadImageBtn.addActionListener(e -> uploadImage());
         nhapPanel.add(uploadImageBtn);
 
@@ -50,7 +51,7 @@ public class FormAddProduct extends JPanel {
         trangThai = new JComboBox<>(trangThaiOptions);
         nhapPanel.add(trangThai);
 
-        JButton btn1 = new JButton("Thêm sản phẩm");
+        ButtonCustom btn1 = new ButtonCustom("Thêm sản phẩm",16,"green");
         btn1.addActionListener(e->{
             try{
                 SanPhamDTO product = new SanPhamDTO(

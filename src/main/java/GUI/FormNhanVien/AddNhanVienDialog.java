@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.imageio.ImageIO;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -172,7 +173,18 @@ public class AddNhanVienDialog extends JDialog {
             }
     
             nv.setTrangThai(cbTinhTrang.isSelected() ? 1 : 0);
-    
+            if (!validateNhanVien(nv)) {
+                return ;
+            }
+            
+            if(bll.checkSDT(nv.getSDT())){
+                JOptionPane.showMessageDialog(this, "SDT này đã tồn tại");
+                return;
+            }
+            if(bll.checkCCCD(nv.getCCCD())){
+                JOptionPane.showMessageDialog(this, "CCCD này đã tồn tại");
+                return;
+            }
             if (bll.addNhanVien(nv)) {
                 JOptionPane.showMessageDialog(this, "Thêm nhân viên thành công!");
                 if (tablePanel != null) {
@@ -184,5 +196,66 @@ public class AddNhanVienDialog extends JDialog {
             e.printStackTrace();
             JOptionPane.showMessageDialog(this, "Lỗi: " + e.getMessage(), "Lỗi nhập liệu", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    public static boolean validateNhanVien(NhanVienDTO nv) {
+        if (nv.getTenNV() == null || nv.getTenNV().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Họ tên không được để trống");
+            return false;
+        }
+        if (nv.getTenNV().matches(".*\\d.*")) {
+            JOptionPane.showMessageDialog(null, "Họ tên không được chứa số");
+            return false;
+        }
+        if (nv.getCCCD() == null || !nv.getCCCD().matches("\\d{12}")) {
+            JOptionPane.showMessageDialog(null, "CCCD phải là 12 chữ số");
+            return false;
+        }
+        Date ngaySinh = (Date) nv.getNgaySinh();
+        if (ngaySinh == null) {
+            JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống hoặc không hợp lệ");
+            return false;
+        }
+        
+    
+        if (!isOver18(ngaySinh)) {
+            JOptionPane.showMessageDialog(null, "Nhân viên phải đủ 18 tuổi");
+            return false;
+        }
+            
+        if (nv.getSDT() == null || !nv.getSDT().matches("0\\d{9}")) {
+            JOptionPane.showMessageDialog(null, "Số điện thoại phải bắt đầu bằng 0 và có 10 chữ số");
+            return false;
+        }
+    
+        try {
+            String luongString = String.valueOf(nv.getLuong());
+            double luong = Double.parseDouble(luongString);
+            if (luong < 0) {
+                JOptionPane.showMessageDialog(null, "Lương không được âm");
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Lương phải là một số hợp lệ");
+            return false;
+        }
+        return true; 
+    }
+     public static boolean isOver18(Date ngaySinh) {
+        if (ngaySinh == null) {
+            return false;
+        }
+
+        Calendar today = Calendar.getInstance();
+        Calendar birthDate = Calendar.getInstance();
+        birthDate.setTime(ngaySinh);
+
+        int age = today.get(Calendar.YEAR) - birthDate.get(Calendar.YEAR);
+
+        if (today.get(Calendar.MONTH) < birthDate.get(Calendar.MONTH) ||
+            (today.get(Calendar.MONTH) == birthDate.get(Calendar.MONTH) && today.get(Calendar.DAY_OF_MONTH) < birthDate.get(Calendar.DAY_OF_MONTH))) {
+            age--; 
+        }
+
+        return age >= 18; 
     }
 }

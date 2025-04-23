@@ -8,16 +8,17 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import BLL.LoaiSanPhamBLL;
-import BLL.SanPhamBLL;
-import DTO.SanPhamDTO;
+import BLL.NhaCungCapBLL;
+import BLL.NhanVienBLL;
+import BLL.NhapHangBLL;
+import DTO.PhieuNhapHangDTO;
 import GUI.ComponentCommon.StyledTable;
 
 public class PanelDSLoHang extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+    public ArrayList<PhieuNhapHangDTO> DsNHang = new NhapHangBLL().getAllPhieuNhapHang();
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
 
@@ -25,12 +26,14 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         setBorder(new CompoundBorder(new TitledBorder("Danh Sách Nhập Hàng"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new BorderLayout());
 
-        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
+        String[] tencot = { "Mã đơn nhập hàng", "Tên đơn", "Ngày nhập", "Nhân viên", "Nhà Cung Cấp" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
-        loadSanPham(DsSP);
+        loadNhapHang(DsNHang);
+        StyledTable.hoverTable(tb, model);
         scr = new JScrollPane(tb);
+        scr.setPreferredSize(new Dimension(800, 300));
 
         add(scr, BorderLayout.CENTER);
 
@@ -46,6 +49,16 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         // Thêm sự kiện chuột phải cho bảng
         showpupop(tb);
         showpupop(scr);
+
+        tb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    PanelXemChiTietPhieuNhap panel = new PanelXemChiTietPhieuNhap((Integer)tb.getValueAt(tb.getSelectedRow(), 0));
+                            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
+                }
+            }
+        });
     }
 
     public void showpupop(Object obj) {
@@ -92,13 +105,15 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         }
     }
 
-    private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
+    private void loadNhapHang(ArrayList<PhieuNhapHangDTO> DsNHang) {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (SanPhamDTO sp : DsSP) {
+        for (PhieuNhapHangDTO nh : DsNHang) {
             model.addRow(new Object[] {
-                    sp.getMaSP(),
-                    new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
-                    sp.getTenSP()
+                    nh.getMaPNH(),
+                    nh.getTenPNH(),
+                    nh.getNgayNhap(),
+                    new NhanVienBLL().getNhanVienByMa(nh.getMaNV() + "").getTenNV(),
+                    new NhaCungCapBLL().getNhaCungCap(nh.getMaNCC()).getTenNCC()
             });
         }
     }

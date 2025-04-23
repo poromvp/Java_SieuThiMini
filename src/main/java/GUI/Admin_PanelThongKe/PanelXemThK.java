@@ -10,11 +10,14 @@ import BLL.TheThanhVienBLL;
 import DTO.ChiTietDonHangDTO;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
+import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
+import GUI.FormWareHouse.FormProductDetail;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.*;
+import java.util.*;
 
 public class PanelXemThK extends JPanel {
     JTextArea txtMaHD, txtMANV;
@@ -68,13 +71,7 @@ public class PanelXemThK extends JPanel {
         loadChiTiet();
         JScrollPane scr = new JScrollPane(tb);
 
-        // Tính chiều cao theo số dòng của bảng
-        int rowCount = tb.getRowCount();
-        int rowHeight = tb.getRowHeight();
-        int tableHeight = rowCount * rowHeight;
-
-        // Đặt kích thước động (có padding)
-        scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // Giữ kích thước động
+        TienIch.setPreferredSizeTuDong(scr, tb);
 
         pn3.add(scr);
     }
@@ -143,6 +140,16 @@ public class PanelXemThK extends JPanel {
         pn4 = new JPanel();
         initPanel4();
         add(pn4, gbc);
+
+        tb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Kiểm tra double click
+                    FormProductDetail detailDialog = new FormProductDetail(null, SanPhamBLL.getProductById((Integer)tb.getValueAt(tb.getSelectedRow(), 0)));
+                        detailDialog.setVisible(true);
+                }
+            }
+        });
     }
 
     public String LayChuoiTuBang(DefaultTableModel model, int dong, int cot) {

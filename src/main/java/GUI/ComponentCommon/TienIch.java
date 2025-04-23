@@ -376,4 +376,19 @@ public class TienIch {
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         lb.setIcon(new ImageIcon(resizedImg));
     }
+
+    public static void setPreferredSizeTuDong(JScrollPane scr, JTable tb){
+        // Tính chiều cao theo số dòng của bảng
+        int rowCount = tb.getRowCount();
+        int rowHeight = tb.getRowHeight();
+        int tableHeight = rowCount * rowHeight;
+
+        if(tableHeight > 150){
+            scr.setPreferredSize(new Dimension(800, 150)); // Giữ kích thước động
+        }else{
+            // Đặt kích thước động (có padding)
+        scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // Giữ kích thước động
+        }
+        
+    }
 }

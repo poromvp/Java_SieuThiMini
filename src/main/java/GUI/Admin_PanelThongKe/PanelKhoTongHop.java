@@ -12,6 +12,7 @@ import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.*;
+import GUI.FormWareHouse.FormProductDetail;
 
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
     JPanel pn1, pn2, pn3;
@@ -92,6 +93,15 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         showpupop(scr);
         tab.addChangeListener(this);
         btnMore.addActionListener(this);
+        tb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Kiểm tra double click
+                    FormProductDetail detailDialog = new FormProductDetail(null, SanPhamBLL.getProductById((Integer)tb.getValueAt(tb.getSelectedRow(), 0)));
+                        detailDialog.setVisible(true);
+                }
+            }
+        });
     }
 
     public void showpupop(Object obj) {

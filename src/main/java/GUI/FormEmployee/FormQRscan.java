@@ -158,6 +158,9 @@ public class FormQRscan extends JPanel {
 
                 Java2DFrameConverter converter = new Java2DFrameConverter();
                 OpenCVFrameConverter.ToMat converterToMat = new OpenCVFrameConverter.ToMat();
+                String lastQRText = "";
+                long lastScanTime = 0;
+                                
 
                 while (isScanning) {
                     Frame frameGrabbed = grabber.grab();
@@ -174,26 +177,32 @@ public class FormQRscan extends JPanel {
                         label_qr.setIcon(new ImageIcon(scaledImg));
                         String qrText = decodeQRCode(img);
 
-                        if (qrText != null) {
-                                try {
-                                    txt_id.setText(qrText);
-                                
-                                    int id = Integer.parseInt(qrText);
-                                    System.out.println("Quét thành công: " + qrText);
-                                    FormQRscan.insertProductInformation(id);
-                                    Thread.sleep(3000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                } catch (NumberFormatException ex) {
-                                    System.out.println("QRcode không phải số");
-                                }
-                            
-                        } else {
+
+                        long now = System.currentTimeMillis();
+
+                        // Nếu phát hiện mã QR mới, hoặc cùng mã cũ nhưng đã qua 3 giây
+                        if (qrText != null && (!qrText.equals(lastQRText) || now - lastScanTime >= 3000)) {
+                            try {
+                                txt_id.setText(qrText);
+                                int id = Integer.parseInt(qrText);
+                                System.out.println("Quét thành công: " + qrText);
+                                FormQRscan.insertProductInformation(id);
+
+                                // Ghi nhận mã hiện tại và thời gian
+                                lastQRText = qrText;
+                                lastScanTime = now;
+
+                            } catch (NumberFormatException ex) {
+                                System.out.println("QRcode không phải số");
+                            }
+                        }
+
+                        else {
                             System.out.println("QRcode null");
                         }
                     }
 
-                    Thread.sleep(100);
+                    // Thread.sleep(100);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

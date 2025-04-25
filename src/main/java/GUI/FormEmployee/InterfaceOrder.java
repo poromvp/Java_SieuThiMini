@@ -16,11 +16,13 @@ public class InterfaceOrder extends JPanel{
     private FormOrderDetailList formOrderDetailList;
     private FormFindProduct formFindProduct;
     private OrderIformationForm formOrderInfo;
+    private PanelTimSanPham panelTimSanPham;
 
 
     public InterfaceOrder(){
 
 
+        panelTimSanPham = new PanelTimSanPham();
         formFindProduct = new FormFindProduct();
         formOrderDetailList = new FormOrderDetailList();
         formOrderInfo = new OrderIformationForm();
@@ -30,7 +32,7 @@ public class InterfaceOrder extends JPanel{
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Tìm thông tin sản phẩm"));
         tabbedPane.add("Quét QR", formQRscan);
-        tabbedPane.add("Tìm kiếm", formFindProduct);
+        tabbedPane.add("Tìm kiếm", panelTimSanPham);
 
 
         this.setLayout(new GridBagLayout());

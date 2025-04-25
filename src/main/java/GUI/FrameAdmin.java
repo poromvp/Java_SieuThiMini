@@ -7,6 +7,7 @@ import java.sql.Connection;
 import javax.swing.*;
 
 import GUI.Admin_PanelThongKe.PanelMainThongKe;
+import GUI.Admin_QuanLyKM.DiscountManagementPanel;
 import GUI.Admin_TheThanhVien.PanelMainThanhVien;
 import GUI.ComponentCommon.TienIch;
 import GUI.DashBoardPanel.MainDashBoard;

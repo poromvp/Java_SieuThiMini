@@ -96,6 +96,7 @@ public class PanelXemChiTietPhieuNhap extends JPanel {
     }
 
     public PanelXemChiTietPhieuNhap(int maPhieuNhap) {
+        TienIch.setDarkUI();
         this.phieunhap = new NhapHangBLL().getPhieuNhapHangById(maPhieuNhap);
         this.chiTietList = new ChiTietNhapHangBLL().getChiTietByMaPNH(maPhieuNhap);
         setLayout(new GridBagLayout());

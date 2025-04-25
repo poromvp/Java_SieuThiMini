@@ -39,7 +39,6 @@ public class StyledTable extends JTable {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) { // Kiểm tra double click
-                    TienIch.setDarkUI();
                     int selectedRow = tb.getSelectedRow();
                     if (selectedRow != -1) {
                         if (loaiXem.equals("NV")) {
@@ -55,8 +54,8 @@ public class StyledTable extends JTable {
                             JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
                         }
                     }
-                    TienIch.resetUI();
                 }
+                TienIch.resetUI();
             }
         });
     }

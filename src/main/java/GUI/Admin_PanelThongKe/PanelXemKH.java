@@ -1,9 +1,6 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -24,6 +21,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
     JMenuItem searchItem, exportItem;
 
     public PanelXemKH(DefaultTableModel model, int dong) {
+        TienIch.setDarkUI();
         kh = TheThanhVienBLL.getMemberById(Integer.parseInt(model.getValueAt(dong, 0).toString()));
 
         setBackground(new Color(226, 224, 221));
@@ -68,18 +66,6 @@ public class PanelXemKH extends JPanel implements ActionListener{
         showpupop(scr);
     }
 
-    public String LayChuoiTuBang(DefaultTableModel model, int dong, int cot) {
-        Object txt = model.getValueAt(dong, cot);
-        return txt.toString();
-    }
-
-    public String LayChuoiTuBang(String type) {
-        if (type.equals("type")) {
-            return "s";
-        }
-        return null;
-    }
-
     JLabel lbTenKH, lbNgSInh, lbDchi, lbSDT, lbDiemTL, lbID, lbStart, lbEnd;
 
     public void initPanel1(DefaultTableModel model, int dong) {
@@ -95,7 +81,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
         gbc.gridheight = 6;
         gbc.ipadx = 10;
         JLabel avt = new JLabel();
-        TienIch.anhAVT(avt, kh.getTenAnh(),150, 250);
+        TienIch.anhAVT(avt, kh.getTenAnh(),150, 250,"KH");
         pn1.add(avt, gbc);
         gbc.gridheight = 1;
 

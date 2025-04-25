@@ -141,22 +141,13 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == btnTim) {
             PanelTimVN panel = new PanelTimVN();
-            UIManager.put("OptionPane.background", new Color(33,58,89));
-            UIManager.put("Panel.background", new Color(33,58,89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: " );
+                System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == btnDS) {
             PanelTotNhat panel = new PanelTotNhat();
@@ -164,12 +155,11 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                if(panel.getSelectedFormat().equals("excel")){
+                if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
-                }
-                else{
+                } else {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
@@ -178,5 +168,6 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
                 TienIch.CustomMessage("Đã hủy xuất file");
             }
         }
+        TienIch.resetUI();
     }
 }

@@ -7,6 +7,9 @@ import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
 
+import DTO.NhanVienDTO;
+import DTO.TheThanhVienDTO;
+
 import java.awt.event.*;
 import java.util.*;
 import java.text.*;
@@ -377,8 +380,13 @@ public class TienIch {
         lb.setIcon(new ImageIcon(resizedImg));
     }
 
-    public static void anhAVT(JLabel lb, String file, int width, int height) {
-        ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+    public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
+        ImageIcon icon;
+        if(loai.equals("KH")){
+            icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+        } else{
+            icon = new ImageIcon(TienIch.class.getResource("/images/avtEmployee/" + file));
+        }
         Image img = icon.getImage();
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         lb.setIcon(new ImageIcon(resizedImg));

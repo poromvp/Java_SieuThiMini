@@ -1,12 +1,11 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
+import BLL.DonHangBLL;
 import BLL.NhanVienBLL;
+import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
 import GUI.ComponentCommon.*;
 
@@ -18,8 +17,11 @@ public class PanelXemNV extends JPanel implements ActionListener {
     JPanel pn1, pn2, pn3;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
+    NhanVienDTO nv;
 
     public PanelXemNV(DefaultTableModel model, int dong) {
+        TienIch.setDarkUI();
+        nv = new NhanVienBLL().getNhanVienByMa(model.getValueAt(dong, 0).toString());
         setBackground(new Color(226, 224, 221));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -83,7 +85,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
         gbc.gridy = 0;
         gbc.gridheight = 6;
         JLabel avt = new JLabel();
-        TienIch.labelStyle(avt, 0, 80, "boy.png");
+        TienIch.anhAVT(avt, nv.getImage(),150, 250,"NV");
         pn1.add(avt, gbc);
         gbc.gridheight = 1;
 
@@ -95,7 +97,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        lbTenNV = new JLabel(LayChuoiTuBang(model, dong, 0));
+        lbTenNV = new JLabel(nv.getTenNV());
         TienIch.labelStyle(lbTenNV, 2, 15, null);
         pn1.add(lbTenNV, gbc);
 
@@ -107,7 +109,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 2;
         gbc.gridy = 1;
-        lbNgSInh = new JLabel(LayChuoiTuBang(model, dong, 0));
+        lbNgSInh = new JLabel(TienIch.ddmmyyyy(nv.getNgaySinh()));
         TienIch.labelStyle(lbNgSInh, 2, 15, null);
         pn1.add(lbNgSInh, gbc);
 
@@ -119,7 +121,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 2;
         gbc.gridy = 2;
-        lbDchi = new JLabel(LayChuoiTuBang(model, dong, 0));
+        lbDchi = new JLabel(nv.getDiaChi());
         TienIch.labelStyle(lbDchi, 2, 15, null);
         pn1.add(lbDchi, gbc);
 
@@ -131,7 +133,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 2;
         gbc.gridy = 3;
-        lbSDT = new JLabel(LayChuoiTuBang(model, dong, 0));
+        lbSDT = new JLabel(nv.getSDT());
         TienIch.labelStyle(lbSDT, 2, 15, null);
         pn1.add(lbSDT, gbc);
 
@@ -143,7 +145,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 2;
         gbc.gridy = 4;
-        lbChucVu = new JLabel(LayChuoiTuBang(model, dong, 0));
+        lbChucVu = new JLabel(nv.getChucVu());
         TienIch.labelStyle(lbChucVu, 2, 15, null);
         pn1.add(lbChucVu, gbc);
 
@@ -155,7 +157,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 2;
         gbc.gridy = 5;
-        lbID = new JLabel(LayChuoiTuBang(model, dong, 0));
+        lbID = new JLabel(nv.getMaNV()+"");
         TienIch.labelStyle(lbID, 2, 15, null);
         pn1.add(lbID, gbc);
 
@@ -184,21 +186,25 @@ public class PanelXemNV extends JPanel implements ActionListener {
         JLabel tongdh = new JLabel("<html>Tổng đơn hàng <br>đã thực hiện: </html>");
         TienIch.labelStyle(tongdh, 4, 15, null);
         pn2.add(tongdh);
-        lbTongDonHang = new JLabel("123");
+        lbTongDonHang = new JLabel(dsHoaDon.size()+"");
         TienIch.labelStyle(lbTongDonHang, 2, 15, null);
         pn2.add(lbTongDonHang);
 
         JLabel doanhs = new JLabel("<html>Doanh số <br>bán hàng: </html>");
         TienIch.labelStyle(doanhs, 4, 15, null);
         pn2.add(doanhs);
-        lbDoanhSo = new JLabel("1,000,000" + " VND");
+        double sum = 0;
+        for (DonHangDTO hd : dsHoaDon) {
+            sum += DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH());
+        }
+        lbDoanhSo = new JLabel(TienIch.formatVND(sum));
         TienIch.labelStyle(lbDoanhSo, 2, 15, null);
         pn2.add(lbDoanhSo);
 
         JLabel luong = new JLabel("Lương: ");
         TienIch.labelStyle(luong, 4, 15, null);
         pn2.add(luong);
-        lbLuong = new JLabel("7,000,000" + " VND");
+        lbLuong = new JLabel(TienIch.formatVND(nv.getLuong()));
         TienIch.labelStyle(lbLuong, 2, 15, null);
         pn2.add(lbLuong);
     }
@@ -206,24 +212,16 @@ public class PanelXemNV extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel modelMini;
     JScrollPane scr;
-    public ArrayList<hoadontemp> dsHoaDon = new ArrayList<>();
+    public ArrayList<DonHangDTO> dsHoaDon = DonHangBLL.getAllOrders();
 
     public void initPanel3() {
         TienIch.taoTitleBorder(pn3, "Danh sách các đơn hàng đã thanh toán");
         pn3.setLayout(new BorderLayout());
-        String[] tencot = { "ID", "Tên", "Price", "Date" };
-        hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
-        hoadontemp b = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
-        hoadontemp c = new hoadontemp("4", "Cam", "10,000", "10/10/2025");
-        hoadontemp d = new hoadontemp("2", "Cam", "10,000", "10/10/2025");
-        dsHoaDon.add(a);
-        dsHoaDon.add(b);
-        dsHoaDon.add(c);
-        dsHoaDon.add(d);
+        String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         modelMini = (DefaultTableModel) tb.getModel();
-        refreshTable();
+        loadDonHang(dsHoaDon);
         StyledTable.hoverTable(tb, modelMini);
         StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
@@ -231,10 +229,15 @@ public class PanelXemNV extends JPanel implements ActionListener {
         pn3.add(scr, BorderLayout.CENTER);
     }
 
-    private void refreshTable() {
-        modelMini.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (hoadontemp s : dsHoaDon) {
-            modelMini.addRow(new Object[] { s.getId(), s.getName(), s.getPrice(), s.getDate() });
+    private void loadDonHang(ArrayList<DonHangDTO> danhsach) {
+        modelMini.setRowCount(0);
+        for (DonHangDTO hd : danhsach) {
+            modelMini.addRow(new Object[] {
+                    hd.getMaDH(),
+                    hd.getMaNV(),
+                    hd.getPtThanhToan(),
+                    TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                    TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
     }
 

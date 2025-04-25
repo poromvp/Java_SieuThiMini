@@ -24,6 +24,7 @@ public class PanelXemThK extends JPanel {
     JLabel lbIdHD, lbDay, lbGuest, lbNV;
 
     public void initPanel1() {
+        TienIch.setDarkUI();
         pn1.setLayout(new GridLayout(4, 2));
         JLabel mahd = new JLabel("Mã hóa đơn: ");
         TienIch.labelStyle(mahd, 4, 20, null);

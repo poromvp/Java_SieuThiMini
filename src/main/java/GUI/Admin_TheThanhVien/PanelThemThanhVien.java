@@ -1,6 +1,9 @@
 package GUI.Admin_TheThanhVien;
 import com.toedter.calendar.JDateChooser;
 
+import GUI.ComponentCommon.StyledTextField;
+import GUI.ComponentCommon.TienIch;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -8,24 +11,24 @@ import java.io.File;
 
 public class PanelThemThanhVien extends JPanel {
 
-    private JTextField txtTenTV;
-    private JDateChooser dateNgaySinh;
-    private JTextField txtDiaChi;
-    private JTextField txtSDT;
+    private StyledTextField txtTenTV;
+    private StyledTextField txtDiaChi;
+    private StyledTextField txtSDT;
     private JLabel lblImagePreview;
+    private JDateChooser dateNgaySinh;
     private String tenAnh;
 
     public PanelThemThanhVien() {
         setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createTitledBorder("Thông tin Thẻ Thành Viên"));
+        TienIch.taoTitleBorder(this, "Thông tin thẻ thành viên");
 
         JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
 
         // Các thành phần nhập liệu
-        txtTenTV = new JTextField();
+        txtTenTV = new StyledTextField();
         dateNgaySinh = new JDateChooser();
-        txtDiaChi = new JTextField();
-        txtSDT = new JTextField();
+        txtDiaChi = new StyledTextField();
+        txtSDT = new StyledTextField();
         JButton btnChonAnh = new JButton("Chọn ảnh");
 
         // Label hiển thị ảnh
@@ -51,6 +54,7 @@ public class PanelThemThanhVien extends JPanel {
 
         // Thêm vào panel
         formPanel.add(new JLabel("Tên thành viên:"));
+        txtTenTV.setPlaceholder("Nhập họ và tên");
         formPanel.add(txtTenTV);
 
         formPanel.add(new JLabel("Ngày sinh:"));

@@ -101,7 +101,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         btnReport = createButton("Báo Cáo", "src/main/resources/images/report.png");
         btnAccount = createButton("Tài Khoản", "src/main/resources/images/account.png");
         btnLogout = createButton("Đăng Xuất", "src/main/resources/images/exit.png");
-        btnTheTV = createButton("Thẻ Thành Viên", "src/main/resources/images/thethanhvien.png");
+        btnTheTV = createButton("Thành Viên", "src/main/resources/images/thethanhvien.png");
         btnKM = createButton("Khuyến Mãi", "src/main/resources/images/discount.png");
     
         // Thêm các nút vào panel

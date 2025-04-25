@@ -1,6 +1,9 @@
 package GUI.ComponentCommon;
 
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -23,7 +26,7 @@ public class TienIch {
 
         // Đặt màu ban đầu
         nut.setBackground(normalColor);
-        nut.setForeground(Color.BLACK); //màu chữ
+        nut.setForeground(Color.BLACK); // màu chữ
 
         // Thêm icon nếu có
         if (fileIcon != null && !fileIcon.isEmpty()) {
@@ -84,7 +87,7 @@ public class TienIch {
         nut.setHorizontalTextPosition(SwingConstants.CENTER); // Chữ căn giữa theo chiều ngang
 
         // Màu sắc
-        Color normalColor = new Color(33,58,89);
+        Color normalColor = new Color(33, 58, 89);
         Color hoverColor = Color.GRAY;
         Color clickColor = new Color(18, 31, 47);
 
@@ -141,13 +144,13 @@ public class TienIch {
         if (rank == 1) { // title
             label.setForeground(Color.BLACK); // Màu đen
         } else if (rank == 2) { // số thống kê
-            label.setForeground(new Color(33,58,89)); // Màu xanh dương
+            label.setForeground(new Color(33, 58, 89)); // Màu xanh dương
 
             // Đặt viền cho label (tùy chọn)
-            label.setBorder(BorderFactory.createLineBorder(new Color(33,58,89), 1, true));
+            label.setBorder(BorderFactory.createLineBorder(new Color(33, 58, 89), 1, true));
             label.setBackground(Color.WHITE);
             // Màu sắc
-            Color normalColor = new Color(33,58,89);
+            Color normalColor = new Color(33, 58, 89);
             Color hoverColor = new Color(210, 53, 29);
             // Sự kiện hover và click
             label.addMouseListener(new MouseAdapter() {
@@ -171,11 +174,16 @@ public class TienIch {
         } else if (rank == 3) { // nhãn bên trái trong hóa đơn
             label.setForeground(Color.BLACK);
             label.setFont(new Font("Arial", Font.PLAIN, size));
-            label.setHorizontalAlignment(SwingConstants.LEFT);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
-        } else if (rank == 4) { // bên phải trong hóa đơn
+        } else if (rank == 4) { //XemThK và XemNV
+            label.setForeground(Color.WHITE);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setBackground(new Color(33, 58, 89));
+        } else if (rank == 5) { //TongDoanhThu TongDonHang
             label.setForeground(Color.BLACK);
-            label.setHorizontalAlignment(SwingConstants.LEFT);
+            label.setHorizontalAlignment(SwingConstants.CENTER);
+            label.setBackground(null);
         }
 
         // Đặt khoảng cách đệm xung quanh nội dung
@@ -253,11 +261,10 @@ public class TienIch {
     public static String ddmmyyyy(Date date) {
         // Định dạng mong muốn
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
-    
+
         // Chuyển từ Date sang chuỗi theo định dạng mới
         return outputFormat.format(date);
     }
-    
 
     public static String formatVND(double amount) {
         Locale localeVN = new Locale("vi", "VN"); // định dạng tiếng Việt, Việt Nam
@@ -375,20 +382,56 @@ public class TienIch {
         Image img = icon.getImage();
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         lb.setIcon(new ImageIcon(resizedImg));
+        lb.setHorizontalAlignment(SwingConstants.CENTER);
+        lb.setVerticalAlignment(SwingConstants.CENTER);
     }
 
-    public static void setPreferredSizeTuDong(JScrollPane scr, JTable tb){
+    public static void setPreferredSizeTuDong(JScrollPane scr, JTable tb) {
         // Tính chiều cao theo số dòng của bảng
         int rowCount = tb.getRowCount();
         int rowHeight = tb.getRowHeight();
         int tableHeight = rowCount * rowHeight;
 
-        if(tableHeight > 150){
-            scr.setPreferredSize(new Dimension(800, 150)); // Giữ kích thước động
-        }else{
+        if (tableHeight > 150) {
+            scr.setPreferredSize(new Dimension(800, 150)); // Giữ kích cố định
+        } else {
             // Đặt kích thước động (có padding)
-        scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // Giữ kích thước động
+            scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // Giữ kích thước động
         }
-        
+
     }
+
+    public static void setDarkUI() {
+        UIManager.put("Label.foreground", Color.WHITE);
+        UIManager.put("OptionPane.background", new Color(33, 58, 89));
+        UIManager.put("Panel.background", new Color(33, 58, 89));
+        UIManager.put("Button.background", Color.GRAY);
+        UIManager.put("Button.foreground", Color.WHITE);
+        UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+    }
+
+    public static void resetUI() {
+        UIManager.put("Label.foreground", null);
+        UIManager.put("OptionPane.background", null);
+        UIManager.put("Panel.background", null);
+        UIManager.put("Button.background", null);
+        UIManager.put("Button.foreground", null);
+        UIManager.put("Button.font", null);
+    }
+
+    public static void CustomMessage(String message) {
+        JLabel label = new JLabel(message);
+        label.setFont(new Font("Arial", Font.BOLD, 18));
+        label.setForeground(Color.WHITE);
+        JOptionPane.showMessageDialog(null, label, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void taoTitleBorder(JPanel panel, String title) {
+        TitledBorder border = new TitledBorder(title);
+        EmptyBorder emptyBorder = new EmptyBorder(4, 4, 4, 4);
+        border.setTitleColor(Color.WHITE);
+        border.setTitleFont(new Font("Segoe UI", Font.BOLD, 13));
+        panel.setBorder(new CompoundBorder(border,emptyBorder));
+    }
+
 }

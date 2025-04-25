@@ -71,7 +71,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
     JLabel lbTenNV, lbNgSInh, lbDchi, lbSDT, lbChucVu, lbID;
 
     public void initPanel1(DefaultTableModel model, int dong) {
-        pn1.setBorder(new CompoundBorder(new TitledBorder("Thông tin chi tiết"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(pn1, "Thông tin chi tiết");
         pn1.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1.0;
@@ -162,7 +162,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
         gbc.gridx = 3;
         gbc.gridy = 0;
         JLabel gthieu = new JLabel("Giới thiệu: ");
-        TienIch.labelStyle(gthieu, 1, 15, null);
+        TienIch.labelStyle(gthieu, 4, 15, null);
         pn1.add(gthieu, gbc);
 
         gbc.gridx = 4;
@@ -178,7 +178,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
     JLabel lbTongDonHang, lbDoanhSo, lbLuong;
 
     public void initPanel2() {
-        pn2.setBorder(new CompoundBorder(new TitledBorder("Tóm tắt"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(pn2, "Tóm tắt");
         pn2.setLayout(new GridLayout(3, 2));
 
         JLabel tongdh = new JLabel("<html>Tổng đơn hàng <br>đã thực hiện: </html>");
@@ -209,9 +209,8 @@ public class PanelXemNV extends JPanel implements ActionListener {
     public ArrayList<hoadontemp> dsHoaDon = new ArrayList<>();
 
     public void initPanel3() {
+        TienIch.taoTitleBorder(pn3, "Danh sách các đơn hàng đã thanh toán");
         pn3.setLayout(new BorderLayout());
-        pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách các đơn hàng đã thanh toán"),
-                new EmptyBorder(4, 4, 4, 4)));
         String[] tencot = { "ID", "Tên", "Price", "Date" };
         hoadontemp a = new hoadontemp("1", "Cam", "10,000", "10/10/2025");
         hoadontemp b = new hoadontemp("3", "Cam", "10,000", "10/10/2025");
@@ -285,37 +284,18 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
             PanelTimVN panel = new PanelTimVN();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(modelMini);
@@ -323,10 +303,11 @@ public class PanelXemNV extends JPanel implements ActionListener {
                     panel.XuatPDF(modelMini);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             }
         }
+        TienIch.resetUI();
     }
 }

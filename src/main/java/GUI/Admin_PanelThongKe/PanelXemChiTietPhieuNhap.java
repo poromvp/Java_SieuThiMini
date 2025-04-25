@@ -25,7 +25,7 @@ public class PanelXemChiTietPhieuNhap extends JPanel {
     private ArrayList<ChiTietPNHangDTO> chiTietList;
 
     public void initPanel1() {
-        pn1.setBorder(new CompoundBorder(new TitledBorder("Thông tin chung"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(pn1, "Thông tin chung");
         pn1.setLayout(new GridLayout(3, 2, 10, 10));
 
         JLabel lb1 = new JLabel("Mã đơn nhập hàng:");
@@ -58,7 +58,7 @@ public class PanelXemChiTietPhieuNhap extends JPanel {
     }
 
     public void initPanel2() {
-        pn2.setBorder(new CompoundBorder(new TitledBorder("Chi tiết phiếu nhập"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(pn2, "Chi tiết phiếu nhập");
         pn2.setLayout(new BorderLayout());
 
         String[] tencot = { "STT", "Mã sản phẩm", "Mã lô hàng", "Số lượng", "Giá nhập", "Thành tiền" };

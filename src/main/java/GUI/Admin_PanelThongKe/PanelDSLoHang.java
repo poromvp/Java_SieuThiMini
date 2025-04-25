@@ -13,6 +13,7 @@ import BLL.NhanVienBLL;
 import BLL.NhapHangBLL;
 import DTO.PhieuNhapHangDTO;
 import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.TienIch;
 
 public class PanelDSLoHang extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
@@ -23,7 +24,7 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
     JMenuItem searchItem, exportItem;
 
     public PanelDSLoHang() {
-        setBorder(new CompoundBorder(new TitledBorder("Danh Sách Nhập Hàng"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(this, "Danh sách nhập hàng");
         setLayout(new BorderLayout());
 
         String[] tencot = { "Mã đơn nhập hàng", "Tên đơn", "Ngày nhập", "Nhân viên", "Nhà Cung Cấp" };
@@ -33,7 +34,8 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         loadNhapHang(DsNHang);
         StyledTable.hoverTable(tb, model);
         scr = new JScrollPane(tb);
-        scr.setPreferredSize(new Dimension(800, 300));
+        //scr.setPreferredSize(new Dimension(800, 300));
+        TienIch.setPreferredSizeTuDong(scr, tb);
 
         add(scr, BorderLayout.CENTER);
 
@@ -55,7 +57,7 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     PanelXemChiTietPhieuNhap panel = new PanelXemChiTietPhieuNhap((Integer)tb.getValueAt(tb.getSelectedRow(), 0));
-                            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết Phiếu Nhập", JOptionPane.PLAIN_MESSAGE);
                 }
             }
         });
@@ -120,37 +122,18 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
             PanelTimKho panel = new PanelTimKho();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
@@ -158,10 +141,11 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             }
         }
+        TienIch.resetUI();
     }
 }

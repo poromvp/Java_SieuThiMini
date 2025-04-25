@@ -47,7 +47,7 @@ public class PanelSuaThanhVien extends JPanel {
             tenAnh = member.getTenAnh();
             if (tenAnh != null && !tenAnh.isEmpty()) {
                 try {
-                    TienIch.anhAVT(lblImagePreview, tenAnh, 150, 150);
+                    TienIch.anhAVT(lblImagePreview, tenAnh,150, 250);
                 } catch (Exception e) {
                     lblImagePreview.setText("Lỗi tải ảnh");
                 }

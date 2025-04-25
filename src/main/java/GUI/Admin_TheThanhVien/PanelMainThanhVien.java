@@ -66,6 +66,14 @@ public class PanelMainThanhVien extends JPanel implements ActionListener {
 
         btnThem.addActionListener(this);
         btnKhoa.addActionListener(this);
+        btnKhoa.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isRightMouseButton(e)) {
+                    TienIch.CustomMessage("Bạn đã nhấn nút bằng chuột phải");
+                }
+            }
+        });
         btnSua.addActionListener(this);
         btnTim.addActionListener(this);
         btnXemBlock.addActionListener(this);
@@ -114,37 +122,18 @@ public class PanelMainThanhVien extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == btnTim) {
             PanelTimKH panel = new PanelTimKH();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == btnIn) {
             PanelExport panel = new PanelExport();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
@@ -152,84 +141,57 @@ public class PanelMainThanhVien extends JPanel implements ActionListener {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             }
         } else if (e.getSource() == btnXemBlock) {
             PanelXemDSLock panel = new PanelXemDSLock();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Danh sách TTV đã khóa",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
         } else if (e.getSource() == btnThem) {
             PanelThemThanhVien panel = new PanelThemThanhVien();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Thêm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == JOptionPane.OK_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã thêm thành công!");
+                TienIch.CustomMessage("Đã thêm thành công");
                 loadThanhVien(TTV);
             }
         } else if (e.getSource() == btnSua) {
-            String maTV = JOptionPane.showInputDialog(this, "Nhập mã thành viên cần sửa:");
+            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Sửa", JOptionPane.PLAIN_MESSAGE);
             if (maTV != null && !maTV.trim().isEmpty()) {
                 TheThanhVienDTO member = TheThanhVienBLL.getMemberById(Integer.parseInt(maTV));
                 if (member != null) {
                     PanelSuaThanhVien panel = new PanelSuaThanhVien(Integer.parseInt(maTV));
-                    UIManager.put("OptionPane.background", new Color(33, 58, 89));
-                    UIManager.put("Panel.background", new Color(33, 58, 89));
-                    UIManager.put("Button.background", Color.GRAY);
-                    UIManager.put("Button.foreground", Color.WHITE);
-                    UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+
                     int result = JOptionPane.showConfirmDialog(null, panel, "Sửa thông tin thành viên",
                             JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-                    UIManager.put("OptionPane.background", null);
-                    UIManager.put("Panel.background", null);
-                    UIManager.put("Button.background", null);
-                    UIManager.put("Button.foreground", null);
-                    UIManager.put("Button.font", null);
+
                     if (result == JOptionPane.OK_OPTION) {
                         boolean success = TheThanhVienBLL.updateMember(panel.getDTOTheThanhVien());
                         if (success) {
-                            JOptionPane.showMessageDialog(null, "Cập nhật thành viên thành công!");
+                            TienIch.CustomMessage("Cập nhật thành viên thành công!");
                             loadThanhVien(TTV);
                         } else {
-                            JOptionPane.showMessageDialog(null, "Cập nhật thành viên thất bại!");
+                            TienIch.CustomMessage("Cập nhật thất bại");
                         }
                     }
                 } else {
-                    JOptionPane.showMessageDialog(null, "Mã thành viên không tồn tại!");
+                    TienIch.CustomMessage("Mã thành viên không tồn tại");
                 }
             }
         } else if (e.getSource() == btnKhoa) {
-            String maTV = JOptionPane.showInputDialog(this, "Nhập mã thành viên cần khóa:");
+            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Khóa", JOptionPane.PLAIN_MESSAGE);
             if (maTV != null && !maTV.trim().isEmpty()) {
                 boolean success = TheThanhVienBLL.deleteMember(Integer.parseInt(maTV));
                 if (success) {
-                    JOptionPane.showMessageDialog(null, "Khóa thành viên thành công!");
+                    TienIch.CustomMessage("Khóa thành viên thành công!");
                     loadThanhVien(TTV);
                 } else {
-                    JOptionPane.showMessageDialog(null, "Khóa thành viên thất bại!");
+                    TienIch.CustomMessage("Khóa thành viên thất bại");
                 }
             }
         }
+        TienIch.resetUI();
     }
 }

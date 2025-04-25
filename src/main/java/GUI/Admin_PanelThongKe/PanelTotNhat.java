@@ -144,9 +144,9 @@ public class PanelTotNhat extends JPanel implements ActionListener {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             }
         }
     }

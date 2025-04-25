@@ -71,6 +71,10 @@ public class FormMainAccount extends JPanel {
                     );
         
                     if (confirm == JOptionPane.YES_OPTION) {
+                        if (maNV <= 0) {
+                            JOptionPane.showMessageDialog(null, "Mã nhân viên không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            return ;
+                        }
                         TaiKhoanBLL bll = new TaiKhoanBLL();
                         if (bll.deleteTaiKhoan(maNV)) {
                             model.removeRow(selectedRow);

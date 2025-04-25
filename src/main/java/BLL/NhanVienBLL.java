@@ -54,7 +54,9 @@ public class NhanVienBLL {
         }
         return dal.searchNhanVien(keyword);
     }
-    
-   
+    public String getNameNV (String maNV){
+        return dal.getNameNhanVien(maNV);
+    }
+
     
 }

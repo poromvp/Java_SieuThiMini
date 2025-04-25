@@ -2,8 +2,12 @@ package BLL;
 
 import DAL.TaiKhoanDAL;
 import DTO.TaiKhoanDTO;
+import JDBC.DBConnection;
 
 import javax.swing.JOptionPane;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 public class TaiKhoanBLL {
@@ -43,10 +47,7 @@ public class TaiKhoanBLL {
     }
 
     public boolean deleteTaiKhoan(int maNV) {
-        if (maNV <= 0) {
-            JOptionPane.showMessageDialog(null, "Mã nhân viên không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
+
         return taiKhoanDAL.deleteTaiKhoan(maNV);
     }
 
@@ -57,6 +58,15 @@ public class TaiKhoanBLL {
         return taiKhoanDAL.searchTaiKhoan(keyword);
     }
 
-    // -------------------- VALIDATION --------------------
+    public boolean loginCheck (String maNV, String mk){
+        return taiKhoanDAL.loginCheck(maNV,mk);
+    }
+    public String quyenCheck(String maNV) {
+        return taiKhoanDAL.getQuyenByMaNV(maNV);  
+    }
+    public String getQuyenNV(String maNV){
+        return taiKhoanDAL.getQuyenByMaNV(maNV);
+    }
+   
     
 }

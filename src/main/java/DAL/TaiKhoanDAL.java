@@ -132,5 +132,26 @@ public class TaiKhoanDAL {
         }
         return taiKhoanList;
     }
-    
+    public boolean loginCheck (String maNV, String mk){
+        String sql = "SELECT * FROM TAIKHOAN WHERE MANV = ? AND MATKHAU = ?";
+        try {
+            ResultSet rs = DBConnection.executeQuery(sql, maNV,mk);
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public String getQuyenByMaNV(String maNV) {
+        String sql = "SELECT QUYEN FROM TAIKHOAN WHERE MANV = ?";
+        try {
+            ResultSet rs = DBConnection.executeQuery(sql, maNV);
+            if (rs.next()) {
+                return rs.getString("QUYEN"); 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;  
+    }
 }

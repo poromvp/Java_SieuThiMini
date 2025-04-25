@@ -41,7 +41,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
  
 
 
-    public FrameEmployee(){
+    public FrameEmployee(String maNV){
         setLayout(new BorderLayout());
         setSize(1300, 750);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,7 +60,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
        
 
         pn_header = new Header();
-        pn_leftMenu = new LeftMenu();
+        pn_leftMenu = new LeftMenu(maNV);
         
         
         cardLayout = new CardLayout(); 
@@ -92,7 +92,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
 
     public static void main(String[] args) {
-        new FrameEmployee();
+        // new FrameEmployee();
     }
     
     public static void setPage(String pagename, String title){

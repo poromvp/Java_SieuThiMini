@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.hpsf.Array;
+
 public class TaiKhoanDAL {
     public List<TaiKhoanDTO> getAllTaiKhoan() {
         List<TaiKhoanDTO> taiKhoanList = new ArrayList<>();
@@ -132,10 +134,10 @@ public class TaiKhoanDAL {
         }
         return taiKhoanList;
     }
-    public boolean loginCheck (String maNV, String mk){
-        String sql = "SELECT * FROM TAIKHOAN WHERE MANV = ? AND MATKHAU = ?";
+    public boolean loginCheck (String tenTK, String mk){
+        String sql = "SELECT * FROM TAIKHOAN WHERE TenTK = ? AND MATKHAU = ?";
         try {
-            ResultSet rs = DBConnection.executeQuery(sql, maNV,mk);
+            ResultSet rs = DBConnection.executeQuery(sql, tenTK,mk);
             return rs.next();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -143,15 +145,37 @@ public class TaiKhoanDAL {
         }
     }
     public String getQuyenByMaNV(String maNV) {
-        String sql = "SELECT QUYEN FROM TAIKHOAN WHERE MANV = ?";
+        String sql = "SELECT Quyen FROM TAIKHOAN WHERE MANV = ?";
         try {
             ResultSet rs = DBConnection.executeQuery(sql, maNV);
             if (rs.next()) {
-                return rs.getString("QUYEN"); 
+                return rs.getString("Quyen");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;  
+        return null;
+    }
+    
+    public TaiKhoanDTO getTaiKhoanDTO (String tenTK){
+        try {
+            String sql ="SELECT * FROM TAIKHOAN WHERE tenTK = ?";
+            ResultSet rs = DBConnection.executeQuery(sql, tenTK);
+            
+            if (rs.next()){
+                TaiKhoanDTO tk = new TaiKhoanDTO();
+                tk.setMaNV(rs.getInt("maNV"));
+                tk.setTenTK(rs.getString("TenTK"));
+                tk.setMatKhau(rs.getString("MATKHAU"));
+                tk.setQuyen(rs.getString("Quyen"));
+                tk.setGmail(rs.getString("Gmail"));
+                tk.setTrangThai(rs.getString("TrangThai"));
+                
+                return tk;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

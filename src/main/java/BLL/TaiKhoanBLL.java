@@ -61,12 +61,11 @@ public class TaiKhoanBLL {
     public boolean loginCheck (String maNV, String mk){
         return taiKhoanDAL.loginCheck(maNV,mk);
     }
-    public String quyenCheck(String maNV) {
-        return taiKhoanDAL.getQuyenByMaNV(maNV);  
-    }
     public String getQuyenNV(String maNV){
         return taiKhoanDAL.getQuyenByMaNV(maNV);
     }
-   
+    public TaiKhoanDTO getTaiKhoanDTO (String tenTK){
+        return taiKhoanDAL.getTaiKhoanDTO(tenTK);
+    }
     
 }

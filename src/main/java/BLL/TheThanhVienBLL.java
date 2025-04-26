@@ -35,9 +35,15 @@ public class TheThanhVienBLL {
         return result > 0;
     }
     
-    // Xóa thẻ thành viên theo mã
+    // Khóa thẻ thành viên theo mã
     public static boolean deleteMember(int maTV) {
         int result = TheThanhVienDAL.deleteMember(maTV);
+        return result > 0;
+    }
+
+    // Mở khóa thẻ thành viên theo mã
+    public static boolean UndeleteMember(int maTV) {
+        int result = TheThanhVienDAL.UndeleteMember(maTV);
         return result > 0;
     }
     

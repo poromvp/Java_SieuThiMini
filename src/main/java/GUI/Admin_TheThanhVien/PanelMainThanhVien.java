@@ -13,7 +13,7 @@ import GUI.Admin_PanelThongKe.PanelExport;
 import GUI.Admin_PanelThongKe.PanelTimKH;
 import GUI.ComponentCommon.*;
 
-public class PanelMainThanhVien extends JPanel implements ActionListener {
+public class PanelMainThanhVien extends JPanel implements ActionListener, MouseListener {
     JPanel pn1, pn2;
     JButton btnThem, btnKhoa, btnSua, btnTim, btnXemBlock, btnIn;
     StyledTable tb;
@@ -66,14 +66,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener {
 
         btnThem.addActionListener(this);
         btnKhoa.addActionListener(this);
-        btnKhoa.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isRightMouseButton(e)) {
-                    TienIch.CustomMessage("Bạn đã nhấn nút bằng chuột phải");
-                }
-            }
-        });
+        btnKhoa.addMouseListener(this);
         btnSua.addActionListener(this);
         btnTim.addActionListener(this);
         btnXemBlock.addActionListener(this);
@@ -154,26 +147,43 @@ public class PanelMainThanhVien extends JPanel implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, panel, "Thêm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                TienIch.CustomMessage("Đã thêm thành công");
-                loadThanhVien(TTV);
+                if (panel.ktraBieuThucChinhQuy()) {
+                    boolean kq = TheThanhVienBLL.addMember(panel.create1TV());
+                    if (kq) {
+                        TienIch.CustomMessage("Đã thêm thành công");
+                        loadThanhVien(TTV);
+                    } else {
+                        TienIch.CustomMessage("Lỗi, không thêm thành viên mới được");
+                    }
+                } else {
+                    TienIch.CustomMessage("Hãy nhập đầy đủ thông tin");
+                }
+            } else {
+                TienIch.CustomMessage("Đã hủy thêm thành viên!");
             }
         } else if (e.getSource() == btnSua) {
-            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Sửa", JOptionPane.PLAIN_MESSAGE);
+            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Sửa",
+                    JOptionPane.PLAIN_MESSAGE);
             if (maTV != null && !maTV.trim().isEmpty()) {
                 TheThanhVienDTO member = TheThanhVienBLL.getMemberById(Integer.parseInt(maTV));
                 if (member != null) {
-                    PanelSuaThanhVien panel = new PanelSuaThanhVien(Integer.parseInt(maTV));
+                    if (member.getTrangThai().equals("INACTIVE")) {
+                        TienIch.CustomMessage("Thành viên này đã bị khóa, không thể sửa");
+                    } else {
+                        PanelSuaThanhVien panel = new PanelSuaThanhVien(member);
+                        int result = JOptionPane.showConfirmDialog(null, panel, "Sửa thông tin thành viên",
+                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-                    int result = JOptionPane.showConfirmDialog(null, panel, "Sửa thông tin thành viên",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                    if (result == JOptionPane.OK_OPTION) {
-                        boolean success = TheThanhVienBLL.updateMember(panel.getDTOTheThanhVien());
-                        if (success) {
-                            TienIch.CustomMessage("Cập nhật thành viên thành công!");
-                            loadThanhVien(TTV);
+                        if (result == JOptionPane.OK_OPTION) {
+                            boolean success = TheThanhVienBLL.updateMember(panel.getDTOTheThanhVien());
+                            if (success) {
+                                TienIch.CustomMessage("Cập nhật thành viên thành công!");
+                                loadThanhVien(TTV);
+                            } else {
+                                TienIch.CustomMessage("Cập nhật thất bại");
+                            }
                         } else {
-                            TienIch.CustomMessage("Cập nhật thất bại");
+                            TienIch.CustomMessage("Đã hủy sửa thành viên");
                         }
                     }
                 } else {
@@ -181,17 +191,61 @@ public class PanelMainThanhVien extends JPanel implements ActionListener {
                 }
             }
         } else if (e.getSource() == btnKhoa) {
-            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Khóa", JOptionPane.PLAIN_MESSAGE);
+            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Khóa",
+                    JOptionPane.PLAIN_MESSAGE);
             if (maTV != null && !maTV.trim().isEmpty()) {
-                boolean success = TheThanhVienBLL.deleteMember(Integer.parseInt(maTV));
-                if (success) {
-                    TienIch.CustomMessage("Khóa thành viên thành công!");
-                    loadThanhVien(TTV);
+                if (TheThanhVienBLL.getMemberById(Integer.parseInt(maTV)).getTrangThai().equals("INACTIVE")) {
+                    TienIch.CustomMessage("Thành viên này đã khóa sẵn rồi!");
                 } else {
-                    TienIch.CustomMessage("Khóa thành viên thất bại");
+                    boolean success = TheThanhVienBLL.deleteMember(Integer.parseInt(maTV));
+                    if (success) {
+                        TienIch.CustomMessage("Khóa thành viên thành công!");
+                        loadThanhVien(TTV);
+                    } else {
+                        TienIch.CustomMessage("Khóa thành viên thất bại");
+                    }
                 }
             }
         }
         TienIch.resetUI();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        TienIch.setDarkUI();
+        if (SwingUtilities.isRightMouseButton(e)) {
+            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Mở Khóa",
+                    JOptionPane.PLAIN_MESSAGE);
+            if (maTV != null && !maTV.trim().isEmpty()) {
+                if (TheThanhVienBLL.getMemberById(Integer.parseInt(maTV)).getTrangThai().equals("ACTIVE")) {
+                    TienIch.CustomMessage("Thành viên này đã mở khóa sẵn rồi!");
+                } else {
+                    boolean success = TheThanhVienBLL.UndeleteMember(Integer.parseInt(maTV));
+                    if (success) {
+                        TienIch.CustomMessage("Mở khóa thành viên thành công!");
+                        loadThanhVien(TTV);
+                    } else {
+                        TienIch.CustomMessage("Mở khóa thành viên thất bại");
+                    }
+                }
+            }
+        }
+        TienIch.resetUI();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
     }
 }

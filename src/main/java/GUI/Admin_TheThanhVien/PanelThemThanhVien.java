@@ -1,6 +1,8 @@
 package GUI.Admin_TheThanhVien;
+
 import com.toedter.calendar.JDateChooser;
 
+import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 
@@ -38,7 +40,7 @@ public class PanelThemThanhVien extends JPanel {
 
         // Sự kiện chọn ảnh
         btnChonAnh.addActionListener((ActionEvent _) -> {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser("src/main/resources/images/avtMember");
             int result = chooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
@@ -46,7 +48,7 @@ public class PanelThemThanhVien extends JPanel {
 
                 // Hiển thị ảnh preview
                 ImageIcon icon = new ImageIcon(file.getAbsolutePath());
-                Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+                Image img = icon.getImage().getScaledInstance(150, 200, Image.SCALE_SMOOTH);
                 lblImagePreview.setIcon(new ImageIcon(img));
                 lblImagePreview.setText(""); // Xóa chữ "Chưa chọn ảnh"
             }
@@ -58,12 +60,18 @@ public class PanelThemThanhVien extends JPanel {
         formPanel.add(txtTenTV);
 
         formPanel.add(new JLabel("Ngày sinh:"));
+        dateNgaySinh.setDateFormatString("dd/MM/yyyy");
+        dateNgaySinh.setMaxSelectableDate(new java.util.Date());
+        TienIch.checkngaynhaptutay(dateNgaySinh,null);
+        TienIch.checkngaynhapdutuoi(dateNgaySinh,null);
         formPanel.add(dateNgaySinh);
 
         formPanel.add(new JLabel("Địa chỉ:"));
+        txtDiaChi.setPlaceholder("Nhập địa chỉ");
         formPanel.add(txtDiaChi);
 
         formPanel.add(new JLabel("SĐT:"));
+        txtSDT.setPlaceholder("Nhập số điện thoại");
         formPanel.add(txtSDT);
 
         formPanel.add(new JLabel("Ảnh đại diện:"));
@@ -71,6 +79,29 @@ public class PanelThemThanhVien extends JPanel {
 
         add(formPanel, BorderLayout.CENTER);
         add(lblImagePreview, BorderLayout.EAST);
+    }
+
+    public boolean ktraBieuThucChinhQuy() {
+        if (getTenTV() == null || getTenTV().trim().isEmpty()) {
+            return false;
+        }
+        if (getNgaySinh() == null) {
+            return false;
+        }
+        if (getDiaChi() == null || getDiaChi().trim().isEmpty()) {
+            return false;
+        }
+        if (getSDT() == null || getSDT().trim().isEmpty()) {
+            return false;
+        }
+        if (getTenAnh() == null || getTenAnh().trim().isEmpty()) {
+            return false;
+        }
+        return true;
+    }
+
+    public TheThanhVienDTO create1TV(){
+        return new TheThanhVienDTO(getTenTV(), getNgaySinh(), getDiaChi(), getSDT(), getTenAnh());
     }
 
     // Các getter để lấy dữ liệu từ form
@@ -94,4 +125,3 @@ public class PanelThemThanhVien extends JPanel {
         return tenAnh;
     }
 }
-

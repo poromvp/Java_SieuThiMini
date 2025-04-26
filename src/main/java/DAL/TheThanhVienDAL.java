@@ -147,6 +147,12 @@ public class TheThanhVienDAL {
         return DBConnection.executeUpdate(sql, maTV);
     }
 
+    // Mở khóa thẻ thành viên theo mã
+    public static int UndeleteMember(int maTV) {
+        String sql = "UPDATE TheThanhVien SET trangthai = 'ACTIVE' WHERE maTV=?";
+        return DBConnection.executeUpdate(sql, maTV);
+    }
+
     // Hiển thị danh sách tất cả thành viên
     public static void printAllMembers() {
         ArrayList<TheThanhVienDTO> memberList = getAllMembers();

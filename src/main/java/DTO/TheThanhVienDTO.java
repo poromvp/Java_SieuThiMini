@@ -1,5 +1,7 @@
 package DTO;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class TheThanhVienDTO {
@@ -30,6 +32,23 @@ public class TheThanhVienDTO {
         this.ngayKT = ngayKT;
         this.tenAnh = tenAnh;
         this.trangThai = trangThai;
+    }
+
+    public TheThanhVienDTO(String tenTV, Date ngaySinh, String diaChi, String sdt, String tenAnh){
+        this.tenTV = tenTV;
+        this.ngaySinh = ngaySinh;
+        this.diaChi = diaChi;
+        this.diemTL = 0;
+        this.sdt = sdt;
+        this.ngayBD = convertToDateViaSqlDate(LocalDate.now());
+        this.ngayKT = convertToDateViaSqlDate(LocalDate.now().plusYears(2));
+        this.tenAnh = tenAnh;
+        this.trangThai = "ACTIVE";
+    }
+
+    // Chuyển đổi từ LocalDate sang Date
+    public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
+        return Date.from(dateToConvert.atStartOfDay(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant());
     }
 
     // Getter và Setter

@@ -7,12 +7,11 @@ import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
 
-import DTO.NhanVienDTO;
-import DTO.TheThanhVienDTO;
-
 import java.awt.event.*;
 import java.util.*;
 import java.text.*;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.awt.*;
 
 public class TienIch {
@@ -179,11 +178,11 @@ public class TienIch {
             label.setFont(new Font("Arial", Font.PLAIN, size));
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setVerticalAlignment(SwingConstants.CENTER);
-        } else if (rank == 4) { //XemThK và XemNV
+        } else if (rank == 4) { // XemThK và XemNV
             label.setForeground(Color.WHITE);
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setBackground(new Color(33, 58, 89));
-        } else if (rank == 5) { //TongDoanhThu TongDonHang
+        } else if (rank == 5) { // TongDoanhThu TongDonHang
             label.setForeground(Color.BLACK);
             label.setHorizontalAlignment(SwingConstants.CENTER);
             label.setBackground(null);
@@ -275,17 +274,60 @@ public class TienIch {
         return currencyFormatter.format(amount);
     }
 
-    public static void checkngaynhaptutay(JDateChooser day) {
+    public static LocalDate convertDateToLocalDate(Date dateToConvert) {
+        return dateToConvert.toInstant()
+                .atZone(ZoneId.of("Asia/Ho_Chi_Minh"))
+                .toLocalDate();
+    }
+
+    public static void checkngaynhaptutay(JDateChooser day, Date ngay) {
         // Kiểm tra khi người dùng tự gõ tay
         day.getDateEditor().addPropertyChangeListener("date", _ -> {
             Date selectedDate = day.getDate();
             Date today = new Date();
             if (selectedDate != null && selectedDate.after(today)) {
-                JOptionPane.showMessageDialog(null, "Không được chọn ngày trong tương lai!");
-                day.setDate(today);
+                CustomMessage("Không thể chọn ngày trong tương lai!");
+                day.setDate(ngay);
+                return;
             }
         }); // có thể thay today bằng một giá trị Date cụ thể nếu muốn kiểm tra theo một mốc
             // nào đó.
+    }
+
+    public static void checkngayKT(JDateChooser day, Date ngayBD, Date ngayKT) {
+        // Kiểm tra khi người dùng tự gõ tay
+        day.getDateEditor().addPropertyChangeListener("date", _ -> {
+            Date selectedDate = day.getDate();
+            if (selectedDate != null && selectedDate.before(ngayBD)) {
+                CustomMessage("Không thể chọn ngày trước ngày bắt đầu được!");
+                day.setDate(ngayKT);
+                return;
+            } else if (selectedDate != null && selectedDate.after(ngayBD) && selectedDate.before(ngayKT)) {
+                CustomMessage("Ngày kết thúc phải cách ngày bắt đầu ít nhất 2 năm!");
+                day.setDate(ngayKT);
+                return;
+            }
+        });
+    }
+
+    public static void checkngaynhapdutuoi(JDateChooser day, Date ngay) {
+        day.getDateEditor().addPropertyChangeListener("date", _ -> {
+            if (day != null && day.getDate() != null) {
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(day.getDate());
+                int year = cal.get(Calendar.YEAR);
+
+                Date currentDay = new Date();
+                cal.setTime(currentDay);
+                int currentYear = cal.get(Calendar.YEAR);
+
+                if (currentYear - year < 18) {
+                    CustomMessage("Chưa đủ 18 tuổi");
+                    day.setDate(ngay);
+                    return;
+                }
+            }
+        });
     }
 
     public static void timStyle(Object obj) {
@@ -382,9 +424,9 @@ public class TienIch {
 
     public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
         ImageIcon icon;
-        if(loai.equals("KH")){
+        if (loai.equals("KH")) {
             icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
-        } else{
+        } else {
             icon = new ImageIcon(TienIch.class.getResource("/images/avtEmployee/" + file));
         }
         Image img = icon.getImage();
@@ -439,7 +481,7 @@ public class TienIch {
         EmptyBorder emptyBorder = new EmptyBorder(4, 4, 4, 4);
         border.setTitleColor(Color.WHITE);
         border.setTitleFont(new Font("Segoe UI", Font.BOLD, 13));
-        panel.setBorder(new CompoundBorder(border,emptyBorder));
+        panel.setBorder(new CompoundBorder(border, emptyBorder));
     }
 
 }

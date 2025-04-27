@@ -2,6 +2,8 @@ package GUI;
 
 import javax.swing.*;
 
+import BLL.TaiKhoanBLL;
+import DTO.TaiKhoanDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
 
@@ -9,7 +11,10 @@ import java.awt.*;
 
 public class FrameLogin extends JFrame {
     private Color bgColor = new Color(17, 32, 51);
+    private TaiKhoanBLL bll;
+    private TaiKhoanDTO tk;
     public FrameLogin() {
+        this.bll = new TaiKhoanBLL(); 
         setTitle("Đăng nhập");
         setSize(700, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -54,11 +59,11 @@ public class FrameLogin extends JFrame {
 
         gbc.gridwidth = 1;
         gbc.gridy++;
-        rightPanel.add(new JLabel("Mã nhân viên:"), gbc);
+        rightPanel.add(new JLabel("Tên tài khoản:"), gbc);
 
         gbc.gridx = 1;
-        StyledTextField maNV = new StyledTextField();
-        rightPanel.add(maNV, gbc);
+        StyledTextField tenTKField = new StyledTextField();
+        rightPanel.add(tenTKField, gbc);
 
         gbc.gridx = 0;
         gbc.gridy++;
@@ -66,7 +71,7 @@ public class FrameLogin extends JFrame {
 
         gbc.gridx = 1;
         JPasswordField passWord = new JPasswordField();
-        passWord.setEchoChar('*'); // Nếu StyledTextField không hỗ trợ, hãy đổi sang JPasswordField
+        passWord.setEchoChar('*');
         passWord.setFont(new Font("SansSerif", Font.BOLD, 14));
         passWord.setForeground(Color.BLACK);
         passWord.setBackground(Color.WHITE);
@@ -84,7 +89,38 @@ public class FrameLogin extends JFrame {
         gbc.gridy++;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
-        ButtonCustom loginBtn = new ButtonCustom("Đăng nhập", 16, "#3498db");
+        ButtonCustom loginBtn = new ButtonCustom("Đăng nhập", 16, "black");
+        loginBtn.addActionListener(e -> {
+            String tenTK = tenTKField.getText();
+            char[] passChars = passWord.getPassword();
+            String password = new String(passChars);
+            if (bll.loginCheck(tenTK, password)) {
+                tk = bll.getTaiKhoanDTO(tenTK);
+                String quyen = tk.getQuyen();
+                if (tk.getTrangThai().equalsIgnoreCase("ACTIVE")){
+                    if (quyen != null) {
+                        JOptionPane.showMessageDialog(this, "ĐĂNG NHẬP THÀNH CÔNG", "LOGIN", JOptionPane.INFORMATION_MESSAGE);
+                        if (quyen.equalsIgnoreCase("ADMIN")) {
+                            new FrameAdmin(Integer.toString(tk.getMaNV()));  
+                        } else if (quyen.equalsIgnoreCase("Nhân Viên")) {
+                            new FrameEmployee(Integer.toString(tk.getMaNV()));  
+                        } else if (quyen.equalsIgnoreCase("Quản Lý Kho")) {
+                            new FrameQuanLyKho(Integer.toString(tk.getMaNV()));  
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Quyền không hợp lệ", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }else{
+                        System.out.println("không có quyền");
+                    }
+                    dispose();
+                }else{
+                    JOptionPane.showMessageDialog(this,"TÀI KHOẢN ĐÃ BỊ KHÓA","Thông báo",JOptionPane.INFORMATION_MESSAGE);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Sai tài khoản hoặc mật khẩu", "Lỗi đăng nhập", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+        
         rightPanel.add(loginBtn, gbc);
 
         mainPanel.add(rightPanel);

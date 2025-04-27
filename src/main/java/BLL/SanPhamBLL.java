@@ -1,10 +1,16 @@
 package BLL;
 
+import java.util.ArrayList;
 import java.util.List;
 import DAL.SanPhamDAL;
 import DTO.SanPhamDTO;
 
 public class SanPhamBLL {
+
+     public static ArrayList<SanPhamDTO> timKiemSanPham(String idOrTenSP, String IdOrTenLSP, int giaMin, int giaMax) {
+        // Gọi lớp DAL để thực hiện truy vấn và nhận kết quả
+        return SanPhamDAL.timKiemSanPham(idOrTenSP, IdOrTenLSP, giaMin, giaMax);
+    }
 
     public static SanPhamDTO getProductById(int id) {
         return SanPhamDAL.getProductById(id);

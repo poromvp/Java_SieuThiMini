@@ -5,6 +5,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 
+import BLL.NhanVienBLL;
+import BLL.TaiKhoanBLL;
+
 
 public class LeftMenuWareHouse extends JPanel implements  ActionListener{
     private JButton btnImport;
@@ -13,7 +16,8 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
     private JButton btnProductType;
     private JButton btnSupplier;
     private JButton selectedButton = null;
-
+    private NhanVienBLL bllnv = new NhanVienBLL();
+    private TaiKhoanBLL blltk = new TaiKhoanBLL();
     private ActionListener listener;
 
     private Color bgColor = new Color(33,58,89);
@@ -43,7 +47,7 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
     }
 
 
-    public LeftMenuWareHouse(){
+    public LeftMenuWareHouse(String maNV){
         setBackground(bgColor);
         setMaximumSize(new Dimension(250, getHeight()));
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
@@ -74,14 +78,14 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
         employeePanel.add(avtLabel);
 
         // Tên nhân viên
-        JLabel nameLabel = new JLabel("Nguyễn Văn A");
+        JLabel nameLabel = new JLabel(bllnv.getNameNV(maNV));
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         employeePanel.add(nameLabel);
 
         // Chức vụ
-        JLabel roleLabel = new JLabel("Nhân viên kho");
+        JLabel roleLabel = new JLabel(blltk.getQuyenNV(maNV));
         roleLabel.setForeground(Color.LIGHT_GRAY);
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -187,9 +191,9 @@ public class LeftMenuWareHouse extends JPanel implements  ActionListener{
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 700);
 
-        LeftMenuWareHouse TEST = new LeftMenuWareHouse();
+        // LeftMenuWareHouse TEST = new LeftMenuWareHouse();
 
-        frame.add(TEST);
+        // frame.add(TEST);
         frame.setVisible(true);
     }
 }

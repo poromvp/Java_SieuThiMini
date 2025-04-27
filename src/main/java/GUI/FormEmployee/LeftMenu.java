@@ -7,6 +7,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import BLL.NhanVienBLL;
+import BLL.TaiKhoanBLL;
 import GUI.ComponentCommon.StyledLeftMenubutton;
 import GUI.FrameEmployee;
 
@@ -16,9 +18,11 @@ public class LeftMenu extends JPanel implements ActionListener {
     private JButton btn_sell;
     private JButton btn_orderManagement;
     private JButton btn_report;
+    private NhanVienBLL bllnv = new NhanVienBLL();
+    private TaiKhoanBLL blltk = new TaiKhoanBLL();
     // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
     private Color bgColor = new Color(33,58,89);
-    public LeftMenu() { 
+    public LeftMenu(String maNV) { 
         
         
         setBackground(bgColor);
@@ -41,14 +45,14 @@ public class LeftMenu extends JPanel implements ActionListener {
         employeePanel.add(avtLabel);
 
         // Tên nhân viên
-        JLabel nameLabel = new JLabel("Nguyễn Văn A");
+        JLabel nameLabel = new JLabel(bllnv.getNameNV(maNV));
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         employeePanel.add(nameLabel);
 
         // Chức vụ
-        JLabel roleLabel = new JLabel("Quản lý");
+        JLabel roleLabel = new JLabel(blltk.getQuyenNV(maNV));
         roleLabel.setForeground(Color.LIGHT_GRAY);
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

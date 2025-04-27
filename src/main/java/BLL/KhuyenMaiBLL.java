@@ -60,6 +60,7 @@ public class KhuyenMaiBLL {
     }
 
     public static void main(String[] args) {
-        printAllDiscounts();
+        // printAllDiscounts();
+        System.out.println(getDiscountToday().toString());
     }
 }

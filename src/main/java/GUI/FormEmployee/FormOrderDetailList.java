@@ -41,7 +41,7 @@ public class FormOrderDetailList extends JPanel {
         for(int i = 0; i < tableProduct.getRowCount(); i++){
             double price = Double.parseDouble(tableProduct.getValueAt(i, 2).toString());
             double discount = Double.parseDouble(tableProduct.getValueAt(i, 3).toString());
-            int quantity = Integer.parseInt(tableProduct.getValueAt(i, 4).toString());
+            double quantity = Double.parseDouble(tableProduct.getValueAt(i, 4).toString());
             total += (price - (price * discount / 100)) * quantity;
         }
         return total;
@@ -51,7 +51,7 @@ public class FormOrderDetailList extends JPanel {
         double total = 0;
         for(int i = 0; i < tableProduct.getRowCount(); i++){
             double price = Double.parseDouble(tableProduct.getValueAt(i, 2).toString());
-            int quantity = Integer.parseInt(tableProduct.getValueAt(i, 4).toString());
+            double quantity = Double.parseDouble(tableProduct.getValueAt(i, 4).toString());
             total += (price ) * quantity;
         }
         return total;

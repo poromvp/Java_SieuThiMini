@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 
 import DTO.ChiTietKhuyenMaiDTO;
+import DTO.KhuyenMaiDTO;
 import JDBC.DBConnection;
 
 public class ChiTietKhuyenMaiDAL {
@@ -38,27 +39,28 @@ public class ChiTietKhuyenMaiDAL {
 
     public static double getProductOnSaleToday(int productId) {
         String sql = "SELECT ctkm.tiLeGiam FROM ChiTietKM ctkm " +
-                "JOIN KhuyenMai km ON ctkm.maKM = km.maKM " +
-                "WHERE ctkm.maSP = ? " +
-                "AND km.ngayBD <= ? AND km.ngayKT >= ? " +
-                "AND km.trangThai = 'Hoạt động'";
-        try {
-            Connection connection = DBConnection.getConnection();
-            PreparedStatement pstmt = connection.prepareStatement(sql);
-            Date today = Date.valueOf(LocalDate.now());
+                     "JOIN KhuyenMai km ON ctkm.maKM = km.maKM " +
+                     "WHERE ctkm.maSP = ? " +
+                     "AND km.ngayBD <= CURDATE() AND km.ngayKT >= CURDATE() " +
+                     "AND km.trangThai = 'ACTIVE'";
+    
+        try (Connection connection = DBConnection.getConnection();
+             PreparedStatement pstmt = connection.prepareStatement(sql)) {
+    
             pstmt.setInt(1, productId);
-            pstmt.setDate(2, today);
-            pstmt.setDate(3, today);
             ResultSet rs = pstmt.executeQuery();
+    
             if (rs.next()) {
                 return rs.getDouble("tiLeGiam");
             }
+    
         } catch (Exception e) {
             e.printStackTrace();
         }
+    
         return 0;
     }
-
+    
     public static int insertDiscountDetail(ChiTietKhuyenMaiDTO detail) {
         String sql = "INSERT INTO " + tableName + " (maKM, maSP, tiLeGiam, trangThai) VALUES (?, ?, ?, ?)";
         try {
@@ -105,6 +107,7 @@ public class ChiTietKhuyenMaiDAL {
         }
     }
 
+    
     public static void main(String[] args) {
         System.out.println(getProductOnSaleToday(1));
     }

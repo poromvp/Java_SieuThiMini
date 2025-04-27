@@ -12,7 +12,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
     private JPanel rightPn;
     private LeftMenuWareHouse pn_leftMenu;
 
-    public FrameQuanLyKho(){
+    public FrameQuanLyKho(String maNV){
         setTitle("Frame Quản Lý Kho");
         setSize(1300,750);
         setLocationRelativeTo(null);
@@ -20,7 +20,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        pn_leftMenu = new LeftMenuWareHouse();
+        pn_leftMenu = new LeftMenuWareHouse(maNV);
         pn_leftMenu.setActionListener(this);
         pn_leftMenu.setPreferredSize(new Dimension(250, 0));
 
@@ -85,7 +85,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
     }
 
     public static void main(String[] args) {
-        new FrameQuanLyKho();
+        // new FrameQuanLyKho();
     }
 
     @Override

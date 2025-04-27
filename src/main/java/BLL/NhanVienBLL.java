@@ -2,12 +2,6 @@ package BLL;
 
 import DAL.NhanVienDAL;
 import DTO.NhanVienDTO;
-import DTO.TaiKhoanDTO;
-
-import javax.swing.JOptionPane;
-
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 
 public class NhanVienBLL {
@@ -54,7 +48,9 @@ public class NhanVienBLL {
         }
         return dal.searchNhanVien(keyword);
     }
-    
-   
+    public String getNameNV (String maNV){
+        return dal.getNameNhanVien(maNV);
+    }
+
     
 }

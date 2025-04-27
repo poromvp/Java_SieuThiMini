@@ -12,9 +12,11 @@ import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
+import GUI.FormWareHouse.FormProductDetail;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.awt.event.*;
+import java.util.*;
 
 public class PanelXemThK extends JPanel {
     JTextArea txtMaHD, txtMANV;
@@ -22,24 +24,25 @@ public class PanelXemThK extends JPanel {
     JLabel lbIdHD, lbDay, lbGuest, lbNV;
 
     public void initPanel1() {
+        TienIch.setDarkUI();
         pn1.setLayout(new GridLayout(4, 2));
         JLabel mahd = new JLabel("Mã hóa đơn: ");
-        TienIch.labelStyle(mahd, 1, 20, null);
+        TienIch.labelStyle(mahd, 4, 20, null);
         pn1.add(mahd);
         pn1.add(lbIdHD);
 
         JLabel ngay = new JLabel("Ngày: ");
-        TienIch.labelStyle(ngay, 1, 20, null);
+        TienIch.labelStyle(ngay, 4, 20, null);
         pn1.add(ngay);
         pn1.add(lbDay);
 
         JLabel khachhang = new JLabel("Khách hàng: ");
-        TienIch.labelStyle(khachhang, 1, 20, null);
+        TienIch.labelStyle(khachhang, 4, 20, null);
         pn1.add(khachhang);
         pn1.add(lbGuest);
 
         JLabel nhanvien = new JLabel("Nhân viên: ");
-        TienIch.labelStyle(nhanvien, 1, 20, null);
+        TienIch.labelStyle(nhanvien, 4, 20, null);
         pn1.add(nhanvien);
         pn1.add(lbNV);
     }
@@ -49,7 +52,7 @@ public class PanelXemThK extends JPanel {
     public void initPanel2() {
         pn2.setLayout(new BorderLayout());
         lbTitle = new JLabel("HÓA ĐƠN BÁN HÀNG");
-        TienIch.labelStyle(lbTitle, 1, 30, null);
+        TienIch.labelStyle(lbTitle, 4, 30, null);
         pn2.add(lbTitle, BorderLayout.CENTER);
     }
 
@@ -68,13 +71,7 @@ public class PanelXemThK extends JPanel {
         loadChiTiet();
         JScrollPane scr = new JScrollPane(tb);
 
-        // Tính chiều cao theo số dòng của bảng
-        int rowCount = tb.getRowCount();
-        int rowHeight = tb.getRowHeight();
-        int tableHeight = rowCount * rowHeight;
-
-        // Đặt kích thước động (có padding)
-        scr.setPreferredSize(new Dimension(800, tableHeight + 24)); // Giữ kích thước động
+        TienIch.setPreferredSizeTuDong(scr, tb);
 
         pn3.add(scr);
     }
@@ -85,29 +82,29 @@ public class PanelXemThK extends JPanel {
         pn4.setLayout(new GridLayout(3, 2));
 
         JLabel tongtien = new JLabel("Tổng tiền: ");
-        TienIch.labelStyle(tongtien, 1, 15, null);
+        TienIch.labelStyle(tongtien, 4, 15, null);
         pn4.add(tongtien);
 
-        TienIch.labelStyle(lbTotal, 1, 15, null);
-        lbTotal.setForeground(new Color(44, 99, 44));
+        TienIch.labelStyle(lbTotal, 4, 15, null);
+        lbTotal.setForeground(Color.GREEN);
         pn4.add(lbTotal);
 
         JLabel giamgia = new JLabel("Giảm giá: ");
-        TienIch.labelStyle(giamgia, 1, 15, null);
+        TienIch.labelStyle(giamgia, 4, 15, null);
         pn4.add(giamgia);
 
         lbDiscount = new JLabel("-" + "20,000" + " VND");
-        TienIch.labelStyle(lbDiscount, 1, 15, null);
+        TienIch.labelStyle(lbDiscount, 4, 15, null);
         lbDiscount.setForeground(Color.RED);
         pn4.add(lbDiscount);
 
         JLabel thu = new JLabel("Thu: ");
-        TienIch.labelStyle(thu, 1, 15, null);
+        TienIch.labelStyle(thu, 4, 15, null);
         pn4.add(thu);
 
         lbThu = new JLabel(TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(donhang.getMaDH())));
-        TienIch.labelStyle(lbThu, 1, 15, null);
-        lbThu.setForeground(new Color(44, 99, 44));
+        TienIch.labelStyle(lbThu, 4, 15, null);
+        lbThu.setForeground(Color.GREEN);
         pn4.add(lbThu);
     }
 
@@ -143,6 +140,16 @@ public class PanelXemThK extends JPanel {
         pn4 = new JPanel();
         initPanel4();
         add(pn4, gbc);
+
+        tb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Kiểm tra double click
+                    FormProductDetail detailDialog = new FormProductDetail(null, SanPhamBLL.getProductById((Integer)tb.getValueAt(tb.getSelectedRow(), 0)));
+                        detailDialog.setVisible(true);
+                }
+            }
+        });
     }
 
     public String LayChuoiTuBang(DefaultTableModel model, int dong, int cot) {
@@ -160,16 +167,16 @@ public class PanelXemThK extends JPanel {
         donhang = DonHangBLL.getOrderById(Integer.parseInt(getid));
 
         lbIdHD = new JLabel(getid);
-        TienIch.labelStyle(lbIdHD, 1, 20, null);
+        TienIch.labelStyle(lbIdHD, 4, 20, null);
         lbDay = new JLabel(LayChuoiTuBang(model, dong, 4));
-        TienIch.labelStyle(lbDay, 1, 20, null);
+        TienIch.labelStyle(lbDay, 4, 20, null);
 
         khach = TheThanhVienBLL.getMemberById(donhang.getMaKH());
         lbGuest = new JLabel(khach.getTenTV());
-        TienIch.labelStyle(lbGuest, 1, 20, null);
+        TienIch.labelStyle(lbGuest, 4, 20, null);
 
         lbNV = new JLabel(LayChuoiTuBang(model, dong, 1));
-        TienIch.labelStyle(lbNV, 1, 20, null);
+        TienIch.labelStyle(lbNV, 4, 20, null);
     }
 
     private void loadChiTiet() {

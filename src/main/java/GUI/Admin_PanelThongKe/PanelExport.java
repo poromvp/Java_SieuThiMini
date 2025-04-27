@@ -3,6 +3,9 @@ package GUI.Admin_PanelThongKe;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
+
+import GUI.ComponentCommon.TienIch;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -47,12 +50,12 @@ public class PanelExport extends JPanel {
     
     public void XuatPDF(DefaultTableModel model){
         this.tableModel = model;
-        JOptionPane.showMessageDialog(null, "In báo cáo ra file PDF...");
+        TienIch.CustomMessage("In báo cáo ra file PDF...");
     }
 
     public void XuatExccel(DefaultTableModel model){
         this.tableModel = model;
-        JOptionPane.showMessageDialog(null, "In báo cáo ra file Exccel...");
+        TienIch.CustomMessage("In báo cáo ra file Excel...");
     }
 
     // Trả về định dạng người dùng đã chọn

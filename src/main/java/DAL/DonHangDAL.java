@@ -179,7 +179,35 @@ public class DonHangDAL {
     
 
     
-    
+    // Lấy đơn hàng theo ID Thành Viên
+    public static ArrayList<DonHangDTO> getOrderByKH(int maKH) {
+        ArrayList<DonHangDTO> dsDonHang = new ArrayList<>();
+        String sql = "SELECT * FROM DonHang WHERE maKH = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, maKH);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                DonHangDTO dh = new DonHangDTO(
+                    rs.getInt("maDH"),
+                    rs.getInt("maKH"),
+                    rs.getInt("maKM"),
+                    rs.getInt("maNV"),
+                    rs.getString("PTTToan"),
+                    rs.getString("NgayTT"),
+                    rs.getInt("maDTL"), 
+                    rs.getInt("tienKD"), 
+                    rs.getString("trangThai")
+                );
+                dsDonHang.add(dh);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsDonHang;
+    }
 
 
     // Lấy đơn hàng theo ID

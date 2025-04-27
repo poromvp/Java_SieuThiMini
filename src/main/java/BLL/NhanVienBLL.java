@@ -2,12 +2,6 @@ package BLL;
 
 import DAL.NhanVienDAL;
 import DTO.NhanVienDTO;
-import DTO.TaiKhoanDTO;
-
-import javax.swing.JOptionPane;
-
-import java.sql.Date;
-import java.util.Calendar;
 import java.util.List;
 
 public class NhanVienBLL {

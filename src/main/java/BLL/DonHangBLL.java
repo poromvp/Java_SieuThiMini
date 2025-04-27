@@ -26,6 +26,10 @@ public class DonHangBLL {
         return DonHangDAL.getOrderById(maDH);
     }
 
+    // Lấy đơn hàng theo ID Thành Viên
+    public static ArrayList<DonHangDTO> getOrderByKH(int maKH) {
+        return DonHangDAL.getOrderByKH(maKH);
+    }
 
     public static int tinhTongTienByMaDonHang(int maDH){
         if(maDH <= 0){

@@ -61,6 +61,7 @@ public class PanelSuaThanhVien extends JPanel {
         if (member != null) {
             txtTenTV.setText(member.getTenTV());
             dateNgaySinh.setDate(member.getNgaySinh());
+            System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
             txtDiaChi.setText(member.getDiaChi());
             txtSDT.setText(member.getSdt());
             tenAnh = member.getTenAnh();
@@ -82,8 +83,8 @@ public class PanelSuaThanhVien extends JPanel {
             int result = chooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
-                tenAnh = file.getAbsolutePath();
-                ImageIcon icon = new ImageIcon(tenAnh);
+                tenAnh = file.getName();
+                ImageIcon icon = new ImageIcon(file.getAbsolutePath());
                 Image img = icon.getImage().getScaledInstance(200, 350, Image.SCALE_SMOOTH);
                 lblImagePreview.setIcon(new ImageIcon(img));
                 lblImagePreview.setText("");
@@ -114,13 +115,9 @@ public class PanelSuaThanhVien extends JPanel {
 
     public TheThanhVienDTO getDTOTheThanhVien() {
         TheThanhVienDTO dto = new TheThanhVienDTO();
-        // Chuyển Date sang LocalDate
-        LocalDate ngaySinh = TienIch.convertDateToLocalDate(dateNgaySinh.getDate());
-        LocalDate ngayKT = TienIch.convertDateToLocalDate(dateNgayKT.getDate());
-
-        // Chuyển LocalDate sang Date để set vào DTO (vì DTO đang dùng java.util.Date)
-        dto.setNgaySinh(dto.convertToDateViaSqlDate(ngaySinh));
-        dto.setNgayKT(dto.convertToDateViaSqlDate(ngayKT));
+        dto.setNgaySinh(new java.sql.Date(dateNgaySinh.getDate().getTime()));
+        System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
+        dto.setNgayKT(new java.sql.Date(dateNgayKT.getDate().getTime()));
         dto.setTenTV(txtTenTV.getText());
         dto.setDiaChi(txtDiaChi.getText());
         dto.setSdt(txtSDT.getText());

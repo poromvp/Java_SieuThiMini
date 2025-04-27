@@ -109,8 +109,8 @@ public class PanelThemThanhVien extends JPanel {
         return txtTenTV.getText();
     }
 
-    public java.util.Date getNgaySinh() {
-        return dateNgaySinh.getDate();
+    public java.sql.Date getNgaySinh() {
+        return new java.sql.Date(dateNgaySinh.getDate().getTime());
     }
 
     public String getDiaChi() {

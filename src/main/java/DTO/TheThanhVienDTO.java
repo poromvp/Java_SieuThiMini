@@ -1,8 +1,7 @@
 package DTO;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.sql.Date;
 
 public class TheThanhVienDTO {
     private int maTV;        // Mã thẻ thành viên (PK)
@@ -40,15 +39,22 @@ public class TheThanhVienDTO {
         this.diaChi = diaChi;
         this.diemTL = 0;
         this.sdt = sdt;
-        this.ngayBD = convertToDateViaSqlDate(LocalDate.now());
-        this.ngayKT = convertToDateViaSqlDate(LocalDate.now().plusYears(2));
+        this.ngayBD = Date.valueOf(LocalDate.now());
+        this.ngayKT = Date.valueOf(LocalDate.now().plusYears(2));
         this.tenAnh = tenAnh;
         this.trangThai = "ACTIVE";
     }
 
     // Chuyển đổi từ LocalDate sang Date
-    public Date convertToDateViaSqlDate(LocalDate dateToConvert) {
-        return Date.from(dateToConvert.atStartOfDay(ZoneId.of("Asia/Ho_Chi_Minh")).toInstant());
+    public Date them2nam(Date sqlDate) {
+        // Chuyển java.sql.Date thành LocalDate
+        LocalDate localDate = sqlDate.toLocalDate();
+        
+        // Cộng thêm 2 năm
+        LocalDate newLocalDate = localDate.plusYears(2);
+        
+        // Chuyển lại thành java.sql.Date
+        return Date.valueOf(newLocalDate);
     }
 
     // Getter và Setter

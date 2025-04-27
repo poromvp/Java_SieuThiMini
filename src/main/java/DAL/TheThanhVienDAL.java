@@ -39,6 +39,66 @@ public class TheThanhVienDAL {
         return dsTheThanhVien;
     }
 
+    // Lấy danh sách tất cả thẻ thành viên ACTIVE
+    public static ArrayList<TheThanhVienDTO> getAllMembersACTIVE() {
+        ArrayList<TheThanhVienDTO> dsTheThanhVien = new ArrayList<>();
+        String sql = "SELECT * FROM TheThanhVien WHERE trangthai = 'ACTIVE'";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                TheThanhVienDTO member = new TheThanhVienDTO(
+                    rs.getInt("maTV"),
+                    rs.getString("tenTV"),
+                    rs.getDate("ngaySinh"),
+                    rs.getString("diaChi"),
+                    rs.getInt("diemTL"),
+                    rs.getString("sdt"),
+                    rs.getDate("ngayBD"),
+                    rs.getDate("ngayKT"),
+                    rs.getString("tenAnh"),
+                    rs.getString("trangThai")
+                );
+                dsTheThanhVien.add(member);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsTheThanhVien;
+    }
+
+    // Lấy danh sách tất cả thẻ thành viên INACTIVE
+    public static ArrayList<TheThanhVienDTO> getAllMembersINACTIVE() {
+        ArrayList<TheThanhVienDTO> dsTheThanhVien = new ArrayList<>();
+        String sql = "SELECT * FROM TheThanhVien WHERE trangthai = 'INACTIVE'";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                TheThanhVienDTO member = new TheThanhVienDTO(
+                    rs.getInt("maTV"),
+                    rs.getString("tenTV"),
+                    rs.getDate("ngaySinh"),
+                    rs.getString("diaChi"),
+                    rs.getInt("diemTL"),
+                    rs.getString("sdt"),
+                    rs.getDate("ngayBD"),
+                    rs.getDate("ngayKT"),
+                    rs.getString("tenAnh"),
+                    rs.getString("trangThai")
+                );
+                dsTheThanhVien.add(member);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsTheThanhVien;
+    }
+
     // Lấy thông tin thẻ thành viên theo mã
     public static TheThanhVienDTO getMemberById(int maTV) {
         String sql = "SELECT * FROM TheThanhVien WHERE maTV = ?";

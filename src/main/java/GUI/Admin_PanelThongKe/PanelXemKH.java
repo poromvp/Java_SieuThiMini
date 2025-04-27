@@ -23,7 +23,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
     public PanelXemKH(DefaultTableModel model, int dong) {
         TienIch.setDarkUI();
         kh = TheThanhVienBLL.getMemberById(Integer.parseInt(model.getValueAt(dong, 0).toString()));
-
+        HoaDon = DonHangBLL.getOrderByKH(Integer.parseInt(model.getValueAt(dong, 0).toString()));
         setBackground(new Color(226, 224, 221));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -211,7 +211,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel modelMini;
     JScrollPane scr;
-    public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
+    public ArrayList<DonHangDTO> HoaDon ;
 
     public void initPanel3() {
         TienIch.taoTitleBorder(pn3, "Danh sách các hóa đơn đã mua");

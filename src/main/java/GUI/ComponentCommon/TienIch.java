@@ -288,7 +288,6 @@ public class TienIch {
             if (selectedDate != null && selectedDate.after(today)) {
                 CustomMessage("Không thể chọn ngày trong tương lai!");
                 day.setDate(ngay);
-                return;
             }
         }); // có thể thay today bằng một giá trị Date cụ thể nếu muốn kiểm tra theo một mốc
             // nào đó.
@@ -301,11 +300,9 @@ public class TienIch {
             if (selectedDate != null && selectedDate.before(ngayBD)) {
                 CustomMessage("Không thể chọn ngày trước ngày bắt đầu được!");
                 day.setDate(ngayKT);
-                return;
             } else if (selectedDate != null && selectedDate.after(ngayBD) && selectedDate.before(ngayKT)) {
                 CustomMessage("Ngày kết thúc phải cách ngày bắt đầu ít nhất 2 năm!");
                 day.setDate(ngayKT);
-                return;
             }
         });
     }

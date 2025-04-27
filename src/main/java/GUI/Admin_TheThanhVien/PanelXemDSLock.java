@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.TheThanhVienBLL;
@@ -18,7 +17,7 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
+    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembersINACTIVE();
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
 

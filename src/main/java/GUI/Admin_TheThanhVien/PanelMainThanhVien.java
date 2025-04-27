@@ -18,7 +18,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
     JButton btnThem, btnKhoa, btnSua, btnTim, btnXemBlock, btnIn;
     StyledTable tb;
     DefaultTableModel model;
-    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
+    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembersACTIVE();
 
     private void initPanel(JPanel pnl, String title) {
         pnl.setBorder(new CompoundBorder(new TitledBorder(title), new EmptyBorder(4, 4, 4, 4)));
@@ -89,7 +89,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
 
     private void loadThanhVien(ArrayList<TheThanhVienDTO> ttv) {
         model.setRowCount(0);
-        ttv = TheThanhVienBLL.getAllMembers();
+        ttv = TheThanhVienBLL.getAllMembersACTIVE();
         for (TheThanhVienDTO tv : ttv) {
             model.addRow(new Object[] {
                     tv.getMaTV(),
@@ -142,19 +142,18 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
             PanelXemDSLock panel = new PanelXemDSLock();
             int result = JOptionPane.showConfirmDialog(null, panel, "Danh sách TTV đã khóa",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            if (result == JOptionPane.OK_OPTION) {
+                TienIch.CustomMessage("Đã hủy xem danh sách thẻ thành viên bị khóa");
+            }
         } else if (e.getSource() == btnThem) {
             PanelThemThanhVien panel = new PanelThemThanhVien();
             int result = JOptionPane.showConfirmDialog(null, panel, "Thêm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.ktraBieuThucChinhQuy()) {
-                    boolean kq = TheThanhVienBLL.addMember(panel.create1TV());
-                    if (kq) {
-                        TienIch.CustomMessage("Đã thêm thành công");
-                        loadThanhVien(TTV);
-                    } else {
-                        TienIch.CustomMessage("Lỗi, không thêm thành viên mới được");
-                    }
+                    String kq = TheThanhVienBLL.addMember(panel.create1TV());
+                    TienIch.CustomMessage(kq);
+                    loadThanhVien(TTV);
                 } else {
                     TienIch.CustomMessage("Hãy nhập đầy đủ thông tin");
                 }

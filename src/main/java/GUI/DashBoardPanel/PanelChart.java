@@ -1,33 +1,42 @@
 package GUI.DashBoardPanel;
 
 import javax.swing.*;
+
+import BLL.ChartBLL;
+
 import java.awt.*;
 import java.time.LocalDate;
 
 public class PanelChart extends JPanel {
+    private PanelTomTat panelTomTat;
 
-    public PanelChart() {
+    public PanelChart(PanelTomTat panelTomTat) {
+        this.panelTomTat = panelTomTat;
+
         // Dữ liệu doanh thu ban đầu (dựa trên ngày hiện tại)
-        LocalDate today = LocalDate.now(); // Ví dụ: 2025-03-20
-        int year = today.getYear(); // 2025
-        int month = today.getMonthValue(); // 3
-        int currentDay = today.getDayOfMonth(); // 20
-        int[] revenue = Database.getRevenueForMonth(month, year, currentDay); // Dữ liệu thực tế cho ngày
+        LocalDate today = LocalDate.now();
+        int year = today.getYear();
+        int month = today.getMonthValue();
+        int currentDay = today.getDayOfMonth();
+        double[] revenue = ChartBLL.getRevenueForMonth(month, year, currentDay);
         String[] days = new String[currentDay];
         for (int i = 0; i < currentDay; i++) {
             days[i] = String.valueOf(i + 1);
         }
         vechart chart = new vechart(revenue, days, "Ngày");
 
+        // Cập nhật PanelTomTat với bộ lọc ban đầu
+        panelTomTat.updateData("Ngày", month, year);
+
         // Tạo bộ lọc thời gian
-        String[] filters = { "Ngày", "Tháng", "Năm" };
+        String[] filters = {"Ngày", "Tháng", "Năm"};
         JComboBox<String> filterBox = new JComboBox<>(filters);
         filterBox.setSelectedItem("Ngày");
 
-        // Tạo bộ chọn tháng (chỉ dùng cho "Ngày")
-        String[] monthNames = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+        // Tạo bộ chọn tháng
+        String[] monthNames = {"T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"};
         JComboBox<String> monthBox = new JComboBox<>(monthNames);
-        monthBox.setSelectedIndex(month - 1); // Mặc định tháng hiện tại
+        monthBox.setSelectedIndex(month - 1);
         monthBox.setVisible(true);
         JLabel thang = new JLabel("Tháng:");
         thang.setVisible(true);
@@ -61,7 +70,6 @@ public class PanelChart extends JPanel {
                     yearField.setText(String.valueOf(currentYear));
                 }
 
-                // Không cho chọn tháng tương lai trong năm hiện tại
                 if (chart.selectedYear == currentYear && chart.selectedMonth > currentMonth) {
                     chart.selectedMonth = currentMonth;
                     monthBox.setSelectedIndex(currentMonth - 1);
@@ -69,17 +77,17 @@ public class PanelChart extends JPanel {
 
                 numBars = chart.getDaysInMonth(chart.selectedMonth, chart.selectedYear);
                 if (chart.selectedYear == currentYear && chart.selectedMonth == currentMonth) {
-                    numBars = currentDay; // Giới hạn đến ngày hiện tại
+                    numBars = currentDay;
                 }
                 chart.labels = new String[numBars];
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
                 for (int i = 0; i < numBars; i++) {
-                    chart.labels[i] = String.valueOf(i + 1); // Nhãn là ngày
+                    chart.labels[i] = String.valueOf(i + 1);
                 }
             } else if ("Tháng".equals(selectedFilter)) {
-                monthBox.setVisible(false); // Không cần chọn tháng khi hiển thị 12 tháng
+                monthBox.setVisible(false);
                 thang.setVisible(false);
                 yearField.setVisible(true);
                 yearLabel.setVisible(true);
@@ -93,14 +101,14 @@ public class PanelChart extends JPanel {
                     yearField.setText(String.valueOf(currentYear));
                 }
 
-                numBars = 12; // 12 tháng
+                numBars = 12;
                 chart.labels = monthNames.clone();
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForYearByMonth(chart.selectedYear);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForYearByMonth(chart.selectedYear);
                 if (chart.selectedYear == currentYear) {
                     for (int i = currentMonth; i < 12; i++) {
-                        chart.values[i] = 0; // Tháng tương lai = 0
+                        chart.values[i] = 0.0;
                     }
                 }
             } else { // Năm
@@ -108,20 +116,22 @@ public class PanelChart extends JPanel {
                 thang.setVisible(false);
                 yearField.setVisible(false);
                 yearLabel.setVisible(false);
-                numBars = 5; // Số năm cố định
+                numBars = 5;
                 chart.labels = new String[numBars];
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForYears(currentYear - 4, numBars);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForYears(currentYear - 4, numBars);
                 for (int i = 0; i < numBars; i++) {
                     chart.labels[i] = String.valueOf(currentYear - 4 + i);
                 }
             }
             chart.timeFilter = selectedFilter;
             chart.startAnimation();
+            // Cập nhật dữ liệu trong PanelTomTat
+            panelTomTat.updateData(selectedFilter, chart.selectedMonth, chart.selectedYear);
         });
 
-        // Logic cho monthBox (chỉ dùng cho "Ngày")
+        // Logic cho monthBox
         monthBox.addActionListener(_ -> {
             if ("Ngày".equals(chart.timeFilter)) {
                 int currentYear = today.getYear();
@@ -148,13 +158,15 @@ public class PanelChart extends JPanel {
                     numBars = currentDay;
                 }
                 chart.labels = new String[numBars];
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
                 for (int i = 0; i < numBars; i++) {
                     chart.labels[i] = String.valueOf(i + 1);
                 }
                 chart.startAnimation();
+                // Cập nhật dữ liệu trong PanelTomTat
+                panelTomTat.updateData(chart.timeFilter, chart.selectedMonth, chart.selectedYear);
             }
         });
 
@@ -187,25 +199,27 @@ public class PanelChart extends JPanel {
                         numBars = currentDay;
                     }
                     chart.labels = new String[numBars];
-                    chart.values = new int[numBars];
-                    chart.animatedValues = new int[numBars];
-                    chart.values = Database.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
+                    chart.values = new double[numBars];
+                    chart.animatedValues = new double[numBars];
+                    chart.values = ChartBLL.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
                     for (int i = 0; i < numBars; i++) {
                         chart.labels[i] = String.valueOf(i + 1);
                     }
                 } else { // Tháng
                     numBars = 12;
                     chart.labels = monthNames.clone();
-                    chart.values = new int[numBars];
-                    chart.animatedValues = new int[numBars];
-                    chart.values = Database.getRevenueForYearByMonth(chart.selectedYear);
+                    chart.values = new double[numBars];
+                    chart.animatedValues = new double[numBars];
+                    chart.values = ChartBLL.getRevenueForYearByMonth(chart.selectedYear);
                     if (chart.selectedYear == currentYear) {
                         for (int i = currentMonth; i < 12; i++) {
-                            chart.values[i] = 0; // Tháng tương lai = 0
+                            chart.values[i] = 0;
                         }
                     }
                 }
                 chart.startAnimation();
+                // Cập nhật dữ liệu trong PanelTomTat
+                panelTomTat.updateData(chart.timeFilter, chart.selectedMonth, chart.selectedYear);
             }
         });
 
@@ -215,7 +229,6 @@ public class PanelChart extends JPanel {
             int currentYear = today.getYear();
             int currentMonth = today.getMonthValue();
 
-            // Đồng bộ selectedMonth và selectedYear từ giao diện
             if ("Ngày".equals(chart.timeFilter)) {
                 chart.selectedMonth = monthBox.getSelectedIndex() + 1;
             }
@@ -228,48 +241,48 @@ public class PanelChart extends JPanel {
                 yearField.setText(String.valueOf(currentYear));
             }
 
-            // Kiểm tra và giới hạn tháng tương lai
             if ("Ngày".equals(chart.timeFilter) && chart.selectedYear == currentYear
                     && chart.selectedMonth > currentMonth) {
                 chart.selectedMonth = currentMonth;
                 monthBox.setSelectedIndex(currentMonth - 1);
             }
 
-            // Tải dữ liệu theo timeFilter
             if ("Ngày".equals(chart.timeFilter)) {
                 numBars = chart.getDaysInMonth(chart.selectedMonth, chart.selectedYear);
                 if (chart.selectedYear == currentYear && chart.selectedMonth == currentMonth) {
                     numBars = currentDay;
                 }
                 chart.labels = new String[numBars];
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForMonth(chart.selectedMonth, chart.selectedYear, numBars);
                 for (int i = 0; i < numBars; i++) {
                     chart.labels[i] = String.valueOf(i + 1);
                 }
             } else if ("Tháng".equals(chart.timeFilter)) {
                 numBars = 12;
                 chart.labels = monthNames.clone();
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForYearByMonth(chart.selectedYear);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForYearByMonth(chart.selectedYear);
                 if (chart.selectedYear == currentYear) {
                     for (int i = currentMonth; i < 12; i++) {
-                        chart.values[i] = 0; // Tháng tương lai = 0
+                        chart.values[i] = 0;
                     }
                 }
             } else { // Năm
                 numBars = 5;
                 chart.labels = new String[numBars];
-                chart.values = new int[numBars];
-                chart.animatedValues = new int[numBars];
-                chart.values = Database.getRevenueForYears(currentYear - 4, numBars);
+                chart.values = new double[numBars];
+                chart.animatedValues = new double[numBars];
+                chart.values = ChartBLL.getRevenueForYears(currentYear - 4, numBars);
                 for (int i = 0; i < numBars; i++) {
                     chart.labels[i] = String.valueOf(currentYear - 4 + i);
                 }
             }
             chart.startAnimation();
+            // Cập nhật dữ liệu trong PanelTomTat
+            panelTomTat.updateData(chart.timeFilter, chart.selectedMonth, chart.selectedYear);
         });
 
         setLayout(new BorderLayout());
@@ -279,20 +292,16 @@ public class PanelChart extends JPanel {
         pn1.setLayout(new FlowLayout());
 
         pn1.add(new JLabel("Lọc:"));
-
         pn1.add(filterBox);
-
         pn1.add(thang);
-
         pn1.add(monthBox);
-
         pn1.add(yearLabel);
-
         pn1.add(yearField);
-
         pn1.add(animateButton);
 
-        add(chart, BorderLayout.CENTER);
+        JScrollPane scr = new JScrollPane(chart);
+        scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        add(scr, BorderLayout.CENTER);
         add(pn1, BorderLayout.SOUTH);
     }
 }

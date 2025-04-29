@@ -1,11 +1,14 @@
 package GUI;
 
 import javax.swing.*;
+import java.awt.event.*;
+
 
 import BLL.TaiKhoanBLL;
 import DTO.TaiKhoanDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
+import GUI.ComponentCommon.TienIch;
 
 import java.awt.*;
 
@@ -21,8 +24,15 @@ public class FrameLogin extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        Image icon = Toolkit.getDefaultToolkit().getImage("src/main/resources/images/icon/Logo_1.png");
-        this.setIconImage(icon);
+        Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
+            if (event.getID() == WindowEvent.WINDOW_OPENED) {
+                Window window = (Window) event.getSource();
+                ImageIcon icon = new ImageIcon(TienIch.class.getResource("/images/icon/supermarket.png"));
+                Image img = icon.getImage();
+                Image resizedImg = img.getScaledInstance(512, 512, Image.SCALE_SMOOTH);
+                window.setIconImage(new ImageIcon(resizedImg).getImage());
+            }
+        }, AWTEvent.WINDOW_EVENT_MASK);
 
         // Chia đôi frame: trái là ảnh, phải là form
         JPanel mainPanel = new JPanel(new GridLayout(1, 2));

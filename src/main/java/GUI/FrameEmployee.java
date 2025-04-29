@@ -1,12 +1,15 @@
 package GUI;
 
 
+import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Image;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -15,6 +18,7 @@ import javax.swing.JPanel;
 
 import GUI.ComponentCommon.Header;
 import GUI.ComponentCommon.TienIch;
+import GUI.FormEmployee.Home;
 import GUI.FormEmployee.InterfaceHome;
 import GUI.FormEmployee.InterfaceOrder;
 import GUI.FormEmployee.InterfaceOrderManagement;
@@ -29,7 +33,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
     private  InterfaceOrder pn_formOrder;
     private  InterfaceOrderManagement pn_formOrderManagement;
-    private  InterfaceHome pn_formHome;
+    private  Home pn_formHome;
     private  PanelMainBaoCao panelMainBaoCao;
 
 
@@ -68,7 +72,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
         pn_formOrder = new InterfaceOrder();
         pn_formOrderManagement = new InterfaceOrderManagement();
-        pn_formHome = new InterfaceHome();
+        pn_formHome = new Home();
         panelMainBaoCao = new PanelMainBaoCao();
 
         pn_cardLayout.add(pn_formHome, "formHome");
@@ -92,7 +96,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
 
     public static void main(String[] args) {
-        // new FrameEmployee();
+        new FrameEmployee(1 +"");
     }
     
     public static void setPage(String pagename, String title){

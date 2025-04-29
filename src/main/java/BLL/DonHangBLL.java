@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import DAL.DonHangDAL;
 import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
+import DTO.SearchFilterDTO;
 
 public class DonHangBLL {
     
@@ -134,6 +135,10 @@ public class DonHangBLL {
             orderType,
             limit
         );
+    }
+
+    public static ArrayList<DonHangDTO> getOrderByThK(SearchFilterDTO search){
+        return DonHangDAL.getOrderByThK(search);
     }
     
 

@@ -16,6 +16,10 @@ public class ChiTietNhapHangBLL {
         return chiTietNhapHangDAL.getAllChiTietNhapHang();
     }
 
+    public ArrayList<ChiTietPNHangDTO> getAllCTNhHang() {
+        return chiTietNhapHangDAL.getAllCTNhHang();
+    }
+
     // Thêm chi tiết nhập hàng
     public boolean insertChiTietNhapHang(ChiTietPNHangDTO chiTiet) {
         return chiTietNhapHangDAL.insertChiTietNhapHang(chiTiet);

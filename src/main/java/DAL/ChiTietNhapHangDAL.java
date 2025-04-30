@@ -17,41 +17,13 @@ public class ChiTietNhapHangDAL {
 
             while (rs.next()) {
                 ChiTietPNHangDTO chiTiet = new ChiTietPNHangDTO(
-                        
+                        rs.getInt("MaCTPNH"),
                         rs.getInt("MaPNH"),
                         rs.getInt("MaSP"),
                         rs.getInt("MaLH"),
                         rs.getInt("SoLuong"),
                         rs.getDouble("GiaNhap"),
                         rs.getString("TrangThai")
-                );
-                chiTietPNHList.add(chiTiet);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return chiTietPNHList;
-    }
-
-    public ArrayList<ChiTietPNHangDTO> getAllCTNhHang() {
-        ArrayList<ChiTietPNHangDTO> chiTietPNHList = new ArrayList<>();
-        String query = "SELECT * FROM ChiTietPNH WHERE TrangThai = 'ACTIVE'";
-
-        try (Connection conn = DBConnection.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
-
-            while (rs.next()) {
-                ChiTietPNHangDTO chiTiet = new ChiTietPNHangDTO(
-                        
-                        rs.getInt("MaPNH"),
-                        rs.getInt("MaSP"),
-                        rs.getInt("MaLH"),
-                        rs.getInt("SoLuong"),
-                        rs.getDouble("GiaNhap"),
-                        rs.getString("TrangThai"),
-                        rs.getDate("NgaySX"),
-                        rs.getDate("NgayHH")
                 );
                 chiTietPNHList.add(chiTiet);
             }
@@ -92,6 +64,7 @@ public class ChiTietNhapHangDAL {
             pstmt.setInt(4, chiTiet.getSoLuong());
             pstmt.setDouble(5, chiTiet.getGiaNhap());
             pstmt.setString(6, chiTiet.getTrangThai());
+            pstmt.setInt(7, chiTiet.getMaCTPNH());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -125,7 +98,7 @@ public class ChiTietNhapHangDAL {
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     ChiTietPNHangDTO chiTiet = new ChiTietPNHangDTO(
-                            
+                            rs.getInt("MaCTPNH"),
                             rs.getInt("MaPNH"),
                             rs.getInt("MaSP"),
                             rs.getInt("MaLH"),

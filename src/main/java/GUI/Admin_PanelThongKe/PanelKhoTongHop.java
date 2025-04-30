@@ -8,26 +8,23 @@ import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
-import BLL.ChiTietNhapHangBLL;
 import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
-import DTO.ChiTietPNHangDTO;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.*;
 import GUI.FormWareHouse.FormProductDetail;
 
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
     JPanel pn1, pn2, pn3;
-    JScrollPane scr, scr2;
+    JScrollPane scr;
     JLabel tongdonhang;
     JButton btnMore;
     JTabbedPane tab;
-    StyledTable tbSP, tbKho; // Thay JTable bằng StyledTable
-    DefaultTableModel modelSP, modelKho;
+    StyledTable tb; // Thay JTable bằng StyledTable
+    DefaultTableModel model;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
     public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
-    public ArrayList<ChiTietPNHangDTO> DsKho = new ChiTietNhapHangBLL().getAllCTNhHang();
 
     public PanelKhoTongHop() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo kho tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
@@ -60,20 +57,11 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         gbc.gridwidth = 3;
         String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
-        tbSP = new StyledTable(data, tencot); // Khởi tạo StyledTable
-        modelSP = (DefaultTableModel) tbSP.getModel();
-        StyledTable.hoverTable(tbSP, modelSP);
+        tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
+        model = (DefaultTableModel) tb.getModel();
+        StyledTable.hoverTable(tb, model);
         loadSanPham(DsSP);
-        scr = new JScrollPane(tbSP);
-
-        String[] tencott = { "Mã Lô Hàng", "Tên sản phẩm" , "Số lượng", "Tình trạng"};
-        Object[][] dataa = new Object[0][tencott.length]; // Dữ liệu rỗng
-        tbKho = new StyledTable(dataa, tencott); // Khởi tạo StyledTable
-        modelKho = (DefaultTableModel) tbKho.getModel();
-        StyledTable.hoverTable(tbKho, modelKho);
-        loadChiTietPhieuNhap(DsKho);
-        scr2 = new JScrollPane(tbKho);
-
+        scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
@@ -86,9 +74,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         pn3.setLayout(new BorderLayout());
 
         tab = new JTabbedPane();
-        tab.addTab("Danh sách sản phẩm bán chạy", pn1);
-        tab.addTab("Danh sách hàng trong kho", pn2);
-        //tab.addTab("Danh sách hàng sắp hết ", pn3);
+        tab.addTab("Danh sách bán chạy", pn1);
+        tab.addTab("Danh sách tồn nhiều", pn2);
+        tab.addTab("Danh sách hàng sắp hết", pn3);
         add(tab, gbc);
 
         // Thêm popup menu
@@ -101,18 +89,16 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         popupMenu.add(exportItem);
 
         // Thêm sự kiện chuột phải cho bảng
-        showpupop(tbSP);
+        showpupop(tb);
         showpupop(scr);
-        showpupop(tbKho);
-        showpupop(scr2);
         tab.addChangeListener(this);
         btnMore.addActionListener(this);
-        tbSP.addMouseListener(new MouseAdapter() {
+        tb.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) { // Kiểm tra double click
                     FormProductDetail detailDialog = new FormProductDetail(null,
-                            SanPhamBLL.getProductById((Integer) tbSP.getValueAt(tbSP.getSelectedRow(), 0)));
+                            SanPhamBLL.getProductById((Integer) tb.getValueAt(tb.getSelectedRow(), 0)));
                     detailDialog.setVisible(true);
                 }
             }
@@ -120,8 +106,8 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     }
 
     public void showpupop(Object obj) {
-        if (obj instanceof JTable tbSP) {
-            tbSP.addMouseListener(new MouseAdapter() {
+        if (obj instanceof JTable tb) {
+            tb.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
                     if (e.isPopupTrigger()) {
@@ -164,24 +150,12 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     }
 
     private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
-        modelSP.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
+        model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
         for (SanPhamDTO sp : DsSP) {
-            modelSP.addRow(new Object[] {
+            model.addRow(new Object[] {
                     sp.getMaSP(),
                     new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
                     sp.getTenSP()
-            });
-        }
-    }
-
-    private void loadChiTietPhieuNhap(ArrayList<ChiTietPNHangDTO> DsKho){
-        modelKho.setRowCount(0);
-        for (ChiTietPNHangDTO ct : DsKho){
-            modelKho.addRow(new Object[]{
-                ct.getMaLH(),
-                SanPhamBLL.getProductById(ct.getMaSP()).getTenSP(),
-                ct.getSoLuong(),
-                ct.check(ct.getNgaySX(), ct.getNgayHH())
             });
         }
     }
@@ -192,7 +166,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         if (tabSelected == 0) {
             pn1.add(scr, BorderLayout.CENTER);
         } else if (tabSelected == 1) {
-            pn2.add(scr2, BorderLayout.CENTER);
+            pn2.add(scr, BorderLayout.CENTER);
         } else if (tabSelected == 2) {
             pn3.add(scr, BorderLayout.CENTER);
         }
@@ -222,9 +196,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.XuatExccel(modelSP);
+                    panel.XuatExccel(model);
                 } else {
-                    panel.XuatPDF(modelSP);
+                    panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

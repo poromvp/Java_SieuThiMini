@@ -3,17 +3,11 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2025 at 08:22 PM
+-- Generation Time: Apr 30, 2025 at 04:26 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
-
-
-DROP DATABASE IF EXISTS SIEUTHIMINI;
-CREATE DATABASE IF NOT EXISTS SIEUTHIMINII 
-    CHARACTER SET utf8mb4 
-    COLLATE utf8mb4_unicode_ci;
-USE SIEUTHIMINII;
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -53,7 +47,23 @@ INSERT INTO `chitietdh` (`MaDH`, `MaSP`, `SoLuong`, `TrangThai`) VALUES
 (2, 4, 5, 'ACTIVE'),
 (3, 3, 6, 'ACTIVE'),
 (4, 4, 8, 'ACTIVE'),
-(5, 5, 2, 'ACTIVE');
+(5, 5, 2, 'ACTIVE'),
+(6, 1, 10, 'ACTIVE'),
+(6, 2, 5, 'ACTIVE'),
+(7, 3, 8, 'ACTIVE'),
+(8, 4, 20, 'ACTIVE'),
+(9, 5, 7, 'ACTIVE'),
+(10, 1, 15, 'ACTIVE'),
+(11, 2, 10, 'ACTIVE'),
+(12, 3, 12, 'ACTIVE'),
+(13, 4, 25, 'ACTIVE'),
+(14, 5, 5, 'ACTIVE'),
+(15, 1, 12, 'ACTIVE'),
+(16, 2, 8, 'ACTIVE'),
+(17, 3, 10, 'ACTIVE'),
+(18, 4, 15, 'ACTIVE'),
+(19, 5, 8, 'ACTIVE'),
+(20, 1, 10, 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -86,10 +96,9 @@ INSERT INTO `chitietkm` (`MaKM`, `MaSP`, `TileGiam`, `TrangThai`) VALUES
 --
 
 CREATE TABLE `chitietpnh` (
-  `MaCTPNH` int(11) NOT NULL,
-  `MaPNH` int(11) DEFAULT NULL,
-  `MaSP` int(11) DEFAULT NULL,
-  `MaLH` int(11) DEFAULT NULL,
+  `MaPNH` int(11) NOT NULL,
+  `MaSP` int(11) NOT NULL,
+  `MaLH` int(11) NOT NULL,
   `NgayHH` date DEFAULT NULL,
   `NgaySX` date DEFAULT NULL,
   `SoLuong` int(11) DEFAULT NULL,
@@ -101,12 +110,12 @@ CREATE TABLE `chitietpnh` (
 -- Dumping data for table `chitietpnh`
 --
 
-INSERT INTO `chitietpnh` (`MaCTPNH`, `MaPNH`, `MaSP`, `MaLH`, `NgayHH`, `NgaySX`, `SoLuong`, `GiaNhap`, `TrangThai`) VALUES
-(1, 1, 1, 1, NULL, NULL, 100, 45000.00, 'ACTIVE'),
-(2, 2, 2, 2, NULL, NULL, 200, 70000.00, 'ACTIVE'),
-(3, 3, 3, 3, NULL, NULL, 150, 95000.00, 'ACTIVE'),
-(4, 4, 4, 4, NULL, NULL, 180, 120000.00, 'ACTIVE'),
-(5, 5, 5, 5, NULL, NULL, 220, 140000.00, 'ACTIVE');
+INSERT INTO `chitietpnh` (`MaPNH`, `MaSP`, `MaLH`, `NgayHH`, `NgaySX`, `SoLuong`, `GiaNhap`, `TrangThai`) VALUES
+(1, 1, 1, '2025-10-30', '2023-10-30', 100, 45000.00, 'ACTIVE'),
+(2, 2, 2, '2025-05-21', '2022-05-27', 200, 70000.00, 'ACTIVE'),
+(3, 3, 3, '2025-06-25', '2025-04-23', 150, 95000.00, 'ACTIVE'),
+(4, 4, 4, '2025-04-26', '2024-04-26', 180, 120000.00, 'ACTIVE'),
+(5, 5, 5, '2025-04-08', '2024-04-08', 220, 140000.00, 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -161,7 +170,23 @@ INSERT INTO `donhang` (`MaDH`, `MaKH`, `MaKM`, `MaNV`, `PTTToan`, `NgayTT`, `maD
 (2, 2, 2, 2, 'CASH', '2024-03-11 00:00:00', 2, 1000000, 'FINISHED', 140021.45),
 (3, 3, 2, 3, 'BANK', '2024-03-12 00:00:00', 3, -1, 'FINISHED', 120000.00),
 (4, 4, NULL, 4, 'CASH', '2024-03-13 00:00:00', 4, 1000000, 'FINISHED', 60805.70),
-(5, 5, 3, 5, 'CASH', '2024-03-14 00:00:00', 5, 1000000, 'FINISHED', 61075.00);
+(5, 5, 3, 5, 'CASH', '2024-03-14 00:00:00', 5, 1000000, 'FINISHED', 61075.00),
+(6, 1, 1, 1, 'CASH', '2023-01-05 10:00:00', 1, 1000000, 'FINISHED', 210002.50),
+(7, 2, NULL, 2, 'BANK', '2023-02-10 14:30:00', 2, -1, 'FINISHED', 200000.00),
+(8, 3, 2, 3, 'CASH', '2023-03-15 09:00:00', NULL, 500000, 'FINISHED', 160015.00),
+(9, 4, 3, 4, 'BANK', '2023-06-20 16:00:00', 3, -1, 'FINISHED', 245000.00),
+(10, 5, 4, 5, 'CASH', '2023-09-25 11:00:00', 4, 2000000, 'FINISHED', 225000.00),
+(11, 6, NULL, 1, 'BANK', '2023-12-30 13:00:00', 5, -1, 'FINISHED', 120005.00),
+(12, 8, 5, 2, 'CASH', '2024-01-10 15:00:00', NULL, 1000000, 'FINISHED', 300000.00),
+(13, 9, 1, 3, 'BANK', '2024-04-05 12:00:00', 1, -1, 'FINISHED', 200018.75),
+(14, 10, 2, 4, 'CASH', '2024-07-15 17:00:00', 2, 1500000, 'FINISHED', 175000.00),
+(15, 1, 3, 5, 'BANK', '2024-10-20 10:30:00', 3, -1, 'FINISHED', 180000.00),
+(16, 2, NULL, 1, 'CASH', '2024-12-25 14:00:00', 4, 2000000, 'FINISHED', 96004.00),
+(17, 3, 4, 2, 'BANK', '2025-01-05 09:00:00', NULL, -1, 'FINISHED', 250000.00),
+(18, 4, 5, 3, 'CASH', '2025-02-10 16:00:00', 5, 1000000, 'FINISHED', 120011.25),
+(19, 5, 1, 4, 'BANK', '2025-03-15 11:00:00', 1, -1, 'FINISHED', 280000.00),
+(20, 6, NULL, 5, 'CASH', '2025-04-20 13:00:00', 2, 500000, 'FINISHED', 150000.00),
+(21, 6, NULL, 5, 'CASH', '2025-04-19 13:00:00', 2, 500000, 'FINISHED', 150000.00);
 
 -- --------------------------------------------------------
 
@@ -401,7 +426,7 @@ ALTER TABLE `chitietkm`
 -- Indexes for table `chitietpnh`
 --
 ALTER TABLE `chitietpnh`
-  ADD PRIMARY KEY (`MaCTPNH`),
+  ADD PRIMARY KEY (`MaPNH`,`MaSP`,`MaLH`),
   ADD KEY `FK_ChiTietPNH_PhieuNhapHang` (`MaPNH`),
   ADD KEY `FK_ChiTietPNH_SanPham` (`MaSP`);
 
@@ -481,12 +506,6 @@ ALTER TABLE `thethanhvien`
 --
 
 --
--- AUTO_INCREMENT for table `chitietpnh`
---
-ALTER TABLE `chitietpnh`
-  MODIFY `MaCTPNH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
 -- AUTO_INCREMENT for table `diemtichluy`
 --
 ALTER TABLE `diemtichluy`
@@ -496,7 +515,7 @@ ALTER TABLE `diemtichluy`
 -- AUTO_INCREMENT for table `donhang`
 --
 ALTER TABLE `donhang`
-  MODIFY `MaDH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `MaDH` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `khuyenmai`

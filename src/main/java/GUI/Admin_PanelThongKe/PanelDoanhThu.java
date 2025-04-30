@@ -9,6 +9,7 @@ import javax.swing.table.*;
 
 import BLL.DonHangBLL;
 import DTO.DonHangDTO;
+import GUI.ExportToPDF;
 import GUI.ComponentCommon.*;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
@@ -64,9 +65,6 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         pn3.setBorder(new CompoundBorder(new TitledBorder("Danh sách"), new EmptyBorder(4, 4, 4, 4)));
         pn3.setLayout(new BorderLayout());
         String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
-        for (DonHangDTO hd : HoaDon) {
-            System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " + hd.getPtThanhToan() + " " + hd.getNgayTT());
-        }
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
@@ -197,7 +195,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.XuatExccel(model);
+                    panel.exportJTableToPDF(tb);
                 } else {
                     panel.XuatPDF(model);
                 }
@@ -206,6 +204,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
             } else {
                 TienIch.CustomMessage("Đã hủy xuất file");
             }
+            //ExportToPDF.exportJTableToPDF(tb);
         }
         TienIch.resetUI();
     }

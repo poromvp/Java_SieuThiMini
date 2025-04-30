@@ -1,7 +1,13 @@
 package GUI.DashBoardPanel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import GUI.ComponentCommon.TienIch;
+
 import java.awt.*;
+import java.io.*;
+import java.awt.image.BufferedImage;
 
 public class MainDashBoard extends JPanel {
     public MainDashBoard() {
@@ -30,5 +36,6 @@ public class MainDashBoard extends JPanel {
         scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scr.getVerticalScrollBar().setUnitIncrement(20);
         add(scr, BorderLayout.CENTER);
+
     }
 }

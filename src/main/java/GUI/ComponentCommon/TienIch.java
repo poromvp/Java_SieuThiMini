@@ -6,7 +6,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
-
+import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
 import java.text.*;
@@ -481,4 +481,22 @@ public class TienIch {
         panel.setBorder(new CompoundBorder(border, emptyBorder));
     }
 
+    public static BufferedImage captureComponent(Component comp) {
+        comp.doLayout();  // bắt buộc
+        comp.setSize(comp.getPreferredSize());  // bắt buộc
+    
+        int width = comp.getWidth();
+        int height = comp.getHeight();
+    
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException("Component has invalid size.");
+        }
+    
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = image.createGraphics();
+        comp.paint(g2d);
+        g2d.dispose();
+        return image;
+    }
+    
 }

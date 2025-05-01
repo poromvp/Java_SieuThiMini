@@ -3,6 +3,7 @@ package GUI.Admin_PanelThongKe;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
@@ -10,6 +11,7 @@ import javax.swing.table.*;
 import BLL.DonHangBLL;
 import BLL.SearchFilterBLL;
 import DTO.DonHangDTO;
+import DTO.SearchFilterDTO;
 import GUI.ExportToPDF;
 import GUI.ComponentCommon.*;
 
@@ -188,7 +190,8 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 HoaDon = SearchFilterBLL.timKiem_SapXepDonHang(panel.filter());
-                loadDonHang(HoaDon);
+                System.out.println(HoaDon.size());
+             loadDonHang(HoaDon);
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();

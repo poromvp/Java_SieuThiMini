@@ -57,7 +57,7 @@ public class PanelTimKH extends JPanel{
         dateChooserBatDau = new JDateChooser();
         dateChooserBatDau.setDateFormatString("dd/MM/yyyy");
         dateChooserBatDau.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateChooserBatDau);
+        TienIch.checkngaynhaptutay(dateChooserBatDau, new java.sql.Date(System.currentTimeMillis()));
         TienIch.timStyle(dateChooserBatDau);
         gbc.gridx = 3;
         gbc.gridy = 0;
@@ -72,7 +72,7 @@ public class PanelTimKH extends JPanel{
         dateChooserKetThuc = new JDateChooser();
         dateChooserKetThuc.setDateFormatString("dd/MM/yyyy");
         dateChooserKetThuc.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateChooserBatDau);
+        TienIch.checkngaynhaptutay(dateChooserKetThuc, new java.sql.Date(System.currentTimeMillis()));
         TienIch.timStyle(dateChooserKetThuc);
         gbc.gridx = 5;
         gbc.gridy = 0;

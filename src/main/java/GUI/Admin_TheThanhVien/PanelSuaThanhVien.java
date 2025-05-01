@@ -5,49 +5,72 @@ import com.toedter.calendar.JDateChooser;
 import javax.swing.*;
 import java.awt.*;
 import java.io.File;
+import java.time.LocalDate;
+
 import BLL.TheThanhVienBLL;
 import DTO.TheThanhVienDTO;
+import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 
 public class PanelSuaThanhVien extends JPanel {
-    private JTextField txtTenTV;
-    private JDateChooser dateNgaySinh;
-    private JTextField txtDiaChi;
-    private JTextField txtSDT;
+    private StyledTextField txtTenTV;
+    private StyledTextField txtDiaChi;
+    private StyledTextField txtSDT;
+    private StyledTextField txtDiemTL;
+    private StyledTextField txtNgayBD;
     private JLabel lblImagePreview;
+    private JDateChooser dateNgaySinh;
+    private JDateChooser dateNgayKT;
     private String tenAnh;
     private int maTV;
 
-    public PanelSuaThanhVien(int maTV) {
-        this.maTV = maTV;
+    public PanelSuaThanhVien(TheThanhVienDTO member) {
+        this.maTV = member.getMaTV();
         setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createTitledBorder("Sửa Thông Tin Thẻ Thành Viên"));
+        TienIch.taoTitleBorder(this, "Sửa thông tin thẻ thành viên");
 
-        JPanel formPanel = new JPanel(new GridLayout(5, 2, 10, 10));
+        JPanel formPanel = new JPanel(new GridLayout(8, 2, 10, 10));
 
         // Các thành phần nhập liệu
-        txtTenTV = new JTextField();
+        txtTenTV = new StyledTextField();
         dateNgaySinh = new JDateChooser();
-        txtDiaChi = new JTextField();
-        txtSDT = new JTextField();
+        txtDiaChi = new StyledTextField();
+        txtSDT = new StyledTextField();
         JButton btnChonAnh = new JButton("Chọn ảnh");
+        txtDiemTL = new StyledTextField();
+        txtDiemTL.setEnabled(false);
+        txtNgayBD = new StyledTextField();
+        txtNgayBD.setEnabled(false);
+        dateNgayKT = new JDateChooser();
+
+        dateNgaySinh.setDateFormatString("dd/MM/yyyy");
+        dateNgaySinh.setMaxSelectableDate(new java.util.Date());
+        TienIch.checkngaynhaptutay(dateNgaySinh, member.getNgaySinh());
+        TienIch.checkngaynhapdutuoi(dateNgaySinh, member.getNgaySinh());
+
+        dateNgayKT.setDateFormatString("dd/MM/yyyy");
+        dateNgayKT.setMinSelectableDate(member.getNgayKT());
+        TienIch.checkngayKT(dateNgayKT, member.getNgayBD(), member.getNgayKT());
 
         // Label hiển thị ảnh
         lblImagePreview = new JLabel("Chưa chọn ảnh", JLabel.CENTER);
-        lblImagePreview.setPreferredSize(new Dimension(150, 150));
+        lblImagePreview.setPreferredSize(new Dimension(200, 350));
         lblImagePreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         // Load thông tin thành viên
-        TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
         if (member != null) {
             txtTenTV.setText(member.getTenTV());
             dateNgaySinh.setDate(member.getNgaySinh());
+            System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
             txtDiaChi.setText(member.getDiaChi());
             txtSDT.setText(member.getSdt());
             tenAnh = member.getTenAnh();
+            txtDiemTL.setText(member.getDiemTL() + "");
+            txtNgayBD.setText(TienIch.ddmmyyyy(member.getNgayBD()));
+            dateNgayKT.setDate(member.getNgayKT());
             if (tenAnh != null && !tenAnh.isEmpty()) {
                 try {
-                    TienIch.anhAVT(lblImagePreview, tenAnh, 150, 150);
+                    TienIch.anhAVT(lblImagePreview, tenAnh, 200, 350, "KH");
                 } catch (Exception e) {
                     lblImagePreview.setText("Lỗi tải ảnh");
                 }
@@ -56,13 +79,13 @@ public class PanelSuaThanhVien extends JPanel {
 
         // Sự kiện chọn ảnh
         btnChonAnh.addActionListener(_ -> {
-            JFileChooser chooser = new JFileChooser();
+            JFileChooser chooser = new JFileChooser("src/main/resources/images/avtMember");
             int result = chooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
                 File file = chooser.getSelectedFile();
-                tenAnh = file.getAbsolutePath();
-                ImageIcon icon = new ImageIcon(tenAnh);
-                Image img = icon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+                tenAnh = file.getName();
+                ImageIcon icon = new ImageIcon(file.getAbsolutePath());
+                Image img = icon.getImage().getScaledInstance(200, 350, Image.SCALE_SMOOTH);
                 lblImagePreview.setIcon(new ImageIcon(img));
                 lblImagePreview.setText("");
             }
@@ -77,6 +100,12 @@ public class PanelSuaThanhVien extends JPanel {
         formPanel.add(txtDiaChi);
         formPanel.add(new JLabel("SĐT:"));
         formPanel.add(txtSDT);
+        formPanel.add(new JLabel("Điểm tích lũy:"));
+        formPanel.add(txtDiemTL);
+        formPanel.add(new JLabel("Ngày bắt đầu:"));
+        formPanel.add(txtNgayBD);
+        formPanel.add(new JLabel("Ngày kết thúc:"));
+        formPanel.add(dateNgayKT);
         formPanel.add(new JLabel("Ảnh đại diện:"));
         formPanel.add(btnChonAnh);
 
@@ -84,19 +113,22 @@ public class PanelSuaThanhVien extends JPanel {
         add(lblImagePreview, BorderLayout.EAST);
     }
 
-    // Getter để lấy DTO từ form
     public TheThanhVienDTO getDTOTheThanhVien() {
         TheThanhVienDTO dto = new TheThanhVienDTO();
-        dto.setMaTV(maTV);
+        dto.setNgaySinh(new java.sql.Date(dateNgaySinh.getDate().getTime()));
+        System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
+        dto.setNgayKT(new java.sql.Date(dateNgayKT.getDate().getTime()));
         dto.setTenTV(txtTenTV.getText());
-        dto.setNgaySinh(dateNgaySinh.getDate());
         dto.setDiaChi(txtDiaChi.getText());
         dto.setSdt(txtSDT.getText());
         dto.setTenAnh(tenAnh);
-        // Giữ nguyên các giá trị khác nếu có
+        // Giữ nguyên các giá trị khác
         TheThanhVienDTO existing = TheThanhVienBLL.getMemberById(maTV);
         if (existing != null) {
+            dto.setMaTV(existing.getMaTV());
             dto.setDiemTL(existing.getDiemTL());
+            dto.setNgayBD(existing.getNgayBD());
+            dto.setTrangThai(existing.getTrangThai());
             // Các trường khác nếu cần
         }
         return dto;

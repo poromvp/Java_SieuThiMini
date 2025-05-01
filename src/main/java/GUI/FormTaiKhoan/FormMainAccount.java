@@ -19,11 +19,12 @@ public class FormMainAccount extends JPanel {
 
         tablePanel = new FormTableAccount();
         FormSearchAccount searchPanel = new FormSearchAccount(tablePanel);
+        JPanel filterPanel = createFilterPanel();
 
+        searchPanel.add(filterPanel,BorderLayout.EAST);
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(searchPanel, BorderLayout.NORTH);
         mainPanel.add(tablePanel, BorderLayout.CENTER);
-
         JPanel buttonPanel = new JPanel();
         addButton = new ButtonCustom("Thêm","add",12,50,50);
         editButton = new ButtonCustom("Sửa","edit",12,50,50);
@@ -35,6 +36,7 @@ public class FormMainAccount extends JPanel {
 
         add(mainPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
+
 
         addButton.addActionListener(new ActionListener() {
             @Override
@@ -71,6 +73,10 @@ public class FormMainAccount extends JPanel {
                     );
         
                     if (confirm == JOptionPane.YES_OPTION) {
+                        if (maNV <= 0) {
+                            JOptionPane.showMessageDialog(null, "Mã nhân viên không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            return ;
+                        }
                         TaiKhoanBLL bll = new TaiKhoanBLL();
                         if (bll.deleteTaiKhoan(maNV)) {
                             model.removeRow(selectedRow);
@@ -87,7 +93,34 @@ public class FormMainAccount extends JPanel {
         
         
     }
+    private JPanel createFilterPanel() {
+        JPanel filterPanel = new JPanel();
+        filterPanel.setLayout(new FlowLayout());
 
+        JLabel filterLabel = new JLabel("Lọc theo:");
+        JComboBox<String> filterOptions = new JComboBox<>(new String[]{"Tất cả", "ACTIVE", "INACTIVE"});
+        JComboBox<String> roleOptions = new JComboBox<>(new String[]{"Tất cả", "ADMIN", "NHÂN VIÊN","QUẢN LÝ KHO"});
+        ButtonCustom btnCancel = new ButtonCustom("Hủy", 12, "red");
+        ButtonCustom filterButton = new ButtonCustom("Lọc", 12, "green");
+        filterPanel.add(filterLabel);
+        filterPanel.add(filterOptions);
+        filterPanel.add(roleOptions);
+        filterPanel.add(filterButton);
+        filterPanel.add(btnCancel);
+
+        filterButton.addActionListener(e -> {
+            String selectedFilter = (String) filterOptions.getSelectedItem();
+            String selectedRole = (String) roleOptions.getSelectedItem();
+            
+            tablePanel.filterData(selectedFilter, selectedRole);
+        });
+        btnCancel.addActionListener(e -> {
+            filterOptions.setSelectedIndex(0); 
+            roleOptions.setSelectedIndex(0);
+            tablePanel.refreshTable();
+        });
+        return filterPanel;
+    }
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test FormAccount");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

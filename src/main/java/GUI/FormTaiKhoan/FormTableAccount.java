@@ -1,6 +1,7 @@
 package GUI.FormTaiKhoan;
 
 import BLL.TaiKhoanBLL;
+import DTO.NhanVienDTO;
 import DTO.TaiKhoanDTO;
 import GUI.ComponentCommon.StyledTable;
 
@@ -8,15 +9,16 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FormTableAccount extends JPanel {
     private StyledTable accountTable;
     private DefaultTableModel tableModel;
 
+    private String[] columnNames = {"Mã NV", "Tài khoản", "Mật khẩu", "Quyền", "Gmail", "Trạng thái"};
     public FormTableAccount() {
         setLayout(new BorderLayout());
-        String[] columnNames = {"Mã NV", "Tài khoản", "Mật khẩu", "Quyền", "Gmail", "Trạng thái"};
         initTable(columnNames);
     }
 
@@ -48,9 +50,27 @@ public class FormTableAccount extends JPanel {
     public void searchAndUpdateTable(String keyword) {
         TaiKhoanBLL bll = new TaiKhoanBLL();
         List<TaiKhoanDTO> taiKhoanList = bll.searchTaiKhoan(keyword);
-        String[] columnNames = {"Mã NV", "Tài khoản", "Mật khẩu", "Quyền", "Gmail", "Trạng thái"};
         updateTableData(taiKhoanList, columnNames);
     }
+    
+    public void filterData(String trangThai, String quyen) {
+        TaiKhoanBLL bll = new TaiKhoanBLL();
+        List<TaiKhoanDTO> taiKhoanList = bll.getAllTaiKhoan();
+        List<TaiKhoanDTO> list = new ArrayList<>();
+    
+        for (TaiKhoanDTO tk : taiKhoanList) {
+            boolean matchTrangThai = trangThai.equals("Tất cả") || tk.getTrangThai().equalsIgnoreCase(trangThai);
+            boolean matchQuyen = quyen.equals("Tất cả") || tk.getQuyen().equalsIgnoreCase(quyen);
+    
+            if (matchTrangThai && matchQuyen) {
+                list.add(tk);
+            }
+        }
+    
+        updateTableData(list,columnNames);
+    }
+    
+
     private void updateTableData(List<TaiKhoanDTO> taiKhoanList, String[] columnNames) {
         Object[][] data = new Object[taiKhoanList.size()][6];
         for (int i = 0; i < taiKhoanList.size(); i++) {
@@ -79,7 +99,6 @@ public class FormTableAccount extends JPanel {
         repaint();
     }
     public void refreshTable() {
-        String[] columnNames = {"Mã NV", "Tài khoản", "Mật khẩu", "Quyền", "Gmail", "Trạng thái"};
         initTable(columnNames);
     }
 

@@ -90,6 +90,10 @@ public class FormEditAccount extends JDialog {
                         tk.setTrangThai(cbTrangThai.getSelectedItem().equals("Đang hoạt động") ? "ACTIVE" : "INACTIVE");
 
                         TaiKhoanBLL bll = new TaiKhoanBLL();
+                                      
+                        if (!FormAddAccount.isValidData(tk)) {
+                            return ;
+                        }
                         if (bll.updateTaiKhoan(tk)) {
                             // Cập nhật bảng
                             tableModel.setValueAt(tk.getMaNV(), selectedRow, 0);

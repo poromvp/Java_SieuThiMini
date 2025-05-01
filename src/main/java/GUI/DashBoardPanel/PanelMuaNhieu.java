@@ -61,9 +61,9 @@ public class PanelMuaNhieu extends JPanel {
 
     public PanelMuaNhieu() {
         setDoubleBuffered(true); // Bật double buffering
-        setBorder(new CompoundBorder(new TitledBorder("Top 5 khách hàng mua nhiều nhất"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(this, "Top 5 khách hàng mua nhiều nhất");
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setBackground(new Color(30, 144, 255));
+        setBackground(new Color(33, 58, 89));
 
         pn1 = new JPanel();
         pn1 = initPanel("1", "0977723621", "23", "1,000,000");

@@ -3,6 +3,8 @@ CREATE DATABASE IF NOT EXISTS SIEUTHIMINI
     CHARACTER SET utf8mb4 
     COLLATE utf8mb4_unicode_ci;
 USE SIEUTHIMINI;
+START TRANSACTION;
+SET time_zone = "+00:00";
 
 -- Tạo bảng, bỏ NVARCHAR, dùng VARCHAR với UTF-8
 CREATE TABLE NhanVien (
@@ -85,7 +87,8 @@ CREATE TABLE SanPham (
     TenSP VARCHAR(255) ,
     SoLuongTon INT DEFAULT 0,
     MoTa VARCHAR(555) ,
-   	TrangThai ENUM('ACTIVE', 'INACTIVE')
+   	TrangThai ENUM('ACTIVE', 'INACTIVE'),
+    soLuongTon int
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 
@@ -172,11 +175,11 @@ INSERT INTO DiemTichLuy (MaDTL, DiemTL, TileGiam, GiamMax, TrangThai) VALUES
 
 
 INSERT INTO NhanVien (TenNV, GioiTinh, NgaySinh, CCCD, DiaChi, SDT, Luong, TrangThai) VALUES
-('Nguyễn Văn An', 'Nam', '1990-05-10', '123456789012', 'Hà Nội', '0912345671', 10000000, '1'),
-('Trần Thị Bích', 'Nữ', '1992-07-15', '234567890123', 'Hải Phòng', '0912345672', 12000000, '1'),
-('Lê Văn Cường', 'Nam', '1993-09-20', '345678901234', 'Đà Nẵng', '0912345673', 15000000, '1'),
-('Phạm Thị Dung', 'Nữ', '1994-11-25', '456789012345', 'TP Hồ Chí Minh', '0912345674', 11000000, '1'),
-('Võ Minh Tuấn', 'Nam', '1995-03-30', '567890123456', 'Cần Thơ', '0912345675', 9000000, '1');
+('Nguyễn Văn An', 'Nam', '1990-05-10', '123456789012', 'Hà Nội', '0912345671', 10000000, 1),
+('Trần Thị Bích', 'Nữ', '1992-07-15', '234567890123', 'Hải Phòng', '0912345672', 12000000, 1),
+('Lê Văn Cường', 'Nam', '1993-09-20', '345678901234', 'Đà Nẵng', '0912345673', 15000000, 1),
+('Phạm Thị Dung', 'Nữ', '1994-11-25', '456789012345', 'TP Hồ Chí Minh', '0912345674', 11000000, 1),
+('Võ Minh Tuấn', 'Nam', '1995-03-30', '567890123456', 'Cần Thơ', '0912345675', 9000000, 1);
 
 INSERT INTO TaiKhoan (MaNV, TenTK, MatKhau, Quyen, Gmail, TrangThai) VALUES
 (1, 'admin1', '123456', 'ADMIN', 'admin1@example.com', 'ACTIVE'),
@@ -220,12 +223,12 @@ INSERT INTO KhuyenMai (MaKM, TenKM, NgayKT, NgayBD,  TrangThai) VALUES
 (5, 'Giảm giá 12.75%', '2025-09-30', '2025-06-01', 'ACTIVE');
 
 
-INSERT INTO SanPham ( MaNCC, MaLSP, TenAnh, Gia, TenSP, MoTa, TrangThai) VALUES
-(1, 1, 'sp1.jpg', 15000.00, 'Bánh Oreo', 'Bánh quy nhân kem', 'ACTIVE'),
-(2, 2, 'sp2.jpg', 12000.50, 'Sữa Vinamilk', 'Sữa tươi nguyên chất', 'ACTIVE'),
-(3, 3, 'sp3.jpg', 25000.00, 'Mì Hảo Hảo', 'Mì gói chua cay', 'ACTIVE'),
-(4, 4, 'sp4.jpg', 8000.75, 'Nước suối Lavie', 'Nước khoáng thiên nhiên', 'ACTIVE'),
-(5, 5, 'sp5.jpg', 35000.00, 'Cà phê G7', 'Cà phê hòa tan đậm đà', 'ACTIVE');
+INSERT INTO SanPham ( MaNCC, MaLSP, TenAnh, Gia, TenSP, MoTa, TrangThai, soLuongTon) VALUES
+(1, 1, 'sp1.jpg', 15000.00, 'Bánh Oreo', 'Bánh quy nhân kem', 'ACTIVE', 20),
+(2, 2, 'sp2.jpg', 12000.50, 'Sữa Vinamilk', 'Sữa tươi nguyên chất', 'ACTIVE', 20),
+(3, 3, 'sp3.jpg', 25000.00, 'Mì Hảo Hảo', 'Mì gói chua cay', 'ACTIVE', 20),
+(4, 4, 'sp4.jpg', 8000.75, 'Nước suối Lavie', 'Nước khoáng thiên nhiên', 'ACTIVE', 20),
+(5, 5, 'sp5.jpg', 35000.00, 'Cà phê G7', 'Cà phê hòa tan đậm đà', 'ACTIVE', 20);
 
 
 INSERT INTO ChiTietKM (MaKM, MaSP, TileGiam, TrangThai) VALUES
@@ -288,3 +291,4 @@ INSERT INTO ChiTietPNH (MaPNH, MaSP, MaLH, SoLuong, GiaNhap, TrangThai) VALUES
 -- order by Tongtien desc;
  -- select * from donhang
 
+COMMIT;

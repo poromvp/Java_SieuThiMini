@@ -6,6 +6,10 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 
+import BLL.NhanVienBLL;
+import BLL.TaiKhoanBLL;
+import DTO.TaiKhoanDTO;
+
 public class LeftSidebarMenu extends JPanel implements ActionListener {
 
     private JButton btnHome;
@@ -17,7 +21,8 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
     private JButton btnTheTV;
     private JButton btnKM;
     private JButton selectedButton = null;
-
+     private NhanVienBLL bllnv = new NhanVienBLL();
+    private TaiKhoanBLL blltk = new TaiKhoanBLL();
     private ActionListener listener;  
 
     private Color bgColor = new Color(33,58,89);
@@ -54,7 +59,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         return btnKM;
     }
 
-    public LeftSidebarMenu() {
+    public LeftSidebarMenu(String maNV) {
         setBackground(bgColor);
         setMaximumSize(new Dimension(250, getHeight()));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -64,7 +69,7 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         employeePanel.setBackground(new Color(25,45,70));
         employeePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
 
-        // Avatar nhân viên (có thể thay bằng ảnh thật sau này)
+        // Avatar nhân viên 
         ImageIcon baseAvata = new ImageIcon("src/main/resources/images/icon/boy.png");
         Image resizeAvata = baseAvata.getImage().getScaledInstance(50,50,Image.SCALE_SMOOTH);
         JLabel avtLabel = new JLabel(new ImageIcon(resizeAvata));
@@ -73,14 +78,14 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         employeePanel.add(avtLabel);
 
         // Tên nhân viên
-        JLabel nameLabel = new JLabel("Nguyễn Văn A");
+        JLabel nameLabel = new JLabel(bllnv.getNameNV(maNV));
         nameLabel.setForeground(Color.WHITE);
         nameLabel.setFont(new Font("Arial", Font.BOLD, 14));
         nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         employeePanel.add(nameLabel);
 
         // Chức vụ
-        JLabel roleLabel = new JLabel("Quản lý");
+        JLabel roleLabel = new JLabel(blltk.getQuyenNV(maNV));
         roleLabel.setForeground(Color.LIGHT_GRAY);
         roleLabel.setFont(new Font("Arial", Font.PLAIN, 12));
         roleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -94,17 +99,15 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
 //        logoLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Căn giữa logo
 //        add(logoLabel);
     
-        // Tạo các nút
         btnHome = createButton("Trang Chủ", "src/main/resources/images/home.png");
         btnEmployee = createButton("Nhân Viên", "src/main/resources/images/employee.png");
         btnProduct = createButton("Sản Phẩm", "src/main/resources/images/product.png");
         btnReport = createButton("Báo Cáo", "src/main/resources/images/report.png");
         btnAccount = createButton("Tài Khoản", "src/main/resources/images/account.png");
         btnLogout = createButton("Đăng Xuất", "src/main/resources/images/exit.png");
-        btnTheTV = createButton("Thẻ Thành Viên", "src/main/resources/images/thethanhvien.png");
+        btnTheTV = createButton("Thành Viên", "src/main/resources/images/thethanhvien.png");
         btnKM = createButton("Khuyến Mãi", "src/main/resources/images/discount.png");
     
-        // Thêm các nút vào panel
         add(btnHome);
         add(btnEmployee);
         add(btnProduct);
@@ -113,10 +116,8 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         add(btnKM);
         add(btnReport);
         
-        // Thêm khoảng trống linh hoạt để đẩy nút đăng xuất xuống dưới cùng
         add(Box.createVerticalGlue());
         
-        // Thêm nút đăng xuất
         add(btnLogout);
     }
     
@@ -182,9 +183,9 @@ public class LeftSidebarMenu extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(400, 700);
         
-        LeftSidebarMenu TEST = new LeftSidebarMenu();
+        // LeftSidebarMenu TEST = new LeftSidebarMenu();
         
-        frame.add(TEST);
+        // frame.add(TEST);
         frame.setVisible(true);
     }
 }

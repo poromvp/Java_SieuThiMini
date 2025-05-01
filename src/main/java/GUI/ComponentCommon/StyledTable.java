@@ -55,6 +55,7 @@ public class StyledTable extends JTable {
                         }
                     }
                 }
+                TienIch.resetUI();
             }
         });
     }

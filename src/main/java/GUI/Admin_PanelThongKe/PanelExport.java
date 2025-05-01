@@ -1,10 +1,31 @@
 package GUI.Admin_PanelThongKe;
 
-import javax.swing.*;
-import javax.swing.border.*;
-import javax.swing.table.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.io.FileOutputStream;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTable;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+
+import GUI.ComponentCommon.TienIch;
 
 public class PanelExport extends JPanel {
 
@@ -25,8 +46,6 @@ public class PanelExport extends JPanel {
         rbExcel = new JRadioButton("Excel");
         rbPDF = new JRadioButton("PDF");
 
-        rbExcel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        rbPDF.setFont(new Font("Segoe UI", Font.BOLD, 24));
         rbExcel.setForeground(Color.WHITE);
         rbPDF.setForeground(Color.WHITE);
         rbExcel.setBackground(new Color(33,58,89));
@@ -47,12 +66,12 @@ public class PanelExport extends JPanel {
     
     public void XuatPDF(DefaultTableModel model){
         this.tableModel = model;
-        JOptionPane.showMessageDialog(null, "In báo cáo ra file PDF...");
+        TienIch.CustomMessage("In báo cáo ra file PDF...");
     }
 
     public void XuatExccel(DefaultTableModel model){
         this.tableModel = model;
-        JOptionPane.showMessageDialog(null, "In báo cáo ra file Exccel...");
+        TienIch.CustomMessage("In báo cáo ra file Excel...");
     }
 
     // Trả về định dạng người dùng đã chọn
@@ -64,5 +83,55 @@ public class PanelExport extends JPanel {
 
     public DefaultTableModel getTableModel() {
         return tableModel;
+    }
+
+    public void exportJTableToPDF(JTable table) {
+        JFileChooser fileChooser = new JFileChooser("src/main/resources/images");
+        fileChooser.setDialogTitle("Chọn nơi lưu file PDF");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("PDF files", "pdf");
+        fileChooser.setFileFilter(filter);
+        fileChooser.setAcceptAllFileFilterUsed(false);
+
+        int userChoice = fileChooser.showSaveDialog(null);
+        if (userChoice == JFileChooser.APPROVE_OPTION) {
+            String filePath = fileChooser.getSelectedFile().getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".pdf")) {
+                filePath += ".pdf";
+            }
+
+            try {
+                // Tạo đối tượng Document
+                Document document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream(filePath));
+                document.open();
+
+                // Tạo đối tượng BaseFont từ font hỗ trợ Unicode (ví dụ: Arial Unicode MS)
+                BaseFont baseFont = BaseFont.createFont("C:/Windows/Fonts/arial.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                Font font = new Font(baseFont, 12);
+
+                PdfPTable pdfTable = new PdfPTable(table.getColumnCount());
+
+                // Thêm tiêu đề cột vào bảng PDF
+                for (int i = 0; i < table.getColumnCount(); i++) {
+                    pdfTable.addCell(new PdfPCell(new Phrase(table.getColumnName(i), font)));
+                }
+
+                // Thêm dữ liệu vào bảng PDF
+                for (int rows = 0; rows < table.getRowCount(); rows++) {
+                    for (int cols = 0; cols < table.getColumnCount(); cols++) {
+                        Object value = table.getValueAt(rows, cols);
+                        pdfTable.addCell(new PdfPCell(new Phrase(value != null ? value.toString() : "", font)));
+                    }
+                }
+
+                document.add(pdfTable);
+                document.close();
+
+                TienIch.CustomMessage("Đã xuất file thành công!");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF: " + ex.getMessage());
+            }
+        }
     }
 }

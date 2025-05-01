@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import com.toedter.calendar.JDateChooser;
 
+import DTO.SearchFilterDTO;
 import GUI.ComponentCommon.*;
 
 public class PanelTimThK extends JPanel {
@@ -58,7 +59,7 @@ public class PanelTimThK extends JPanel {
         dateChooserBatDau = new JDateChooser();
         dateChooserBatDau.setDateFormatString("dd/MM/yyyy");
         dateChooserBatDau.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateChooserBatDau);
+        TienIch.checkngaynhaptutay(dateChooserBatDau, new java.sql.Date(System.currentTimeMillis()));
         TienIch.timStyle(dateChooserBatDau);
         gbc.gridx = 3;
         gbc.gridy = 0;
@@ -73,7 +74,7 @@ public class PanelTimThK extends JPanel {
         dateChooserKetThuc = new JDateChooser();
         dateChooserKetThuc.setDateFormatString("dd/MM/yyyy");
         dateChooserKetThuc.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateChooserBatDau);
+        TienIch.checkngaynhaptutay(dateChooserKetThuc, new java.sql.Date(System.currentTimeMillis()));
         TienIch.timStyle(dateChooserKetThuc);
         gbc.gridx = 5;
         gbc.gridy = 0;
@@ -282,7 +283,22 @@ public class PanelTimThK extends JPanel {
     }
 
     public void testt() {
-        System.out.println("Bạn đã nhập " + txtLoaiSanPham.getText());
+        SearchFilterDTO search = new SearchFilterDTO();
+        if(!txtMaDonHang.getText().isEmpty()){
+            search.setMaDH(Integer.parseInt(txtMaDonHang.getText()));
+        }
+        System.out.println("Bạn đã nhập " + search.getMaDH());
+    }
+
+    public SearchFilterDTO filter(){
+        SearchFilterDTO search = new SearchFilterDTO();
+        if(!txtMaDonHang.getText().isEmpty()){
+            search.setMaDH(Integer.parseInt(txtMaDonHang.getText()));
+        }
+        if(!txtMaSanPham.getText().isEmpty()){
+            search.setMaSP(Integer.parseInt(txtMaSanPham.getText()));
+        }
+        return search;
     }
 
     /*

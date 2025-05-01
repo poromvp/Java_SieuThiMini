@@ -1,17 +1,12 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 
 
 import BLL.DonHangBLL;
-import BLL.LoaiSanPhamBLL;
 import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
-import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
 
@@ -26,8 +21,9 @@ public class PanelXemKH extends JPanel implements ActionListener{
     JMenuItem searchItem, exportItem;
 
     public PanelXemKH(DefaultTableModel model, int dong) {
+        TienIch.setDarkUI();
         kh = TheThanhVienBLL.getMemberById(Integer.parseInt(model.getValueAt(dong, 0).toString()));
-
+        HoaDon = DonHangBLL.getOrderByKH(Integer.parseInt(model.getValueAt(dong, 0).toString()));
         setBackground(new Color(226, 224, 221));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -70,26 +66,14 @@ public class PanelXemKH extends JPanel implements ActionListener{
         showpupop(scr);
     }
 
-    public String LayChuoiTuBang(DefaultTableModel model, int dong, int cot) {
-        Object txt = model.getValueAt(dong, cot);
-        return txt.toString();
-    }
-
-    public String LayChuoiTuBang(String type) {
-        if (type.equals("type")) {
-            return "s";
-        }
-        return null;
-    }
-
     JLabel lbTenKH, lbNgSInh, lbDchi, lbSDT, lbDiemTL, lbID, lbStart, lbEnd;
 
     public void initPanel1(DefaultTableModel model, int dong) {
-        pn1.setBorder(new CompoundBorder(new TitledBorder("Thông tin chi tiết"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(pn1, "Thông tin chi tiết");
         pn1.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.weightx = 0.5;
-        gbc.weighty = 0.5;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
 
         gbc.gridx = 0;
@@ -97,7 +81,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
         gbc.gridheight = 6;
         gbc.ipadx = 10;
         JLabel avt = new JLabel();
-        TienIch.anhAVT(avt, kh.getTenAnh(), 150, 200);
+        TienIch.anhAVT(avt, kh.getTenAnh(),150, 250,"KH");
         pn1.add(avt, gbc);
         gbc.gridheight = 1;
 
@@ -176,13 +160,13 @@ public class PanelXemKH extends JPanel implements ActionListener{
         gbc.gridx = 3;
         gbc.gridy = 0;
         JLabel from = new JLabel("Ngày bắt đầu:");
-        TienIch.labelStyle(from, 1, 15, null);
+        TienIch.labelStyle(from, 4, 15, null);
         pn1.add(from, gbc);
 
         gbc.gridx = 3;
         gbc.gridy = 1;
         JLabel to = new JLabel("Ngày kết thúc:");
-        TienIch.labelStyle(to, 1, 15, null);
+        TienIch.labelStyle(to, 4, 15, null);
         pn1.add(to, gbc);
 
         gbc.gridx = 4;
@@ -201,10 +185,10 @@ public class PanelXemKH extends JPanel implements ActionListener{
     JLabel lbTongDonHang, lbChiTieu;
 
     public void initPanel2() {
-        pn2.setBorder(new CompoundBorder(new TitledBorder("Tóm tắt"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(pn2, "Tóm tắt");
         pn2.setLayout(new GridLayout(2, 2));
 
-        JLabel tongdh = new JLabel("<html>Tổng đơn hàng <br>đã mua: </html>");
+        JLabel tongdh = new JLabel("<html><center>Tổng đơn hàng <br>đã mua: </center></html>");
         TienIch.labelStyle(tongdh, 4, 15, null);
         pn2.add(tongdh);
         lbTongDonHang = new JLabel(HoaDon.size() + "");
@@ -227,9 +211,10 @@ public class PanelXemKH extends JPanel implements ActionListener{
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel modelMini;
     JScrollPane scr;
-    public ArrayList<DonHangDTO> HoaDon = DonHangBLL.getAllOrders();
+    public ArrayList<DonHangDTO> HoaDon ;
 
     public void initPanel3() {
+        TienIch.taoTitleBorder(pn3, "Danh sách các hóa đơn đã mua");
         pn3.setLayout(new BorderLayout());
         String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
         for (DonHangDTO hd : HoaDon) {
@@ -244,8 +229,6 @@ public class PanelXemKH extends JPanel implements ActionListener{
         scr = new JScrollPane(tb);
         scr.setPreferredSize(new Dimension(600, 120)); // Giữ kích thước
         pn3.add(scr, BorderLayout.CENTER);
-        pn3.setBorder(
-                new CompoundBorder(new TitledBorder("Danh sách các hóa đơn đã mua"), new EmptyBorder(4, 4, 4, 4)));
     }
 
     private void loadDonHang(ArrayList<DonHangDTO> danhsach) {
@@ -306,37 +289,18 @@ public class PanelXemKH extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
             PanelTimKH panel = new PanelTimKH();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(modelMini);
@@ -344,10 +308,11 @@ public class PanelXemKH extends JPanel implements ActionListener{
                     panel.XuatPDF(modelMini);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             }
         }
+        TienIch.resetUI();
     }
 }

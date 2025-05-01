@@ -12,6 +12,7 @@ import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.*;
+import GUI.FormWareHouse.FormProductDetail;
 
 public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionListener {
     JPanel pn1, pn2, pn3;
@@ -92,6 +93,16 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         showpupop(scr);
         tab.addChangeListener(this);
         btnMore.addActionListener(this);
+        tb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Kiểm tra double click
+                    FormProductDetail detailDialog = new FormProductDetail(null,
+                            SanPhamBLL.getProductById((Integer) tb.getValueAt(tb.getSelectedRow(), 0)));
+                    detailDialog.setVisible(true);
+                }
+            }
+        });
     }
 
     public void showpupop(Object obj) {
@@ -163,41 +174,38 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == btnMore) {
             PanelDSLoHang panel = new PanelDSLoHang();
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
+
         } else if (e.getSource() == searchItem) {
             PanelTimKho panel = new PanelTimKho();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
+
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
+
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
+
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
             if (result == JOptionPane.OK_OPTION) {
-                if(panel.getSelectedFormat().equals("excel")){
+                if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
-                }
-                else{
+                } else {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
-            }        }
+                TienIch.CustomMessage("Đã hủy xuất file");
+            }
+        }
+        TienIch.resetUI();
     }
 }

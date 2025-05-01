@@ -8,29 +8,34 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
-import BLL.LoaiSanPhamBLL;
-import BLL.SanPhamBLL;
-import DTO.SanPhamDTO;
+import BLL.NhaCungCapBLL;
+import BLL.NhanVienBLL;
+import BLL.NhapHangBLL;
+import DTO.PhieuNhapHangDTO;
 import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.TienIch;
 
 public class PanelDSLoHang extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+    public ArrayList<PhieuNhapHangDTO> DsNHang = new NhapHangBLL().getAllPhieuNhapHang();
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
 
     public PanelDSLoHang() {
-        setBorder(new CompoundBorder(new TitledBorder("Danh Sách Nhập Hàng"), new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(this, "Danh sách nhập hàng");
         setLayout(new BorderLayout());
 
-        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
+        String[] tencot = { "Mã đơn nhập hàng", "Tên đơn", "Ngày nhập", "Nhân viên", "Nhà Cung Cấp" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
-        loadSanPham(DsSP);
+        loadNhapHang(DsNHang);
+        StyledTable.hoverTable(tb, model);
         scr = new JScrollPane(tb);
+        //scr.setPreferredSize(new Dimension(800, 300));
+        TienIch.setPreferredSizeTuDong(scr, tb);
 
         add(scr, BorderLayout.CENTER);
 
@@ -46,6 +51,16 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         // Thêm sự kiện chuột phải cho bảng
         showpupop(tb);
         showpupop(scr);
+
+        tb.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    PanelXemChiTietPhieuNhap panel = new PanelXemChiTietPhieuNhap((Integer)tb.getValueAt(tb.getSelectedRow(), 0));
+                            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết Phiếu Nhập", JOptionPane.PLAIN_MESSAGE);
+                }
+            }
+        });
     }
 
     public void showpupop(Object obj) {
@@ -92,50 +107,33 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         }
     }
 
-    private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
+    private void loadNhapHang(ArrayList<PhieuNhapHangDTO> DsNHang) {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (SanPhamDTO sp : DsSP) {
+        for (PhieuNhapHangDTO nh : DsNHang) {
             model.addRow(new Object[] {
-                    sp.getMaSP(),
-                    new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
-                    sp.getTenSP()
+                    nh.getMaPNH(),
+                    nh.getTenPNH(),
+                    nh.getNgayNhap(),
+                    new NhanVienBLL().getNhanVienByMa(nh.getMaNV() + "").getTenNV(),
+                    new NhaCungCapBLL().getNhaCungCap(nh.getMaNCC()).getTenNCC()
             });
         }
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
             PanelTimKho panel = new PanelTimKho();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == 0) {
                 System.out.println("Bạn vừa nhập: ");
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
-            UIManager.put("OptionPane.background", new Color(33, 58, 89));
-            UIManager.put("Panel.background", new Color(33, 58, 89));
-            UIManager.put("Button.background", Color.GRAY);
-            UIManager.put("Button.foreground", Color.WHITE);
-            UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 13));
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            UIManager.put("OptionPane.background", null);
-            UIManager.put("Panel.background", null);
-            UIManager.put("Button.background", null);
-            UIManager.put("Button.foreground", null);
-            UIManager.put("Button.font", null);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
@@ -143,10 +141,11 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             } else {
-                JOptionPane.showMessageDialog(null, "Đã hủy xuất file");
+                TienIch.CustomMessage("Đã hủy xuất file");
             }
         }
+        TienIch.resetUI();
     }
 }

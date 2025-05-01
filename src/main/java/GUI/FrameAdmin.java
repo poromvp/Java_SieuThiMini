@@ -6,7 +6,9 @@ import java.sql.Connection;
 
 import javax.swing.*;
 
+import DTO.TaiKhoanDTO;
 import GUI.Admin_PanelThongKe.PanelMainThongKe;
+import GUI.Admin_QuanLyKM.DiscountManagementPanel;
 import GUI.Admin_TheThanhVien.PanelMainThanhVien;
 import GUI.ComponentCommon.TienIch;
 import GUI.DashBoardPanel.MainDashBoard;
@@ -20,8 +22,8 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
     private JPanel rightPn;
     private LeftSidebarMenu leftMenu;
-
-    public FrameAdmin() {
+    private static TaiKhoanDTO tk;
+    public FrameAdmin(String maNV) {
         setTitle("Frame Quản Lý");
         setSize(1300, 750);
         setLocationRelativeTo(null);
@@ -29,7 +31,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        leftMenu = new LeftSidebarMenu();
+        leftMenu = new LeftSidebarMenu(maNV);
         leftMenu.setActionListener(this);
         leftMenu.setPreferredSize(new Dimension(250, 0));
 
@@ -54,7 +56,8 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FrameAdmin());
+        String maNV ="12312";
+        SwingUtilities.invokeLater(() -> new FrameAdmin(maNV));
     }
 
     public void panelNhanVien() {
@@ -153,6 +156,9 @@ public class FrameAdmin extends JFrame implements ActionListener {
             panelTaiKhoan();
         } else if (e.getSource() == leftMenu.getBtnLogout()) {
             JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
+            this.dispose();
+            new FrameLogin();
+            
         } else if (e.getSource() == leftMenu.getBtnTheTV()) {
             panelTheThanhVien();
         }else if (e.getSource() == leftMenu.getBtnKM()){

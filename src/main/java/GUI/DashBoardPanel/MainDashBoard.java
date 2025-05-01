@@ -1,7 +1,13 @@
 package GUI.DashBoardPanel;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+
+import GUI.ComponentCommon.TienIch;
+
 import java.awt.*;
+import java.io.*;
+import java.awt.image.BufferedImage;
 
 public class MainDashBoard extends JPanel {
     public MainDashBoard() {
@@ -10,29 +16,26 @@ public class MainDashBoard extends JPanel {
         pn1.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;  // Chỉ kéo giãn theo chiều ngang
-        
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         PanelTomTat panelTomTat = new PanelTomTat();
-        panelTomTat.setPreferredSize(new Dimension(600, 150));
+        panelTomTat.setPreferredSize(new Dimension(1000, 150)); // Tăng chiều rộng
         pn1.add(panelTomTat, gbc);
-        
+
         gbc.gridy = 1;
-        PanelChart panelChart = new PanelChart();
-        panelChart.setPreferredSize(new Dimension(600, 550));
+        PanelChart panelChart = new PanelChart(panelTomTat);
+        panelChart.setPreferredSize(new Dimension(1000, 550));
+        panelChart.setMinimumSize(new Dimension(600, 550));
         pn1.add(panelChart, gbc);
-        
-        /* 
-        gbc.gridy = 2;
-        PanelMuaNhieu panelMuaNhieu = new PanelMuaNhieu();
-        panelMuaNhieu.setPreferredSize(new Dimension(600, 500));
-        pn1.add(panelMuaNhieu, gbc);*/
-        
+
         JScrollPane scr = new JScrollPane(pn1);
-        scr.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scr.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scr.getVerticalScrollBar().setUnitIncrement(20);
-        add(scr,BorderLayout.CENTER);
+        add(scr, BorderLayout.CENTER);
+
     }
 }

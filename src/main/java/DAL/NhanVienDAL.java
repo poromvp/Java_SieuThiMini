@@ -194,6 +194,21 @@ public class NhanVienDAL {
         }
         return list;
     }
-    
+    public String getNameNhanVien(String maNV){
+        String sql = "SELECT  NHANVIEN.TENNV " + 
+                        "FROM TAIKHOAN " + 
+                        "JOIN NHANVIEN ON TAIKHOAN.MANV = NHANVIEN.MANV " + 
+                        "WHERE TAIKHOAN.MANV = ?";
+        try {
+            ResultSet rs = DBConnection.executeQuery(sql, maNV);
+            if(rs.next()){
+                return rs.getString("TenNV");
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     
 }

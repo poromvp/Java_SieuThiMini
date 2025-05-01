@@ -1,5 +1,6 @@
 package DAL;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,6 +22,57 @@ public class SanPhamDAL {
         }
         return null;
     }
+    public static ArrayList<SanPhamDTO> timKiemSanPham(String idOrTenSP, String IdOrTenLSP, int giaMin, int giaMax) {
+        ArrayList<SanPhamDTO> ketQua = new ArrayList<>();
+    
+        String sql = "SELECT * FROM SanPham " +
+                     "LEFT JOIN LoaiSP ON SanPham.maLSP = LoaiSP.maLSP " +
+                     "WHERE 1=1";
+        
+        ArrayList<Object> params = new ArrayList<>();
+    
+        // Tìm theo mã SP hoặc tên SP (không phân biệt hoa thường)
+        if (!idOrTenSP.isEmpty()) {
+            sql += " AND (LOWER(SanPham.maSP) = LOWER(?) OR LOWER(SanPham.tenSP) LIKE LOWER(?))";
+            params.add(idOrTenSP);
+            params.add("%" + idOrTenSP + "%");
+        }
+    
+        // Tìm theo mã loại SP hoặc tên loại SP (không phân biệt hoa thường)
+        if (!IdOrTenLSP.equalsIgnoreCase("tất cả")) {
+            sql += " AND (LOWER(LoaiSP.maLSP) = LOWER(?) OR LOWER(LoaiSP.tenLoaiSP) LIKE LOWER(?))";
+            params.add(IdOrTenLSP);
+            params.add("%" + IdOrTenLSP + "%");
+        }
+    
+        // Điều kiện khoảng giá
+        sql += " AND SanPham.gia BETWEEN ? AND ?";
+        params.add(giaMin);
+        params.add(giaMax);
+    
+        try (PreparedStatement stmt = DBConnection.getConnection().prepareStatement(sql)) {
+            for (int i = 0; i < params.size(); i++) {
+                Object param = params.get(i);
+                if (param instanceof String) {
+                    stmt.setString(i + 1, (String) param);
+                } else if (param instanceof Integer) {
+                    stmt.setInt(i + 1, (Integer) param);
+                }
+            }
+    
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    ketQua.add(mapResultSetToSanPham(rs));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    
+        return ketQua;
+    }
+    
+    
 
     public static List<SanPhamDTO> getAllProducts() {
         List<SanPhamDTO> productList = new ArrayList<>();
@@ -71,8 +123,8 @@ public class SanPhamDAL {
         return sp;
     }
 
-    public static List<SanPhamDTO> searchProducts(String maSP, String tenSP, int maLSP) {
-        List<SanPhamDTO> productList = new ArrayList<>();
+    public static ArrayList<SanPhamDTO> searchProducts(String maSP, String tenSP, int maLSP) {
+        ArrayList<SanPhamDTO> productList = new ArrayList<>();
         StringBuilder sql = new StringBuilder("SELECT * FROM SanPham WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
@@ -105,7 +157,9 @@ public class SanPhamDAL {
     }
 
     public static void main(String[] args) {
-        SanPhamDTO sanPham = new SanPhamDTO(0, 1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdong", 100); // Thêm SoLuongTon
-        System.out.println(insertProduct(sanPham));
+        // SanPhamDTO sanPham = new SanPhamDTO(0, 1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdong", 100); // Thêm SoLuongTon
+        // System.out.println(insertProduct(sanPham));
+        ArrayList a = timKiemSanPham("1", "1", 1, 1000000);
+        System.out.print(a.get(0).toString());
     }
 }

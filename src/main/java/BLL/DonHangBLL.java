@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import DAL.DonHangDAL;
 import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
+import DTO.SearchFilterDTO;
 
 public class DonHangBLL {
     
@@ -26,6 +27,10 @@ public class DonHangBLL {
         return DonHangDAL.getOrderById(maDH);
     }
 
+    // Lấy đơn hàng theo ID Thành Viên
+    public static ArrayList<DonHangDTO> getOrderByKH(int maKH) {
+        return DonHangDAL.getOrderByKH(maKH);
+    }
 
     public static int tinhTongTienByMaDonHang(int maDH){
         if(maDH <= 0){
@@ -45,19 +50,18 @@ public class DonHangBLL {
     }
 
     // Thêm đơn hàng mới (có kiểm tra dữ liệu)
-    public static boolean insertOrder(DonHangDTO dh) {
+    public static int insertOrder(DonHangDTO dh) {
         if (dh == null) {
             System.out.println("Dữ liệu đơn hàng không hợp lệ!");
-            return false;
+            return -1;
         }
 
         if (dh.getNgayTT() == null || dh.getTrangThai().isEmpty()) {
             System.out.println("Thông tin đơn hàng không đầy đủ!");
-            return false;
+            return -1;
         }
 
-        int result = DonHangDAL.insertOrder(dh);
-        return result > 0;
+        return DonHangDAL.insertOrder(dh);
     }
 
     // Cập nhật đơn hàng (có kiểm tra dữ liệu)
@@ -130,6 +134,10 @@ public class DonHangBLL {
             orderType,
             limit
         );
+    }
+
+    public static ArrayList<DonHangDTO> getOrderByThK(SearchFilterDTO search){
+        return DonHangDAL.getOrderByThK(search);
     }
     
 

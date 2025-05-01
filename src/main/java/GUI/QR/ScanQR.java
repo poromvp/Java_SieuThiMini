@@ -29,7 +29,6 @@ import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
 
-import GUI.FormEmployee.FormQRscan;
 
 // import component.ComponentOrder.FormQRscan;
 
@@ -105,7 +104,6 @@ public class ScanQR extends JPanel {
                                     txtOld = qrText;
                                     int id = Integer.parseInt(qrText);
                                     System.out.println("Quét thành công: " + qrText);
-                                    FormQRscan.insertProductInformation(id);
                                     Thread.sleep(3000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();

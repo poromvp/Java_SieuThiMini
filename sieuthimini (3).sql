@@ -7,9 +7,14 @@
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+DROP DATABASE IF EXISTS SIEUTHIMINI;
+CREATE DATABASE IF NOT EXISTS SIEUTHIMINI
+    CHARACTER SET utf8mb4 
+    COLLATE utf8mb4_unicode_ci;
+USE SIEUTHIMINI;
 START TRANSACTION;
 SET time_zone = "+00:00";
+
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -285,12 +290,16 @@ CREATE TABLE `nhanvien` (
 --
 
 INSERT INTO `nhanvien` (`MaNV`, `TenNV`, `GioiTinh`, `NgaySinh`, `CCCD`, `DiaChi`, `SDT`, `Luong`, `TrangThai`, `image`) VALUES
-(1, 'Nguyễn Văn An', 'Nam', '1990-05-10', '123456789012', 'Hà Nội', '0912345671', 10000000.00, b'1', 'haha.jpeg'),
-(2, 'Trần Thị Bích', 'Nữ', '1992-07-15', '234567890123', 'Hải Phòng', '0912345672', 12000000.00, b'1', NULL),
-(3, 'Lê Văn Cường', 'Nam', '1993-09-20', '345678901234', 'Đà Nẵng', '0912345673', 15000000.00, b'1', NULL),
-(4, 'Phạm Thị Dung', 'Nữ', '1994-11-25', '456789012345', 'TP Hồ Chí Minh', '0912345674', 11000000.00, b'1', NULL),
-(5, 'Võ Minh Tuấn', 'Nam', '1995-03-30', '567890123456', 'Cần Thơ', '0912345675', 9000000.00, b'1', NULL);
+(1, 'VÕ TRỊNH KHANG', 'Nam', '2005-04-27', '123456789012', 'QUẢNG NGÃI', '0762779663', 10000000.00, b'1', 'haha.jpeg'),
+(2, 'TRỊNH KHANG', 'Nam', '2005-04-27', '123456789013', 'QUẢNG NGÃI kkk', '0762779664', 10000000.00, b'1', 'haha.jpeg'),
+(3, 'KHANG', 'Nam', '2005-04-27', '123456789014', 'QUẢNG NGÃI KKK', '0762779665', 10000000.00, b'1', 'haha.jpeg'),
+(4, 'Nguyễn Văn An', 'Nam', '1990-05-10', '123456789012', 'Hà Nội', '0912345671', 10000000.00, b'1', 'haha.jpeg'),
+(5, 'Trần Thị Bích', 'Nữ', '1992-07-15', '234567890123', 'Hải Phòng', '0912345672', 12000000.00, b'1', NULL),
+(6, 'Lê Văn Cường', 'Nam', '1993-09-20', '345678901234', 'Đà Nẵng', '0912345673', 15000000.00, b'1', NULL),
+(7, 'Phạm Thị Dung', 'Nữ', '1994-11-25', '456789012345', 'TP Hồ Chí Minh', '0912345674', 11000000.00, b'1', NULL),
+(8, 'Võ Minh Tuấn', 'Nam', '1995-03-30', '567890123456', 'Cần Thơ', '0912345675', 9000000.00, b'1', NULL);
 
+-- ----
 -- --------------------------------------------------------
 
 --
@@ -340,11 +349,74 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`MaSP`, `MaNCC`, `MaLSP`, `TenAnh`, `Gia`, `TenSP`, `MoTa`, `TrangThai`, `SoLuongTon`) VALUES
-(1, 1, 1, 'sp1.jpg', 15000.00, 'Bánh Oreo', 'Bánh quy nhân kem', 'ACTIVE', 0),
-(2, 2, 2, 'sp2.jpg', 12000.50, 'Sữa Vinamilk', 'Sữa tươi nguyên chất', 'ACTIVE', 0),
-(3, 3, 3, 'sp3.jpg', 25000.00, 'Mì Hảo Hảo', 'Mì gói chua cay', 'ACTIVE', 0),
-(4, 4, 4, 'sp4.jpg', 8000.75, 'Nước suối Lavie', 'Nước khoáng thiên nhiên', 'ACTIVE', 0),
-(5, 5, 5, 'sp5.jpg', 35000.00, 'Cà phê G7', 'Cà phê hòa tan đậm đà', 'ACTIVE', 0);
+(51, 1, 1, 'sp1.jpg', 15000.00, 'Bánh Oreo', 'Bánh quy nhân kem', 'ACTIVE', 0),
+(52, 2, 2, 'sp2.jpg', 12000.50, 'Sữa Vinamilk', 'Sữa tươi nguyên chất', 'ACTIVE', 0),
+(53, 3, 3, 'sp3.jpg', 25000.00, 'Mì Hảo Hảo', 'Mì gói chua cay', 'ACTIVE', 0),
+(54, 4, 4, 'sp4.jpg', 8000.75, 'Nước suối Lavie', 'Nước khoáng thiên nhiên', 'ACTIVE', 0),
+(55, 5, 5, 'sp5.jpg', 35000.00, 'Cà phê G7', 'Cà phê hòa tan đậm đà', 'ACTIVE', 0);
+
+-- Sản phẩm cho MaLSP = 1 (Thực phẩm)
+INSERT INTO `sanpham` (`MaSP`, `MaNCC`, `MaLSP`, `TenAnh`, `Gia`, `TenSP`, `MoTa`, `TrangThai`, `SoLuongTon`) VALUES
+(1, 1, 1, 'thucpham1.jpg', 10000, 'Gạo ST25', 'Gạo ngon đặc sản', 'ACTIVE', 50),
+(2, 1, 1, 'thucpham2.jpg', 20000, 'Nước mắm Nam Ngư', 'Nước mắm truyền thống', 'ACTIVE', 100),
+(3, 1, 1, 'thucpham3.jpg', 15000, 'Trứng gà', 'Trứng gà ta', 'ACTIVE', 200),
+(4, 1, 1, 'thucpham4.jpg', 25000, 'Thịt heo', 'Thịt heo tươi sạch', 'ACTIVE', 80),
+(5, 1, 1, 'thucpham5.jpg', 5000, 'Muối i-ốt', 'Muối ăn tốt cho sức khỏe', 'ACTIVE', 300),
+(6, 1, 1, 'thucpham6.jpg', 12000, 'Dầu ăn Neptune', 'Dầu ăn cao cấp', 'ACTIVE', 120),
+(7, 1, 1, 'thucpham7.jpg', 8000, 'Đường trắng', 'Đường tinh luyện', 'ACTIVE', 150),
+(8, 1, 1, 'thucpham8.jpg', 18000, 'Sữa tươi', 'Sữa tươi tiệt trùng', 'ACTIVE', 100),
+(9, 1, 1, 'thucpham9.jpg', 3000, 'Mì tôm', 'Mì ăn liền Hảo Hảo', 'ACTIVE', 500),
+(10, 1, 1, 'thucpham10.jpg', 4000, 'Bánh mì', 'Bánh mì truyền thống', 'ACTIVE', 90);
+
+-- Sản phẩm cho MaLSP = 2 (Đồ uống)
+INSERT INTO `sanpham` VALUES
+(11, 2, 2, 'douong1.jpg', 10000, 'Coca Cola', 'Nước ngọt có ga', 'ACTIVE', 200),
+(12, 2, 2, 'douong2.jpg', 9000, 'Pepsi', 'Nước ngọt vị cola', 'ACTIVE', 180),
+(13, 2, 2, 'douong3.jpg', 12000, 'Trà xanh C2', 'Trà xanh giải nhiệt', 'ACTIVE', 160),
+(14, 2, 2, 'douong4.jpg', 15000, 'Revive', 'Nước bù khoáng', 'ACTIVE', 140),
+(15, 2, 2, 'douong5.jpg', 20000, 'Nước cam Twister', 'Nước ép cam', 'ACTIVE', 130),
+(16, 2, 2, 'douong6.jpg', 11000, 'Number 1', 'Nước tăng lực', 'ACTIVE', 170),
+(17, 2, 2, 'douong7.jpg', 25000, 'Cafe sữa', 'Cà phê sữa đá', 'ACTIVE', 100),
+(18, 2, 2, 'douong8.jpg', 13000, 'Trà sữa', 'Trà sữa vị truyền thống', 'ACTIVE', 120),
+(19, 2, 2, 'douong9.jpg', 8000, 'Lavie 500ml', 'Nước suối đóng chai', 'ACTIVE', 300),
+(20, 2, 2, 'douong10.jpg', 7000, 'Sting dâu', 'Nước tăng lực vị dâu', 'ACTIVE', 220);
+
+INSERT INTO `sanpham` VALUES
+(21, 3, 3, 'giadung1.jpg', 50000, 'Chảo chống dính', 'Chảo nấu ăn chất lượng', 'ACTIVE', 80),
+(22, 3, 3, 'giadung2.jpg', 30000, 'Bộ dao nhà bếp', 'Dao thép không gỉ', 'ACTIVE', 100),
+(23, 3, 3, 'giadung3.jpg', 40000, 'Nồi inox', 'Nồi inox 3 lớp đáy', 'ACTIVE', 90),
+(24, 3, 3, 'giadung4.jpg', 60000, 'Bình đun siêu tốc', 'Bình 1.8L tự ngắt điện', 'ACTIVE', 70),
+(25, 3, 3, 'giadung5.jpg', 20000, 'Máy xay sinh tố mini', 'Máy xay hoa quả mini', 'ACTIVE', 50),
+(26, 3, 3, 'giadung6.jpg', 10000, 'Bàn chải nhà tắm', 'Dụng cụ vệ sinh đa năng', 'ACTIVE', 150),
+(27, 3, 3, 'giadung7.jpg', 8000, 'Kéo cắt thực phẩm', 'Kéo bếp đa năng', 'ACTIVE', 200),
+(28, 3, 3, 'giadung8.jpg', 25000, 'Khăn lau bếp', 'Khăn siêu thấm', 'ACTIVE', 300),
+(29, 3, 3, 'giadung9.jpg', 35000, 'Thớt gỗ', 'Thớt gỗ tự nhiên', 'ACTIVE', 120),
+(30, 3, 3, 'giadung10.jpg', 75000, 'Bàn ủi hơi nước', 'Bàn ủi mini tiện lợi', 'ACTIVE', 60);
+
+INSERT INTO `sanpham` VALUES
+(31, 4, 4, 'thoitrang1.jpg', 150000, 'Áo thun nam', 'Áo cotton 100%', 'ACTIVE', 100),
+(32, 4, 4, 'thoitrang2.jpg', 250000, 'Quần jeans nữ', 'Quần co giãn thời trang', 'ACTIVE', 80),
+(33, 4, 4, 'thoitrang3.jpg', 300000, 'Áo sơ mi nam', 'Áo sơ mi công sở', 'ACTIVE', 70),
+(34, 4, 4, 'thoitrang4.jpg', 100000, 'Mũ lưỡi trai', 'Mũ thời trang mùa hè', 'ACTIVE', 90),
+(35, 4, 4, 'thoitrang5.jpg', 120000, 'Vớ thể thao', 'Vớ cotton thoáng khí', 'ACTIVE', 200),
+(36, 4, 4, 'thoitrang6.jpg', 350000, 'Giày thể thao', 'Giày sneaker nam nữ', 'ACTIVE', 60),
+(37, 4, 4, 'thoitrang7.jpg', 180000, 'Túi xách nữ', 'Túi da công sở', 'ACTIVE', 70),
+(38, 4, 4, 'thoitrang8.jpg', 90000, 'Thắt lưng nam', 'Thắt lưng da PU', 'ACTIVE', 150),
+(39, 4, 4, 'thoitrang9.jpg', 220000, 'Đầm dự tiệc', 'Váy thời trang cao cấp', 'ACTIVE', 40),
+(40, 4, 4, 'thoitrang10.jpg', 50000, 'Khăn choàng cổ', 'Khăn vải lụa mềm mại', 'ACTIVE', 110);
+
+
+INSERT INTO `sanpham` VALUES
+(41, 5, 5, 'mypham1.jpg', 120000, 'Sữa rửa mặt', 'Làm sạch sâu da mặt', 'ACTIVE', 100),
+(42, 5, 5, 'mypham2.jpg', 250000, 'Kem chống nắng', 'SPF50+, dưỡng ẩm da', 'ACTIVE', 80),
+(43, 5, 5, 'mypham3.jpg', 180000, 'Son môi', 'Son lì không trôi', 'ACTIVE', 90),
+(44, 5, 5, 'mypham4.jpg', 300000, 'Kem dưỡng da', 'Dưỡng trắng da ban đêm', 'ACTIVE', 70),
+(45, 5, 5, 'mypham5.jpg', 95000, 'Tẩy trang', 'Nước tẩy trang dịu nhẹ', 'ACTIVE', 150),
+(46, 5, 5, 'mypham6.jpg', 200000, 'Nước hoa mini', 'Hương thơm quyến rũ', 'ACTIVE', 60),
+(47, 5, 5, 'mypham7.jpg', 175000, 'Phấn nền', 'Làm mịn da, che khuyết điểm', 'ACTIVE', 100),
+(48, 5, 5, 'mypham8.jpg', 110000, 'Kẻ mắt', 'Bút kẻ mắt không lem', 'ACTIVE', 120),
+(49, 5, 5, 'mypham9.jpg', 220000, 'Mặt nạ dưỡng da', 'Dưỡng ẩm và làm sáng da', 'ACTIVE', 90),
+(50, 5, 5, 'mypham10.jpg', 80000, 'Bông tẩy trang', 'Bông cotton 100%', 'ACTIVE', 200);
 
 -- --------------------------------------------------------
 
@@ -365,10 +437,14 @@ CREATE TABLE `taikhoan` (
 -- Dumping data for table `taikhoan`
 --
 
+
 INSERT INTO `taikhoan` (`MaNV`, `TenTK`, `MatKhau`, `Quyen`, `Gmail`, `TrangThai`) VALUES
-(1, 'admin1', '123456', 'ADMIN', 'admin1@example.com', 'ACTIVE'),
-(2, 'kho01', 'kho123', 'QUẢN LÝ KHO', 'kho01@example.com', 'ACTIVE'),
-(3, 'nhanvien01', 'nv123', 'NHÂN VIÊN', 'nv01@example.com', 'INACTIVE');
+(1, 'VOTRINHKHANG', 'VOTRINHKHANG', 'ADMIN', 'VOTRINHKHANG@gmail.com', 'ACTIVE'),
+(2, 'TRINHKHANG', 'TRINHKHANG', 'QUẢN LÝ KHO', 'TRINHKHANG@gmail.com', 'ACTIVE'),
+(3, 'KHANG', 'KHANG', 'NHÂN VIÊN', 'KHANG@gmail.com', 'ACTIVE'),
+(4, 'admin1', '123456', 'ADMIN', 'admin1@example.com', 'ACTIVE'),
+(5, 'kho01', 'kho123', 'QUẢN LÝ KHO', 'kho01@example.com', 'ACTIVE'),
+(6, 'nhanvien01', 'nv123', 'NHÂN VIÊN', 'nv01@example.com', 'INACTIVE');
 
 -- --------------------------------------------------------
 

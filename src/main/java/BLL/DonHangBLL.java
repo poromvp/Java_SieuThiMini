@@ -50,19 +50,18 @@ public class DonHangBLL {
     }
 
     // Thêm đơn hàng mới (có kiểm tra dữ liệu)
-    public static boolean insertOrder(DonHangDTO dh) {
+    public static int insertOrder(DonHangDTO dh) {
         if (dh == null) {
             System.out.println("Dữ liệu đơn hàng không hợp lệ!");
-            return false;
+            return -1;
         }
 
         if (dh.getNgayTT() == null || dh.getTrangThai().isEmpty()) {
             System.out.println("Thông tin đơn hàng không đầy đủ!");
-            return false;
+            return -1;
         }
 
-        int result = DonHangDAL.insertOrder(dh);
-        return result > 0;
+        return DonHangDAL.insertOrder(dh);
     }
 
     // Cập nhật đơn hàng (có kiểm tra dữ liệu)

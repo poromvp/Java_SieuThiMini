@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 
 import DTO.DonHangDTO;
@@ -32,6 +34,7 @@ public class DonHangDAL {
                         rs.getString("NgayTT"),
                         rs.getInt("maDTL"),
                         rs.getInt("tienKD"),
+                        rs.getInt("TongTien"),
                         rs.getString("trangThai"));
                 dsDonHang.add(dh);
             }
@@ -196,6 +199,7 @@ public class DonHangDAL {
                         rs.getString("NgayTT"),
                         rs.getInt("maDTL"),
                         rs.getInt("tienKD"),
+                        rs.getInt("TongTien"),
                         rs.getString("trangThai"));
                 dsDonHang.add(dh);
             }
@@ -224,6 +228,7 @@ public class DonHangDAL {
                         rs.getString("NgayTT"),
                         rs.getInt("maDTL"),
                         rs.getInt("tienKD"),
+                        rs.getInt("TongTien"),
                         rs.getString("trangThai"));
             }
         } catch (SQLException e) {
@@ -234,10 +239,59 @@ public class DonHangDAL {
 
     // Thêm đơn hàng mới
     public static int insertOrder(DonHangDTO dh) {
-        String sql = "INSERT INTO DonHang(maKH, maKM, maNV, NgayTT, trangThai) VALUES (?, ?, ?, ?, ?)";
-        return DBConnection.executeUpdate(sql, dh.getMaKH(), dh.getMaKM(), dh.getMaNV(), dh.getNgayTT(),
-                dh.getTrangThai());
+        int generatedId = -1;
+        String sql = "INSERT INTO DonHang(maKH, maKM, maNV, PTTToan, NgayTT, tienKD, TongTien, trangThai, maDTL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+    
+            if (dh.getMaKH() != null) {
+                stmt.setInt(1, dh.getMaKH());
+            } else {
+                stmt.setNull(1, Types.INTEGER);
+            }
+    
+            if (dh.getMaKM() != null) {
+                stmt.setInt(2, dh.getMaKM());
+            } else {
+                stmt.setNull(2, Types.INTEGER);
+            }
+    
+            stmt.setInt(3, dh.getMaNV());
+            stmt.setString(4, dh.getPtThanhToan());
+    
+           
+                stmt.setString(5, dh.getNgayTT());
+            
+    
+            stmt.setDouble(6, dh.getTienKD());
+            stmt.setDouble(7, dh.getTongTien());
+            stmt.setString(8, dh.getTrangThai());
+    
+            if (dh.getMaDTL() != null) {
+                stmt.setInt(9, dh.getMaDTL());
+            } else {
+                stmt.setNull(9, Types.INTEGER);
+            }
+    
+            int affectedRows = stmt.executeUpdate();
+    
+            if (affectedRows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1);
+                    }
+                }
+            }
+    
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    
+        return generatedId;
     }
+    
+    
 
     // Cập nhật đơn hàng
     public static int updateOrder(DonHangDTO dh) {
@@ -326,6 +380,7 @@ public class DonHangDAL {
                         rs.getString("NgayTT"),
                         rs.getInt("maDTL"),
                         rs.getInt("tienKD"),
+                        rs.getInt("TongTien"),
                         rs.getString("trangThai"));
                 dsDonHang.add(dh);
             }

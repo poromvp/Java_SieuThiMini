@@ -9,6 +9,7 @@ public class DonHangDTO {
     private Integer maDTL;
     private int tienKD;
     private String ngayTT;       // Ngày thanh toán
+    private int tongTien;       // Ngày thanh toán
     private String trangThai; // Trạng thái đơn hàng
 
     // Constructor không tham số
@@ -16,7 +17,7 @@ public class DonHangDTO {
     }
 
     // Constructor có tham số
-    public DonHangDTO(int maDH, int maKH, int maKM, int maNV, String ptThanhToan,  String ngayTT, int dtl, int tienkd,  String trangThai) {
+    public DonHangDTO(int maDH, Integer maKH, Integer maKM, int maNV, String ptThanhToan,  String ngayTT, Integer dtl, int tienkd, int tongTien,  String trangThai) {
         this.maDH = maDH;
         this.maKH = maKH;
         this.maKM = maKM;
@@ -25,13 +26,21 @@ public class DonHangDTO {
         this.ngayTT = ngayTT;
         this.maDTL = dtl;
         this.tienKD = tienkd;
+        this.tongTien = tongTien;
         this.trangThai = trangThai;
     }
 
-    public int getMaDTL() {
+
+
+    public Integer getMaDTL() {
         return maDTL;
     }
     
+
+    public int getTongTien() {
+        return tongTien;
+    }
+
     public void setMaDTL(Integer maDTL) {
         this.maDTL = maDTL;
     }

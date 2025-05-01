@@ -1,7 +1,12 @@
 package GUI.FormWareHouse;
 
+import BLL.LoaiSanPhamBLL;
+import BLL.NhaCungCapBLL;
 import BLL.SanPhamBLL;
+import DTO.LoaiSanPhamDTO;
+import DTO.NhaCungCapDTO;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
 
 import javax.swing.*;
@@ -9,11 +14,15 @@ import java.awt.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 public class FormAddProduct extends JPanel {
     private JComboBox trangThai;
-    private StyledTextField tenSP,giaSP,loaiSP,ncc,tenAnh,moTa;
+    private StyledTextField tenSP,giaSP,tenAnh,moTa;
     private String selectedImageName;
+    private JComboBox<String> loaiSPCombo;
+    private JComboBox<String> nccCombo;
+
     public FormAddProduct(){
         setLayout(new BorderLayout());
 
@@ -29,15 +38,25 @@ public class FormAddProduct extends JPanel {
         nhapPanel.add(giaSP);
 
         nhapPanel.add(new JLabel("Loại sản phẩm:"));
-        loaiSP = new StyledTextField();
-        nhapPanel.add(loaiSP);
+        loaiSPCombo = new JComboBox<>();
+        List<LoaiSanPhamDTO> loaiSPList = new LoaiSanPhamBLL().getList();
+        for (LoaiSanPhamDTO tmp : loaiSPList) {
+            loaiSPCombo.addItem(tmp.getTenLoaiSP() + " (" + tmp.getMaLSP() + ")");
+        }
+        nhapPanel.add(loaiSPCombo);
 
         nhapPanel.add(new JLabel("Nhà cung cấp:"));
-        ncc = new StyledTextField();
-        nhapPanel.add(ncc);
+        nccCombo = new JComboBox<>();
+        List<NhaCungCapDTO> nccList = new NhaCungCapBLL().getList();
+        for (NhaCungCapDTO tmp : nccList) {
+            nccCombo.addItem(tmp.getTenNCC() + " (" + tmp.getMaNCC() + ")");
+        }
+        nhapPanel.add(nccCombo);
+
+
 
         nhapPanel.add(new JLabel("Tải ảnh:"));
-        JButton uploadImageBtn = new JButton("Chọn ảnh");
+        ButtonCustom uploadImageBtn = new ButtonCustom("Chọn ảnh",16,"blue");
         uploadImageBtn.addActionListener(e -> uploadImage());
         nhapPanel.add(uploadImageBtn);
 
@@ -50,13 +69,18 @@ public class FormAddProduct extends JPanel {
         trangThai = new JComboBox<>(trangThaiOptions);
         nhapPanel.add(trangThai);
 
-        JButton btn1 = new JButton("Thêm sản phẩm");
+        ButtonCustom btn1 = new ButtonCustom("Thêm sản phẩm",16,"green");
         btn1.addActionListener(e->{
             try{
+                String selectedLoaiSP = (String) loaiSPCombo.getSelectedItem();
+                int maLSP = Integer.parseInt(selectedLoaiSP.substring(selectedLoaiSP.indexOf("(") + 1, selectedLoaiSP.indexOf(")")));
+
+                String selectedNCC = (String) nccCombo.getSelectedItem();
+                int maNCC = Integer.parseInt(selectedNCC.substring(selectedNCC.indexOf("(") + 1, selectedNCC.indexOf(")")));
                 SanPhamDTO product = new SanPhamDTO(
                         0,
-                        Integer.parseInt(ncc.getText()),
-                        Integer.parseInt(loaiSP.getText()),
+                        maNCC,
+                        maLSP,
                         selectedImageName != null ? selectedImageName : "product-default.png",
                         Double.parseDouble(giaSP.getText()),
                         tenSP.getText(),
@@ -72,6 +96,8 @@ public class FormAddProduct extends JPanel {
                 }
             }catch (NumberFormatException ex){
                 JOptionPane.showMessageDialog(null,"Vui lòng nhập đúng định dạng số !");
+            } catch (Exception ex){
+                JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
             }
         });
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -84,8 +110,8 @@ public class FormAddProduct extends JPanel {
     private void clearFields() {
         tenSP.setText("");
         giaSP.setText("");
-        loaiSP.setText("");
-        ncc.setText("");
+        loaiSPCombo.setSelectedIndex(0);
+        nccCombo.setSelectedIndex(0);
         tenAnh.setText("");
         moTa.setText("");
     }

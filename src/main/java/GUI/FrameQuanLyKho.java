@@ -85,7 +85,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
     }
 
     public static void main(String[] args) {
-        // new FrameQuanLyKho();
+         new FrameQuanLyKho("1");
     }
 
     @Override

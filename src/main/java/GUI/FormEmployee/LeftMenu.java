@@ -16,7 +16,7 @@ public class LeftMenu extends JPanel implements ActionListener {
 
     private JButton btn_home;
     private JButton btn_sell;
-    private JButton btn_orderManagement;
+//    private JButton btn_orderManagement;
     private JButton btn_report;
     private NhanVienBLL bllnv = new NhanVienBLL();
     private TaiKhoanBLL blltk = new TaiKhoanBLL();
@@ -63,28 +63,28 @@ public class LeftMenu extends JPanel implements ActionListener {
 
         btn_home =  new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
         btn_sell = new JButton("bán hàng", new ImageIcon("src/main/resources/images/selling.png"));
-        btn_orderManagement = new JButton("Quản lí bán hàng", new ImageIcon("src/main/resources/images/product.png"));
+//        btn_orderManagement = new JButton("Quản lí bán hàng", new ImageIcon("src/main/resources/images/product.png"));
         btn_report =  new StyledLeftMenubutton("src/main/resources/images/report.png", "Báo cáo");
         
         btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
         btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
-        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí đơn hàng");
+//        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí đơn hàng");
 
 
         setButtonStyle(btn_home);
         setButtonStyle(btn_sell);
-        setButtonStyle(btn_orderManagement);
+//        setButtonStyle(btn_orderManagement);
         setButtonStyle(btn_report);
 
 
         btn_home.addActionListener(this);
         btn_sell.addActionListener(this);
-        btn_orderManagement.addActionListener(this);
+//        btn_orderManagement.addActionListener(this);
         btn_report.addActionListener(this);
 
         add(btn_home);
         add(btn_sell);
-        add(btn_orderManagement);
+//        add(btn_orderManagement);
         add(btn_report);
     }
 
@@ -120,10 +120,10 @@ public class LeftMenu extends JPanel implements ActionListener {
             System.out.println("click btn_home");
             FrameEmployee.setPage("formHome", "Trang Chủ");
         } 
-        if (e.getSource() == btn_orderManagement) {
-            System.out.println("click btn_orderManagement");
-            FrameEmployee.setPage("formOrderManagement", "Quản Lí Đơn Hàng");
-        }
+//        if (e.getSource() == btn_orderManagement) {
+//            System.out.println("click btn_orderManagement");
+//            FrameEmployee.setPage("formOrderManagement", "Quản Lí Đơn Hàng");
+//        }
 
         if (e.getSource() == btn_report) {
             System.out.println("click btn_report");

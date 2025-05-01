@@ -21,15 +21,15 @@ public class ChiTietNhapHangBLL {
         return chiTietNhapHangDAL.insertChiTietNhapHang(chiTiet);
     }
 
-    // Cập nhật chi tiết nhập hàng
-    public boolean updateChiTietNhapHang(ChiTietPNHangDTO chiTiet) {
-        return chiTietNhapHangDAL.updateChiTietNhapHang(chiTiet);
-    }
-
-    // Xóa chi tiết nhập hàng
-    public boolean deleteChiTietNhapHang(int maCTPNH) {
-        return chiTietNhapHangDAL.deleteChiTietNhapHang(maCTPNH);
-    }
+//    // Cập nhật chi tiết nhập hàng
+//    public boolean updateChiTietNhapHang(ChiTietPNHangDTO chiTiet) {
+//        return chiTietNhapHangDAL.updateChiTietNhapHang(chiTiet);
+//    }
+//
+//    // Xóa chi tiết nhập hàng
+//    public boolean deleteChiTietNhapHang(int maCTPNH) {
+//        return chiTietNhapHangDAL.deleteChiTietNhapHang(maCTPNH);
+//    }
 
     // Lấy chi tiết nhập hàng theo mã phiếu nhập
     public ArrayList<ChiTietPNHangDTO> getChiTietByMaPNH(int maPNH) {

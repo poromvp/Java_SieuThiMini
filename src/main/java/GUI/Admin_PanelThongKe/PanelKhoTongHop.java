@@ -3,10 +3,14 @@ package GUI.Admin_PanelThongKe;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.sql.Date;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
+
+import com.toedter.calendar.JDateChooser;
 
 import BLL.LoaiSanPhamBLL;
 import BLL.SanPhamBLL;
@@ -25,6 +29,62 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
     public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+
+    JScrollPane scr2;
+    StyledTable tb2;
+    DefaultTableModel model2;
+    public ArrayList<SanPhamDTO> DsSP2 = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+
+    JDateChooser from, to;
+    JPanel pnTool = new JPanel();
+
+    public void initPanelTool() {
+        pnTool.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // Ngày hôm nay
+        Date today = new Date(System.currentTimeMillis());
+
+        // Ngày đầu tiên của tháng
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = new Date(cal.getTimeInMillis());
+
+        from = new JDateChooser();
+        from.setMaxSelectableDate(today);
+        from.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutayy(from, today);
+        TienIch.timStyle(from);
+        from.setDate(firstDayOfMonth);
+
+        to = new JDateChooser();
+        to.setMaxSelectableDate(today);
+        to.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutayy(to, today);
+        TienIch.timStyle(to);
+        to.setDate(today);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel tu = new JLabel("Từ");
+        tu.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(tu, gbc);
+
+        gbc.gridx = 1;
+        pnTool.add(from);
+
+        gbc.gridx = 2;
+        JLabel toi = new JLabel("Tới");
+        toi.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(toi, gbc);
+
+        gbc.gridx = 3;
+        pnTool.add(to);
+    }
 
     public PanelKhoTongHop() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo kho tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
@@ -48,7 +108,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        btnMore = new JButton("<html><center>Xem danh sách<br>lô hàng đã nhập<center></html>");
+        btnMore = new JButton("<html><center>Xem DS lô hàng<center></html>");
         TienIch.nutStyle(btnMore, "list.png", 20, 40, 20);
         add(btnMore, gbc);
 
@@ -66,6 +126,8 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
         pn1.add(scr, BorderLayout.CENTER);
+        initPanelTool();
+        pn1.add(pnTool, BorderLayout.NORTH);
 
         pn2 = new JPanel();
         pn2.setLayout(new BorderLayout());
@@ -76,7 +138,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         tab = new JTabbedPane();
         tab.addTab("Danh sách bán chạy", pn1);
         tab.addTab("Danh sách tồn nhiều", pn2);
-        tab.addTab("Danh sách hàng sắp hết", pn3);
+        // tab.addTab("Danh sách hàng sắp hết", pn3);
         add(tab, gbc);
 
         // Thêm popup menu
@@ -165,6 +227,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         int tabSelected = tab.getSelectedIndex();
         if (tabSelected == 0) {
             pn1.add(scr, BorderLayout.CENTER);
+            pn1.add(pnTool, BorderLayout.NORTH);
         } else if (tabSelected == 1) {
             pn2.add(scr, BorderLayout.CENTER);
         } else if (tabSelected == 2) {

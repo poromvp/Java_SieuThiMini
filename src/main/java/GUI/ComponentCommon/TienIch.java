@@ -280,6 +280,19 @@ public class TienIch {
                 .toLocalDate();
     }
 
+    public static void checkngaynhaptutayy(JDateChooser day, Date ngay) {
+        // Kiểm tra khi người dùng tự gõ tay
+        day.getDateEditor().addPropertyChangeListener("date", _ -> {
+            Date selectedDate = day.getDate();
+            Date today = new Date();
+            if (selectedDate != null && selectedDate.after(today)) {
+                CustomMessageNormal("Không thể chọn ngày trong tương lai!");
+                day.setDate(ngay);
+            }
+        }); // có thể thay today bằng một giá trị Date cụ thể nếu muốn kiểm tra theo một mốc
+            // nào đó.
+    }
+
     public static void checkngaynhaptutay(JDateChooser day, Date ngay) {
         // Kiểm tra khi người dùng tự gõ tay
         day.getDateEditor().addPropertyChangeListener("date", _ -> {
@@ -470,6 +483,13 @@ public class TienIch {
         JLabel label = new JLabel(message);
         label.setFont(new Font("Arial", Font.BOLD, 18));
         label.setForeground(Color.WHITE);
+        JOptionPane.showMessageDialog(null, label, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void CustomMessageNormal(String message) {
+        JLabel label = new JLabel(message);
+        label.setFont(new Font("Arial", Font.BOLD, 18));
+        label.setForeground(Color.BLACK);
         JOptionPane.showMessageDialog(null, label, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }
 

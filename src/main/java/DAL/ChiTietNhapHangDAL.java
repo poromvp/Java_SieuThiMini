@@ -23,6 +23,8 @@ public class ChiTietNhapHangDAL {
                         rs.getInt("MaLH"),
                         rs.getInt("SoLuong"),
                         rs.getDouble("GiaNhap"),
+                        rs.getDate("NgaySX"),
+                        rs.getDate("NgayHH"),
                         rs.getString("TrangThai")
                 );
                 chiTietPNHList.add(chiTiet);
@@ -43,7 +45,9 @@ public class ChiTietNhapHangDAL {
             pstmt.setInt(3, chiTiet.getMaLH());
             pstmt.setInt(4, chiTiet.getSoLuong());
             pstmt.setDouble(5, chiTiet.getGiaNhap());
-            pstmt.setString(6, chiTiet.getTrangThai());
+            pstmt.setDate(6, chiTiet.getNsx() != null ? new java.sql.Date(chiTiet.getNsx().getTime()) : null);
+            pstmt.setDate(7, chiTiet.getHsd() != null ? new java.sql.Date(chiTiet.getHsd().getTime()) : null);
+            pstmt.setString(8, chiTiet.getTrangThai());
 
             return pstmt.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -52,40 +56,40 @@ public class ChiTietNhapHangDAL {
         return false;
     }
 
-    public boolean updateChiTietNhapHang(ChiTietPNHangDTO chiTiet) {
-        String query = "UPDATE ChiTietPNH SET MaPNH = ?, MaSP = ?, MaLH = ?, SoLuong = ?, GiaNhap = ?, TrangThai = ? WHERE MaCTPNH = ?";
+//    public boolean updateChiTietNhapHang(ChiTietPNHangDTO chiTiet) {
+//        String query = "UPDATE ChiTietPNH SET MaPNH = ?, MaSP = ?, MaLH = ?, SoLuong = ?, GiaNhap = ?, TrangThai = ? WHERE MaCTPNH = ?";
+//
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement pstmt = conn.prepareStatement(query)) {
+//
+//            pstmt.setInt(1, chiTiet.getMaPNH());
+//            pstmt.setInt(2, chiTiet.getMaSP());
+//            pstmt.setInt(3, chiTiet.getMaLH());
+//            pstmt.setInt(4, chiTiet.getSoLuong());
+//            pstmt.setDouble(5, chiTiet.getGiaNhap());
+//            pstmt.setString(6, chiTiet.getTrangThai());
+//            pstmt.setInt(7, chiTiet.getMaCTPNH());
+//
+//            return pstmt.executeUpdate() > 0;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1, chiTiet.getMaPNH());
-            pstmt.setInt(2, chiTiet.getMaSP());
-            pstmt.setInt(3, chiTiet.getMaLH());
-            pstmt.setInt(4, chiTiet.getSoLuong());
-            pstmt.setDouble(5, chiTiet.getGiaNhap());
-            pstmt.setString(6, chiTiet.getTrangThai());
-            pstmt.setInt(7, chiTiet.getMaCTPNH());
-
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean deleteChiTietNhapHang(int maCTPNH) {
-        String query = "UPDATE ChiTietPNH SET TrangThai = 'INACTIVE' WHERE MaCTPNH = ?";
-
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)) {
-
-            pstmt.setInt(1, maCTPNH);
-            return pstmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    public boolean deleteChiTietNhapHang(int maCTPNH) {
+//        String query = "UPDATE ChiTietPNH SET TrangThai = 'INACTIVE' WHERE MaCTPNH = ?";
+//
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement pstmt = conn.prepareStatement(query)) {
+//
+//            pstmt.setInt(1, maCTPNH);
+//            return pstmt.executeUpdate() > 0;
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
     public ArrayList<ChiTietPNHangDTO> getChiTietByMaPNH(int maPNH) {
         ArrayList<ChiTietPNHangDTO> chiTietList = new ArrayList<>();
@@ -104,6 +108,8 @@ public class ChiTietNhapHangDAL {
                             rs.getInt("MaLH"),
                             rs.getInt("SoLuong"),
                             rs.getDouble("GiaNhap"),
+                            rs.getDate("NgaySX"),
+                            rs.getDate("NgayHH"),
                             rs.getString("TrangThai")
                     );
                     chiTietList.add(chiTiet);

@@ -1,6 +1,11 @@
 package GUI.FormWareHouse;
 
+import BLL.LoaiSanPhamBLL;
+import BLL.NhaCungCapBLL;
 import BLL.SanPhamBLL;
+import DTO.LoaiSanPhamDTO;
+import DTO.NhaCungCapDTO;
+import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
@@ -10,10 +15,13 @@ import java.awt.*;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 
 public class FormEditProduct extends JDialog {
     private JComboBox<String> trangThai;
-    private StyledTextField tenSP, giaSP, loaiSP, ncc, tenAnh, moTa;
+    private StyledTextField tenSP, giaSP, tenAnh, moTa;
+    private JComboBox<String> loaiSPCombo;
+    private JComboBox<String> nccCombo;
     private ButtonCustom uploadImageBtn;
     private String selectedImageName;
     private SanPhamDTO product;
@@ -38,15 +46,27 @@ public class FormEditProduct extends JDialog {
         giaSP.setText(String.valueOf(product.getGia()));
         nhapPanel.add(giaSP);
 
-        nhapPanel.add(new JLabel("Loại sản phẩm:"));
-        loaiSP = new StyledTextField();
-        loaiSP.setText(String.valueOf(product.getMaLSP()));
-        nhapPanel.add(loaiSP);
+        nhapPanel.add(new JLabel("Loại sản phẩm"));
+        loaiSPCombo = new JComboBox<>();
+        List<LoaiSanPhamDTO> loaiSPList = new LoaiSanPhamBLL().getList();
+        for(LoaiSanPhamDTO loai: loaiSPList){
+            loaiSPCombo.addItem(loai.getTenLoaiSP() + " (" + loai.getMaLSP() + ")");
+            if(loai.getMaLSP()==product.getMaLSP()){
+                loaiSPCombo.setSelectedItem(loai.getTenLoaiSP() + " (" + loai.getMaLSP() + ")");
+            }
+        }
+        nhapPanel.add(loaiSPCombo);
 
         nhapPanel.add(new JLabel("Nhà cung cấp:"));
-        ncc = new StyledTextField();
-        ncc.setText(String.valueOf(product.getMaNCC()));
-        nhapPanel.add(ncc);
+        nccCombo= new JComboBox<>();
+        List<NhaCungCapDTO> nccList = new NhaCungCapBLL().getList();
+        for(NhaCungCapDTO ncc:nccList){
+            nccCombo.addItem(ncc.getTenNCC()+" ("+ncc.getMaNCC()+") ");
+            if(ncc.getMaNCC()== product.getMaNCC()){
+                nccCombo.setSelectedItem(ncc.getTenNCC()+" ("+ncc.getMaNCC()+") ");
+            }
+        }
+        nhapPanel.add(nccCombo);
 
 //        nhapPanel.add(new JLabel("Tên ảnh:"));
 //        tenAnh = new StyledTextField();
@@ -73,10 +93,15 @@ public class FormEditProduct extends JDialog {
         ButtonCustom saveBtn = new ButtonCustom("Lưu",16,"green");
         saveBtn.addActionListener(e -> {
             try {
+                String selectedLoaiSP = (String) loaiSPCombo.getSelectedItem();
+                int maLSP = Integer.parseInt(selectedLoaiSP.substring(selectedLoaiSP.indexOf("(") + 1, selectedLoaiSP.indexOf(")")));
+
+                String selectedNCC = (String) nccCombo.getSelectedItem();
+                int maNCC = Integer.parseInt(selectedNCC.substring(selectedNCC.indexOf("(") + 1, selectedNCC.indexOf(")")));
                 SanPhamDTO updatedProduct = new SanPhamDTO(
                         product.getMaSP(),
-                        Integer.parseInt(ncc.getText()),
-                        Integer.parseInt(loaiSP.getText()),
+                        maNCC,
+                        maLSP,
                         selectedImageName != null ? selectedImageName : product.getTenAnh(),
                         Double.parseDouble(giaSP.getText()),
                         tenSP.getText(),
@@ -92,6 +117,8 @@ public class FormEditProduct extends JDialog {
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(null, "Vui lòng nhập đúng định dạng số!");
+            } catch (Exception ex){
+                JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
             }
         });
 

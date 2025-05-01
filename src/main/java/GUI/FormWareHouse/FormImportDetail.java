@@ -10,8 +10,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 
 public class FormImportDetail extends JPanel {
@@ -19,6 +21,7 @@ public class FormImportDetail extends JPanel {
     private NhapHangBLL nhapHangBLL = new NhapHangBLL();
     private int maPNH;
     private StyledTable table;
+    private  SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public FormImportDetail(int maPNH) {
         this.maPNH = maPNH;
@@ -45,7 +48,7 @@ public class FormImportDetail extends JPanel {
         add(infoPanel, BorderLayout.NORTH);
 
         // Tạo bảng chi tiết
-        String[] headerCol = {"STT", "Mã sản phẩm", "Mã lô hàng", "Số lượng", "Giá nhập", "Thành tiền"};
+        String[] headerCol = {"STT", "Mã sản phẩm", "Mã lô hàng", "Số lượng", "Giá nhập","Ngày sản xuất","Hạn sử dụng","Thành tiền"};
         ArrayList<ChiTietPNHangDTO> chiTietList = chiTietBLL.getChiTietByMaPNH(maPNH);
 
         table = new StyledTable(convertDTOToArray(chiTietList), headerCol);
@@ -70,7 +73,7 @@ public class FormImportDetail extends JPanel {
 
     private Object[][] convertDTOToArray(ArrayList<ChiTietPNHangDTO> list) {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        Object[][] data = new Object[list.size()][6];
+        Object[][] data = new Object[list.size()][8];
 
         for (int i = 0; i < list.size(); i++) {
             ChiTietPNHangDTO ct = list.get(i);
@@ -81,15 +84,17 @@ public class FormImportDetail extends JPanel {
             data[i][2] = ct.getMaLH();
             data[i][3] = ct.getSoLuong();
             data[i][4] = currencyFormat.format(ct.getGiaNhap());
-            data[i][5] = currencyFormat.format(thanhTien);
+            data[i][5] = ct.getNsx() != null ? dateFormat.format(ct.getNsx()) : "";
+            data[i][6] = ct.getHsd() != null ? dateFormat.format(ct.getHsd()) : "";
+            data[i][7] = currencyFormat.format(thanhTien);
         }
         return data;
     }
 
     private void showAddProductDialog() {
         JDialog addDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm sản phẩm", true);
-        addDialog.setSize(400, 300);
-        addDialog.setLayout(new GridLayout(5, 2, 10, 10));
+        addDialog.setSize(400, 400);
+        addDialog.setLayout(new GridLayout(7, 2, 10, 10));
         addDialog.setLocationRelativeTo(null);
 
         JLabel maSPLabel = new JLabel("Mã sản phẩm:");
@@ -100,6 +105,10 @@ public class FormImportDetail extends JPanel {
         JTextField soLuongField = new JTextField();
         JLabel giaNhapLabel = new JLabel("Giá nhập:");
         JTextField giaNhapField = new JTextField();
+        JLabel nsxLabel = new JLabel("Ngày sản xuất (dd/MM/yyyy):");
+        JTextField nsxField = new JTextField();
+        JLabel hsdLabel = new JLabel("Hạn sử dụng (dd/MM/yyyy):");
+        JTextField hsdField = new JTextField();
 
         JButton addButton = new JButton("Thêm");
         JButton cancelButton = new JButton("Hủy");
@@ -110,9 +119,15 @@ public class FormImportDetail extends JPanel {
                 int maLH = Integer.parseInt(maLHField.getText().trim());
                 int soLuong = Integer.parseInt(soLuongField.getText().trim());
                 double giaNhap = Double.parseDouble(giaNhapField.getText().trim());
+                Date nsx = dateFormat.parse(nsxField.getText().trim());
+                Date hsd = dateFormat.parse(hsdField.getText().trim());
 
                 if (soLuong <= 0 || giaNhap <= 0) {
                     JOptionPane.showMessageDialog(this, "Số lượng và giá nhập phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (nsx.after(hsd)) {
+                    JOptionPane.showMessageDialog(this, "Ngày sản xuất phải trước hạn sử dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -122,6 +137,8 @@ public class FormImportDetail extends JPanel {
                 chiTiet.setMaLH(maLH);
                 chiTiet.setSoLuong(soLuong);
                 chiTiet.setGiaNhap(giaNhap);
+                chiTiet.setNsx(nsx);
+                chiTiet.setHsd(hsd);
                 chiTiet.setTrangThai("ACTIVE");
 
                 if (chiTietBLL.insertChiTietNhapHang(chiTiet)) {
@@ -133,6 +150,8 @@ public class FormImportDetail extends JPanel {
                 }
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (dd/MM/yyyy)!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -146,43 +165,47 @@ public class FormImportDetail extends JPanel {
         addDialog.add(soLuongField);
         addDialog.add(giaNhapLabel);
         addDialog.add(giaNhapField);
+        addDialog.add(nsxLabel);
+        addDialog.add(nsxField);
+        addDialog.add(hsdLabel);
+        addDialog.add(hsdField);
         addDialog.add(addButton);
         addDialog.add(cancelButton);
 
         addDialog.setVisible(true);
     }
 
-    private void deleteSelectedProduct() {
-        int row = table.getSelectedRow();
-        if (row >= 0) {
-            int confirm = JOptionPane.showConfirmDialog(
-                    this,
-                    "Bạn có chắc chắn muốn xóa sản phẩm này?",
-                    "Xác nhận xóa",
-                    JOptionPane.YES_NO_OPTION
-            );
-
-            if (confirm == JOptionPane.YES_OPTION) {
-                ArrayList<ChiTietPNHangDTO> chiTietList = chiTietBLL.getChiTietByMaPNH(maPNH);
-                if (row < chiTietList.size()) {
-                    int maCTPNH = chiTietList.get(row).getMaCTPNH();
-                    if (chiTietBLL.deleteChiTietNhapHang(maCTPNH)) {
-                        refreshTable();
-                        JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!");
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Xóa sản phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để xóa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
-        }
-    }
+//    private void deleteSelectedProduct() {
+//        int row = table.getSelectedRow();
+//        if (row >= 0) {
+//            int confirm = JOptionPane.showConfirmDialog(
+//                    this,
+//                    "Bạn có chắc chắn muốn xóa sản phẩm này?",
+//                    "Xác nhận xóa",
+//                    JOptionPane.YES_NO_OPTION
+//            );
+//
+//            if (confirm == JOptionPane.YES_OPTION) {
+//                ArrayList<ChiTietPNHangDTO> chiTietList = chiTietBLL.getChiTietByMaPNH(maPNH);
+//                if (row < chiTietList.size()) {
+//                    int maCTPNH = chiTietList.get(row).getMaCTPNH();
+//                    if (chiTietBLL.deleteChiTietNhapHang(maCTPNH)) {
+//                        refreshTable();
+//                        JOptionPane.showMessageDialog(this, "Xóa sản phẩm thành công!");
+//                    } else {
+//                        JOptionPane.showMessageDialog(this, "Xóa sản phẩm thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//                    }
+//                }
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Vui lòng chọn một sản phẩm để xóa!", "Thông báo", JOptionPane.WARNING_MESSAGE);
+//        }
+//    }
 
     private void refreshTable() {
         ArrayList<ChiTietPNHangDTO> chiTietList = chiTietBLL.getChiTietByMaPNH(maPNH);
         table.setModel(new DefaultTableModel(convertDTOToArray(chiTietList),
-                new String[]{"STT", "Mã sản phẩm", "Mã lô hàng", "Số lượng", "Giá nhập", "Thành tiền"}));
+                new String[]{"STT", "Mã sản phẩm", "Mã lô hàng", "Số lượng", "Giá nhập", "Ngày SX", "Hạn SD", "Thành tiền"}));
     }
 
 }

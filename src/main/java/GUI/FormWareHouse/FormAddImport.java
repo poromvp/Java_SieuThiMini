@@ -13,7 +13,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Locale;
 import java.util.function.Consumer;
 
@@ -25,6 +28,7 @@ public class FormAddImport extends JPanel {
     private PhieuNhapHangDTO phieuNhap;
     private Runnable refreshCallback;
     private SanPhamBLL sanPhamBLL = new SanPhamBLL();
+    private SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
     public FormAddImport(PhieuNhapHangDTO phieuNhap,Runnable refreshCallback) {
         this.phieuNhap = phieuNhap;
@@ -36,7 +40,7 @@ public class FormAddImport extends JPanel {
         // Panel nhập thông tin sản phẩm
         JPanel import_info = new JPanel();
         import_info.setBorder(BorderFactory.createTitledBorder("Thông tin sản phẩm"));
-        import_info.setLayout(new GridLayout(6, 2, 5, 5));
+        import_info.setLayout(new GridLayout(8, 2, 5, 5));
 
         import_info.add(new JLabel("Mã sản phẩm:"));
         StyledTextField maSP = new StyledTextField();
@@ -54,6 +58,14 @@ public class FormAddImport extends JPanel {
         StyledTextField gia = new StyledTextField();
         import_info.add(gia);
 
+        import_info.add(new JLabel("Ngày sản xuất (dd/MM/yyyy):"));
+        StyledTextField nsx = new StyledTextField();
+        import_info.add(nsx);
+
+        import_info.add(new JLabel("Hạn sử dụng (dd/MM/yyyy):"));
+        StyledTextField hsd = new StyledTextField();
+        import_info.add(hsd);
+
         ButtonCustom btnThemSanPham = new ButtonCustom("Thêm sản phẩm",12,"blue");
 
         btnThemSanPham.addActionListener(e->{
@@ -62,10 +74,16 @@ public class FormAddImport extends JPanel {
                 int maLHValue = Integer.parseInt(maLH.getText().trim());
                 int soLuongValue = Integer.parseInt(soLuong.getText().trim());
                 double giaNhapValue = Double.parseDouble(gia.getText().trim());
+                Date nsxValue = dateFormat.parse(nsx.getText().trim());
+                Date hsdValue = dateFormat.parse(hsd.getText().trim());
 
                 // Validate số lượng và giá nhập
                 if (!chiTietNhapBLL.validateSoLuong(soLuongValue) || !chiTietNhapBLL.validateGiaNhap(giaNhapValue)) {
                     JOptionPane.showMessageDialog(this, "Số lượng và giá nhập phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (nsxValue.after(hsdValue)) {
+                    JOptionPane.showMessageDialog(this, "Ngày sản xuất phải trước hạn sử dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
@@ -74,6 +92,8 @@ public class FormAddImport extends JPanel {
                 chiTiet.setMaSP(maSPValue);
                 chiTiet.setSoLuong(soLuongValue);
                 chiTiet.setGiaNhap(giaNhapValue);
+                chiTiet.setNsx(nsxValue);
+                chiTiet.setHsd(hsdValue);
                 chiTiet.setTrangThai("ACTIVE");
 
                 chiTietList.add(chiTiet);
@@ -83,11 +103,15 @@ public class FormAddImport extends JPanel {
                 maLH.setText("");
                 soLuong.setText("");
                 gia.setText("");
+                nsx.setText("");
+                hsd.setText("");
 
                 JOptionPane.showMessageDialog(this,"Thêm sản  phẩm thành công !");
 
             }catch (NumberFormatException ex){
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }catch (ParseException ex) {
+                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (dd/MM/yyyy)!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -178,7 +202,9 @@ public class FormAddImport extends JPanel {
             data[i][2] = ct.getMaLH();
             data[i][3] = ct.getSoLuong();
             data[i][4] = currencyFormat.format(ct.getGiaNhap());
-            data[i][5] = currencyFormat.format(thanhTien);
+            data[i][5] = ct.getNsx() != null ? dateFormat.format(ct.getNsx()) : "";
+            data[i][6] = ct.getHsd() != null ? dateFormat.format(ct.getHsd()) : "";
+            data[i][7] = currencyFormat.format(thanhTien);
         }
         table.setModel(new DefaultTableModel(data, new String[]{"STT", "Mã SP", "Mã lô hàng", "Số lượng", "Giá nhập", "Thành tiền"}));
     }

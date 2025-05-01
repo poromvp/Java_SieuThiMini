@@ -1,16 +1,33 @@
 package GUI;
 
-import javax.swing.*;
-import java.awt.event.*;
+import java.awt.AWTEvent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.awt.event.WindowEvent;
 
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.SwingConstants;
 
 import BLL.TaiKhoanBLL;
 import DTO.TaiKhoanDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
-
-import java.awt.*;
 
 public class FrameLogin extends JFrame {
     private Color bgColor = new Color(17, 32, 51);

@@ -7,7 +7,7 @@
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
-DROP DATABASE IF EXISTS SIEUTHIMINII;
+DROP DATABASE IF EXISTS SIEUTHIMINI;
 CREATE DATABASE IF NOT EXISTS SIEUTHIMINI
     CHARACTER SET utf8mb4 
     COLLATE utf8mb4_unicode_ci;
@@ -441,7 +441,7 @@ CREATE TABLE `taikhoan` (
 INSERT INTO `taikhoan` (`MaNV`, `TenTK`, `MatKhau`, `Quyen`, `Gmail`, `TrangThai`) VALUES
 (1, 'VOTRINHKHANG', 'VOTRINHKHANG', 'ADMIN', 'VOTRINHKHANG@gmail.com', 'ACTIVE'),
 (2, 'TRINHKHANG', 'TRINHKHANG', 'QUẢN LÝ KHO', 'TRINHKHANG@gmail.com', 'ACTIVE'),
-(3, 'KHANG', 'KHANG', 'NHÂN VIÊN', 'KHANG@gmail.com', 'INACTIVE'),
+(3, 'KHANG', 'KHANG', 'NHÂN VIÊN', 'KHANG@gmail.com', 'ACTIVE'),
 (4, 'admin1', '123456', 'ADMIN', 'admin1@example.com', 'ACTIVE'),
 (5, 'kho01', 'kho123', 'QUẢN LÝ KHO', 'kho01@example.com', 'ACTIVE'),
 (6, 'nhanvien01', 'nv123', 'NHÂN VIÊN', 'nv01@example.com', 'INACTIVE');

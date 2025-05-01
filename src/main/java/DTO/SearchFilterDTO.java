@@ -1,22 +1,33 @@
 package DTO;
 
-import java.sql.*;
+import java.sql.Date;
 
 public class SearchFilterDTO {
-    public int maDH;
+    public Integer maDH;
     public Date ngayBD;
     public Date ngayKT;
     public double tongTienMin;
     public double tongTienMax;
     public String phuongThucTT;
-    public int maKH;
+    public Integer maKH;
+    public String tenKH;
+    public Integer maKM;
+    public String tenKM;
+    public Integer maSP;
+    public String tenSP;
+    public Integer maLSP;
+    public String tenLSP;
+    public Integer maNV;
+    public String tenNV;
+    public String sort;
+    public String tenCot;
 
     public SearchFilterDTO() {
     }
 
-    public SearchFilterDTO(int maDH, Date ngayBD, Date ngayKT, double tongTienMin, double tongTienMax,
-            String phuongThucTT, int maKH, String tenKH, int maKM, String tenKM, int maSP, String tenSP, int maLSP,
-            String tenLSP, int maNV, String tenNV, String sort, String tenCot) {
+    public SearchFilterDTO(Integer maDH, Date ngayBD, Date ngayKT, double tongTienMin, double tongTienMax,
+            String phuongThucTT, Integer maKH, String tenKH, Integer maKM, String tenKM, Integer maSP, String tenSP, Integer maLSP,
+            String tenLSP, Integer maNV, String tenNV, String sort, String tenCot) {
         this.maDH = maDH;
         this.ngayBD = ngayBD;
         this.ngayKT = ngayKT;
@@ -37,11 +48,11 @@ public class SearchFilterDTO {
         this.tenCot = tenCot;
     }
 
-    public int getMaDH() {
+    public Integer getMaDH() {
         return maDH;
     }
 
-    public void setMaDH(int maDH) {
+    public void setMaDH(Integer maDH) {
         this.maDH = maDH;
     }
 
@@ -85,11 +96,11 @@ public class SearchFilterDTO {
         this.phuongThucTT = phuongThucTT;
     }
 
-    public int getMaKH() {
+    public Integer getMaKH() {
         return maKH;
     }
 
-    public void setMaKH(int maKH) {
+    public void setMaKH(Integer maKH) {
         this.maKH = maKH;
     }
 
@@ -101,11 +112,11 @@ public class SearchFilterDTO {
         this.tenKH = tenKH;
     }
 
-    public int getMaKM() {
+    public Integer getMaKM() {
         return maKM;
     }
 
-    public void setMaKM(int maKM) {
+    public void setMaKM(Integer maKM) {
         this.maKM = maKM;
     }
 
@@ -117,11 +128,11 @@ public class SearchFilterDTO {
         this.tenKM = tenKM;
     }
 
-    public int getMaSP() {
+    public Integer getMaSP() {
         return maSP;
     }
 
-    public void setMaSP(int maSP) {
+    public void setMaSP(Integer maSP) {
         this.maSP = maSP;
     }
 
@@ -133,11 +144,11 @@ public class SearchFilterDTO {
         this.tenSP = tenSP;
     }
 
-    public int getMaLSP() {
+    public Integer getMaLSP() {
         return maLSP;
     }
 
-    public void setMaLSP(int maLSP) {
+    public void setMaLSP(Integer maLSP) {
         this.maLSP = maLSP;
     }
 
@@ -149,11 +160,11 @@ public class SearchFilterDTO {
         this.tenLSP = tenLSP;
     }
 
-    public int getMaNV() {
+    public Integer getMaNV() {
         return maNV;
     }
 
-    public void setMaNV(int maNV) {
+    public void setMaNV(Integer maNV) {
         this.maNV = maNV;
     }
 
@@ -181,15 +192,5 @@ public class SearchFilterDTO {
         this.tenCot = tenCot;
     }
 
-    public String tenKH;
-    public int maKM;
-    public String tenKM;
-    public int maSP;
-    public String tenSP;
-    public int maLSP;
-    public String tenLSP;
-    public int maNV;
-    public String tenNV;
-    public String sort;
-    public String tenCot;
+   
 }

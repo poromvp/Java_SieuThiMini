@@ -57,7 +57,7 @@ public class SearchFilterDAL {
                 param.add(filter.getNgayKT());
             }
     
-            if (filter.getPhuongThucTT() != null) {
+            if (filter.getPhuongThucTT() != null && !filter.getPhuongThucTT().equalsIgnoreCase("tất cả")) {
                 whereClauses.add("donhang.PTTToan = ?");
                 param.add(filter.getPhuongThucTT());
             }

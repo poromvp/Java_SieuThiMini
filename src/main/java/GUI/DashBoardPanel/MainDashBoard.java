@@ -1,13 +1,7 @@
 package GUI.DashBoardPanel;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
-
-import GUI.ComponentCommon.TienIch;
-
 import java.awt.*;
-import java.io.*;
-import java.awt.image.BufferedImage;
 
 public class MainDashBoard extends JPanel {
     public MainDashBoard() {

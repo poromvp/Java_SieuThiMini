@@ -6,6 +6,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.io.File;
 
 import BLL.TheThanhVienBLL;
 import DTO.TheThanhVienDTO;
@@ -20,10 +21,12 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
     DefaultTableModel model;
     private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembersACTIVE();
 
+    // Khởi tạo panel với tiêu đề và viền
     private void initPanel(JPanel pnl, String title) {
         pnl.setBorder(new CompoundBorder(new TitledBorder(title), new EmptyBorder(4, 4, 4, 4)));
     }
 
+    // Khởi tạo panel chứa các nút hành động
     private void initPanel1(JPanel pn1) {
         initPanel(pn1, "Hành động");
         pn1.setLayout(new GridBagLayout());
@@ -36,7 +39,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         btnXemBlock = new JButton("<html><center>DS TTV Đã Khóa</center><html>");
         btnIn = new JButton("Xuất danh sách");
 
-        // Thiết lập style cho từng nút
+        // Thiết lập style cho các nút
         TienIch.nutStyle(btnThem, "addIcon.png", 14, 24, 12, new Color(238, 238, 238), Color.GRAY, Color.DARK_GRAY);
         TienIch.nutStyle(btnKhoa, "lock.png", 14, 24, 12, new Color(238, 238, 238), Color.GRAY, Color.DARK_GRAY);
         TienIch.nutStyle(btnSua, "editIcon.png", 14, 24, 12, new Color(238, 238, 238), Color.GRAY, Color.DARK_GRAY);
@@ -44,7 +47,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         TienIch.nutStyle(btnXemBlock, "list.png", 14, 24, 12, new Color(238, 238, 238), Color.GRAY, Color.DARK_GRAY);
         TienIch.nutStyle(btnIn, "printer.png", 14, 24, 12, new Color(238, 238, 238), Color.GRAY, Color.DARK_GRAY);
 
-        // Đặt khoảng cách và vị trí cho từng nút
+        // Đặt vị trí và khoảng cách cho các nút
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
@@ -65,6 +68,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         pn1.add(btnIn, gbc);
 
         btnThem.addActionListener(this);
+        btnThem.addMouseListener(this);
         btnKhoa.addActionListener(this);
         btnKhoa.addMouseListener(this);
         btnSua.addActionListener(this);
@@ -73,6 +77,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         btnIn.addActionListener(this);
     }
 
+    // Khởi tạo panel chứa bảng danh sách thành viên
     private void initPanel2(JPanel pn2) {
         initPanel(pn2, "Danh sách");
         pn2.setLayout(new BorderLayout());
@@ -87,6 +92,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         pn2.add(scr, BorderLayout.CENTER);
     }
 
+    // Tải dữ liệu thành viên vào bảng
     private void loadThanhVien(ArrayList<TheThanhVienDTO> ttv) {
         model.setRowCount(0);
         ttv = TheThanhVienBLL.getAllMembersACTIVE();
@@ -213,18 +219,47 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
     public void mousePressed(MouseEvent e) {
         TienIch.setDarkUI();
         if (SwingUtilities.isRightMouseButton(e)) {
-            String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Mở Khóa",
-                    JOptionPane.PLAIN_MESSAGE);
-            if (maTV != null && !maTV.trim().isEmpty()) {
-                if (TheThanhVienBLL.getMemberById(Integer.parseInt(maTV)).getTrangThai().equals("ACTIVE")) {
-                    TienIch.CustomMessage("Thành viên này đã mở khóa sẵn rồi!");
-                } else {
-                    boolean success = TheThanhVienBLL.UndeleteMember(Integer.parseInt(maTV));
-                    if (success) {
-                        TienIch.CustomMessage("Mở khóa thành viên thành công!");
+            if (e.getSource() == btnThem) {
+                // Nhấp chuột phải vào btnThem: Nhập từ file Excel
+                JFileChooser chooser = new JFileChooser("src/main/resources/file/import");
+                chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("File Excel", "xlsx", "xls"));
+                int result = chooser.showOpenDialog(this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File file = chooser.getSelectedFile();
+                    try {
+                        ArrayList<TheThanhVienDTO> members = ExcelImporter.importFromExcel(file);
+                        for (TheThanhVienDTO member : members) {
+                            String kq = TheThanhVienBLL.addMember(member);
+                            if (!kq.contains("thành công")) {
+                                TienIch.CustomMessage("Lỗi khi thêm thành viên: " + kq);
+                            }
+                        }
                         loadThanhVien(TTV);
+                        TienIch.CustomMessage("Nhập danh sách thành viên từ Excel thành công!");
+                    } catch (Exception ex) {
+                        TienIch.CustomMessage("Lỗi khi nhập từ Excel: " + ex.getMessage());
+                    }
+                }
+            } else if (e.getSource() == btnKhoa) {
+                // Nhấp chuột phải vào btnKhoa: Mở khóa thành viên
+                String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Mở Khóa",
+                        JOptionPane.PLAIN_MESSAGE);
+                if (maTV != null && !maTV.trim().isEmpty()) {
+                    TheThanhVienDTO member = TheThanhVienBLL.getMemberById(Integer.parseInt(maTV));
+                    if (member != null) {
+                        if (member.getTrangThai().equals("ACTIVE")) {
+                            TienIch.CustomMessage("Thành viên này đã mở khóa sẵn rồi!");
+                        } else {
+                            boolean success = TheThanhVienBLL.UndeleteMember(Integer.parseInt(maTV));
+                            if (success) {
+                                TienIch.CustomMessage("Mở khóa thành viên thành công!");
+                                loadThanhVien(TTV);
+                            } else {
+                                TienIch.CustomMessage("Mở khóa thành viên thất bại");
+                            }
+                        }
                     } else {
-                        TienIch.CustomMessage("Mở khóa thành viên thất bại");
+                        TienIch.CustomMessage("Mã thành viên không tồn tại");
                     }
                 }
             }

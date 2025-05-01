@@ -8,6 +8,7 @@ import javax.swing.border.*;
 import javax.swing.table.*;
 
 import BLL.DonHangBLL;
+import BLL.SearchFilterBLL;
 import DTO.DonHangDTO;
 import GUI.ExportToPDF;
 import GUI.ComponentCommon.*;
@@ -186,7 +187,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                HoaDon = DonHangBLL.getOrderByThK(panel.filter());
+                HoaDon = SearchFilterBLL.timKiem_SapXepDonHang(panel.filter());
                 loadDonHang(HoaDon);
             }
         } else if (e.getSource() == exportItem) {

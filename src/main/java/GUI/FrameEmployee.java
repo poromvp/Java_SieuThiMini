@@ -18,11 +18,10 @@ import javax.swing.JPanel;
 
 import GUI.ComponentCommon.Header;
 import GUI.ComponentCommon.TienIch;
-import GUI.FormEmployee.Home;
-import GUI.FormEmployee.InterfaceHome;
-import GUI.FormEmployee.InterfaceOrder;
+import GUI.FormEmployee.HomePanel;
 import GUI.FormEmployee.InterfaceOrderManagement;
 import GUI.FormEmployee.LeftMenu;
+import GUI.FormEmployee.OrderPanel;
 import GUI.NhanVien_BaoCaoBanHang.PanelMainBaoCao;
 
 public class FrameEmployee extends JFrame implements ActionListener {
@@ -31,9 +30,9 @@ public class FrameEmployee extends JFrame implements ActionListener {
     private  LeftMenu pn_leftMenu;
     private  Header pn_header;
 
-    private  InterfaceOrder pn_formOrder;
+    private  OrderPanel pn_formOrder;
     private  InterfaceOrderManagement pn_formOrderManagement;
-    private  Home pn_formHome;
+    private  HomePanel pn_formHome;
     private  PanelMainBaoCao panelMainBaoCao;
 
 
@@ -70,9 +69,9 @@ public class FrameEmployee extends JFrame implements ActionListener {
         cardLayout = new CardLayout(); 
         pn_cardLayout = new JPanel(cardLayout);  
 
-        pn_formOrder = new InterfaceOrder();
+        pn_formOrder = new OrderPanel();
         pn_formOrderManagement = new InterfaceOrderManagement();
-        pn_formHome = new Home();
+        pn_formHome = new HomePanel();
         panelMainBaoCao = new PanelMainBaoCao();
 
         pn_cardLayout.add(pn_formHome, "formHome");

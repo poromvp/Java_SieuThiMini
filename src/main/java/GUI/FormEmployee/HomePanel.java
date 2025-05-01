@@ -18,7 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-public class Home extends JPanel {
+public class HomePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JPanel panelCenter;
@@ -26,7 +26,7 @@ public class Home extends JPanel {
     /**
      * Create the panel.
      */
-    public Home() {
+    public HomePanel() {
         setLayout(new BorderLayout(0, 0));
         
         panelCenter = new JPanel();
@@ -226,7 +226,7 @@ public class Home extends JPanel {
         frame.setSize(900, 500);
         frame.setLocationRelativeTo(null);
 
-        JPanel panel = new Home();
+        JPanel panel = new HomePanel();
         frame.getContentPane().add(panel);
         frame.setVisible(true);
     }

@@ -39,7 +39,7 @@ public class SanPhamDAL {
         }
     
         // Tìm theo mã loại SP hoặc tên loại SP (không phân biệt hoa thường)
-        if (!IdOrTenLSP.isEmpty()) {
+        if (!IdOrTenLSP.equalsIgnoreCase("tất cả")) {
             sql += " AND (LOWER(LoaiSP.maLSP) = LOWER(?) OR LOWER(LoaiSP.tenLoaiSP) LIKE LOWER(?))";
             params.add(IdOrTenLSP);
             params.add("%" + IdOrTenLSP + "%");

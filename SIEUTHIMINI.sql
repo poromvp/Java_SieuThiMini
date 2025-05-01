@@ -85,6 +85,7 @@ CREATE TABLE SanPham (
     TenAnh VARCHAR(255) ,
     Gia DECIMAL(10,2),
     TenSP VARCHAR(255) ,
+    SoLuongTon INT DEFAULT 0,
     MoTa VARCHAR(555) ,
    	TrangThai ENUM('ACTIVE', 'INACTIVE'),
     soLuongTon int

@@ -2,6 +2,8 @@ package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.Date;
+
 import com.toedter.calendar.JDateChooser;
 
 import DTO.SearchFilterDTO;
@@ -10,24 +12,24 @@ import GUI.ComponentCommon.*;
 public class PanelTimThK extends JPanel {
 
     // Khai báo các biến instance để truy cập từ các phương thức khác
-    private JTextField txtMaDonHang;
-    private JDateChooser dateChooserBatDau;
-    private JTextField txtLoaiSanPham;
-    private SpinnerNumberModel min, max;
-    private JSpinner Max, Min;
-    private JDateChooser dateChooserKetThuc;
-    private JTextField txtMaNhanVien;
-    private JTextField txtTenNhanVien;
-    private JComboBox<String> cboSapXep;
-    private JComboBox<String> cboTheoCot;
-    private JTextField txtMaKhachHang;
-    private JTextField txtTenKhachHang;
-    private JTextField txtMaKhuyenMai;
-    private JTextField txtTenKhuyenMai;
-    private JComboBox<String> cboPhuongThucThanhToan;
-    private JTextField txtMaSanPham;
-    private JTextField txtTenSanPham;
-    private JTextField txtMaLoaiSanPham;
+    private static JTextField txtMaDonHang;
+    private static JDateChooser dateChooserBatDau;
+    private static JTextField txtLoaiSanPham;
+    private static SpinnerNumberModel min, max;
+    private static JSpinner Max, Min;
+    private static JDateChooser dateChooserKetThuc;
+    private static JTextField txtMaNhanVien;
+    private static JTextField txtTenNhanVien;
+    private static JComboBox<String> cboSapXep;
+    private static JComboBox<String> cboTheoCot;
+    private static JTextField txtMaKhachHang;
+    private static JTextField txtTenKhachHang;
+    private static JTextField txtMaKhuyenMai;
+    private static JTextField txtTenKhuyenMai;
+    private static JComboBox<String> cboPhuongThucThanhToan;
+    private static JTextField txtMaSanPham;
+    private static JTextField txtTenSanPham;
+    private static JTextField txtMaLoaiSanPham;
 
     public PanelTimThK() {
         setBackground(new Color(33,58,89));
@@ -290,18 +292,30 @@ public class PanelTimThK extends JPanel {
         System.out.println("Bạn đã nhập " + search.getMaDH());
     }
 
-    public SearchFilterDTO filter(){
+    public static SearchFilterDTO filter(){
         SearchFilterDTO search = new SearchFilterDTO();
-        if(!txtMaDonHang.getText().isEmpty()){
-            search.setMaDH(Integer.parseInt(txtMaDonHang.getText()));
-        }
-        if(!txtMaSanPham.getText().isEmpty()){
-            search.setMaSP(Integer.parseInt(txtMaSanPham.getText()));
-        }
+        search.setMaDH(txtMaDonHang.getText().isEmpty()? null: Integer.parseInt(txtMaDonHang.getText()));
+        search.setMaKH(txtMaKhachHang.getText().isEmpty()? null : Integer.parseInt(txtMaKhachHang.getText()));
+        search.setMaKM(txtMaKhuyenMai.getText().isEmpty()? null : Integer.parseInt(txtMaKhuyenMai.getText()));
+        search.setMaLSP(txtMaLoaiSanPham.getText().isEmpty()? null : Integer.parseInt(txtMaLoaiSanPham.getText()));
+        search.setMaNV(txtMaNhanVien.getText().isEmpty()? null : Integer.parseInt(txtMaNhanVien.getText()));
+        search.setMaSP(txtMaSanPham.getText().isEmpty()? null : Integer.parseInt(txtMaSanPham.getText()));
+        search.setNgayBD( (Date)dateChooserBatDau.getDate() == null ? null : (Date)dateChooserBatDau.getDate());
+        search.setNgayBD( (Date)dateChooserKetThuc.getDate() == null ? null : (Date)dateChooserKetThuc.getDate());
+        search.setPhuongThucTT((String)cboPhuongThucThanhToan.getSelectedItem());
+        search.setSort((String)cboSapXep.getSelectedItem());
+        search.setTenCot((String) cboTheoCot.getSelectedItem());
+        search.setTenKH(txtTenKhachHang.getText().isEmpty()? null : txtTenKhachHang.getText());
+        search.setTenKM(txtTenKhuyenMai.getText().isEmpty() ? null : txtTenKhuyenMai.getText());
+        search.setTenLSP(txtLoaiSanPham.getText().isEmpty() ? null : txtLoaiSanPham.getText());
+        search.setTenNV(txtTenNhanVien.getText().isEmpty()? null: txtTenNhanVien.getText());
+        search.setTenSP(txtTenSanPham.getText().isEmpty() ? null : txtTenSanPham.getText());
+        search.setTongTienMax((Integer)max.getValue());
+        search.setTongTienMin((Integer)min.getValue());
         return search;
     }
 
-    /*
+    
     public static void main(String[] args) {
         JFrame frame = new JFrame("Panel Tìm Thống Kê");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -309,5 +323,5 @@ public class PanelTimThK extends JPanel {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }*/
+    }
 }

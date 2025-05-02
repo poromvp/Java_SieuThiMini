@@ -5,7 +5,6 @@ import java.awt.event.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.*;
 
 import BLL.NhaCungCapBLL;
@@ -124,7 +123,7 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
-            PanelTimKho panel = new PanelTimKho();
+            PanelTimLoHang panel = new PanelTimLoHang();
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {

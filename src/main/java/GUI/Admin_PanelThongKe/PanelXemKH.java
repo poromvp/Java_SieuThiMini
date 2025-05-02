@@ -291,7 +291,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
-            PanelTimKH panel = new PanelTimKH();
+            PanelTimKHHD panel = new PanelTimKHHD();
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {

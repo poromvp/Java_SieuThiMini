@@ -2,11 +2,15 @@ package GUI.Admin_PanelThongKe;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
+
+import com.toedter.calendar.JDateChooser;
 
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
@@ -19,10 +23,59 @@ public class PanelTotNhat extends JPanel implements ActionListener {
     public ArrayList<NhanVienDTO> DsNV = (ArrayList<NhanVienDTO>) new NhanVienBLL().getAllNhanVien();
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
+    JDateChooser from, to;
+    JPanel pnTool = new JPanel();
+
+    public void initPanelTool() {
+        pnTool.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // Ngày hôm nay
+        Date today = new Date(System.currentTimeMillis());
+
+        // Ngày đầu tiên của tháng
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = new Date(cal.getTimeInMillis());
+
+        from = new JDateChooser();
+        from.setMaxSelectableDate(today);
+        from.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutay(from, today);
+        TienIch.timStyle(from);
+        from.setDate(firstDayOfMonth);
+
+        to = new JDateChooser();
+        to.setMaxSelectableDate(today);
+        to.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutay(to, today);
+        TienIch.timStyle(to);
+        to.setDate(today);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel tu = new JLabel("Từ");
+        tu.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(tu, gbc);
+
+        gbc.gridx = 1;
+        pnTool.add(from);
+
+        gbc.gridx = 2;
+        JLabel toi = new JLabel("Tới");
+        toi.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(toi, gbc);
+
+        gbc.gridx = 3;
+        pnTool.add(to);
+    }
 
     public PanelTotNhat() {
-        setBorder(new CompoundBorder(new TitledBorder("Danh sách nhân viên có doanh số tốt nhất"),
-                new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(this, "Danh sách nhân viên có doanh số tốt nhất");
         setLayout(new BorderLayout());
 
         String[] tencot = { "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại" };
@@ -33,6 +86,9 @@ public class PanelTotNhat extends JPanel implements ActionListener {
         TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         add(scr, BorderLayout.CENTER);
+        initPanelTool();
+        add(pnTool, BorderLayout.NORTH);
+
 
         // Thêm popup menu
         popupMenu = new JPopupMenu();

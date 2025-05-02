@@ -217,7 +217,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
     public void initPanel3() {
         TienIch.taoTitleBorder(pn3, "Danh sách các đơn hàng đã thanh toán");
         pn3.setLayout(new BorderLayout());
-        String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
+        String[] tencot = { "Mã đơn hàng", "Mã khách hàng", "PTTT", "Thành tiền", "Ngày" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         modelMini = (DefaultTableModel) tb.getModel();
@@ -232,12 +232,22 @@ public class PanelXemNV extends JPanel implements ActionListener {
     private void loadDonHang(ArrayList<DonHangDTO> danhsach) {
         modelMini.setRowCount(0);
         for (DonHangDTO hd : danhsach) {
-            modelMini.addRow(new Object[] {
+            if(hd.getMaKH()!=0){
+                modelMini.addRow(new Object[] {
+                        hd.getMaDH(),
+                        hd.getMaKH(),
+                        hd.getPtThanhToan(),
+                        TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                        TienIch.ddmmyyyy(hd.getNgayTT()) });
+            }
+            else{
+                modelMini.addRow(new Object[] {
                     hd.getMaDH(),
-                    hd.getMaNV(),
+                    "Không có",
                     hd.getPtThanhToan(),
                     TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
+            }
         }
     }
 
@@ -289,7 +299,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
-            PanelTimVN panel = new PanelTimVN();
+          PanelTimNVHD panel = new PanelTimNVHD();
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {

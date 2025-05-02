@@ -144,6 +144,7 @@ public class PanelXemThK extends JPanel {
         tb.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                TienIch.resetUI();
                 if (e.getClickCount() == 2) { // Kiểm tra double click
                     FormProductDetail detailDialog = new FormProductDetail(null, SanPhamBLL.getProductById((Integer)tb.getValueAt(tb.getSelectedRow(), 0)));
                         detailDialog.setVisible(true);

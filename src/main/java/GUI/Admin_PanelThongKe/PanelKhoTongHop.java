@@ -13,6 +13,7 @@ import javax.swing.table.DefaultTableModel;
 import com.toedter.calendar.JDateChooser;
 
 import BLL.LoaiSanPhamBLL;
+import BLL.NhaCungCapBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import GUI.ComponentCommon.*;
@@ -115,7 +116,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
+        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm", "Số lượng bán ra"};
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
@@ -132,12 +133,20 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         pn2 = new JPanel();
         pn2.setLayout(new BorderLayout());
 
+        String[] tencot2 = { "Mã sản phẩm", "Tên sản phẩm", "Giá", "Số lượng tồn", "Loại", "Nhà cung cấp"};
+        Object[][] data2 = new Object[0][tencot2.length]; // Dữ liệu rỗng
+        tb2 = new StyledTable(data2, tencot2); // Khởi tạo StyledTable
+        model2 = (DefaultTableModel) tb2.getModel();
+        StyledTable.hoverTable(tb2, model2);
+        loadSanPham2(DsSP2);
+        scr2 = new JScrollPane(tb2);
+
         pn3 = new JPanel();
         pn3.setLayout(new BorderLayout());
 
         tab = new JTabbedPane();
         tab.addTab("Danh sách bán chạy", pn1);
-        tab.addTab("Danh sách tồn nhiều", pn2);
+        tab.addTab("Danh sách tồn kho", pn2);
         // tab.addTab("Danh sách hàng sắp hết", pn3);
         add(tab, gbc);
 
@@ -158,9 +167,23 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         tb.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                TienIch.resetUI();
                 if (e.getClickCount() == 2) { // Kiểm tra double click
                     FormProductDetail detailDialog = new FormProductDetail(null,
                             SanPhamBLL.getProductById((Integer) tb.getValueAt(tb.getSelectedRow(), 0)));
+                    detailDialog.setVisible(true);
+                }
+            }
+        });
+
+        showpupop(tb2);
+        showpupop(scr2);
+        tb2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) { // Kiểm tra double click
+                    FormProductDetail detailDialog = new FormProductDetail(null,
+                            SanPhamBLL.getProductById((Integer) tb2.getValueAt(tb2.getSelectedRow(), 0)));
                     detailDialog.setVisible(true);
                 }
             }
@@ -217,7 +240,22 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             model.addRow(new Object[] {
                     sp.getMaSP(),
                     new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
-                    sp.getTenSP()
+                    sp.getTenSP(),
+                    0
+            });
+        }
+    }
+
+    private void loadSanPham2(ArrayList<SanPhamDTO> DsSP2) {
+        model2.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
+        for (SanPhamDTO sp : DsSP2) {
+            model2.addRow(new Object[] {
+                    sp.getMaSP(),
+                    sp.getTenSP(),
+                    sp.getGia(),
+                    sp.getSoLuongTon(),
+                    new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
+                    new NhaCungCapBLL().getNhaCungCap(sp.getMaNCC()).getTenNCC()
             });
         }
     }
@@ -229,7 +267,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             pn1.add(scr, BorderLayout.CENTER);
             pn1.add(pnTool, BorderLayout.NORTH);
         } else if (tabSelected == 1) {
-            pn2.add(scr, BorderLayout.CENTER);
+            pn2.add(scr2, BorderLayout.CENTER);
         } else if (tabSelected == 2) {
             pn3.add(scr, BorderLayout.CENTER);
         }
@@ -243,7 +281,13 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
 
         } else if (e.getSource() == searchItem) {
-            PanelTimKho panel = new PanelTimKho();
+            JPanel panel;
+            if(tab.getSelectedIndex()==0){
+                panel = new PanelTimBanChay();
+            }
+            else{
+                panel = new PanelTimKho();
+            }
 
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);

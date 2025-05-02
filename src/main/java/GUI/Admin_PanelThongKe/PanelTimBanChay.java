@@ -6,9 +6,8 @@ import java.awt.*;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 
-public class PanelTimKho extends JPanel {
+public class PanelTimBanChay extends JPanel {
 
-    // Khai báo các biến instance để truy cập từ các phương thức khác
     private SpinnerNumberModel min, max;
     private JSpinner Max, Min;
     private StyledTextField txtMaSanPham;
@@ -17,28 +16,23 @@ public class PanelTimKho extends JPanel {
     private StyledTextField txtLoaiSanPham;
     private static JComboBox<String> cboSapXep;
     private static JComboBox<String> cboTheoCot;
-    private StyledTextField txtMaNCC;
-    private StyledTextField txtTenNCC;
-    private SpinnerNumberModel min2, max2;
-    private JSpinner Max2, Min2;
 
-    public PanelTimKho() {
+    public PanelTimBanChay() {
         setBackground(new Color(33, 58, 89));
-        // Thiết lập layout chính cho panel
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Khoảng cách giữa các thành phần
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // Dòng 1: Mã sản phẩm, tên sản phẩm
+        // Dòng 1: Mã sản phẩm, Tên sản phẩm
         JLabel lbMaSP = new JLabel("Mã sản phẩm");
         TienIch.timStyle(lbMaSP);
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(lbMaSP, gbc);
 
-        txtMaSanPham = new StyledTextField(1,10);
-        txtMaSanPham.setPlaceholder("1,2,3,....");
+        txtMaSanPham = new StyledTextField(1, 10);
+        txtMaSanPham.setPlaceholder("1,2,3,4,....");
         TienIch.timStyle(txtMaSanPham);
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -50,7 +44,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 0;
         add(lbTenSanPham, gbc);
 
-        txtTenSanPham = new StyledTextField(1,10);
+        txtTenSanPham = new StyledTextField(1, 10);
         txtTenSanPham.setPlaceholder("Nhập tên sản phẩm");
         TienIch.timStyle(txtTenSanPham);
         gbc.gridx = 3;
@@ -58,24 +52,24 @@ public class PanelTimKho extends JPanel {
         add(txtTenSanPham, gbc);
 
         JLabel gifIMG = new JLabel();
-        TienIch.anhGif(gifIMG, "searching.gif", 300, 230);
+        TienIch.anhGif(gifIMG, "searching.gif", 150, 150);
         gbc.gridx = 4;
         gbc.gridy = 0;
-        gbc.gridheight = 6;
+        gbc.gridheight = 4;
         gbc.gridwidth = 2;
         add(gifIMG, gbc);
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
 
-        // Dòng 2: Mã loại sản phẩm, tên loại sản phẩm
+        // Dòng 2: Mã loại sản phẩm, Tên loại sản phẩm
         JLabel lbMaLoaiSP = new JLabel("Mã loại sản phẩm");
         TienIch.timStyle(lbMaLoaiSP);
         gbc.gridx = 0;
         gbc.gridy = 1;
         add(lbMaLoaiSP, gbc);
 
-        txtMaLoaiSanPham = new StyledTextField(1,10);
-        txtMaLoaiSanPham.setPlaceholder("1,2,3,....");
+        txtMaLoaiSanPham = new StyledTextField(1, 10);
+        txtMaLoaiSanPham.setPlaceholder("1,2,3,4,....");
         TienIch.timStyle(txtMaLoaiSanPham);
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -87,14 +81,14 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 1;
         add(lbTenLoaiSP, gbc);
 
-        txtLoaiSanPham = new StyledTextField(1,10);
+        txtLoaiSanPham = new StyledTextField(1, 10);
         txtLoaiSanPham.setPlaceholder("Nhập tên loại sản phẩm");
         TienIch.timStyle(txtLoaiSanPham);
         gbc.gridx = 3;
         gbc.gridy = 1;
         add(txtLoaiSanPham, gbc);
 
-        // Dòng 3: Số lượng max, số lượng min
+        // Dòng 3: Số lượng bán min, max
         JLabel lbmin = new JLabel("Số lượng từ");
         TienIch.timStyle(lbmin);
         gbc.gridx = 0;
@@ -121,83 +115,29 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 2;
         add(Max, gbc);
 
-        // Dòng 4: Giá tiền max, min 
-        JLabel lbMinGia = new JLabel("Giá từ");
-        TienIch.timStyle(lbMinGia);
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        add(lbMinGia, gbc);
-
-        min2 = new SpinnerNumberModel(0, 0, 900000000, 1000);
-        Min2 = new JSpinner(min2);
-        TienIch.timStyle(Min2);
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        add(Min2, gbc);
-
-        JLabel lbMaxGia = new JLabel("Giá đến");
-        TienIch.timStyle(lbMaxGia);
-        gbc.gridx = 2;
-        gbc.gridy = 3;
-        add(lbMaxGia, gbc);
-
-        max2 = new SpinnerNumberModel(10000, 1000, 900000000, 1000);
-        Max2 = new JSpinner(max2);
-        TienIch.timStyle(Max2);
-        gbc.gridx = 3;
-        gbc.gridy = 3;
-        add(Max2, gbc);
-
-        // Dòng 5: Mã nhà cung cấp, Tên nhà cung cấp
-        JLabel lbMaNCC = new JLabel("Mã NCC");
-        TienIch.timStyle(lbMaNCC);
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        add(lbMaNCC, gbc);
-
-        txtMaNCC = new StyledTextField(1,10);
-        txtMaNCC.setPlaceholder("1,2,3,....");
-        TienIch.timStyle(txtMaNCC);
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        add(txtMaNCC, gbc);
-
-        JLabel lbTenNCC = new JLabel("Tên NCC");
-        TienIch.timStyle(lbTenNCC);
-        gbc.gridx = 2;
-        gbc.gridy = 4;
-        add(lbTenNCC, gbc);
-
-        txtTenNCC = new StyledTextField(1,10);
-        txtTenNCC.setPlaceholder("Nhập tên nhà cung cấp");
-        TienIch.timStyle(txtTenNCC);
-        gbc.gridx = 3;
-        gbc.gridy = 4;
-        add(txtTenNCC, gbc);
-
-        // Dòng 6: Sắp xếp, Theo cột
+        // Dòng 4: Sắp xếp, theo cột
         JLabel lblSapXep = new JLabel("Sắp xếp");
         TienIch.timStyle(lblSapXep);
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 3;
         add(lblSapXep, gbc);
 
-        cboSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
+        cboSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
         TienIch.timStyle(cboSapXep);
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 3;
         add(cboSapXep, gbc);
 
         JLabel lblTheoCot = new JLabel("Theo cột");
         TienIch.timStyle(lblTheoCot);
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 3;
         add(lblTheoCot, gbc);
 
-        cboTheoCot = new JComboBox<>(new String[] { "Mã sản phẩm", "Giá", "Số lượng", "Mã loại sản phẩm", "Mã nhà cung cấp" });
+        cboTheoCot = new JComboBox<>(new String[]{"Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Mã loại sản phẩm"});
         TienIch.timStyle(cboTheoCot);
         gbc.gridx = 3;
-        gbc.gridy = 5;
+        gbc.gridy = 3;
         add(cboTheoCot, gbc);
     }
 }

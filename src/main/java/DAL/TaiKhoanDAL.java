@@ -178,4 +178,25 @@ public class TaiKhoanDAL {
         }
         return null;
     }
+    public TaiKhoanDTO getTaiKhoanById (int id){
+        try {
+            String sql ="SELECT * FROM TAIKHOAN WHERE maNV = ?";
+            ResultSet rs = DBConnection.executeQuery(sql, id);
+            
+            if (rs.next()){
+                TaiKhoanDTO tk = new TaiKhoanDTO();
+                tk.setMaNV(rs.getInt("maNV"));
+                tk.setTenTK(rs.getString("TenTK"));
+                tk.setMatKhau(rs.getString("MATKHAU"));
+                tk.setQuyen(rs.getString("Quyen"));
+                tk.setGmail(rs.getString("Gmail"));
+                tk.setTrangThai(rs.getString("TrangThai"));
+                
+                return tk;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

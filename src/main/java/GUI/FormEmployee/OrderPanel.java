@@ -186,7 +186,7 @@ public class OrderPanel extends JPanel {
 	public OrderPanel() {
 		khachHang = null;
 		setBackground(new Color(207, 235, 243));
-		setBorder(new EmptyBorder(10, 10, 10, 10));
+		setBorder(new EmptyBorder(15, 15, 15, 10));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{874, 0};
 		// gridBagLayout.columnWidths = new int[]{478, 320};

@@ -16,12 +16,16 @@ public class LeftMenu extends JPanel implements ActionListener {
 
     private JButton btn_home;
     private JButton btn_sell;
+    private JButton btn_user;
 //    private JButton btn_orderManagement;
     private JButton btn_report;
     private NhanVienBLL bllnv = new NhanVienBLL();
     private TaiKhoanBLL blltk = new TaiKhoanBLL();
     // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
-    private Color bgColor = new Color(33,58,89);
+    private static Color bgColor = new Color(33,58,89);
+    public static Color getColor(){
+        return bgColor;
+    } 
     public LeftMenu(String maNV) { 
         
         
@@ -68,6 +72,7 @@ public class LeftMenu extends JPanel implements ActionListener {
         
         btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
         btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
+        btn_user = new StyledLeftMenubutton("src/main/resources/images/icon/user.png", "Người dùng");
 //        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí đơn hàng");
 
 
@@ -75,14 +80,17 @@ public class LeftMenu extends JPanel implements ActionListener {
         setButtonStyle(btn_sell);
 //        setButtonStyle(btn_orderManagement);
         setButtonStyle(btn_report);
+        setButtonStyle(btn_user);
 
 
         btn_home.addActionListener(this);
         btn_sell.addActionListener(this);
 //        btn_orderManagement.addActionListener(this);
         btn_report.addActionListener(this);
+        btn_user.addActionListener(this);
 
         add(btn_home);
+        add(btn_user);
         add(btn_sell);
 //        add(btn_orderManagement);
         add(btn_report);
@@ -128,6 +136,10 @@ public class LeftMenu extends JPanel implements ActionListener {
         if (e.getSource() == btn_report) {
             System.out.println("click btn_report");
             FrameEmployee.setPage("formReport", "Báo cáo đơn hàng");
+        }
+        if (e.getSource() == btn_user) {
+            System.out.println("click btn_user");
+            FrameEmployee.setPage("formUser", "Người dùng");
         }
     }
 }

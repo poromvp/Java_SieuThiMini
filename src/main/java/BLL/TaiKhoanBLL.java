@@ -61,5 +61,9 @@ public class TaiKhoanBLL {
     public TaiKhoanDTO getTaiKhoanDTO (String tenTK){
         return taiKhoanDAL.getTaiKhoanDTO(tenTK);
     }
+    public TaiKhoanDTO getTaiKhoanById (int id){
+        return taiKhoanDAL.getTaiKhoanById(id);
+    }
     
 }
+ 

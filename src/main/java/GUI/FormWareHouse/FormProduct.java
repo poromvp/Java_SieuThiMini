@@ -6,6 +6,8 @@ import BLL.LoaiSanPhamBLL;
 import DTO.LoaiSanPhamDTO;
 import DTO.NhaCungCapDTO;
 import DTO.SanPhamDTO;
+import EXCEL.ExportExcelProduct;
+import EXCEL.ImportExcelProduct;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
 
@@ -115,6 +117,16 @@ public class FormProduct extends JPanel {
             }
         });
 
+        ButtonCustom importExcelBtn = new ButtonCustom("Nhập từ Excel","importExcel",16,20,20);
+        ButtonCustom exportExcelBtn = new ButtonCustom("Xuất ra Excel","exportExcel",16,20,20);
+
+        importExcelBtn.addActionListener(e -> {
+            if (ImportExcelProduct.importProduct((JFrame) SwingUtilities.getWindowAncestor(this))) {
+                loadTableData(); // Làm mới bảng
+            }
+        });
+
+        exportExcelBtn.addActionListener(e -> ExportExcelProduct.exportProduct((JFrame) SwingUtilities.getWindowAncestor(this)));
         // Bảng sản phẩm
         String[] headerCol = {"Mã SP", "Tên SP", "Giá","Số lượng tồn", "Loai","Nhà cung cấp"};
         tableModel = new DefaultTableModel(headerCol,0){
@@ -149,6 +161,8 @@ public class FormProduct extends JPanel {
         panelBtn.add(themBtn);
         panelBtn.add(suaBtn);
         panelBtn.add(xoaBtn);
+        panelBtn.add(importExcelBtn);
+        panelBtn.add(exportExcelBtn);
 
         JPanel infoProduct = new JPanel();
         infoProduct.setBorder(BorderFactory.createTitledBorder("Thông tin sản phẩm"));

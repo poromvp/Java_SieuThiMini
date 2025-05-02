@@ -137,7 +137,7 @@ public class HomePanel extends JPanel {
 		panelItem3.setMaximumSize(new Dimension(290, 500));
 		panelItem3.setPreferredSize(new Dimension(290, 400));
 
-		panelItem1.setMaximumSize(new Dimension(2290, 500)); 
+		panelItem1.setMaximumSize(new Dimension(290, 500)); 
 		panelItem1.setPreferredSize(new Dimension(290, 400));
 
 		Box box = Box.createHorizontalBox();

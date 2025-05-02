@@ -725,7 +725,8 @@ public class OrderPanel extends JPanel {
         int row = tableProduct.getSelectedRow();
         if (row != -1) {
             String productName = tableProduct.getValueAt(row, 1).toString();
-            JOptionPane.showMessageDialog(null, "Thông tin chi tiết sản phẩm: " + productName, "Chi tiết", JOptionPane.INFORMATION_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Thông tin chi tiết sản phẩm: " + productName, "Chi tiết", JOptionPane.INFORMATION_MESSAGE);
+			new ChiTietSP_Dialog(null, Integer.parseInt( tableProduct.getValueAt(row, 0).toString())).setVisible(true);;
         }
     }
 

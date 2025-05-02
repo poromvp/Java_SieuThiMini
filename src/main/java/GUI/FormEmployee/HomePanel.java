@@ -23,6 +23,7 @@ public class HomePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JPanel panelCenter;
+    private JPanel panelItem1;
 
     /**
      * Create the panel.
@@ -36,7 +37,7 @@ public class HomePanel extends JPanel {
         panelCenter.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.X_AXIS));
 // ==================================================================================================================
-		JPanel panelItem1 = new JPanel();
+		panelItem1 = new JPanel();
         panelItem1.setLayout(new BoxLayout(panelItem1, BoxLayout.Y_AXIS));
         // panelCenter.add(panel);
         
@@ -136,7 +137,7 @@ public class HomePanel extends JPanel {
 		panelItem3.setMaximumSize(new Dimension(290, 500));
 		panelItem3.setPreferredSize(new Dimension(290, 400));
 
-		panelItem1.setMaximumSize(new Dimension(290, 500)); 
+		panelItem1.setMaximumSize(new Dimension(2290, 500)); 
 		panelItem1.setPreferredSize(new Dimension(290, 400));
 
 		Box box = Box.createHorizontalBox();

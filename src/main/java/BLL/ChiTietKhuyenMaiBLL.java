@@ -49,6 +49,15 @@ public class ChiTietKhuyenMaiBLL {
         int result = ChiTietKhuyenMaiDAL.deleteDiscountDetail(maKM, maSP);
         return result > 0;
     }
+
+    public static ChiTietKhuyenMaiDTO getDiscountDetail(int maKM, int maSP) {
+        if (maKM <= 0 || maSP <= 0) {
+            System.out.println("Mã khuyến mãi hoặc mã sản phẩm không hợp lệ!");
+            return null;
+        }
+        return ChiTietKhuyenMaiDAL.getDiscountDetail(maKM, maSP);
+    }
+
     public static void main(String[] args) {
         System.out.println(getProductOnSaleToday(1));
     }

@@ -7,7 +7,7 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import java.io.FileOutputStream;
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
-import GUI.ExportToPDF;
+import GUI.Export;
 import GUI.ComponentCommon.ButtonCustom;
 
 
@@ -63,9 +63,9 @@ public class FormMainNhanVien extends JPanel {
         ButtonCustom btnXemNghiViec = new ButtonCustom("Lịch sử", "his", 12, 50, 40);
         btnXemNghiViec.addActionListener(e -> xemLichSu());
         buttonPanel.add(btnXemNghiViec);
-        ButtonCustom btnXuatPDF = new ButtonCustom("Xuất PDF", "printer",12,50,40);
+        ButtonCustom btnXuatPDF = new ButtonCustom("Xuất", "printer",12,50,40);
         buttonPanel.add(btnXuatPDF);
-        btnXuatPDF.addActionListener(e -> ExportToPDF.exportJTableToPDF(employeeTablePanel.getNhanVienTable()));
+        btnXuatPDF.addActionListener(e -> FormExport());
         add(buttonPanel, BorderLayout.SOUTH);
     }
    
@@ -171,6 +171,14 @@ private void deleteNhanVien() {
         dialog.setLocationRelativeTo(this);
         FormLichSuNghiViec formLichSu = new FormLichSuNghiViec(employeeTablePanel);
         dialog.add(formLichSu);
+        dialog.setVisible(true);
+    }
+    private void FormExport() {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Export", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(this);
+        FormExport formEx = new FormExport();
+        dialog.add(formEx);
         dialog.setVisible(true);
     }
 

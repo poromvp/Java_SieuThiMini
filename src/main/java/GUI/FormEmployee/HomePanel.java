@@ -17,11 +17,13 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 public class HomePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private JPanel panelCenter;
+    private JPanel panelItem1;
 
     /**
      * Create the panel.
@@ -30,12 +32,12 @@ public class HomePanel extends JPanel {
         setLayout(new BorderLayout(0, 0));
         
         panelCenter = new JPanel();
-        panelCenter.setBackground(new Color(40, 185, 123));
+        panelCenter.setBackground(new Color(175, 238, 238));
         add(panelCenter, BorderLayout.CENTER);
         panelCenter.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.X_AXIS));
 // ==================================================================================================================
-		JPanel panelItem1 = new JPanel();
+		panelItem1 = new JPanel();
         panelItem1.setLayout(new BoxLayout(panelItem1, BoxLayout.Y_AXIS));
         // panelCenter.add(panel);
         
@@ -187,6 +189,8 @@ public class HomePanel extends JPanel {
 		panelCenter.add(box);
 		
 		JPanel panel_2 = new JPanel();
+		panel_2.setBorder(new EmptyBorder(10, 10, 10, 10));
+		panel_2.setBackground(new Color(175, 238, 238));
 		add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		// C:\Users\KHANG\GIT-SGU\Java_SieuThiMini\src\main\resources\images\anhcho1.png

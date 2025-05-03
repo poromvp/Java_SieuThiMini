@@ -4,6 +4,9 @@ package GUI;
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -16,12 +19,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+
 import GUI.ComponentCommon.Header;
 import GUI.ComponentCommon.TienIch;
 import GUI.FormEmployee.HomePanel;
 import GUI.FormEmployee.InterfaceOrderManagement;
 import GUI.FormEmployee.LeftMenu;
 import GUI.FormEmployee.OrderPanel;
+import GUI.FormEmployee.ProfilePanel;
 import GUI.NhanVien_BaoCaoBanHang.PanelMainBaoCao;
 
 public class FrameEmployee extends JFrame implements ActionListener {
@@ -34,6 +39,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
     private  InterfaceOrderManagement pn_formOrderManagement;
     private  HomePanel pn_formHome;
     private  PanelMainBaoCao panelMainBaoCao;
+    private  ProfilePanel panelProfile;
 
 
     private static  JLabel lbl_title = new JLabel("Trang Chủ");
@@ -64,6 +70,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
         pn_header = new Header();
         pn_leftMenu = new LeftMenu(maNV);
+        panelProfile = new ProfilePanel();
         
         
         cardLayout = new CardLayout(); 
@@ -75,6 +82,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
         panelMainBaoCao = new PanelMainBaoCao();
 
         pn_cardLayout.add(pn_formHome, "formHome");
+        pn_cardLayout.add(panelProfile, "formUser");
         pn_cardLayout.add(pn_formOrder, "formOrder");
         pn_cardLayout.add(pn_formOrderManagement, "formOrderManagement");
         pn_cardLayout.add(panelMainBaoCao, "formReport");
@@ -82,11 +90,16 @@ public class FrameEmployee extends JFrame implements ActionListener {
         
         pn_body = new JPanel(new BorderLayout());
         lbl_title.setHorizontalAlignment(JLabel.CENTER);
+        lbl_title.setPreferredSize(new Dimension(100, 50));
+        lbl_title.setFont(new Font("Arial", Font.BOLD, 20));
+        lbl_title.setBackground(LeftMenu.getColor());
+        lbl_title.setOpaque(true);
+        lbl_title.setForeground(Color.white);
         pn_body.add(lbl_title, BorderLayout.NORTH);
         pn_body.add(pn_cardLayout, BorderLayout.CENTER);
         
         
-        add(pn_header, BorderLayout.NORTH);
+        // add(pn_header, BorderLayout.NORTH);
         add(pn_leftMenu, BorderLayout.WEST);
         add(pn_body, BorderLayout.CENTER);
         

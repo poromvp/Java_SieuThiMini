@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 
 import BLL.TaiKhoanBLL;
 import DTO.TaiKhoanDTO;
@@ -155,6 +156,12 @@ public class FrameLogin extends JFrame {
     }
 
     public static void main(String[] args) {
+        // 	try {
+        //     // Đổi Look & Feel sang hệ điều hành
+        //     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         new FrameLogin();
     }
 }

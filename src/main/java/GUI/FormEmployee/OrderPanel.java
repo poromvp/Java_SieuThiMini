@@ -186,7 +186,7 @@ public class OrderPanel extends JPanel {
 	public OrderPanel() {
 		khachHang = null;
 		setBackground(new Color(207, 235, 243));
-		setBorder(new EmptyBorder(10, 10, 10, 10));
+		setBorder(new EmptyBorder(15, 15, 15, 10));
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{874, 0};
 		// gridBagLayout.columnWidths = new int[]{478, 320};
@@ -725,7 +725,8 @@ public class OrderPanel extends JPanel {
         int row = tableProduct.getSelectedRow();
         if (row != -1) {
             String productName = tableProduct.getValueAt(row, 1).toString();
-            JOptionPane.showMessageDialog(null, "Thông tin chi tiết sản phẩm: " + productName, "Chi tiết", JOptionPane.INFORMATION_MESSAGE);
+            // JOptionPane.showMessageDialog(null, "Thông tin chi tiết sản phẩm: " + productName, "Chi tiết", JOptionPane.INFORMATION_MESSAGE);
+			new ChiTietSP_Dialog(null, Integer.parseInt( tableProduct.getValueAt(row, 0).toString())).setVisible(true);;
         }
     }
 

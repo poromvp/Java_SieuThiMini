@@ -115,7 +115,7 @@ public class PanelTimThK extends JPanel {
         gbc.gridy = 1;
         add(lblPhuongThucThanhToan, gbc);
 
-        cboPhuongThucThanhToan = new JComboBox<>(new String[] { "BANK", "CASH" });
+        cboPhuongThucThanhToan = new JComboBox<>(new String[] { "tất cả", "BANK", "CASH" });
         TienIch.timStyle(cboPhuongThucThanhToan);
         gbc.gridx = 5;
         gbc.gridy = 1;

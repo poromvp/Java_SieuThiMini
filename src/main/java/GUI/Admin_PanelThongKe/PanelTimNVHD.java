@@ -2,10 +2,15 @@ package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoNhanVienBLL;
+import DTO.DonHangDTO;
+import DTO.SearchNVDHDTO;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 import java.awt.*;
-import java.util.Date;
+import java.sql.Date;
+import java.util.ArrayList;
 
 public class PanelTimNVHD extends JPanel {
 
@@ -87,7 +92,7 @@ public class PanelTimNVHD extends JPanel {
         gbc.gridy = 1;
         add(lbThanhTienDen, gbc);
 
-        maxThanhTien = new JSpinner(new SpinnerNumberModel(1_000_000_000, 0, 1_000_000_000, 1000));
+        maxThanhTien = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000_000, 1000));
         TienIch.timStyle(maxThanhTien);
         gbc.gridx = 3;
         gbc.gridy = 1;
@@ -99,7 +104,7 @@ public class PanelTimNVHD extends JPanel {
         gbc.gridy = 1;
         add(lbPhuongThucThanhToan, gbc);
 
-        cbPhuongThucThanhToan = new JComboBox<>(new String[]{"TẤT CẢ", "CASH", "BANK"});
+        cbPhuongThucThanhToan = new JComboBox<>(new String[] { "TẤT CẢ", "CASH", "BANK" });
         TienIch.timStyle(cbPhuongThucThanhToan);
         gbc.gridx = 5;
         gbc.gridy = 1;
@@ -231,7 +236,7 @@ public class PanelTimNVHD extends JPanel {
         gbc.gridy = 6;
         add(lbSapXep, gbc);
 
-        cbSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        cbSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
         TienIch.timStyle(cbSapXep);
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -243,10 +248,39 @@ public class PanelTimNVHD extends JPanel {
         gbc.gridy = 6;
         add(lbTheoCot, gbc);
 
-        cbTheoCot = new JComboBox<>(new String[]{"Mã đơn hàng", "Ngày TT", "Thành tiền", "Mã khách hàng", "Mã khuyến mãi"});
+        cbTheoCot = new JComboBox<>(
+                new String[] { "Mã đơn hàng", "Ngày TT", "Thành tiền", "Mã khách hàng", "Mã khuyến mãi" });
         TienIch.timStyle(cbTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 6;
         add(cbTheoCot, gbc);
+    }
+
+    public ArrayList<DonHangDTO> ketqua(int MaNV) {
+        int maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+        maKH = txtMaKhachHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaKhachHang.getText().trim()),
+        maKM = txtMaKhuyenMai.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaKhuyenMai.getText().trim()),
+        maSP = txtMaSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText().trim()),
+        maLSP = txtMaLoaiSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText().trim());
+        Date tu = dateTTFrom.getDate()!=null ? new Date(dateTTFrom.getDate().getTime()) : null;
+        Date den = dateTTTo.getDate()!=null ? new Date(dateTTTo.getDate().getTime()) : null;
+        SearchNVDHDTO search = new SearchNVDHDTO(
+                maDH,
+                tu,
+                den,
+                (int) minThanhTien.getValue(),
+                (int) maxThanhTien.getValue(),
+                (String) cbPhuongThucThanhToan.getSelectedItem(),
+                maKH,
+                txtTenKhachHang.getText().trim(),
+                maKM,
+                txtTenKhuyenMai.getText().trim(),
+                maSP,
+                txtTenSanPham.getText().trim(),
+                maLSP,
+                txtTenLoaiSanPham.getText().trim(),
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
+        return BaoCaoNhanVienBLL.TimNVDH(search, MaNV);
     }
 }

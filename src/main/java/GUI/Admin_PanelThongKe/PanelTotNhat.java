@@ -7,12 +7,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
-import BLL.NhanVienBLL;
+import BLL.BaoCaoNhanVienBLL;
 import DTO.NhanVienDTO;
 import GUI.ComponentCommon.*;
 
@@ -20,7 +19,7 @@ public class PanelTotNhat extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    public ArrayList<NhanVienDTO> DsNV = (ArrayList<NhanVienDTO>) new NhanVienBLL().getAllNhanVien();
+    public ArrayList<NhanVienDTO> DsNV;;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
     JDateChooser from, to;
@@ -72,22 +71,63 @@ public class PanelTotNhat extends JPanel implements ActionListener {
 
         gbc.gridx = 3;
         pnTool.add(to);
+        sukien();
+    }
+
+    public void sukien() {
+        from.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
+                loadNhanVien(DsNV);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                from.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
+                loadNhanVien(DsNV);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                to.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
     }
 
     public PanelTotNhat() {
         TienIch.taoTitleBorder(this, "Danh sách nhân viên có doanh số tốt nhất");
         setLayout(new BorderLayout());
+        initPanelTool();
+        add(pnTool, BorderLayout.NORTH);
 
         String[] tencot = { "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
+        DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(new java.sql.Date(from.getDate().getTime()),
+        new java.sql.Date(to.getDate().getTime()));
         loadNhanVien(DsNV);
         TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         add(scr, BorderLayout.CENTER);
-        initPanelTool();
-        add(pnTool, BorderLayout.NORTH);
 
 
         // Thêm popup menu
@@ -168,9 +208,9 @@ public class PanelTotNhat extends JPanel implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                DsNV = panel.ketqua(new Date(from.getDate().getTime()), new Date(to.getDate().getTime()));
+                loadNhanVien(DsNV);
             }
-            loadNhanVien(DsNV);
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",

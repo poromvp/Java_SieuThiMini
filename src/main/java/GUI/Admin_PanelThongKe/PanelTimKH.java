@@ -2,10 +2,15 @@ package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoKhachHangBLL;
+import DTO.SearchTheThanhVienDTO;
+import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 import java.awt.*;
-import java.util.Date;
+import java.sql.Date;
+import java.util.ArrayList;
 
 public class PanelTimKH extends JPanel {
 
@@ -151,7 +156,7 @@ public class PanelTimKH extends JPanel {
         gbc.gridy = 3;
         add(lbTongDonHangDen, gbc);
 
-        maxTongDonHang = new JSpinner(new SpinnerNumberModel(1_000_000, 0, 1_000_000, 1));
+        maxTongDonHang = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000, 1));
         TienIch.timStyle(maxTongDonHang);
         gbc.gridx = 3;
         gbc.gridy = 3;
@@ -176,7 +181,7 @@ public class PanelTimKH extends JPanel {
         gbc.gridy = 4;
         add(lbTongChiTieuDen, gbc);
 
-        maxTongChiTieu = new JSpinner(new SpinnerNumberModel(1_000_000_000, 0, 1_000_000_000, 1000));
+        maxTongChiTieu = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000_000, 1000));
         TienIch.timStyle(maxTongChiTieu);
         gbc.gridx = 3;
         gbc.gridy = 4;
@@ -201,7 +206,7 @@ public class PanelTimKH extends JPanel {
         gbc.gridy = 5;
         add(lbDiemTichLuyDen, gbc);
 
-        maxDiemTichLuy = new JSpinner(new SpinnerNumberModel(1_000_000, 0, 1_000_000, 1));
+        maxDiemTichLuy = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000, 1));
         TienIch.timStyle(maxDiemTichLuy);
         gbc.gridx = 3;
         gbc.gridy = 5;
@@ -258,5 +263,78 @@ public class PanelTimKH extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 7;
         add(cbTheoCot, gbc);
+
+        TienIch.checkFromTo(dateSinhFrom, dateSinhTo);
+        TienIch.checkFromTo(dateHanTheFrom, dateHanTheTo);
+    }
+
+    public ArrayList<TheThanhVienDTO> ketqua(){
+        int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
+        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+        tongMin = (int) minTongDonHang.getValue(),
+        tongMax = (int) maxTongDonHang.getValue(),
+        tienMin = (int) minTongChiTieu.getValue(),
+        tienMax = (int) maxTongChiTieu.getValue(),
+        diemMin = (int) minDiemTichLuy.getValue(),
+        diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
+        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+        SearchTheThanhVienDTO search = new SearchTheThanhVienDTO(
+            maTV,
+            txtTenThanhVien.getText().trim(),
+            txtDiaChi.getText().trim(),
+            sinhfrom,
+            sinhto,
+            txtSoDienThoai.getText().trim(),
+            maDH,
+            tongMin,
+            tongMax,
+            tienMin,
+            tienMax,
+            diemMin,
+            diemMax,
+            hanfrom,
+            hanto,
+            (String) cbSapXep.getSelectedItem(),
+            (String) cbTheoCot.getSelectedItem()
+        );
+        return BaoCaoKhachHangBLL.TimTTV(search);
+    }
+
+    public ArrayList<TheThanhVienDTO> ketquaLock(){
+        int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
+        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+        tongMin = (int) minTongDonHang.getValue(),
+        tongMax = (int) maxTongDonHang.getValue(),
+        tienMin = (int) minTongChiTieu.getValue(),
+        tienMax = (int) maxTongChiTieu.getValue(),
+        diemMin = (int) minDiemTichLuy.getValue(),
+        diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
+        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+        SearchTheThanhVienDTO search = new SearchTheThanhVienDTO(
+            maTV,
+            txtTenThanhVien.getText().trim(),
+            txtDiaChi.getText().trim(),
+            sinhfrom,
+            sinhto,
+            txtSoDienThoai.getText().trim(),
+            maDH,
+            tongMin,
+            tongMax,
+            tienMin,
+            tienMax,
+            diemMin,
+            diemMax,
+            hanfrom,
+            hanto,
+            (String) cbSapXep.getSelectedItem(),
+            (String) cbTheoCot.getSelectedItem()
+        );
+        return BaoCaoKhachHangBLL.TimTTVLock(search);
     }
 }

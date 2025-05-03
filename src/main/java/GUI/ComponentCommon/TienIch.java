@@ -6,6 +6,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoKhoTongHopBLL;
+
 import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
@@ -316,6 +319,34 @@ public class TienIch {
             } else if (selectedDate != null && selectedDate.after(ngayBD) && selectedDate.before(ngayKT)) {
                 CustomMessage("Ngày kết thúc phải cách ngày bắt đầu ít nhất 2 năm!");
                 day.setDate(ngayKT);
+            }
+        });
+    }
+    
+    public static void checkFromTo(JDateChooser from, JDateChooser to){
+        from.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    from.setDate(null);
+                    to.setDate(null);
+                    return;
+                }
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    from.setDate(null);
+                    to.setDate(null);
+                    return;
+                }
             }
         });
     }

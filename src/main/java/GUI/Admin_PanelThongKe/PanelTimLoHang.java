@@ -2,10 +2,16 @@ package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoKhoTongHopBLL;
+import DTO.SearchLoHangDTO;
+import DTO.PhieuNhapHangDTO;
+
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 import java.awt.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.sql.Date;
 
 public class PanelTimLoHang extends JPanel {
 
@@ -171,7 +177,7 @@ public class PanelTimLoHang extends JPanel {
         gbc.gridy = 4;
         add(lbGiaMax, gbc);
 
-        maxTongGia = new JSpinner(new SpinnerNumberModel(1_000_000, 0, 1_000_000_000, 1000));
+        maxTongGia = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000_000, 1000));
         TienIch.timStyle(maxTongGia);
         gbc.gridx = 3;
         gbc.gridy = 4;
@@ -226,7 +232,7 @@ public class PanelTimLoHang extends JPanel {
         gbc.gridy = 7;
         add(lbSapXep, gbc);
 
-        cbSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        cbSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
         gbc.gridx = 1;
         gbc.gridy = 7;
         add(cbSapXep, gbc);
@@ -237,9 +243,37 @@ public class PanelTimLoHang extends JPanel {
         gbc.gridy = 7;
         add(lbTheoCot, gbc);
 
-        cbTheoCot = new JComboBox<>(new String[]{"Mã đơn nhập", "Ngày nhập", "Tổng giá", "Mã nhân viên", "Mã nhà cung cấp"});
+        cbTheoCot = new JComboBox<>(
+                new String[] { "Mã đơn nhập", "Ngày nhập", "Tổng giá", "Mã nhân viên", "Mã nhà cung cấp" });
         gbc.gridx = 3;
         gbc.gridy = 7;
         add(cbTheoCot, gbc);
+    }
+
+    public ArrayList<PhieuNhapHangDTO> ketqua() {
+        int maDonNH = txtMaDonNhap.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonNhap.getText()),
+        maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+        maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText()),
+        maSP = txtMaSP.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSP.getText()),
+        maLH = txtMaLoHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoHang.getText());
+        Date ngayTu = dateFrom.getDate() != null ? new Date(dateFrom.getDate().getTime()) : null,
+        ngayDen = dateTo.getDate() != null ? new Date(dateTo.getDate().getTime()) : null;
+        SearchLoHangDTO search = new SearchLoHangDTO(
+            maDonNH,
+            txtTenDonNhap.getText(), 
+            ngayTu, 
+            ngayDen,
+            maNV,
+            txtTenNV.getText(), 
+            maNCC, 
+            txtTenNCC.getText(), 
+            (int) minTongGia.getValue(), 
+            (int) maxTongGia.getValue(), 
+            maSP,
+            txtTenSP.getText(), 
+            maLH, 
+            (String) cbSapXep.getSelectedItem(),
+            (String) cbTheoCot.getSelectedItem());
+        return BaoCaoKhoTongHopBLL.TimLoHang(search);
     }
 }

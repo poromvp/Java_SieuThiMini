@@ -12,10 +12,12 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import BLL.BaoCaoKhoTongHopBLL;
 import BLL.LoaiSanPhamBLL;
 import BLL.NhaCungCapBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import DTO.SearchBanChayDTO;
 import GUI.ComponentCommon.*;
 import GUI.FormWareHouse.FormProductDetail;
 
@@ -29,7 +31,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     DefaultTableModel model;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
-    public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+    public ArrayList<SearchBanChayDTO> DsSP;
 
     JScrollPane scr2;
     StyledTable tb2;
@@ -85,6 +87,45 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         gbc.gridx = 3;
         pnTool.add(to);
+        sukien();
+    }
+
+    public void sukien() {
+        from.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
+                loadSanPham(DsSP);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                from.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
+                loadSanPham(DsSP);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                to.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
     }
 
     public PanelKhoTongHop() {
@@ -103,7 +144,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        tongdonhang = new JLabel("555");
+        tongdonhang = new JLabel(BaoCaoKhoTongHopBLL.tongSoHangNhapTrongThang());
         TienIch.labelStyle(tongdonhang, 2, 20, null);
         add(tongdonhang, gbc);
 
@@ -116,24 +157,26 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm", "Số lượng bán ra"};
+        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm", "Số lượng bán ra" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
         StyledTable.hoverTable(tb, model);
+        initPanelTool();
+        DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(new java.sql.Date(from.getDate().getTime()),
+                new java.sql.Date(to.getDate().getTime()));
         loadSanPham(DsSP);
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
         pn1.add(scr, BorderLayout.CENTER);
-        initPanelTool();
         pn1.add(pnTool, BorderLayout.NORTH);
 
         pn2 = new JPanel();
         pn2.setLayout(new BorderLayout());
 
-        String[] tencot2 = { "Mã sản phẩm", "Tên sản phẩm", "Giá", "Số lượng tồn", "Loại", "Nhà cung cấp"};
+        String[] tencot2 = { "Mã sản phẩm", "Tên sản phẩm", "Giá", "Số lượng tồn", "Loại", "Nhà cung cấp" };
         Object[][] data2 = new Object[0][tencot2.length]; // Dữ liệu rỗng
         tb2 = new StyledTable(data2, tencot2); // Khởi tạo StyledTable
         model2 = (DefaultTableModel) tb2.getModel();
@@ -167,12 +210,12 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         tb.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                TienIch.resetUI();
+                TienIch.setDarkUI();
                 if (e.getClickCount() == 2) { // Kiểm tra double click
-                    FormProductDetail detailDialog = new FormProductDetail(null,
-                            SanPhamBLL.getProductById((Integer) tb.getValueAt(tb.getSelectedRow(), 0)));
-                    detailDialog.setVisible(true);
+                    PanelXemDsHDBanChay panel = new PanelXemDsHDBanChay(DsSP.get(tb.getSelectedRow()));
+                    JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
                 }
+                TienIch.resetUI();
             }
         });
 
@@ -234,14 +277,14 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         }
     }
 
-    private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
+    private void loadSanPham(ArrayList<SearchBanChayDTO> DsSP) {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (SanPhamDTO sp : DsSP) {
+        for (SearchBanChayDTO sp : DsSP) {
             model.addRow(new Object[] {
                     sp.getMaSP(),
-                    new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
+                    sp.getTenLSP(),
                     sp.getTenSP(),
-                    0
+                    sp.getSLbanra()
             });
         }
     }
@@ -282,10 +325,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         } else if (e.getSource() == searchItem) {
             JPanel panel;
-            if(tab.getSelectedIndex()==0){
+            if (tab.getSelectedIndex() == 0) {
                 panel = new PanelTimBanChay();
-            }
-            else{
+            } else {
                 panel = new PanelTimKho();
             }
 
@@ -293,7 +335,15 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                // new java.sql.Date(from.getDate().getTime());
+                if (panel instanceof PanelTimBanChay pnbanchay) {
+                    DsSP = pnbanchay.ketqua(new java.sql.Date(from.getDate().getTime()),
+                            new java.sql.Date(to.getDate().getTime()));
+                    loadSanPham(DsSP);
+                } else if(panel instanceof PanelTimKho pntimkho){
+                    DsSP2 = pntimkho.ketqua();
+                    loadSanPham2(DsSP2);
+                }
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();

@@ -2,10 +2,17 @@ package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoKhachHangBLL;
+import BLL.BaoCaoNhanVienBLL;
+import DTO.DonHangDTO;
+import DTO.SearchKHDHDTO;
+import DTO.SearchNVDHDTO;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 import java.awt.*;
-import java.util.Date;
+import java.sql.Date;
+import java.util.ArrayList;
 
 public class PanelTimKHHD extends JPanel {
 
@@ -248,5 +255,33 @@ public class PanelTimKHHD extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 6;
         add(cbTheoCot, gbc);
+    }
+
+    public ArrayList<DonHangDTO> ketqua(int MaKH) {
+        int maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+        maNV = txtMaNhanVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaNhanVien.getText().trim()),
+        maKM = txtMaKhuyenMai.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaKhuyenMai.getText().trim()),
+        maSP = txtMaSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText().trim()),
+        maLSP = txtMaLoaiSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText().trim());
+        Date tu = dateTTFrom.getDate()!=null ? new Date(dateTTFrom.getDate().getTime()) : null;
+        Date den = dateTTTo.getDate()!=null ? new Date(dateTTTo.getDate().getTime()) : null;
+        SearchKHDHDTO search = new SearchKHDHDTO(
+                maDH,
+                tu,
+                den,
+                (int) minThanhTien.getValue(),
+                (int) maxThanhTien.getValue(),
+                (String) cbPhuongThucThanhToan.getSelectedItem(),
+                maNV,
+                txtTenNhanVien.getText().trim(),
+                maKM,
+                txtTenKhuyenMai.getText().trim(),
+                maSP,
+                txtTenSanPham.getText().trim(),
+                maLSP,
+                txtTenLoaiSanPham.getText().trim(),
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
+        return BaoCaoKhachHangBLL.TimKHDH(search, MaKH);
     }
 }

@@ -1,7 +1,13 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
+
+import BLL.BaoCaoKhoTongHopBLL;
+import DTO.SanPhamDTO;
+import DTO.SearchTonKhoDTO;
+
 import java.awt.*;
+import java.util.ArrayList;
 
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
@@ -114,7 +120,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 2;
         add(lbmax, gbc);
 
-        max = new SpinnerNumberModel(10, 10, 9000000, 15);
+        max = new SpinnerNumberModel(0, 0, 9000000, 15);
         Max = new JSpinner(max);
         TienIch.timStyle(Max);
         gbc.gridx = 3;
@@ -141,7 +147,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 3;
         add(lbMaxGia, gbc);
 
-        max2 = new SpinnerNumberModel(10000, 1000, 900000000, 1000);
+        max2 = new SpinnerNumberModel(0, 0, 900000000, 1000);
         Max2 = new JSpinner(max2);
         TienIch.timStyle(Max2);
         gbc.gridx = 3;
@@ -199,5 +205,14 @@ public class PanelTimKho extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 5;
         add(cboTheoCot, gbc);
+    }
+
+    public ArrayList<SanPhamDTO> ketqua (){
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        int maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText());
+        SearchTonKhoDTO search = new SearchTonKhoDTO(maSP, txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(), (int) Min.getValue(), (int) Max.getValue(), (int) Min2.getValue(), (int) Max2.getValue(), maNCC, txtTenNCC.getText(), (String) cboSapXep.getSelectedItem(),
+        (String) cboTheoCot.getSelectedItem());
+        return BaoCaoKhoTongHopBLL.TimTonKho(search);
     }
 }

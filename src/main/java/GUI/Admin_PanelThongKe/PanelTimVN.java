@@ -2,10 +2,15 @@ package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoNhanVienBLL;
+import DTO.NhanVienDTO;
+import DTO.SearchNhanVienDTO;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 import java.awt.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.sql.Date;
 
 public class PanelTimVN extends JPanel {
 
@@ -111,7 +116,7 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 1;
         add(lbChucVu, gbc);
 
-        cbChucVu = new JComboBox<>(new String[]{"ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN"});
+        cbChucVu = new JComboBox<>(new String[]{"TẤT CẢ", "ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN"});
         TienIch.timStyle(cbChucVu);
         gbc.gridx = 5;
         gbc.gridy = 1;
@@ -163,7 +168,7 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 3;
         add(lbTongDonHangDen, gbc);
 
-        maxTongDonHang = new JSpinner(new SpinnerNumberModel(1_000_000, 0, 1_000_000, 1));
+        maxTongDonHang = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000, 1));
         TienIch.timStyle(maxTongDonHang);
         gbc.gridx = 3;
         gbc.gridy = 3;
@@ -188,7 +193,7 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 4;
         add(lbDoanhSoDen, gbc);
 
-        maxDoanhSo = new JSpinner(new SpinnerNumberModel(1_000_000_000, 0, 1_000_000_000, 1000));
+        maxDoanhSo = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000_000, 1000));
         TienIch.timStyle(maxDoanhSo);
         gbc.gridx = 3;
         gbc.gridy = 4;
@@ -213,7 +218,7 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 5;
         add(lbLuongDen, gbc);
 
-        maxLuong = new JSpinner(new SpinnerNumberModel(100_000_000, 0, 100_000_000, 1000));
+        maxLuong = new JSpinner(new SpinnerNumberModel(0, 0, 100_000_000, 1000));
         TienIch.timStyle(maxLuong);
         gbc.gridx = 3;
         gbc.gridy = 5;
@@ -243,5 +248,55 @@ public class PanelTimVN extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 6;
         add(cbTheoCot, gbc);
+    }
+
+    public ArrayList<NhanVienDTO> ketqua(Date from, Date to){
+        int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+        maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+        Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+        SearchNhanVienDTO search = new SearchNhanVienDTO(
+        maNV, 
+        txtTenNV.getText(), 
+        txtDiaChi.getText(), 
+        ngayTu, 
+        ngayDen, 
+        (String) cbChucVu.getSelectedItem(), 
+        txtSoDienThoai.getText(), 
+        maDH, 
+        (int) minTongDonHang.getValue(), 
+        (int) maxTongDonHang.getValue(), 
+        (int) minDoanhSo.getValue(), 
+        (int) maxDoanhSo.getValue(), 
+        (int) minLuong.getValue(), 
+        (int) maxLuong.getValue(), 
+        (String) cbSapXep.getSelectedItem(), 
+        (String) cbTheoCot.getSelectedItem());
+        return BaoCaoNhanVienBLL.TimTotNhat(search, from, to);
+    }
+
+    public ArrayList<NhanVienDTO> ketqua(){
+        int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+        maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+        Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+        SearchNhanVienDTO search = new SearchNhanVienDTO(
+        maNV, 
+        txtTenNV.getText(), 
+        txtDiaChi.getText(), 
+        ngayTu, 
+        ngayDen, 
+        (String) cbChucVu.getSelectedItem(), 
+        txtSoDienThoai.getText(), 
+        maDH, 
+        (int) minTongDonHang.getValue(), 
+        (int) maxTongDonHang.getValue(), 
+        (int) minDoanhSo.getValue(), 
+        (int) maxDoanhSo.getValue(), 
+        (int) minLuong.getValue(), 
+        (int) maxLuong.getValue(), 
+        (String) cbSapXep.getSelectedItem(), 
+        (String) cbTheoCot.getSelectedItem());
+        return BaoCaoNhanVienBLL.TimNhanVien(search);
     }
 }

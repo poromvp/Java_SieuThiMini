@@ -1,10 +1,16 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
+
+import BLL.BaoCaoKhoTongHopBLL;
+import DTO.SearchBanChayDTO;
+
 import java.awt.*;
+import java.util.ArrayList;
 
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
+import java.sql.Date;
 
 public class PanelTimBanChay extends JPanel {
 
@@ -108,7 +114,7 @@ public class PanelTimBanChay extends JPanel {
         gbc.gridy = 2;
         add(lbmax, gbc);
 
-        max = new SpinnerNumberModel(10, 10, 9000000, 15);
+        max = new SpinnerNumberModel(0, 0, 9000000, 15);
         Max = new JSpinner(max);
         TienIch.timStyle(Max);
         gbc.gridx = 3;
@@ -122,7 +128,7 @@ public class PanelTimBanChay extends JPanel {
         gbc.gridy = 3;
         add(lblSapXep, gbc);
 
-        cboSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        cboSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
         TienIch.timStyle(cboSapXep);
         gbc.gridx = 1;
         gbc.gridy = 3;
@@ -134,10 +140,20 @@ public class PanelTimBanChay extends JPanel {
         gbc.gridy = 3;
         add(lblTheoCot, gbc);
 
-        cboTheoCot = new JComboBox<>(new String[]{"Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Mã loại sản phẩm"});
+        cboTheoCot = new JComboBox<>(new String[] { "Mã sản phẩm", "Tên sản phẩm", "Số lượng", "Mã loại sản phẩm" });
         TienIch.timStyle(cboTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 3;
         add(cboTheoCot, gbc);
+    }
+
+    public ArrayList<SearchBanChayDTO> ketqua(Date from, Date to) {
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        SearchBanChayDTO search = new SearchBanChayDTO(maSP,
+                txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(),
+                (int) Min.getValue(), (int) Max.getValue(), (String) cboSapXep.getSelectedItem(),
+                (String) cboTheoCot.getSelectedItem());
+        return BaoCaoKhoTongHopBLL.TimBanChay(search, from, to);
     }
 }

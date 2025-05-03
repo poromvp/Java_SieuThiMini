@@ -4,10 +4,8 @@ import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 
 import BLL.BaoCaoKhachHangBLL;
-import BLL.BaoCaoNhanVienBLL;
 import DTO.DonHangDTO;
 import DTO.SearchKHDHDTO;
-import DTO.SearchNVDHDTO;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
 import java.awt.*;

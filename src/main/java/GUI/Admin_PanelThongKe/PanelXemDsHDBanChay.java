@@ -1,7 +1,6 @@
 package GUI.Admin_PanelThongKe;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;

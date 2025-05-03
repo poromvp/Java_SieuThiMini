@@ -156,12 +156,12 @@ public class FrameLogin extends JFrame {
     }
 
     public static void main(String[] args) {
-        	try {
-            // Đổi Look & Feel sang hệ điều hành
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 	try {
+        //     // Đổi Look & Feel sang hệ điều hành
+        //     UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        // } catch (Exception e) {
+        //     e.printStackTrace();
+        // }
         new FrameLogin();
     }
 }

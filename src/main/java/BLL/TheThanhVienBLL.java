@@ -23,12 +23,13 @@ public class TheThanhVienBLL {
     }
 
     // Lấy thẻ thành viên theo mã
-    public static TheThanhVienDTO getMemberById(Integer maTV) {
-        if(maTV != null){
+    public static TheThanhVienDTO getMemberById(int maTV) {
+        if(maTV != 0){
             return TheThanhVienDAL.getMemberById(maTV);
         }
         return null;
     }
+    
 
     // Lấy thẻ thành viên theo số điện thoại
     public static TheThanhVienDTO getMemberByPhone(String phone) {

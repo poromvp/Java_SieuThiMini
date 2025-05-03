@@ -6,6 +6,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 
 import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoKhoTongHopBLL;
+
 import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
@@ -280,6 +283,19 @@ public class TienIch {
                 .toLocalDate();
     }
 
+    public static void checkngaynhaptutayy(JDateChooser day, Date ngay) {
+        // Kiểm tra khi người dùng tự gõ tay
+        day.getDateEditor().addPropertyChangeListener("date", _ -> {
+            Date selectedDate = day.getDate();
+            Date today = new Date();
+            if (selectedDate != null && selectedDate.after(today)) {
+                CustomMessageNormal("Không thể chọn ngày trong tương lai!");
+                day.setDate(ngay);
+            }
+        }); // có thể thay today bằng một giá trị Date cụ thể nếu muốn kiểm tra theo một mốc
+            // nào đó.
+    }
+
     public static void checkngaynhaptutay(JDateChooser day, Date ngay) {
         // Kiểm tra khi người dùng tự gõ tay
         day.getDateEditor().addPropertyChangeListener("date", _ -> {
@@ -303,6 +319,34 @@ public class TienIch {
             } else if (selectedDate != null && selectedDate.after(ngayBD) && selectedDate.before(ngayKT)) {
                 CustomMessage("Ngày kết thúc phải cách ngày bắt đầu ít nhất 2 năm!");
                 day.setDate(ngayKT);
+            }
+        });
+    }
+    
+    public static void checkFromTo(JDateChooser from, JDateChooser to){
+        from.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    from.setDate(null);
+                    to.setDate(null);
+                    return;
+                }
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    from.setDate(null);
+                    to.setDate(null);
+                    return;
+                }
             }
         });
     }
@@ -470,6 +514,13 @@ public class TienIch {
         JLabel label = new JLabel(message);
         label.setFont(new Font("Arial", Font.BOLD, 18));
         label.setForeground(Color.WHITE);
+        JOptionPane.showMessageDialog(null, label, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    public static void CustomMessageNormal(String message) {
+        JLabel label = new JLabel(message);
+        label.setFont(new Font("Arial", Font.BOLD, 18));
+        label.setForeground(Color.BLACK);
         JOptionPane.showMessageDialog(null, label, "Thông báo", JOptionPane.INFORMATION_MESSAGE);
     }
 

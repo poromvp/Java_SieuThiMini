@@ -2,13 +2,16 @@ package GUI.Admin_PanelThongKe;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.*;
-import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
-import BLL.NhanVienBLL;
+import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoNhanVienBLL;
 import DTO.NhanVienDTO;
 import GUI.ComponentCommon.*;
 
@@ -16,23 +19,116 @@ public class PanelTotNhat extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    public ArrayList<NhanVienDTO> DsNV = (ArrayList<NhanVienDTO>) new NhanVienBLL().getAllNhanVien();
+    public ArrayList<NhanVienDTO> DsNV;;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
+    JDateChooser from, to;
+    JPanel pnTool = new JPanel();
+
+    public void initPanelTool() {
+        pnTool.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // Ngày hôm nay
+        Date today = new Date(System.currentTimeMillis());
+
+        // Ngày đầu tiên của tháng
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = new Date(cal.getTimeInMillis());
+
+        from = new JDateChooser();
+        from.setMaxSelectableDate(today);
+        from.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutay(from, today);
+        TienIch.timStyle(from);
+        from.setDate(firstDayOfMonth);
+
+        to = new JDateChooser();
+        to.setMaxSelectableDate(today);
+        to.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutay(to, today);
+        TienIch.timStyle(to);
+        to.setDate(today);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel tu = new JLabel("Từ");
+        tu.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(tu, gbc);
+
+        gbc.gridx = 1;
+        pnTool.add(from);
+
+        gbc.gridx = 2;
+        JLabel toi = new JLabel("Tới");
+        toi.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(toi, gbc);
+
+        gbc.gridx = 3;
+        pnTool.add(to);
+        sukien();
+    }
+
+    public void sukien() {
+        from.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
+                loadNhanVien(DsNV);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                from.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
+                loadNhanVien(DsNV);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                to.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
+    }
 
     public PanelTotNhat() {
-        setBorder(new CompoundBorder(new TitledBorder("Danh sách nhân viên có doanh số tốt nhất"),
-                new EmptyBorder(4, 4, 4, 4)));
+        TienIch.taoTitleBorder(this, "Danh sách nhân viên có doanh số tốt nhất");
         setLayout(new BorderLayout());
+        initPanelTool();
+        add(pnTool, BorderLayout.NORTH);
 
         String[] tencot = { "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Số điện thoại" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
+        DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(new java.sql.Date(from.getDate().getTime()),
+        new java.sql.Date(to.getDate().getTime()));
         loadNhanVien(DsNV);
         TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         add(scr, BorderLayout.CENTER);
+
 
         // Thêm popup menu
         popupMenu = new JPopupMenu();
@@ -112,9 +208,9 @@ public class PanelTotNhat extends JPanel implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                DsNV = panel.ketqua(new Date(from.getDate().getTime()), new Date(to.getDate().getTime()));
+                loadNhanVien(DsNV);
             }
-            loadNhanVien(DsNV);
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",

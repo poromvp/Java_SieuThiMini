@@ -147,7 +147,8 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                DsNV = panel.ketqua();
+                loadNhanVien(DsNV);
             }
         } else if (e.getSource() == btnDS) {
             PanelTotNhat panel = new PanelTotNhat();

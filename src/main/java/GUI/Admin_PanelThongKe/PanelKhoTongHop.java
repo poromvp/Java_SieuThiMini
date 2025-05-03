@@ -3,14 +3,21 @@ package GUI.Admin_PanelThongKe;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.sql.Date;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 
+import com.toedter.calendar.JDateChooser;
+
+import BLL.BaoCaoKhoTongHopBLL;
 import BLL.LoaiSanPhamBLL;
+import BLL.NhaCungCapBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import DTO.SearchBanChayDTO;
 import GUI.ComponentCommon.*;
 import GUI.FormWareHouse.FormProductDetail;
 
@@ -24,7 +31,102 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
     DefaultTableModel model;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
-    public ArrayList<SanPhamDTO> DsSP = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+    public ArrayList<SearchBanChayDTO> DsSP;
+
+    JScrollPane scr2;
+    StyledTable tb2;
+    DefaultTableModel model2;
+    public ArrayList<SanPhamDTO> DsSP2 = (ArrayList<SanPhamDTO>) SanPhamBLL.getAllProducts();
+
+    JDateChooser from, to;
+    JPanel pnTool = new JPanel();
+
+    public void initPanelTool() {
+        pnTool.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.BOTH;
+
+        // Ngày hôm nay
+        Date today = new Date(System.currentTimeMillis());
+
+        // Ngày đầu tiên của tháng
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = new Date(cal.getTimeInMillis());
+
+        from = new JDateChooser();
+        from.setMaxSelectableDate(today);
+        from.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutayy(from, today);
+        TienIch.timStyle(from);
+        from.setDate(firstDayOfMonth);
+
+        to = new JDateChooser();
+        to.setMaxSelectableDate(today);
+        to.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutayy(to, today);
+        TienIch.timStyle(to);
+        to.setDate(today);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        JLabel tu = new JLabel("Từ");
+        tu.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(tu, gbc);
+
+        gbc.gridx = 1;
+        pnTool.add(from);
+
+        gbc.gridx = 2;
+        JLabel toi = new JLabel("Tới");
+        toi.setHorizontalAlignment(SwingConstants.RIGHT);
+        pnTool.add(toi, gbc);
+
+        gbc.gridx = 3;
+        pnTool.add(to);
+        sukien();
+    }
+
+    public void sukien() {
+        from.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
+                loadSanPham(DsSP);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                from.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    return;
+                }
+                System.out.println("Ngày được chọn (SQL) từ: " + select1);
+                System.out.println("Ngày được chọn (SQL) tới: " + select2);
+                DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
+                loadSanPham(DsSP);
+            } else {
+                TienIch.CustomMessage("Không thể để trống");
+                to.setDate(new Date(System.currentTimeMillis()));
+            }
+        });
+    }
 
     public PanelKhoTongHop() {
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo kho tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
@@ -42,41 +144,53 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        tongdonhang = new JLabel("555");
+        tongdonhang = new JLabel(BaoCaoKhoTongHopBLL.tongSoHangNhapTrongThang());
         TienIch.labelStyle(tongdonhang, 2, 20, null);
         add(tongdonhang, gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        btnMore = new JButton("<html><center>Xem danh sách<br>lô hàng đã nhập<center></html>");
+        btnMore = new JButton("<html><center>Xem DS lô hàng<center></html>");
         TienIch.nutStyle(btnMore, "list.png", 20, 40, 20);
         add(btnMore, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 3;
-        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm" };
+        String[] tencot = { "Mã sản phẩm", "Tên loại", "Tên sản phẩm", "Số lượng bán ra" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
         StyledTable.hoverTable(tb, model);
+        initPanelTool();
+        DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(new java.sql.Date(from.getDate().getTime()),
+                new java.sql.Date(to.getDate().getTime()));
         loadSanPham(DsSP);
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
         pn1.add(scr, BorderLayout.CENTER);
+        pn1.add(pnTool, BorderLayout.NORTH);
 
         pn2 = new JPanel();
         pn2.setLayout(new BorderLayout());
+
+        String[] tencot2 = { "Mã sản phẩm", "Tên sản phẩm", "Giá", "Số lượng tồn", "Loại", "Nhà cung cấp" };
+        Object[][] data2 = new Object[0][tencot2.length]; // Dữ liệu rỗng
+        tb2 = new StyledTable(data2, tencot2); // Khởi tạo StyledTable
+        model2 = (DefaultTableModel) tb2.getModel();
+        StyledTable.hoverTable(tb2, model2);
+        loadSanPham2(DsSP2);
+        scr2 = new JScrollPane(tb2);
 
         pn3 = new JPanel();
         pn3.setLayout(new BorderLayout());
 
         tab = new JTabbedPane();
         tab.addTab("Danh sách bán chạy", pn1);
-        tab.addTab("Danh sách tồn nhiều", pn2);
-        tab.addTab("Danh sách hàng sắp hết", pn3);
+        tab.addTab("Danh sách tồn kho", pn2);
+        // tab.addTab("Danh sách hàng sắp hết", pn3);
         add(tab, gbc);
 
         // Thêm popup menu
@@ -96,9 +210,23 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         tb.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                TienIch.setDarkUI();
+                if (e.getClickCount() == 2) { // Kiểm tra double click
+                    PanelXemDsHDBanChay panel = new PanelXemDsHDBanChay(DsSP.get(tb.getSelectedRow()));
+                    JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
+                }
+                TienIch.resetUI();
+            }
+        });
+
+        showpupop(tb2);
+        showpupop(scr2);
+        tb2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) { // Kiểm tra double click
                     FormProductDetail detailDialog = new FormProductDetail(null,
-                            SanPhamBLL.getProductById((Integer) tb.getValueAt(tb.getSelectedRow(), 0)));
+                            SanPhamBLL.getProductById((Integer) tb2.getValueAt(tb2.getSelectedRow(), 0)));
                     detailDialog.setVisible(true);
                 }
             }
@@ -149,13 +277,28 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         }
     }
 
-    private void loadSanPham(ArrayList<SanPhamDTO> DsSP) {
+    private void loadSanPham(ArrayList<SearchBanChayDTO> DsSP) {
         model.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
-        for (SanPhamDTO sp : DsSP) {
+        for (SearchBanChayDTO sp : DsSP) {
             model.addRow(new Object[] {
                     sp.getMaSP(),
+                    sp.getTenLSP(),
+                    sp.getTenSP(),
+                    sp.getSLbanra()
+            });
+        }
+    }
+
+    private void loadSanPham2(ArrayList<SanPhamDTO> DsSP2) {
+        model2.setRowCount(0); // Xóa toàn bộ dữ liệu cũ
+        for (SanPhamDTO sp : DsSP2) {
+            model2.addRow(new Object[] {
+                    sp.getMaSP(),
+                    sp.getTenSP(),
+                    sp.getGia(),
+                    sp.getSoLuongTon(),
                     new LoaiSanPhamBLL().getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP(),
-                    sp.getTenSP()
+                    new NhaCungCapBLL().getNhaCungCap(sp.getMaNCC()).getTenNCC()
             });
         }
     }
@@ -165,8 +308,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         int tabSelected = tab.getSelectedIndex();
         if (tabSelected == 0) {
             pn1.add(scr, BorderLayout.CENTER);
+            pn1.add(pnTool, BorderLayout.NORTH);
         } else if (tabSelected == 1) {
-            pn2.add(scr, BorderLayout.CENTER);
+            pn2.add(scr2, BorderLayout.CENTER);
         } else if (tabSelected == 2) {
             pn3.add(scr, BorderLayout.CENTER);
         }
@@ -180,13 +324,26 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
 
         } else if (e.getSource() == searchItem) {
-            PanelTimKho panel = new PanelTimKho();
+            JPanel panel;
+            if (tab.getSelectedIndex() == 0) {
+                panel = new PanelTimBanChay();
+            } else {
+                panel = new PanelTimKho();
+            }
 
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                // new java.sql.Date(from.getDate().getTime());
+                if (panel instanceof PanelTimBanChay pnbanchay) {
+                    DsSP = pnbanchay.ketqua(new java.sql.Date(from.getDate().getTime()),
+                            new java.sql.Date(to.getDate().getTime()));
+                    loadSanPham(DsSP);
+                } else if(panel instanceof PanelTimKho pntimkho){
+                    DsSP2 = pntimkho.ketqua();
+                    loadSanPham2(DsSP2);
+                }
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();

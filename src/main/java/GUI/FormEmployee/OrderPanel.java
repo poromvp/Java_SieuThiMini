@@ -69,6 +69,7 @@ import BLL.DiemTichLuyBLL;
 import BLL.DonHangBLL;
 import BLL.KhuyenMaiBLL;
 import BLL.LoaiSanPhamBLL;
+import BLL.NhanVienBLL;
 import BLL.SanPhamBLL;
 import BLL.TheThanhVienBLL;
 import DTO.ChiTietDonHangDTO;
@@ -76,6 +77,7 @@ import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
 import DTO.KhuyenMaiDTO;
 import DTO.LoaiSanPhamDTO;
+import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
 
@@ -177,6 +179,17 @@ public class OrderPanel extends JPanel {
     private static boolean isScanning = false; 
     private static Thread scanThread;
 
+	private NhanVienDTO  NHANVIEN = new NhanVienDTO(
+            1,
+            "Nguyễn Văn A",
+            null,
+            "Nam",
+            "123 Đường ABC, Quận 1",
+            "0123456789",
+            "123456789012",
+            8000000.0,
+            1
+        ); 
 
 	private TheThanhVienDTO khachHang = null;
 
@@ -184,6 +197,10 @@ public class OrderPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public OrderPanel() {
+
+		NhanVienBLL nvBLL = new NhanVienBLL();
+		NHANVIEN = nvBLL.getNhanVienByMa(ProfilePanel.getMaNhanVien() + "");
+
 		khachHang = null;
 		setBackground(new Color(207, 235, 243));
 		setBorder(new EmptyBorder(15, 15, 15, 10));
@@ -1188,12 +1205,12 @@ public class OrderPanel extends JPanel {
 						return ;
 					}else{
 						DiemTichLuyDTO DTL_ = DiemTichLuyBLL.getAllDiemTichLuy().get(comboBoxDTL.getSelectedIndex()); 
-						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, 1, pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));						
+						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));						
 						khachHang.setDiemTL(khachHang.getDiemTL() - dieuKienDTL + (int)(calCalculateTotalAmount()/1000));
 						TheThanhVienBLL.updateMember(khachHang);
 					}
 				}else{
-					maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, 1, pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+					maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
 					khachHang.setDiemTL(khachHang.getDiemTL()  + (int)(calCalculateTotalAmount()/1000));
 					TheThanhVienBLL.updateMember(khachHang);					
 				}
@@ -1202,7 +1219,7 @@ public class OrderPanel extends JPanel {
 				return ;
 			}
 		}else{
-			maDH = DonHangBLL.insertOrder(new DonHangDTO(1, null, maKM, 1, pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+			maDH = DonHangBLL.insertOrder(new DonHangDTO(1, null, maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
 
 		}
 

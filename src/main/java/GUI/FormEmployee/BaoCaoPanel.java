@@ -20,11 +20,14 @@ import javax.swing.table.DefaultTableModel;
 
 
 import BLL.DonHangBLL;
+import BLL.NhanVienBLL;
 import BLL.SearchFilterBLL;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
 import GUI.Admin_PanelThongKe.PanelTimThK;
 import GUI.ComponentCommon.TienIch;
+import PDF.ChiTietBC_Dialog;
+import PDF.ChiTietDH_Dialog;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -48,12 +51,12 @@ public class BaoCaoPanel extends JPanel {
 	private static ArrayList<DonHangDTO> DSHoaDon = new ArrayList<DonHangDTO>();
 	private JPanel panel_TimKiemBtn = new JPanel();
 	private static  PanelTimThK panelTimKiem = new PanelTimThK();
-	JLabel lbl_TongTien = new JLabel("10000000 VNĐ");
-	JLabel lbl_DH = new JLabel("2000");
+	private JLabel lbl_TongTien = new JLabel("10000000 VNĐ");
+	private JLabel lbl_DH = new JLabel("2000");
 	private static int soDonHang = 0;
 	private static double danhThu = 0;
-	JPanel panel_Excel = new JPanel();
-	JPanel panel_PDF = new JPanel();
+	private JPanel panel_Excel = new JPanel();
+	private JPanel panel_PDF = new JPanel();
 
 	private NhanVienDTO  NHANVIEN = new NhanVienDTO(
             1,
@@ -71,6 +74,8 @@ public class BaoCaoPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public BaoCaoPanel() {
+		NhanVienBLL nvBLL = new NhanVienBLL();
+		NHANVIEN = nvBLL.getNhanVienByMa(ProfilePanel.getMaNhanVien() + "");
 		setBackground(new Color(224, 255, 255));
 		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setLayout(new BorderLayout(0, 0));

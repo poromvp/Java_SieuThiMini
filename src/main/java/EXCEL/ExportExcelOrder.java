@@ -47,7 +47,7 @@ public class ExportExcelOrder extends JFrame  {
     
 
 
-    private void exportExcel(int maDH) {
+    public void exportExcel(int maDH) {
         DONHANG = DonHangBLL.getOrderById(maDH);
     try {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

@@ -1,28 +1,32 @@
 package EXCEL;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.usermodel.Font;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import BLL.DonHangBLL;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableModel;
-
-import java.awt.*;
-import java.awt.color.ProfileDataException;
-import java.io.File;
-import java.io.IOException;
-
 import BLL.NhanVienBLL;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
@@ -42,7 +46,7 @@ public class ExportExcelReport extends JFrame {
 	private ArrayList<DonHangDTO> DSHoaDon = DonHangBLL.getAllOrders();
 	JTextArea txtrNhapNoiDung = new JTextArea();
 
-	private NhanVienDTO  NHANVIEN = new NhanVienDTO(
+	private  NhanVienDTO  NHANVIEN = new NhanVienDTO(
             1,
             "Nguyễn Văn A",
             null,
@@ -54,7 +58,7 @@ public class ExportExcelReport extends JFrame {
             1
         ); 
 
-    public void exportExcel() {
+    public  void exportExcel() {
         NhanVienBLL nvBLL = new NhanVienBLL();
         NHANVIEN = nvBLL.getNhanVienByMa(ProfilePanel.getMaNhanVien() +"");
         try {

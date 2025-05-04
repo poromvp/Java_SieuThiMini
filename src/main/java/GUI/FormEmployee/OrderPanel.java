@@ -109,6 +109,7 @@ import com.google.zxing.common.HybridBinarizer;
 import BLL.ChiTietKhuyenMaiBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.RoundedComponent;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.QR.ScanQR;
 
@@ -625,21 +626,26 @@ public class OrderPanel extends JPanel {
 				panel_2.setPreferredSize(new Dimension(310, 10));
 				panel_2.setMaximumSize(new Dimension(32767, 60));
 				panelRightInput.add(panel_2);
-				panel_2.setLayout(new GridLayout(2, 1, 0, 0));
+				panel_2.setLayout(new GridLayout(2, 1, 10, 10));
 				
 				JPanel panel_3 = new JPanel();
 				panel_3.setMaximumSize(new Dimension(32767, 25));
 				panel_2.add(panel_3);
-				panel_3.setLayout(new GridLayout(1, 0, 0, 0));
+				panel_3.setLayout(new GridLayout(1, 0, 10, 10));
 				
 				JButton btnInDH = new JButton("In hoá đơn");
+				btnInDH.setBackground(new Color(0, 102, 153));
 				btnInDH.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_3.add(btnInDH);
+				btnLuuDonHang.setBackground(new Color(51, 153, 0));
 				
 				btnLuuDonHang.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_3.add(btnLuuDonHang);
 				
 				JButton btnHuy = new JButton("Huỷ đơn hàng\r\n");
+				// btnHuy.setBackground(new Color(255, 51, 0));
+				RoundedComponent.setRadius(12);
+				btnHuy = RoundedComponent.createRoundedButton(btnHuy, new Color(255, 51, 0));
 				btnHuy.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_2.add(btnHuy);
 

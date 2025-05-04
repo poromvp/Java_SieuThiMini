@@ -11,8 +11,6 @@ import javax.swing.table.*;
 import BLL.DonHangBLL;
 import BLL.SearchFilterBLL;
 import DTO.DonHangDTO;
-import DTO.SearchFilterDTO;
-import GUI.Export;
 import GUI.ComponentCommon.*;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {

@@ -1,149 +1,361 @@
 package GUI.DashBoardPanel;
 
-import com.itextpdf.kernel.colors.ColorConstants;
-import com.itextpdf.kernel.colors.DeviceRgb;
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
-import com.itextpdf.layout.properties.TextAlignment;
-import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 
-
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
+
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class PDFExporter {
 
-    public static void exportToPDF(PanelChart panelChart, String timeFilter, int selectedMonth, int selectedYear, String outputPath) {
+    public static void exportChartToPDF(PanelChart panelChart, String timeFilter, int selectedMonth, int selectedYear, String outputPath) {
         try {
             // Khởi tạo PDF
             File file = new File(outputPath);
-            PdfWriter writer = new PdfWriter(file);
-            PdfDocument pdf = new PdfDocument(writer);
-            Document document = new Document(pdf);
+            Document document = new Document();
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
+
+            // Font hỗ trợ tiếng Việt
+            String fontPath = "src/main/resources/fonts/arial.ttf";
+            BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+            Font fontNormal = new Font(baseFont, 12);
+            Font fontBold = new Font(baseFont, 12, Font.BOLD);
+            Font fontTitle = new Font(baseFont, 16, Font.BOLD);
 
             // Thêm tiêu đề và ngày in
             LocalDate today = LocalDate.now();
             String formattedDate = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            document.add(new Paragraph("BÁO CÁO DOANH THU")
-                    .setFontSize(16)
-                    .setBold()
-                    .setTextAlignment(TextAlignment.CENTER));
-            document.add(new Paragraph("Ngày in: " + formattedDate)
-                    .setFontSize(12)
-                    .setTextAlignment(TextAlignment.RIGHT));
+            Paragraph title = new Paragraph("BÁO CÁO DOANH THU", fontTitle);
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
 
-            // Lấy dữ liệu từ PanelChart
+            Paragraph date = new Paragraph("Ngày in: " + formattedDate, fontNormal);
+            date.setAlignment(Element.ALIGN_RIGHT);
+            document.add(date);
+
+            // Chụp ảnh biểu đồ từ PanelChart
             vechart chart = (vechart) ((JScrollPane) panelChart.getComponent(0)).getViewport().getView();
-            double[] values = chart.values;
-            String[] labels = chart.labels;
+            BufferedImage chartImage = new BufferedImage(chart.getWidth(), chart.getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = chartImage.createGraphics();
+            chart.paint(g2d);
+            g2d.dispose();
+
+            // Thêm ảnh biểu đồ vào PDF
+            Image pdfImage = Image.getInstance(chartImage, null);
+            pdfImage.scaleToFit(500, 300);
+            pdfImage.setAlignment(Image.ALIGN_CENTER);
+            document.add(pdfImage);
 
             // Thêm tiêu đề biểu đồ
-            String title = "Thống Kê Doanh Thu Theo " + timeFilter;
+            String chartTitle = "Thống Kê Doanh Thu Theo " + timeFilter;
             String[] monthNames = {"", "T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"};
             if ("Ngày".equals(timeFilter)) {
-                title += " (" + monthNames[selectedMonth] + " " + selectedYear + ")";
+                chartTitle += " (" + monthNames[selectedMonth] + " " + selectedYear + ")";
             } else if ("Tháng".equals(timeFilter)) {
-                title += " (" + selectedYear + ")";
+                chartTitle += " (" + selectedYear + ")";
             } else {
-                title += " (5 Năm Gần Nhất)";
+                chartTitle += " (5 Năm Gần Nhất)";
             }
-            document.add(new Paragraph(title)
-                    .setFontSize(14)
-                    .setBold()
-                    .setMarginTop(10));
+            Paragraph chartTitlePara = new Paragraph(chartTitle, fontBold);
+            chartTitlePara.setAlignment(Element.ALIGN_CENTER);
+            chartTitlePara.setSpacingBefore(10);
+            document.add(chartTitlePara);
 
-            // Vẽ biểu đồ cột
-            float pageWidth = pdf.getDefaultPageSize().getWidth() - 40;
-            float chartHeight = 300;
-            PdfCanvas canvas = new PdfCanvas(pdf.getFirstPage());
-            canvas.setFillColor(ColorConstants.LIGHT_GRAY);
-            canvas.rectangle(40, pdf.getDefaultPageSize().getHeight() - 80 - chartHeight, pageWidth, chartHeight);
-            canvas.fill();
+            // Thêm bảng thông tin từ PanelTomTat
+            Paragraph summaryTitle = new Paragraph("Thông Tin Tổng Quan", fontBold);
+            summaryTitle.setSpacingBefore(20);
+            document.add(summaryTitle);
 
-            // Tính toán thông số biểu đồ
-            float maxValue = 0;
-            for (double value : values) {
-                if (value > maxValue) maxValue = (float) value;
-            }
-            float barWidth = (pageWidth - (labels.length - 1) * 10) / labels.length;
-            DecimalFormat df = new DecimalFormat("#,###.##");
+            PdfPTable table = new PdfPTable(2);
+            table.setWidthPercentage(100);
+            table.setWidths(new float[]{50, 50});
+            table.setSpacingBefore(10f);
 
-            // Vẽ các cột và nhãn
-            for (int i = 0; i < values.length; i++) {
-                float barHeight = (float) ((values[i] / maxValue) * chartHeight);
-                float x = 40 + i * (barWidth + 10);
-                float y = pdf.getDefaultPageSize().getHeight() - 80 - barHeight;
+            // Header bảng
+            PdfPCell header1 = new PdfPCell(new Paragraph("Thông Tin", fontBold));
+            header1.setHorizontalAlignment(Element.ALIGN_CENTER);
+            header1.setBackgroundColor(new BaseColor(33, 58, 89));
+            header1.setBorderColor(BaseColor.BLACK);
 
-                // Sử dụng DeviceRgb thay vì Color
-                canvas.setFillColor(new DeviceRgb(100, 100 + i * 30 % 155, 200 - i * 30 % 155));
-                canvas.rectangle(x, y, barWidth, barHeight);
-                canvas.fill();
+            PdfPCell header2 = new PdfPCell(new Paragraph("Giá Trị", fontBold));
+            header2.setHorizontalAlignment(Element.ALIGN_CENTER);
+            header2.setBackgroundColor(new BaseColor(33, 58, 89));
+            header2.setBorderColor(BaseColor.BLACK);
 
-                // Nhãn trục X
-                document.add(new Paragraph(labels[i])
-                        .setFontSize(10)
-                        .setFixedPosition(x + barWidth / 4, pdf.getDefaultPageSize().getHeight() - 90, 50));
-
-                // Giá trị trên cột
-                document.add(new Paragraph(df.format(values[i] / 1000000.0) + "M")
-                        .setFontSize(10)
-                        .setFixedPosition(x + barWidth / 4, y - 15, 50));
-            }
-
-            // Vẽ trục
-            canvas.setStrokeColor(ColorConstants.BLACK);
-            canvas.moveTo(40, pdf.getDefaultPageSize().getHeight() - 80);
-            canvas.lineTo(pageWidth + 40, pdf.getDefaultPageSize().getHeight() - 80); // Trục X
-            canvas.moveTo(40, pdf.getDefaultPageSize().getHeight() - 80);
-            canvas.lineTo(40, pdf.getDefaultPageSize().getHeight() - 80 - chartHeight); // Trục Y
-            canvas.stroke();
-
-            // Nhãn trục Y
-            document.add(new Paragraph("Triệu VND")
-                    .setFontSize(10)
-                    .setFixedPosition(10, pdf.getDefaultPageSize().getHeight() - 80 - chartHeight / 2, 50));
-            float yStep = maxValue / 5;
-            for (int i = 0; i <= 5; i++) {
-                float y = pdf.getDefaultPageSize().getHeight() - 80 - i * chartHeight / 5;
-                document.add(new Paragraph(df.format(i * yStep / 1000000.0) + "M")
-                        .setFontSize(10)
-                        .setFixedPosition(10, y - 5, 50));
-            }
-
-            // Phân tích hồi quy tuyến tính
-            String trend = analyzeTrend(values);
-
-            // Thêm bảng thông tin
-            document.add(new Paragraph("Thông Tin Tổng Quan")
-                    .setFontSize(14)
-                    .setBold()
-                    .setMarginTop(20));
-
-            Table table = new Table(UnitValue.createPercentArray(new float[]{50, 50}));
-            table.addHeaderCell("Thông Tin").addHeaderCell("Giá Trị");
+            table.addCell(header1);
+            table.addCell(header2);
 
             // Lấy dữ liệu từ PanelTomTat
             PanelTomTat panelTomTat = new PanelTomTat();
             panelTomTat.updateData(timeFilter, selectedMonth, selectedYear);
 
-            table.addCell("Lượt Mua").addCell(panelTomTat.luotmua.getText());
-            table.addCell("Doanh Thu").addCell(panelTomTat.doanhthu.getText());
-            table.addCell("Chi Phí").addCell(panelTomTat.chiphi.getText());
-            table.addCell("Lợi Nhuận").addCell(panelTomTat.loinhuan.getText());
-            table.addCell("Xu Hướng Doanh Thu").addCell(trend);
+            // Dữ liệu bảng
+            PdfPCell cellLuotMuaLabel = new PdfPCell(new Paragraph("Lượt Mua", fontNormal));
+            cellLuotMuaLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellLuotMuaLabel);
+
+            PdfPCell cellLuotMuaValue = new PdfPCell(new Paragraph(panelTomTat.luotmua.getText(), fontNormal));
+            cellLuotMuaValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellLuotMuaValue);
+
+            PdfPCell cellDoanhThuLabel = new PdfPCell(new Paragraph("Doanh Thu", fontNormal));
+            cellDoanhThuLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellDoanhThuLabel);
+
+            PdfPCell cellDoanhThuValue = new PdfPCell(new Paragraph(panelTomTat.doanhthu.getText(), fontNormal));
+            cellDoanhThuValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellDoanhThuValue);
+
+            PdfPCell cellChiPhiLabel = new PdfPCell(new Paragraph("Chi Phí", fontNormal));
+            cellChiPhiLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellChiPhiLabel);
+
+            PdfPCell cellChiPhiValue = new PdfPCell(new Paragraph(panelTomTat.chiphi.getText(), fontNormal));
+            cellChiPhiValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellChiPhiValue);
+
+            PdfPCell cellLoiNhuanLabel = new PdfPCell(new Paragraph("Lợi Nhuận", fontNormal));
+            cellLoiNhuanLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellLoiNhuanLabel);
+
+            PdfPCell cellLoiNhuanValue = new PdfPCell(new Paragraph(panelTomTat.loinhuan.getText(), fontNormal));
+            cellLoiNhuanValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellLoiNhuanValue);
+
+            // Phân tích xu hướng doanh thu
+            double[] values = chart.values;
+            String trend = analyzeTrend(values);
+
+            PdfPCell cellTrendLabel = new PdfPCell(new Paragraph("Xu Hướng Doanh Thu", fontNormal));
+            cellTrendLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellTrendLabel);
+
+            PdfPCell cellTrendValue = new PdfPCell(new Paragraph(trend, fontNormal));
+            cellTrendValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+            table.addCell(cellTrendValue);
 
             document.add(table);
+
+            // Thêm chữ ký
+            Paragraph nguoilambaocao = new Paragraph("Người lập báo cáo\nKý và ghi rõ họ tên", fontBold);
+            Paragraph banquanli = new Paragraph("Ban quản lý\nKý và ghi rõ họ tên", fontBold);
+
+            PdfPTable signatureTable = new PdfPTable(2);
+            signatureTable.setWidthPercentage(100);
+            signatureTable.setWidths(new float[]{50, 50});
+            signatureTable.setSpacingBefore(30);
+
+            PdfPCell nguoilam = new PdfPCell(nguoilambaocao);
+            nguoilam.setBorder(PdfPCell.NO_BORDER);
+            nguoilam.setHorizontalAlignment(Element.ALIGN_CENTER);
+            nguoilam.setVerticalAlignment(Element.ALIGN_TOP);
+
+            PdfPCell nguoiduyet = new PdfPCell(banquanli);
+            nguoiduyet.setBorder(PdfPCell.NO_BORDER);
+            nguoiduyet.setHorizontalAlignment(Element.ALIGN_CENTER);
+            nguoiduyet.setVerticalAlignment(Element.ALIGN_TOP);
+
+            signatureTable.addCell(nguoilam);
+            signatureTable.addCell(nguoiduyet);
+            document.add(signatureTable);
 
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi khi xuất file PDF: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    public static void exportChartToPDFWithDialog(PanelChart panelChart, String timeFilter, int selectedMonth, int selectedYear, String maNV) {
+        JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        chooser.setDialogTitle("Chọn nơi lưu báo cáo doanh thu");
+        chooser.setSelectedFile(new File("BaoCaoDoanhThu_" + System.currentTimeMillis() + ".pdf"));
+
+        int returnVal = chooser.showSaveDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = chooser.getSelectedFile();
+            String filePath = selectedFile.getAbsolutePath();
+            if (!filePath.toLowerCase().endsWith(".pdf")) {
+                filePath += ".pdf";
+            }
+
+            try {
+                // Tạo document mới
+                Document document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream(filePath));
+                document.open();
+
+                // Font hỗ trợ tiếng Việt
+                String fontPath = "src/main/resources/fonts/arial.ttf";
+                BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                Font fontNormal = new Font(baseFont, 12);
+                Font fontBold = new Font(baseFont, 12, Font.BOLD);
+                Font fontTitle = new Font(baseFont, 20, Font.BOLD);
+                Font fontHeader = new Font(baseFont, 12, Font.BOLD, BaseColor.WHITE);
+
+                // Ngày tháng năm và tên người in
+                LocalDate today = LocalDate.now();
+                String formattedDate = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                String tenNhanVien = "Unknown";
+                Paragraph dateAndUser = new Paragraph("Ngày in: " + formattedDate + " | Người in: " + tenNhanVien, fontNormal);
+                dateAndUser.setAlignment(Element.ALIGN_RIGHT);
+                document.add(dateAndUser);
+
+                // Logo
+                String imagePath = "src/main/resources/images/icon/Logo_Main.png";
+                try {
+                    Image logo = Image.getInstance(imagePath);
+                    logo.scaleToFit(100, 100);
+                    logo.setAlignment(Image.ALIGN_CENTER);
+                    document.add(logo);
+                } catch (Exception e) {
+                    System.err.println("Không thể tải logo: " + e.getMessage());
+                }
+
+                // Tiêu đề
+                String titleText = "BÁO CÁO DOANH THU";
+                String[] monthNames = {"", "T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9", "T10", "T11", "T12"};
+                if ("Ngày".equals(timeFilter)) {
+                    titleText += " (" + monthNames[selectedMonth] + " " + selectedYear + ")";
+                } else if ("Tháng".equals(timeFilter)) {
+                    titleText += " (" + selectedYear + ")";
+                } else {
+                    titleText += " (5 Năm Gần Nhất)";
+                }
+                Paragraph title = new Paragraph(titleText + "\n\n", fontTitle);
+                title.setAlignment(Element.ALIGN_CENTER);
+                document.add(title);
+
+                // Chụp ảnh biểu đồ từ PanelChart
+                vechart chart = (vechart) ((JScrollPane) panelChart.getComponent(0)).getViewport().getView();
+                BufferedImage chartImage = new BufferedImage(chart.getWidth(), chart.getHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D g2d = chartImage.createGraphics();
+                chart.paint(g2d);
+                g2d.dispose();
+
+                // Thêm ảnh biểu đồ vào PDF
+                Image pdfImage = Image.getInstance(chartImage, null);
+                pdfImage.scaleToFit(500, 300);
+                pdfImage.setAlignment(Image.ALIGN_CENTER);
+                document.add(pdfImage);
+
+                // Thêm bảng thông tin từ PanelTomTat
+                Paragraph summaryTitle = new Paragraph("Thông Tin Tổng Quan", fontBold);
+                summaryTitle.setSpacingBefore(20);
+                document.add(summaryTitle);
+
+                PdfPTable table = new PdfPTable(2);
+                table.setWidthPercentage(100);
+                table.setWidths(new float[]{50, 50});
+                table.setSpacingBefore(10f);
+
+                // Header bảng
+                PdfPCell header1 = new PdfPCell(new Paragraph("Thông Tin", fontHeader));
+                header1.setHorizontalAlignment(Element.ALIGN_CENTER);
+                header1.setBackgroundColor(new BaseColor(33, 58, 89));
+
+                PdfPCell header2 = new PdfPCell(new Paragraph("Giá Trị", fontHeader));
+                header2.setHorizontalAlignment(Element.ALIGN_CENTER);
+                header2.setBackgroundColor(new BaseColor(33, 58, 89));
+
+                table.addCell(header1);
+                table.addCell(header2);
+
+                // Lấy dữ liệu từ PanelTomTat
+                PanelTomTat panelTomTat = new PanelTomTat();
+                panelTomTat.updateData(timeFilter, selectedMonth, selectedYear);
+
+                // Dữ liệu bảng
+                PdfPCell cellLuotMuaLabel = new PdfPCell(new Paragraph("Lượt Mua", fontNormal));
+                cellLuotMuaLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellLuotMuaLabel);
+
+                PdfPCell cellLuotMuaValue = new PdfPCell(new Paragraph(panelTomTat.luotmua.getText(), fontNormal));
+                cellLuotMuaValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellLuotMuaValue);
+
+                PdfPCell cellDoanhThuLabel = new PdfPCell(new Paragraph("Doanh Thu", fontNormal));
+                cellDoanhThuLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellDoanhThuLabel);
+
+                PdfPCell cellDoanhThuValue = new PdfPCell(new Paragraph(panelTomTat.doanhthu.getText(), fontNormal));
+                cellDoanhThuValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellDoanhThuValue);
+
+                PdfPCell cellChiPhiLabel = new PdfPCell(new Paragraph("Chi Phí", fontNormal));
+                cellChiPhiLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellChiPhiLabel);
+
+                PdfPCell cellChiPhiValue = new PdfPCell(new Paragraph(panelTomTat.chiphi.getText(), fontNormal));
+                cellChiPhiValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellChiPhiValue);
+
+                PdfPCell cellLoiNhuanLabel = new PdfPCell(new Paragraph("Lợi Nhuận", fontNormal));
+                cellLoiNhuanLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellLoiNhuanLabel);
+
+                PdfPCell cellLoiNhuanValue = new PdfPCell(new Paragraph(panelTomTat.loinhuan.getText(), fontNormal));
+                cellLoiNhuanValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellLoiNhuanValue);
+
+                // Phân tích xu hướng doanh thu
+                double[] values = chart.values;
+                String trend = analyzeTrend(values);
+
+                PdfPCell cellTrendLabel = new PdfPCell(new Paragraph("Xu Hướng Doanh Thu", fontNormal));
+                cellTrendLabel.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellTrendLabel);
+
+                PdfPCell cellTrendValue = new PdfPCell(new Paragraph(trend, fontNormal));
+                cellTrendValue.setHorizontalAlignment(Element.ALIGN_LEFT);
+                table.addCell(cellTrendValue);
+
+                document.add(table);
+
+                // Thêm chữ ký
+                Paragraph nguoilambaocao = new Paragraph("Người lập báo cáo\nKý và ghi rõ họ tên", fontBold);
+                Paragraph banquanli = new Paragraph("Ban quản lý\nKý và ghi rõ họ tên", fontBold);
+
+                PdfPTable signatureTable = new PdfPTable(2);
+                signatureTable.setWidthPercentage(100);
+                signatureTable.setWidths(new float[]{50, 50});
+                signatureTable.setSpacingBefore(30);
+
+                PdfPCell nguoilam = new PdfPCell(nguoilambaocao);
+                nguoilam.setBorder(PdfPCell.NO_BORDER);
+                nguoilam.setHorizontalAlignment(Element.ALIGN_CENTER);
+                nguoilam.setVerticalAlignment(Element.ALIGN_TOP);
+
+                PdfPCell nguoiduyet = new PdfPCell(banquanli);
+                nguoiduyet.setBorder(PdfPCell.NO_BORDER);
+                nguoiduyet.setHorizontalAlignment(Element.ALIGN_CENTER);
+                nguoiduyet.setVerticalAlignment(Element.ALIGN_TOP);
+
+                signatureTable.addCell(nguoilam);
+                signatureTable.addCell(nguoiduyet);
+                document.add(signatureTable);
+
+                document.close();
+
+                JOptionPane.showMessageDialog(null, "Xuất báo cáo doanh thu thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (java.io.FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi khi xuất file PDF: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
@@ -160,7 +372,7 @@ public class PDFExporter {
         }
 
         double a = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX); // Độ dốc
-        double threshold = 10000; // Ngưỡng để xác định xu hướng (có thể điều chỉnh)
+        double threshold = 10000; // Ngưỡng để xác định xu hướng
 
         if (a > threshold) {
             return "Tăng";

@@ -44,6 +44,10 @@ public class SanPhamBLL {
         return SanPhamDAL.deleteProduct(id);
     }
 
+    public static ArrayList<SanPhamDTO> getProductsByNhaCungCap(int maNCC){
+         return SanPhamDAL.getProductByNcc(maNCC);
+    }
+
     public static List<SanPhamDTO> searchProducts(String maSP, String tenSP, int maLSP) {
         return SanPhamDAL.searchProducts(maSP, tenSP, maLSP);
     }

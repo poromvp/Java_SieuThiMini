@@ -1,6 +1,7 @@
 package GUI.FormWareHouse;
 
 import BLL.ChiTietNhapHangBLL;
+import BLL.LoaiSanPhamBLL;
 import BLL.NhapHangBLL;
 import BLL.SanPhamBLL;
 import DTO.ChiTietPNHangDTO;
@@ -9,9 +10,13 @@ import DTO.SanPhamDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
 import GUI.ComponentCommon.StyledTextField;
+import com.toedter.calendar.JDateChooser;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,7 +27,10 @@ import java.util.function.Consumer;
 
 public class FormAddImport extends JPanel {
     private StyledTable table;
+    private StyledTable productTable;
+    private StyledTextField maSP;
     private NhapHangBLL nhapHangBLL = new NhapHangBLL();
+    private LoaiSanPhamBLL loaiSanPhamBLL = new LoaiSanPhamBLL();
     private ChiTietNhapHangBLL chiTietNhapBLL = new ChiTietNhapHangBLL();
     private ArrayList<ChiTietPNHangDTO> chiTietList = new ArrayList<>();
     private PhieuNhapHangDTO phieuNhap;
@@ -37,13 +45,47 @@ public class FormAddImport extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.white);
 
+        // Panel hiển thị danh sách sản phẩm của nhà cung cấp
+        JPanel supplierProductPanel = new JPanel();
+        supplierProductPanel.setLayout(new BorderLayout());
+        supplierProductPanel.setBorder(BorderFactory.createTitledBorder("Danh sách sản phẩm của nhà cung cấp"));
+
+        String[] productHeader = {"Mã SP", "Tên SP", "Loại sản phẩm", "Số lượng tồn"};
+        ArrayList<SanPhamDTO> supplierProducts = sanPhamBLL.getProductsByNhaCungCap(phieuNhap.getMaNCC());
+        Object[][] productData = convertProductsToArray(supplierProducts);
+        productTable = new StyledTable(productData, productHeader);
+        productTable.setEditable(false);
+
+// Xử lý double-click để điền mã sản phẩm
+        productTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    int row = productTable.getSelectedRow();
+                    if (row >= 0) {
+                        maSP.setText(String.valueOf(productTable.getValueAt(row, 0)));
+                    }
+                }
+            }
+        });
+
+        JScrollPane productScrollPane = new JScrollPane(productTable);
+        productScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        supplierProductPanel.add(productScrollPane, BorderLayout.CENTER);
+
+// Thêm panel vào layout chính
+        add(supplierProductPanel, BorderLayout.WEST);
+
         // Panel nhập thông tin sản phẩm
         JPanel import_info = new JPanel();
         import_info.setBorder(BorderFactory.createTitledBorder("Thông tin sản phẩm"));
         import_info.setLayout(new GridLayout(8, 2, 5, 5));
 
         import_info.add(new JLabel("Mã sản phẩm:"));
-        StyledTextField maSP = new StyledTextField();
+         maSP = new StyledTextField();
+         maSP.setEnabled(false);
+         maSP.setForeground(Color.GRAY);
+         maSP.setText("Mã sản phẩm phải được chọn từ bảng !");
         import_info.add(maSP);
 
         import_info.add(new JLabel("Mã lô hàng:"));
@@ -58,28 +100,61 @@ public class FormAddImport extends JPanel {
         StyledTextField gia = new StyledTextField();
         import_info.add(gia);
 
-        import_info.add(new JLabel("Ngày sản xuất (dd/MM/yyyy):"));
-        StyledTextField nsx = new StyledTextField();
-        import_info.add(nsx);
+        import_info.add(new JLabel("Ngày sản xuất:"));
+        JDateChooser nsxChooser = new JDateChooser();
+        nsxChooser.setDateFormatString("dd/MM/yyyy");
+        import_info.add(nsxChooser);
 
-        import_info.add(new JLabel("Hạn sử dụng (dd/MM/yyyy):"));
-        StyledTextField hsd = new StyledTextField();
-        import_info.add(hsd);
+        import_info.add(new JLabel("Hạn sử dụng:"));
+        JDateChooser hsdChooser = new JDateChooser();
+        hsdChooser.setDateFormatString("dd/MM/yyyy");
+        import_info.add(hsdChooser);
 
         ButtonCustom btnThemSanPham = new ButtonCustom("Thêm sản phẩm",12,"blue");
 
-        btnThemSanPham.addActionListener(e->{
-            try{
+        btnThemSanPham.addActionListener(e -> {
+            try {
                 int maSPValue = Integer.parseInt(maSP.getText().trim());
                 int maLHValue = Integer.parseInt(maLH.getText().trim());
                 int soLuongValue = Integer.parseInt(soLuong.getText().trim());
                 double giaNhapValue = Double.parseDouble(gia.getText().trim());
-                Date nsxValue = dateFormat.parse(nsx.getText().trim());
-                Date hsdValue = dateFormat.parse(hsd.getText().trim());
+                Date nsxValue = nsxChooser.getDate();
+                Date hsdValue = hsdChooser.getDate();
+
+//                // Kiểm tra MaSP tồn tại
+//                if (!sanPhamBLL.isSanPhamExists(maSPValue)) {
+//                    JOptionPane.showMessageDialog(this, "Mã sản phẩm không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//                    return;
+//                }
+
+//                // Kiểm tra MaLH không trùng trong cùng phiếu nhập
+//                for (ChiTietPNHangDTO ct : chiTietList) {
+//                    if (ct.getMaLH() == maLHValue) {
+//                        JOptionPane.showMessageDialog(this, "Mã lô hàng đã tồn tại trong phiếu nhập này!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+//                        return;
+//                    }
+//                }
 
                 // Validate số lượng và giá nhập
                 if (!chiTietNhapBLL.validateSoLuong(soLuongValue) || !chiTietNhapBLL.validateGiaNhap(giaNhapValue)) {
                     JOptionPane.showMessageDialog(this, "Số lượng và giá nhập phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra nếu ngày không được chọn
+                if (nsxValue == null || hsdValue == null) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày sản xuất và hạn sử dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // Kiểm tra ngày sản xuất và hạn sử dụng
+                Date currentDate = new Date();
+                if (nsxValue.after(currentDate)) {
+                    JOptionPane.showMessageDialog(this, "Ngày sản xuất không được trong tương lai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (hsdValue.before(currentDate)) {
+                    JOptionPane.showMessageDialog(this, "Hạn sử dụng không được trong quá khứ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
                 if (nsxValue.after(hsdValue)) {
@@ -103,20 +178,16 @@ public class FormAddImport extends JPanel {
                 maLH.setText("");
                 soLuong.setText("");
                 gia.setText("");
-                nsx.setText("");
-                hsd.setText("");
+                nsxChooser.cleanup();
+                hsdChooser.cleanup();
 
-                JOptionPane.showMessageDialog(this,"Thêm sản  phẩm thành công !");
-
-            }catch (NumberFormatException ex){
+                JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!");
+            } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-            }catch (ParseException ex) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng ngày (dd/MM/yyyy)!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         });
 
         ButtonCustom btnHoanTat = new ButtonCustom("Hoàn tất đơn nhập hàng",12,"green");
-
         btnHoanTat.addActionListener(e ->{
             if (chiTietList.isEmpty()){
                 JOptionPane.showMessageDialog(this,"Vui lòng nhập ít nhất một sản phẩm !","Lỗi",JOptionPane.ERROR_MESSAGE);
@@ -179,8 +250,8 @@ public class FormAddImport extends JPanel {
         product_info.setLayout(new BorderLayout());
         product_info.setBorder(BorderFactory.createTitledBorder("Danh sách sản phẩm đã thêm"));
 
-        String[] headerCol = {"STT", "Mã SP", "Mã lô hàng", "Số lượng", "Giá nhập", "Thành tiền"};
-        table = new StyledTable(new Object[0][6], headerCol);
+        String[] headerCol = {"STT", "Mã SP", "Mã lô hàng", "Số lượng", "Giá nhập","Ngày sản xuất","Hạn sử dụng", "Thành tiền"};
+        table = new StyledTable(new Object[0][8], headerCol);
         table.setEditable(false);
 
         JScrollPane scrollPane = new JScrollPane(table);
@@ -193,7 +264,7 @@ public class FormAddImport extends JPanel {
 
     private void refreshTable() {
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        Object[][] data = new Object[chiTietList.size()][6];
+        Object[][] data = new Object[chiTietList.size()][8];
         for (int i = 0; i < chiTietList.size(); i++) {
             ChiTietPNHangDTO ct = chiTietList.get(i);
             double thanhTien = ct.getSoLuong() * ct.getGiaNhap();
@@ -206,17 +277,18 @@ public class FormAddImport extends JPanel {
             data[i][6] = ct.getHsd() != null ? dateFormat.format(ct.getHsd()) : "";
             data[i][7] = currencyFormat.format(thanhTien);
         }
-        table.setModel(new DefaultTableModel(data, new String[]{"STT", "Mã SP", "Mã lô hàng", "Số lượng", "Giá nhập", "Thành tiền"}));
+        table.setModel(new DefaultTableModel(data, new String[]{"STT", "Mã SP", "Mã lô hàng", "Số lượng", "Giá nhập","Ngày sản xuất","Hạn sử dụng","Thành tiền"}));
     }
 
-//    public static void main(String[] args) {
-//        FormAddImport test = new FormAddImport();
-//        JFrame frame = new JFrame("Thêm đơn nhập hàng");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setSize(800, 600);
-//        frame.setLayout(new BorderLayout());
-//        frame.setLocationRelativeTo(null);
-//        frame.add(test, BorderLayout.CENTER);
-//        frame.setVisible(true);
-//    }
+    private Object[][] convertProductsToArray(ArrayList<SanPhamDTO> products) {
+        Object[][] data = new Object[products.size()][4];
+        for (int i = 0; i < products.size(); i++) {
+            SanPhamDTO sp = products.get(i);
+            data[i][0] = sp.getMaSP();
+            data[i][1] = sp.getTenSP();
+            data[i][2] = loaiSanPhamBLL.getLoaiSanPham(sp.getMaLSP()).getTenLoaiSP();
+            data[i][3] = sp.getSoLuongTon();
+        }
+        return data;
+    }
 }

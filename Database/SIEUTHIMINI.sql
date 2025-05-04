@@ -16,7 +16,8 @@ CREATE TABLE NhanVien (
     DiaChi VARCHAR(255),
     SDT VARCHAR(10) UNIQUE,
     Luong DECIMAL(10,2),
-    TrangThai BIT(1)
+    TrangThai BIT(1),
+    image varchar(250)
 ) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE TaiKhoan (
@@ -87,8 +88,7 @@ CREATE TABLE SanPham (
     TenSP VARCHAR(255) ,
     SoLuongTon INT DEFAULT 0,
     MoTa VARCHAR(555) ,
-   	TrangThai ENUM('ACTIVE', 'INACTIVE'),
-    soLuongTon int
+   	TrangThai ENUM('ACTIVE', 'INACTIVE')
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 

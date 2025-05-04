@@ -18,6 +18,7 @@ import BLL.NhaCungCapBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import DTO.SearchBanChayDTO;
+import DTO.SearchTonKhoDTO;
 import GUI.ComponentCommon.*;
 import GUI.FormWareHouse.FormProductDetail;
 
@@ -127,8 +128,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             }
         });
     }
-
-    public PanelKhoTongHop() {
+    public String MANV;
+    public PanelKhoTongHop(String MANV) {
+        this.MANV = MANV;
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo kho tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -196,7 +198,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         searchItem.addActionListener(this);
         exportItem.addActionListener(this);
         popupMenu.add(searchItem);
@@ -212,7 +214,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             public void mouseClicked(MouseEvent e) {
                 TienIch.setDarkUI();
                 if (e.getClickCount() == 2) { // Kiểm tra double click
-                    PanelXemDsHDBanChay panel = new PanelXemDsHDBanChay(DsSP.get(tb.getSelectedRow()));
+                    PanelXemDsHDBanChay panel = new PanelXemDsHDBanChay(DsSP.get(tb.getSelectedRow()), MANV);
                     JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
                 }
                 TienIch.resetUI();
@@ -315,12 +317,13 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             pn3.add(scr, BorderLayout.CENTER);
         }
     }
-
+    public SearchBanChayDTO SEARCH = new SearchBanChayDTO();
+    public SearchTonKhoDTO SEARCH2 = new SearchTonKhoDTO();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
         if (e.getSource() == btnMore) {
-            PanelDSLoHang panel = new PanelDSLoHang();
+            PanelDSLoHang panel = new PanelDSLoHang(MANV);
             JOptionPane.showMessageDialog(null, panel, "Xem Danh Sách", JOptionPane.PLAIN_MESSAGE);
 
         } else if (e.getSource() == searchItem) {
@@ -339,9 +342,19 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                 if (panel instanceof PanelTimBanChay pnbanchay) {
                     DsSP = pnbanchay.ketqua(new java.sql.Date(from.getDate().getTime()),
                             new java.sql.Date(to.getDate().getTime()));
+                    if(DsSP.size()!=0){
+                        SEARCH = ((PanelTimBanChay)panel).trasearch();
+                    } else {
+                        TienIch.CustomMessage("Không tìm thấy");
+                    }
                     loadSanPham(DsSP);
                 } else if(panel instanceof PanelTimKho pntimkho){
                     DsSP2 = pntimkho.ketqua();
+                    if(DsSP2.size()!=0){
+                        SEARCH2 = ((PanelTimKho)panel).trasearch();
+                    } else {
+                        TienIch.CustomMessage("Không tìm thấy");
+                    }
                     loadSanPham2(DsSP2);
                 }
             }
@@ -355,7 +368,20 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
                 } else {
-                    panel.XuatPDF(model);
+                    if(tab.getSelectedIndex()==0){
+                        if(DsSP.size()==0){
+                            TienIch.CustomMessage("Không có gì để in");
+                        } else{
+                            PanelExport.InPDFSanPhamBanChaySearch(DsSP, SEARCH, new java.sql.Date(from.getDate().getTime()),
+                            new java.sql.Date(to.getDate().getTime()), MANV);
+                        }
+                    } else{
+                        if(DsSP2.size()==0){
+                            TienIch.CustomMessage("Không có gì để in");
+                        } else {
+                            PanelExport.InPDFSanPhamTonKhoSearch(DsSP2, SEARCH2, MANV);
+                        }
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

@@ -9,6 +9,7 @@ import java.util.*;
 import java.io.File;
 
 import BLL.TheThanhVienBLL;
+import DTO.SearchTheThanhVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.Admin_PanelThongKe.PanelExport;
 import GUI.Admin_PanelThongKe.PanelTimKH;
@@ -20,6 +21,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
     StyledTable tb;
     DefaultTableModel model;
     private ArrayList<TheThanhVienDTO> TTV;
+    SearchTheThanhVienDTO SEARCH = new SearchTheThanhVienDTO();
 
     // Khởi tạo panel với tiêu đề và viền
     private void initPanel(JPanel pnl, String title) {
@@ -88,7 +90,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         TTV = TheThanhVienBLL.getAllMembersACTIVE();
         loadThanhVien(TTV);
         StyledTable.hoverTable(tb, model);
-        StyledTable.TableEvent(tb, model, "KH");
+        StyledTable.TableEvent(tb, model, "KH", MANV);
         JScrollPane scr = new JScrollPane(tb);
         pn2.add(scr, BorderLayout.CENTER);
     }
@@ -106,7 +108,10 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         }
     }
 
-    public PanelMainThanhVien() {
+    public String MANV;
+
+    public PanelMainThanhVien(String MANV) {
+        this.MANV = MANV;
         setLayout(new BorderLayout());
 
         pn1 = new JPanel();
@@ -128,7 +133,12 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 TTV = panel.ketqua();
-                loadThanhVien(TTV);
+                if (TTV.size() != 0) {
+                    SEARCH = panel.traSearch();
+                    loadThanhVien(TTV);
+                } else {
+                    TienIch.CustomMessage("Không tìm thấy thẻ thành viên với tiêu chí như vậy!");
+                }
             }
         } else if (e.getSource() == btnIn) {
             PanelExport panel = new PanelExport();
@@ -138,7 +148,12 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
                 } else {
-                    panel.XuatPDF(model);
+                    if (TTV.size() != 0) {
+                        PanelExport.InPDFTheThanhVienTheoSearch(TTV, SEARCH, MANV, "");
+                        panel.XuatPDF(model);
+                    } else {
+                        TienIch.CustomMessage("Không có gì để in");
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");
@@ -146,12 +161,8 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                 TienIch.CustomMessage("Đã hủy xuất file");
             }
         } else if (e.getSource() == btnXemBlock) {
-            PanelXemDSLock panel = new PanelXemDSLock();
-            int result = JOptionPane.showConfirmDialog(null, panel, "Danh sách TTV đã khóa",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
-                TienIch.CustomMessage("Đã hủy xem danh sách thẻ thành viên bị khóa");
-            }
+            PanelXemDSLock panel = new PanelXemDSLock(MANV);
+            JOptionPane.showMessageDialog(null, panel, "Danh sách TTV đã khóa", JOptionPane.PLAIN_MESSAGE);
         } else if (e.getSource() == btnThem) {
             PanelThemThanhVien panel = new PanelThemThanhVien();
             int result = JOptionPane.showConfirmDialog(null, panel, "Thêm",
@@ -200,17 +211,22 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
             String maTV = JOptionPane.showInputDialog(null, "", "Nhập Mã Thành Viên Cần Khóa",
                     JOptionPane.PLAIN_MESSAGE);
             if (maTV != null && !maTV.trim().isEmpty()) {
-                if (TheThanhVienBLL.getMemberById(Integer.parseInt(maTV)).getTrangThai().equals("INACTIVE")) {
-                    TienIch.CustomMessage("Thành viên này đã khóa sẵn rồi!");
-                } else {
-                    boolean success = TheThanhVienBLL.deleteMember(Integer.parseInt(maTV));
-                    if (success) {
-                        TienIch.CustomMessage("Khóa thành viên thành công!");
-                        TTV = TheThanhVienBLL.getAllMembersACTIVE();
-                        loadThanhVien(TTV);
+                TheThanhVienDTO member = TheThanhVienBLL.getMemberById(Integer.parseInt(maTV));
+                if (member != null) {
+                    if (TheThanhVienBLL.getMemberById(Integer.parseInt(maTV)).getTrangThai().equals("INACTIVE")) {
+                        TienIch.CustomMessage("Thành viên này đã khóa sẵn rồi!");
                     } else {
-                        TienIch.CustomMessage("Khóa thành viên thất bại");
+                        boolean success = TheThanhVienBLL.deleteMember(Integer.parseInt(maTV));
+                        if (success) {
+                            TienIch.CustomMessage("Khóa thành viên thành công!");
+                            TTV = TheThanhVienBLL.getAllMembersACTIVE();
+                            loadThanhVien(TTV);
+                        } else {
+                            TienIch.CustomMessage("Khóa thành viên thất bại");
+                        }
                     }
+                } else {
+                    TienIch.CustomMessage("Mã thành viên không tồn tại");
                 }
             }
         }

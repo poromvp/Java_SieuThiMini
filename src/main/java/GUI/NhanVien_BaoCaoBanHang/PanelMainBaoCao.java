@@ -59,7 +59,7 @@ public class PanelMainBaoCao extends JPanel implements ActionListener {
         TienIch.nutStyle(btnTimKiem, "search.png", 24, 90, 30);
         pn2.add(btnTimKiem);
 
-        btnInBaoCao = new JButton("In Báo Cáo");
+        btnInBaoCao = new JButton("Xuất file");
         TienIch.nutStyle(btnInBaoCao, "printer.png", 24, 90, 30);
         pn2.add(btnInBaoCao);
 
@@ -85,7 +85,7 @@ public class PanelMainBaoCao extends JPanel implements ActionListener {
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
-        StyledTable.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "HD", MANV); // Giữ sự kiện double-click
         StyledTable.hoverTable(tb, model);
         scr = new JScrollPane(tb);
         pn3.add(scr, BorderLayout.CENTER);
@@ -102,8 +102,9 @@ public class PanelMainBaoCao extends JPanel implements ActionListener {
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
     }
-
-    public PanelMainBaoCao() {
+    public String MANV;
+    public PanelMainBaoCao(String MANV) {
+        this.MANV = MANV;
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;

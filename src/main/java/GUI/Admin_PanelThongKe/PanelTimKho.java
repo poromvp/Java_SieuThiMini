@@ -43,7 +43,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 0;
         add(lbMaSP, gbc);
 
-        txtMaSanPham = new StyledTextField(1,10);
+        txtMaSanPham = new StyledTextField(1, 10);
         txtMaSanPham.setPlaceholder("1,2,3,....");
         TienIch.timStyle(txtMaSanPham);
         gbc.gridx = 1;
@@ -56,7 +56,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 0;
         add(lbTenSanPham, gbc);
 
-        txtTenSanPham = new StyledTextField(1,10);
+        txtTenSanPham = new StyledTextField(1, 10);
         txtTenSanPham.setPlaceholder("Nhập tên sản phẩm");
         TienIch.timStyle(txtTenSanPham);
         gbc.gridx = 3;
@@ -80,7 +80,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 1;
         add(lbMaLoaiSP, gbc);
 
-        txtMaLoaiSanPham = new StyledTextField(1,10);
+        txtMaLoaiSanPham = new StyledTextField(1, 10);
         txtMaLoaiSanPham.setPlaceholder("1,2,3,....");
         TienIch.timStyle(txtMaLoaiSanPham);
         gbc.gridx = 1;
@@ -93,7 +93,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 1;
         add(lbTenLoaiSP, gbc);
 
-        txtLoaiSanPham = new StyledTextField(1,10);
+        txtLoaiSanPham = new StyledTextField(1, 10);
         txtLoaiSanPham.setPlaceholder("Nhập tên loại sản phẩm");
         TienIch.timStyle(txtLoaiSanPham);
         gbc.gridx = 3;
@@ -127,7 +127,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 2;
         add(Max, gbc);
 
-        // Dòng 4: Giá tiền max, min 
+        // Dòng 4: Giá tiền max, min
         JLabel lbMinGia = new JLabel("Giá từ");
         TienIch.timStyle(lbMinGia);
         gbc.gridx = 0;
@@ -161,7 +161,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 4;
         add(lbMaNCC, gbc);
 
-        txtMaNCC = new StyledTextField(1,10);
+        txtMaNCC = new StyledTextField(1, 10);
         txtMaNCC.setPlaceholder("1,2,3,....");
         TienIch.timStyle(txtMaNCC);
         gbc.gridx = 1;
@@ -174,7 +174,7 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 4;
         add(lbTenNCC, gbc);
 
-        txtTenNCC = new StyledTextField(1,10);
+        txtTenNCC = new StyledTextField(1, 10);
         txtTenNCC.setPlaceholder("Nhập tên nhà cung cấp");
         TienIch.timStyle(txtTenNCC);
         gbc.gridx = 3;
@@ -200,19 +200,33 @@ public class PanelTimKho extends JPanel {
         gbc.gridy = 5;
         add(lblTheoCot, gbc);
 
-        cboTheoCot = new JComboBox<>(new String[] { "Mã sản phẩm", "Giá", "Số lượng", "Mã loại sản phẩm", "Mã nhà cung cấp" });
+        cboTheoCot = new JComboBox<>(
+                new String[] { "Mã sản phẩm", "Giá", "Số lượng", "Mã loại sản phẩm", "Mã nhà cung cấp" });
         TienIch.timStyle(cboTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 5;
         add(cboTheoCot, gbc);
     }
 
-    public ArrayList<SanPhamDTO> ketqua (){
+    public ArrayList<SanPhamDTO> ketqua() {
         int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
         int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
         int maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText());
-        SearchTonKhoDTO search = new SearchTonKhoDTO(maSP, txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(), (int) Min.getValue(), (int) Max.getValue(), (int) Min2.getValue(), (int) Max2.getValue(), maNCC, txtTenNCC.getText(), (String) cboSapXep.getSelectedItem(),
-        (String) cboTheoCot.getSelectedItem());
+        SearchTonKhoDTO search = new SearchTonKhoDTO(maSP, txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(),
+                (int) Min.getValue(), (int) Max.getValue(), (int) Min2.getValue(), (int) Max2.getValue(), maNCC,
+                txtTenNCC.getText(), (String) cboSapXep.getSelectedItem(),
+                (String) cboTheoCot.getSelectedItem());
         return BaoCaoKhoTongHopBLL.TimTonKho(search);
+    }
+
+    public SearchTonKhoDTO trasearch() {
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        int maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText());
+        SearchTonKhoDTO search = new SearchTonKhoDTO(maSP, txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(),
+                (int) Min.getValue(), (int) Max.getValue(), (int) Min2.getValue(), (int) Max2.getValue(), maNCC,
+                txtTenNCC.getText(), (String) cboSapXep.getSelectedItem(),
+                (String) cboTheoCot.getSelectedItem());
+        return search;
     }
 }

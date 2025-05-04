@@ -79,7 +79,7 @@ public class PanelXemThK extends JPanel {
     JLabel lbTotal, lbDiscount, lbThu;
 
     public void initPanel4() {
-        pn4.setLayout(new GridLayout(3, 2));
+        pn4.setLayout(new GridLayout(2, 2));
 
         JLabel tongtien = new JLabel("Tổng tiền: ");
         TienIch.labelStyle(tongtien, 4, 15, null);
@@ -89,16 +89,7 @@ public class PanelXemThK extends JPanel {
         lbTotal.setForeground(Color.GREEN);
         pn4.add(lbTotal);
 
-        JLabel giamgia = new JLabel("Giảm giá: ");
-        TienIch.labelStyle(giamgia, 4, 15, null);
-        pn4.add(giamgia);
-
-        lbDiscount = new JLabel("-" + "20,000" + " VND");
-        TienIch.labelStyle(lbDiscount, 4, 15, null);
-        lbDiscount.setForeground(Color.RED);
-        pn4.add(lbDiscount);
-
-        JLabel thu = new JLabel("Thu: ");
+        JLabel thu = new JLabel("Thu (Sau khi giảm giá): ");
         TienIch.labelStyle(thu, 4, 15, null);
         pn4.add(thu);
 
@@ -107,8 +98,9 @@ public class PanelXemThK extends JPanel {
         lbThu.setForeground(Color.GREEN);
         pn4.add(lbThu);
     }
-
-    public PanelXemThK(DefaultTableModel model, int dong) {
+    public String MANV;
+    public PanelXemThK(DefaultTableModel model, int dong, String MANV) {
+        this.MANV = MANV;
         setBackground(new Color(203, 238, 233));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

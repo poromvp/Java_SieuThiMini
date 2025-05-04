@@ -33,7 +33,7 @@ public class StyledTable extends JTable {
         setDefaultStyles();
     }
 
-    public static void TableEvent(JTable tb, DefaultTableModel model, String loaiXem) {
+    public static void TableEvent(JTable tb, DefaultTableModel model, String loaiXem, String MANV) {
         // Thêm hiệu ứng double-click
         tb.addMouseListener(new MouseAdapter() {
             @Override
@@ -42,15 +42,15 @@ public class StyledTable extends JTable {
                     int selectedRow = tb.getSelectedRow();
                     if (selectedRow != -1) {
                         if (loaiXem.equals("NV")) {
-                            PanelXemNV panelXemNV = new PanelXemNV(model, selectedRow);
+                            PanelXemNV panelXemNV = new PanelXemNV(model, selectedRow, MANV);
                             JOptionPane.showMessageDialog(null, panelXemNV, "Xem Chi Tiết Nhân Viên",
                                     JOptionPane.PLAIN_MESSAGE);
                         } else if (loaiXem.equals("HD")) {
-                            PanelXemThK panel = new PanelXemThK(model, selectedRow);
+                            PanelXemThK panel = new PanelXemThK(model, selectedRow, MANV);
                             JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết Hóa Đơn",
                                     JOptionPane.PLAIN_MESSAGE);
                         } else if (loaiXem.equals("KH")) {
-                            PanelXemKH panel = new PanelXemKH(model, selectedRow);
+                            PanelXemKH panel = new PanelXemKH(model, selectedRow, MANV);
                             JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);
                         }
                     }

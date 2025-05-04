@@ -88,7 +88,6 @@ CREATE TABLE SanPham (
     SoLuongTon INT DEFAULT 0,
     MoTa VARCHAR(555) ,
    	TrangThai ENUM('ACTIVE', 'INACTIVE'),
-    soLuongTon int
 )CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 

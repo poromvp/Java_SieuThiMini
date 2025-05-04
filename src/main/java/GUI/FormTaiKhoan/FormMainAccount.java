@@ -5,18 +5,19 @@ import javax.swing.table.DefaultTableModel;
 
 import BLL.TaiKhoanBLL;
 import GUI.ComponentCommon.ButtonCustom;
+import GUI.FormNhanVien.FormExport;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class FormMainAccount extends JPanel {
-    private JButton addButton, editButton, delButton;
+    private JButton addButton, editButton, delButton, expButton;
     private FormTableAccount tablePanel;
 
     public FormMainAccount() {
         setLayout(new BorderLayout());
-
+        setBackground(Color.white);
         tablePanel = new FormTableAccount();
         FormSearchAccount searchPanel = new FormSearchAccount(tablePanel);
         JPanel filterPanel = createFilterPanel();
@@ -26,13 +27,16 @@ public class FormMainAccount extends JPanel {
         mainPanel.add(searchPanel, BorderLayout.NORTH);
         mainPanel.add(tablePanel, BorderLayout.CENTER);
         JPanel buttonPanel = new JPanel();
+        buttonPanel.setBackground(Color.WHITE);
         addButton = new ButtonCustom("Thêm","add",12,50,50);
         editButton = new ButtonCustom("Sửa","edit",12,50,50);
         delButton = new ButtonCustom("Xóa","del",12,50,50);
+        expButton = new ButtonCustom("Xuất", "printer", 12,50,50);
 
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(delButton);
+        buttonPanel.add(expButton);
 
         add(mainPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -90,8 +94,16 @@ public class FormMainAccount extends JPanel {
                 }
             }
         });
+        expButton.addActionListener(e -> FormExport("Danh sách tài khoản"));
         
-        
+    }
+     private void FormExport(String title) {
+        JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Export", Dialog.ModalityType.APPLICATION_MODAL);
+        dialog.setSize(300, 150);
+        dialog.setLocationRelativeTo(this);
+        FormExport formEx = new FormExport(title);
+        dialog.add(formEx);
+        dialog.setVisible(true);
     }
     private JPanel createFilterPanel() {
         JPanel filterPanel = new JPanel();

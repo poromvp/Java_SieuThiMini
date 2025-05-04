@@ -156,6 +156,19 @@ public class SanPhamDAL {
         return productList;
     }
 
+    public static ArrayList<SanPhamDTO> getProductByNcc(int maNCC){
+        ArrayList<SanPhamDTO> productList = new ArrayList<>();
+        String sql = "SELECT * FROM SanPham WHERE MaNCC = ? AND TrangThai = 'ACTIVE'";
+        try (ResultSet rs = DBConnection.executeQuery(sql, maNCC)) {
+            while (rs.next()) {
+                productList.add(mapResultSetToSanPham(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productList;
+    }
+
     public static void main(String[] args) {
         // SanPhamDTO sanPham = new SanPhamDTO(0, 1, 1, "1.png", 99999, "kkkk", "kkkkkkkk", "hoatdong", 100); // Thêm SoLuongTon
         // System.out.println(insertProduct(sanPham));

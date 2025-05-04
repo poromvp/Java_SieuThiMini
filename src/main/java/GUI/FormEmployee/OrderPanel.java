@@ -69,6 +69,7 @@ import BLL.DiemTichLuyBLL;
 import BLL.DonHangBLL;
 import BLL.KhuyenMaiBLL;
 import BLL.LoaiSanPhamBLL;
+import BLL.NhanVienBLL;
 import BLL.SanPhamBLL;
 import BLL.TheThanhVienBLL;
 import DTO.ChiTietDonHangDTO;
@@ -76,6 +77,7 @@ import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
 import DTO.KhuyenMaiDTO;
 import DTO.LoaiSanPhamDTO;
+import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
 
@@ -107,6 +109,7 @@ import com.google.zxing.common.HybridBinarizer;
 import BLL.ChiTietKhuyenMaiBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.RoundedComponent;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.QR.ScanQR;
 
@@ -177,6 +180,17 @@ public class OrderPanel extends JPanel {
     private static boolean isScanning = false; 
     private static Thread scanThread;
 
+	private NhanVienDTO  NHANVIEN = new NhanVienDTO(
+            1,
+            "Nguyễn Văn A",
+            null,
+            "Nam",
+            "123 Đường ABC, Quận 1",
+            "0123456789",
+            "123456789012",
+            8000000.0,
+            1
+        ); 
 
 	private TheThanhVienDTO khachHang = null;
 
@@ -184,6 +198,10 @@ public class OrderPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public OrderPanel() {
+
+		NhanVienBLL nvBLL = new NhanVienBLL();
+		NHANVIEN = nvBLL.getNhanVienByMa(ProfilePanel.getMaNhanVien() + "");
+
 		khachHang = null;
 		setBackground(new Color(207, 235, 243));
 		setBorder(new EmptyBorder(15, 15, 15, 10));
@@ -245,6 +263,8 @@ public class OrderPanel extends JPanel {
 		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel = new JLabel("Loại sản phẩm");
+		lblNewLabel.setMinimumSize(new Dimension(2264, 13));
+		lblNewLabel.setMaximumSize(new Dimension(2283, 13));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_5.add(lblNewLabel);
 		
@@ -262,6 +282,8 @@ public class OrderPanel extends JPanel {
 		panel_6.setLayout(new BoxLayout(panel_6, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel_1 = new JLabel("Giá MIN\r\n");
+		lblNewLabel_1.setMinimumSize(new Dimension(2236, 13));
+		lblNewLabel_1.setMaximumSize(new Dimension(2236, 13));
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_6.add(lblNewLabel_1);
 		
@@ -275,6 +297,8 @@ public class OrderPanel extends JPanel {
 		panel_7.setLayout(new BoxLayout(panel_7, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel_2 = new JLabel("Giá MAX");
+		lblNewLabel_2.setMinimumSize(new Dimension(2238, 13));
+		lblNewLabel_2.setMaximumSize(new Dimension(2238, 13));
 		lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_7.add(lblNewLabel_2);
 		
@@ -602,21 +626,26 @@ public class OrderPanel extends JPanel {
 				panel_2.setPreferredSize(new Dimension(310, 10));
 				panel_2.setMaximumSize(new Dimension(32767, 60));
 				panelRightInput.add(panel_2);
-				panel_2.setLayout(new GridLayout(2, 1, 0, 0));
+				panel_2.setLayout(new GridLayout(2, 1, 10, 10));
 				
 				JPanel panel_3 = new JPanel();
 				panel_3.setMaximumSize(new Dimension(32767, 25));
 				panel_2.add(panel_3);
-				panel_3.setLayout(new GridLayout(1, 0, 0, 0));
+				panel_3.setLayout(new GridLayout(1, 0, 10, 10));
 				
 				JButton btnInDH = new JButton("In hoá đơn");
+				btnInDH.setBackground(new Color(0, 102, 153));
 				btnInDH.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_3.add(btnInDH);
+				btnLuuDonHang.setBackground(new Color(51, 153, 0));
 				
 				btnLuuDonHang.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_3.add(btnLuuDonHang);
 				
 				JButton btnHuy = new JButton("Huỷ đơn hàng\r\n");
+				// btnHuy.setBackground(new Color(255, 51, 0));
+				RoundedComponent.setRadius(12);
+				btnHuy = RoundedComponent.createRoundedButton(btnHuy, new Color(255, 51, 0));
 				btnHuy.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_2.add(btnHuy);
 
@@ -1182,12 +1211,12 @@ public class OrderPanel extends JPanel {
 						return ;
 					}else{
 						DiemTichLuyDTO DTL_ = DiemTichLuyBLL.getAllDiemTichLuy().get(comboBoxDTL.getSelectedIndex()); 
-						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, 1, pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));						
+						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));						
 						khachHang.setDiemTL(khachHang.getDiemTL() - dieuKienDTL + (int)(calCalculateTotalAmount()/1000));
 						TheThanhVienBLL.updateMember(khachHang);
 					}
 				}else{
-					maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, 1, pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+					maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
 					khachHang.setDiemTL(khachHang.getDiemTL()  + (int)(calCalculateTotalAmount()/1000));
 					TheThanhVienBLL.updateMember(khachHang);					
 				}
@@ -1196,7 +1225,7 @@ public class OrderPanel extends JPanel {
 				return ;
 			}
 		}else{
-			maDH = DonHangBLL.insertOrder(new DonHangDTO(1, null, maKM, 1, pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+			maDH = DonHangBLL.insertOrder(new DonHangDTO(1, null, maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
 
 		}
 

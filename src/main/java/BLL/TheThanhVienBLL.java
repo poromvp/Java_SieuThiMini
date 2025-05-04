@@ -29,6 +29,13 @@ public class TheThanhVienBLL {
         }
         return null;
     }
+    public static TheThanhVienDTO getMemberById(Integer maTV) {
+        if(maTV != null){
+            return TheThanhVienDAL.getMemberById(maTV);
+        }
+        return null;
+    }
+    
     
 
     // Lấy thẻ thành viên theo số điện thoại

@@ -1,4 +1,4 @@
-package GUI.FormEmployee;
+package PDF;
 
 
 import java.awt.BorderLayout;
@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -47,6 +48,7 @@ import DTO.DonHangDTO;
 import DTO.KhuyenMaiDTO;
 import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
+import EXCEL.ExportExcelOrder;
 
 
 
@@ -305,21 +307,84 @@ public class ChiTietDH_Dialog extends JDialog {
 		getContentPane().add(scrollPane, BorderLayout.CENTER);
 		{
 			JPanel buttonPane = new JPanel();
+			buttonPane.setPreferredSize(new Dimension(10, 50));
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("IN HOÁ ĐƠN");
-				okButton.setBackground(new Color(51, 255, 102));
-				okButton.setActionCommand("In Hoá Dơn");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
-				okButton.addActionListener(e->{
-					int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn IN HOÁ ĐƠN  không ???", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-					if(confirm == JOptionPane.YES_OPTION){
-						exportPDF();
-					}
-				});
+				JPanel panel = new JPanel();
+				panel.setPreferredSize(new Dimension(170, 45));
+				buttonPane.add(panel);
+				panel.setLayout(new BorderLayout(0, 0));
+				{
+					ImageIcon imageIconPDF = new ImageIcon( "src/main/resources/images/icon/pdf.png");
+					Image imagePDF = imageIconPDF.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); 
+					
+					JLabel lblNewLabel_12 = new JLabel();
+					lblNewLabel_12.setPreferredSize(new Dimension(45, 45));
+					lblNewLabel_12.setIcon(new ImageIcon(imagePDF));
+					lblNewLabel_12.setHorizontalTextPosition(SwingConstants.CENTER);
+					lblNewLabel_12.setHorizontalAlignment(SwingConstants.CENTER);
+					lblNewLabel_12.setOpaque(true);
+					lblNewLabel_12.setBackground(new Color(255, 153, 51));
+					panel.add(lblNewLabel_12, BorderLayout.WEST);
+				}
+				
+				{
+					JButton okButton = new JButton("IN HOÁ ĐƠN");
+					okButton.setPreferredSize(new Dimension(127, 21));
+					panel.add(okButton);
+					okButton.setBackground(new Color(255, 153, 51));
+					okButton.setActionCommand("In Hoá Dơn");
+					getRootPane().setDefaultButton(okButton);
+					okButton.addActionListener(e->{
+						int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn IN HOÁ ĐƠN  không ???", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						if(confirm == JOptionPane.YES_OPTION){
+							exportPDF();
+						}
+					});
+				}
+				
+				
 			}
+			{
+				JPanel panel = new JPanel();
+				buttonPane.add(panel);
+				panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+				{
+					ImageIcon imageIconExcel = new ImageIcon( "src/main/resources/images/icon/excel.png");
+					Image imageExcel = imageIconExcel.getImage().getScaledInstance(40, 40, Image.SCALE_SMOOTH); 
+					JLabel lblNewLabel_11 = new JLabel();
+					lblNewLabel_11.setOpaque(true);
+					lblNewLabel_11.setBackground(new Color(102, 255, 102));
+					lblNewLabel_11.setIcon(new ImageIcon(imageExcel));
+					lblNewLabel_11.setHorizontalTextPosition(SwingConstants.LEFT);
+					lblNewLabel_11.setHorizontalAlignment(SwingConstants.CENTER);
+					lblNewLabel_11.setMaximumSize(new Dimension(45, 45));
+					lblNewLabel_11.setPreferredSize(new Dimension(43, 45));
+					panel.add(lblNewLabel_11, BorderLayout.WEST);
+				}
+				
+				{
+					JButton okButton = new JButton("IN HOÁ ĐƠN");
+					okButton.setMaximumSize(new Dimension(127, 45));
+					panel.add(okButton);
+					okButton.setPreferredSize(new Dimension(127, 45));
+					okButton.setBackground(new Color(51, 255, 102));
+					okButton.setActionCommand("In Hoá Dơn");
+					getRootPane().setDefaultButton(okButton);
+					okButton.addActionListener(e->{
+						int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn XUẤT HOÁ ĐƠN (excel) không ???", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+						if(confirm == JOptionPane.YES_OPTION){
+							new ExportExcelOrder().exportExcel(DONHANG.getMaDH());
+						}
+					});
+				}
+				
+				
+				
+			}
+			
+			
 			
 		}
 	}
@@ -367,17 +432,24 @@ public class ChiTietDH_Dialog extends JDialog {
             e.printStackTrace();
         }
 		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setDialogTitle("Chọn thư mục để lưu đơn hàng");
+		chooser.setDialogTitle("Chọn nơi lưu báo cáo và đặt tên file");
+		chooser.setSelectedFile(new File("DonHang.pdf"));
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-		int returnVal = chooser.showSaveDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File selectedFolder = chooser.getSelectedFile();
-			String filePath = selectedFolder.getAbsolutePath() + File.separator + "DonHang_" + DONHANG.getMaDH() + ".pdf";
+		int result = chooser.showSaveDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = chooser.getSelectedFile();
+
+			// Nếu người dùng không nhập đuôi .pdf, thêm vào
+			if (!selectedFile.getName().toLowerCase().endsWith(".pdf")) {
+				selectedFile = new File(selectedFile.getAbsolutePath() + ".pdf");
+			}
+
+			System.out.println("File sẽ lưu: " + selectedFile.getAbsolutePath());
 			try {
 				// Tạo document mới
 				com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-        		com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        		com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
         		document.open();
 		
 				// Font hỗ trợ tiếng Việt
@@ -557,6 +629,14 @@ public class ChiTietDH_Dialog extends JDialog {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		try {
+		    // Trả về Look & Feel mặc định của Java (thường là Metal)
+		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		    // Cập nhật lại UI trên frame (nếu cần)
+		    SwingUtilities.updateComponentTreeUI(this); // yourFrame là JFrame hoặc JDialog
+		} catch (Exception e) {
+		    e.printStackTrace();
 		}
 	}
 	

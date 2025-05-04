@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import GUI.ComponentCommon.RoundedComponent;
+
 public class HomePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
@@ -38,6 +40,9 @@ public class HomePanel extends JPanel {
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.X_AXIS));
 // ==================================================================================================================
 		panelItem1 = new JPanel();
+		RoundedComponent.setRadius(12);
+		panelItem1 = RoundedComponent.createRoundedPanel(panelItem1, Color.white);
+		panelItem1.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelItem1.setLayout(new BoxLayout(panelItem1, BoxLayout.Y_AXIS));
         // panelCenter.add(panel);
         
@@ -70,6 +75,8 @@ public class HomePanel extends JPanel {
 // ==========================================================================================================================
 		// Thêm 2 panel trống vào
         JPanel panelItem2 = new JPanel();
+		panelItem2 = RoundedComponent.createRoundedPanel(panelItem2, Color.white);
+        panelItem2.setBorder(new EmptyBorder(10, 10, 10, 10));
 		ImageIcon icon1 = new ImageIcon("src/main/resources/images/icon/tinhchinhxac_128px.png");
         Image scaledImage1 = icon1.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         panelItem2.setLayout(new BoxLayout(panelItem2, BoxLayout.Y_AXIS));
@@ -102,6 +109,8 @@ public class HomePanel extends JPanel {
 // ===========================================================================================================
 
 		JPanel panelItem3 = new JPanel();
+		panelItem3 = RoundedComponent.createRoundedPanel(panelItem3, Color.white);
+		panelItem3.setBorder(new EmptyBorder(10, 10, 10, 10));
 		ImageIcon icon3 = new ImageIcon("src/main/resources/images/icon/tinhchinhxac_128px.png");
 		Image scaledImage3 = icon3.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 		panelItem3.setLayout(new BoxLayout(panelItem3, BoxLayout.Y_AXIS));
@@ -146,42 +155,33 @@ public class HomePanel extends JPanel {
 		box.add(panelItem1);
 		
 		JTextArea txtrGkfd = new JTextArea();
-		txtrGkfd.setText("Chúng tôi cung cấp các giải pháp phân tích thống kê giúp bạn nắm bắt rõ hơn về tình hình hoạt động của doanh nghiệp. \r\n" + //
-						"Đảm bảo chất lượng dữ liệu và tính chính xác của các báo cáo là yếu tố quyết định sự thành công của mọi chiến lược.\r\n" + //
-						"Với các công cụ phân tích hiện đại, chúng tôi giúp bạn hiểu rõ hơn về xu hướng và đưa ra quyết định chính xác.\r\n" + //
-						"\r\n"  //
+		txtrGkfd.setText("- Giúp theo dõi chi tiết số lượng hàng tồn kho, nhập – xuất chính xác theo thời gian thực.\r\n- Tự động cập nhật và cảnh báo khi hàng sắp hết, tránh thiếu hụt hoặc dư thừa.\r\n- Tiết kiệm thời gian, giảm thiểu thất thoát và nâng cao hiệu suất quản lý kho.\r\n\r\n"  //
 						);
 		txtrGkfd.setLineWrap(true); 
 		txtrGkfd.setWrapStyleWord(true);
-		txtrGkfd.setFont(new Font("Arial", Font.PLAIN, 16));
+		txtrGkfd.setFont(new Font("Arial", Font.PLAIN, 18));
 		txtrGkfd.setPreferredSize(new Dimension(200, 300));
 		panelItem1.add(txtrGkfd);
 		box.add(Box.createHorizontalStrut(30));
 		box.add(panelItem2);
 		
 		JTextArea textArea2 = new JTextArea();
-		textArea2.setText("Chúng tôi cung cấp các giải pháp phân tích thống kê giúp bạn nắm bắt rõ hơn về tình hình hoạt động của doanh nghiệp. \r\n" + //
-						"Đảm bảo chất lượng dữ liệu và tính chính xác của các báo cáo là yếu tố quyết định sự thành công của mọi chiến lược.\r\n" + //
-						"Với các công cụ phân tích hiện đại, chúng tôi giúp bạn hiểu rõ hơn về xu hướng và đưa ra quyết định chính xác.\r\n" + //
-						"\r\n"  //
+		textArea2.setText("- Cung cấp báo cáo doanh thu, chi phí, lợi nhuận theo ngày, tuần, tháng.\r\n- Giúp chủ cửa hàng nắm rõ tình hình kinh doanh và đưa ra quyết định kịp thời.\r\n- Dữ liệu trực quan, dễ hiểu, hỗ trợ phân tích xu hướng và lập kế hoạch hiệu quả.\r\r\n"  //
 						);
 		textArea2.setLineWrap(true); 
 		textArea2.setWrapStyleWord(true);
-		textArea2.setFont(new Font("Arial", Font.PLAIN, 16));
+		textArea2.setFont(new Font("Arial", Font.PLAIN, 18));
 		textArea2.setPreferredSize(new Dimension(200, 300));
 		panelItem2.add(textArea2);
 		box.add(Box.createHorizontalStrut(30));
 		box.add(panelItem3);
 		
 		JTextArea textArea3 = new JTextArea();
-		textArea3.setText("Chúng tôi cung cấp các giải pháp phân tích thống kê giúp bạn nắm bắt rõ hơn về tình hình hoạt động của doanh nghiệp. \r\n" + //
-						"Đảm bảo chất lượng dữ liệu và tính chính xác của các báo cáo là yếu tố quyết định sự thành công của mọi chiến lược.\r\n" + //
-						"Với các công cụ phân tích hiện đại, chúng tôi giúp bạn hiểu rõ hơn về xu hướng và đưa ra quyết định chính xác.\r\n" + //
-						"\r\n"  //
+		textArea3.setText("- Thiết kế trực quan, đơn giản hóa thao tác giúp ai cũng dễ sử dụng – kể cả người không rành công nghệ.\r\n- Tối ưu cho cả máy tính và thiết bị di động, thao tác nhanh chóng mọi lúc, mọi nơi.\r\n-Tiết kiệm thời gian đào tạo, phù hợp với nhiều mô hình cửa hàng.\r\n\r\n"  //
 						);
 		textArea3.setLineWrap(true); 
 		textArea3.setWrapStyleWord(true);
-		textArea3.setFont(new Font("Arial", Font.PLAIN, 16));
+		textArea3.setFont(new Font("Arial", Font.PLAIN, 18));
 		textArea3.setPreferredSize(new Dimension(200, 300));
 		panelItem3.add(textArea3);
 		box.add(Box.createHorizontalGlue());
@@ -218,6 +218,7 @@ public class HomePanel extends JPanel {
         editorPaneTieuDe.setOpaque(false);
 		
 		JPanel panel_4 = new JPanel();
+		panel_4 = RoundedComponent.createRoundedPanel(panel_4, Color.WHITE);
 		panel_4.add(editorPaneTieuDe);
 		panel_2.add(panel_4, BorderLayout.CENTER);
 

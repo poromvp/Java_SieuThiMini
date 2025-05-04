@@ -49,10 +49,13 @@ public class ButtonCustom extends JButton {
         setVerticalTextPosition(SwingConstants.BOTTOM);
         setMaximumSize(new Dimension(Integer.MAX_VALUE, getPreferredSize().height));
         setForeground(Color.BLACK);
+    
         setBorderPainted(false);
-        setContentAreaFilled(false);
+        setContentAreaFilled(true);             // Cho phép tô nền
         setFocusPainted(false);
-
+        setOpaque(true);                        // Bắt buộc vẽ nền
+        setBackground(Color.WHITE);            // Màu nền trắng
+    
         ImageIcon icon = switch (type) {
             case "add" -> new ImageIcon("src/main/resources/images/icon/addIcon.png");
             case "del" -> new ImageIcon("src/main/resources/images/icon/delIcon.png");
@@ -65,17 +68,18 @@ public class ButtonCustom extends JButton {
             case "exportExcel" -> new ImageIcon("src/main/resources/images/icon/exportExcel.png");
             default -> null;
         };
-
+    
         if (icon != null) {
             setIcon(resizeIcon(icon, w, h));
         }
-
-        // Thiết lập màu nền mặc định (có thể sửa nếu muốn mỗi icon 1 màu)
-        originalColor = new Color(230, 230, 230);
+    
+        // Thiết lập màu nền gốc
+        originalColor = Color.WHITE;
         bgColor = originalColor;
-
-        applyMouseEffects();
+    
+        applyMouseEffects();  // Nếu có hiệu ứng di chuột, giữ lại
     }
+    
 
     private void applyMouseEffects() {
         this.addMouseListener(new MouseAdapter() {
@@ -136,6 +140,7 @@ public class ButtonCustom extends JButton {
         g2.dispose();
         super.paintComponent(g);
     }
+    
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Test ButtonCustom");

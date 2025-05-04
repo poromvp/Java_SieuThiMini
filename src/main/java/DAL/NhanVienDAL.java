@@ -45,6 +45,28 @@ public class NhanVienDAL {
     
         return list;
     }
+    public static List<String> getAllKhuVuc() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT DiaChi FROM NhanVien WHERE TrangThai = 1";
+        ResultSet rs = DBConnection.executeQuery(sql);
+        
+        try {
+            while (rs != null && rs.next()) {
+                String khuVuc = rs.getString("DiaChi");
+                list.add(khuVuc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return list;
+    }
     public List<NhanVienDTO> getAllNhanVien0() {
         List<NhanVienDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM NhanVien where trangThai = 0";
@@ -210,5 +232,32 @@ public class NhanVienDAL {
         return null;
     }
 
-    
+
+    public NhanVienDTO getNhanVienById(int maNV) {
+        try {
+            String sql = "SELECT * FROM NhanVien WHERE MaNV = ?";
+            ResultSet rs = DBConnection.executeQuery(sql,maNV);
+
+            if (rs.next()) {
+                NhanVienDTO nv = new NhanVienDTO();
+                nv.setMaNV(rs.getInt("MaNV"));
+                nv.setTenNV(rs.getString("TenNV"));
+                nv.setGioiTinh(rs.getString("GioiTinh"));
+                nv.setNgaySinh(rs.getDate("NgaySinh"));
+                nv.setCCCD(rs.getString("CCCD"));
+                nv.setDiaChi(rs.getString("DiaChi"));
+                nv.setSDT(rs.getString("SDT"));
+                nv.setLuong(rs.getDouble("Luong"));
+                nv.setTrangThai(rs.getInt("TrangThai"));
+
+                nv.setImage(rs.getString("Image"));
+
+                return nv;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }

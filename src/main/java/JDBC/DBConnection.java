@@ -11,7 +11,7 @@ public class DBConnection {
     private static Connection connection;
     private static final String URL = "jdbc:mysql://localhost:3306/SIEUTHIMINI?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC&autoReconnect=true";
     private static final String USERNAME = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "Bestngulon50024072#";
 
     // Mở kết nối đến CSDL
     public static Connection getConnection() {

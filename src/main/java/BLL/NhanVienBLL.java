@@ -51,9 +51,12 @@ public class NhanVienBLL {
     public String getNameNV (String maNV){
         return dal.getNameNhanVien(maNV);
     }
+    public static List<String> getDanhSachKhuVuc() {
+        return NhanVienDAL.getAllKhuVuc();
+    }
 
     public boolean isNhanVienExists(int maNV) {
         return dal.getNhanVienById(maNV) != null;
     }
-    
+
 }

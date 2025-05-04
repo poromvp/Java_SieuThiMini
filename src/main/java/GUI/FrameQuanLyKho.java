@@ -102,6 +102,8 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
             panelSupplier();
         } else if(e.getSource()==pn_leftMenu.getBtnLogout()){
             JOptionPane.showMessageDialog(this, "Bạn đã đăng xuất.");
+            this.dispose();
+            new FrameLogin();
         }
     }
 }

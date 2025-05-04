@@ -45,6 +45,28 @@ public class NhanVienDAL {
     
         return list;
     }
+    public static List<String> getAllKhuVuc() {
+        List<String> list = new ArrayList<>();
+        String sql = "SELECT DISTINCT DiaChi FROM NhanVien WHERE TrangThai = 1";
+        ResultSet rs = DBConnection.executeQuery(sql);
+        
+        try {
+            while (rs != null && rs.next()) {
+                String khuVuc = rs.getString("DiaChi");
+                list.add(khuVuc);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return list;
+    }
     public List<NhanVienDTO> getAllNhanVien0() {
         List<NhanVienDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM NhanVien where trangThai = 0";

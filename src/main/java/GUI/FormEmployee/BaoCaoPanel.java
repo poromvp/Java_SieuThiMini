@@ -24,7 +24,9 @@ import BLL.NhanVienBLL;
 import BLL.SearchFilterBLL;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
+import EXCEL.ExportExcelReport;
 import GUI.Admin_PanelThongKe.PanelTimThK;
+import GUI.ComponentCommon.RoundedComponent;
 import GUI.ComponentCommon.TienIch;
 import PDF.ChiTietBC_Dialog;
 import PDF.ChiTietDH_Dialog;
@@ -103,6 +105,8 @@ public class BaoCaoPanel extends JPanel {
 		panel_1.setLayout(new GridLayout(0, 2, 10, 0));
 		
 		JPanel panel_DonHang = new JPanel();
+		RoundedComponent.setRadius(13);
+		// panel_DonHang = RoundedComponent.createRoundedPanel(panel_DonHang, new Color(0, 153, 153));
 		panel_1.add(panel_DonHang);
 		panel_DonHang.setBorder(new EmptyBorder(10, 10, 10, 10));
 		panel_DonHang.setBackground(new Color(0, 153, 153));
@@ -316,6 +320,23 @@ public class BaoCaoPanel extends JPanel {
 				panel_PDF.setBackground(new Color(219, 112, 147));
 			}
 		});
+
+		panel_Excel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new ExportExcelReport().exportExcel();
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				panel_Excel.setBackground(new Color(123, 168, 123));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				panel_Excel.setBackground(new Color(143, 188, 143));
+			}
+		});
+
+
 
 		tableOrder.addMouseListener(new MouseAdapter() {
 			@Override

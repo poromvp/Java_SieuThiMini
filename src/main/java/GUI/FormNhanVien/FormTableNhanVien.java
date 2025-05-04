@@ -3,6 +3,7 @@ package GUI.FormNhanVien;
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
 import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.TienIch;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -54,7 +55,7 @@ public class FormTableNhanVien extends JPanel {
                 data[i][4] = nv.getCCCD();
                 data[i][5] = nv.getDiaChi();
                 data[i][6] = nv.getSDT();
-                data[i][7] = nv.getLuong();
+                data[i][7] = TienIch.formatVND(nv.getLuong());
                 data[i][8] = nv.getTrangThai()==1 ? "Đang làm việc" : "Nghỉ việc";
             }
     
@@ -86,7 +87,7 @@ public class FormTableNhanVien extends JPanel {
                 newData[i][4] = nv.getCCCD();
                 newData[i][5] = nv.getDiaChi();
                 newData[i][6] = nv.getSDT();
-                newData[i][7] = nv.getLuong();
+                newData[i][7] = TienIch.formatVND(nv.getLuong());
                 newData[i][8] = nv.getTrangThai() == 1 ? "Đang làm việc" : "Nghỉ việc";
             }
     
@@ -128,7 +129,7 @@ public class FormTableNhanVien extends JPanel {
                 newData[i][4] = nv.getCCCD();
                 newData[i][5] = nv.getDiaChi();
                 newData[i][6] = nv.getSDT();
-                newData[i][7] = nv.getLuong();
+                newData[i][7] = TienIch.formatVND(nv.getLuong());
                 newData[i][8] = nv.getTrangThai() == 1 ? "Đang làm việc" : "Nghỉ việc";
             }
     
@@ -250,7 +251,7 @@ public class FormTableNhanVien extends JPanel {
                 newData[i][4] = nv.getCCCD();
                 newData[i][5] = nv.getDiaChi();
                 newData[i][6] = nv.getSDT();
-                newData[i][7] = nv.getLuong();
+                newData[i][7] = TienIch.formatVND(nv.getLuong());
                 newData[i][8] = nv.getTrangThai() == 1 ? "Đang làm việc" : "Nghỉ việc";
             }
         

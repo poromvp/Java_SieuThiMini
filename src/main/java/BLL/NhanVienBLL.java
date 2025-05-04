@@ -52,5 +52,8 @@ public class NhanVienBLL {
         return dal.getNameNhanVien(maNV);
     }
 
+    public boolean isNhanVienExists(int maNV) {
+        return dal.getNhanVienById(maNV) != null;
+    }
     
 }

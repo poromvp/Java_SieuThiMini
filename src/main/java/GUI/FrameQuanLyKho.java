@@ -11,8 +11,10 @@ import java.awt.event.*;
 public class FrameQuanLyKho extends JFrame  implements ActionListener{
     private JPanel rightPn;
     private LeftMenuWareHouse pn_leftMenu;
+    private String maNV;
 
     public FrameQuanLyKho(String maNV){
+        this.maNV=maNV;
         setTitle("Frame Quản Lý Kho");
         setSize(1300,750);
         setLocationRelativeTo(null);
@@ -44,7 +46,7 @@ public class FrameQuanLyKho extends JFrame  implements ActionListener{
         rightPn.removeAll();
         rightPn.setLayout(new BorderLayout());
 
-        FormImport importPanel = new FormImport();
+        FormImport importPanel = new FormImport(maNV);
         rightPn.add(importPanel, BorderLayout.CENTER);
 
         rightPn.revalidate();

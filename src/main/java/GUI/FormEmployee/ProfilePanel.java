@@ -1,67 +1,46 @@
 package GUI.FormEmployee;
 
-import javax.swing.JPanel;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-
 import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.Color;
 import java.awt.Dimension;
-
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import com.toedter.calendar.JDateChooser;
-
-import DTO.NhanVienDTO;
-
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Font;
-import java.awt.FlowLayout;
-
-import javax.swing.JRadioButton;
-
-import java.awt.Color;
-
-import javax.swing.border.EmptyBorder;
-
-import java.awt.Button;
-
-import javax.swing.JPasswordField;
-
 import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
+import com.toedter.calendar.JDateChooser;
 
 import BLL.NhanVienBLL;
 import BLL.TaiKhoanBLL;
+import DTO.NhanVienDTO;
 import DTO.TaiKhoanDTO;
-
-import javax.swing.JScrollPane;
-
-import DAL.NhanVienDAL;
-import javax.swing.SwingConstants;
-import java.io.*;
-import java.nio.file.*;
 
 
 
@@ -87,6 +66,7 @@ public class ProfilePanel extends JPanel {
 	JButton btnDoiAnh = new JButton("Đổi ảnh");
 	JButton btnLuuAnh = new JButton("Lưu ảnh");
 	String imgPath = "";
+	JPanel panel_Anh = new JPanel();
 	String imgFolder = "src/main/resources/images/avtEmployee/";
 
 
@@ -101,32 +81,20 @@ public class ProfilePanel extends JPanel {
 	private static TaiKhoanDTO TAIKHOAN  = new TaiKhoanDTO(1, "TRINHKHANG", "12345", "98654398765", "5678", "email", "76", "");
 	private JTextField text_Email;
 	private JTextField text_Quyen;
+
+	public static int getMaNhanVien(){
+		return TAIKHOAN.getMaNV();
+	}
 	
 
 	/**
 	 * Create the panel.
 	 */
-	public ProfilePanel() {
-    try {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date ngaySinh = sdf.parse("2000-01-01");
-
-        NHANVIEN = new NhanVienDTO(
-            1,
-            "Nguyễn Văn A",
-            ngaySinh,
-            "Nam",
-            "123 Đường ABC, Quận 1",
-            "0123456789",
-            "123456789012",
-            8000000.0,
-            1
-        );
-
-    } catch (ParseException  e) {
-        e.printStackTrace();
-    }
-
+	public ProfilePanel(int maNV) {
+		NhanVienBLL nvBLL = new NhanVienBLL();
+		NHANVIEN = nvBLL.getNhanVienByMa(maNV + "");
+		TaiKhoanBLL tkBLL = new TaiKhoanBLL();
+		TAIKHOAN = tkBLL.getTaiKhoanById(maNV);
 
 
 		setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -193,7 +161,7 @@ public class ProfilePanel extends JPanel {
 		
 		JLabel lblQuyen = new JLabel("Quyền");
 		lblQuyen.setFont(new Font("Arial", Font.BOLD, 14));
-		lblQuyen.setMinimumSize(new Dimension(2243, 13));
+		lblQuyen.setMinimumSize(new Dimension(1243, 13));
 		lblQuyen.setPreferredSize(new Dimension(43, 30));
 		panel_3.add(lblQuyen);
 		
@@ -205,28 +173,34 @@ public class ProfilePanel extends JPanel {
 		text_Quyen.setColumns(10);
 		panel.add(Box.createHorizontalStrut(10));
 		JPanel panel_1 = new JPanel();
+		panel_1.setPreferredSize(new Dimension(180, 10));
 		panel.add(panel_1);
 		panel_1.setLayout(new GridLayout(0, 1, 10, 5));
 		
 		btn_DoiTenOrMatKhau = new JButton("Đổi Tên/Mật khẩu");
+		btn_DoiTenOrMatKhau.setBackground(new Color(153, 204, 255));
 		panel_1.add(btn_DoiTenOrMatKhau);
 		
-		panel_1.add(btnDoiAnh);
+		JPanel panel_5 = new JPanel();
+		panel_1.add(panel_5);
+		panel_5.setLayout(new GridLayout(0, 2, 10, 10));
+		btnDoiAnh.setBackground(new Color(153, 204, 255));
+		panel_5.add(btnDoiAnh);
 		btnDoiAnh.setMinimumSize(new Dimension(100, 21));
-		
-		panel_1.add(btnLuuAnh);
+		btnLuuAnh.setBackground(new Color(153, 204, 255));
+		panel_5.add(btnLuuAnh);
+		btnLuuAnh.setEnabled(false);
 		
 		
 		
 		panel_AnhContainer.add(Box.createHorizontalStrut(10));
 
-		JPanel panel_Anh = new JPanel();
 		panel_Anh.setPreferredSize(new Dimension(200, 200));
 		panel_Anh.setMaximumSize(new Dimension(200, 32767));
 		panel_AnhContainer.add(panel_Anh);
 		panel_Anh.setLayout(new BorderLayout(0, 0));
 		lbl_anh.setHorizontalAlignment(SwingConstants.CENTER);
-		ImageIcon imageIcon = new ImageIcon(imgFolder = "src/main/resources/images/avtEmployee/" + NHANVIEN.getImage());
+		ImageIcon imageIcon = new ImageIcon(imgFolder  + NHANVIEN.getImage());
 		Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH); 
 		lbl_anh.setIcon(new ImageIcon(image));
 		panel_Anh.add(lbl_anh, BorderLayout.CENTER);
@@ -365,6 +339,7 @@ public class ProfilePanel extends JPanel {
 		lbl_NgaySinh.setPreferredSize(new Dimension(343, 30));
 		panel_NgaySinh.add(lbl_NgaySinh);
 		dateChooserNgaySinh = new JDateChooser();
+		dateChooserNgaySinh.setFont(new Font("Arial", Font.BOLD, 15));
 		dateChooserNgaySinh.getCalendarButton().setBackground(new Color(255, 255, 255));
 		dateChooserNgaySinh.setBackground(new Color(152, 251, 152));
 		dateChooserNgaySinh.setEnabled(false);
@@ -421,16 +396,18 @@ public class ProfilePanel extends JPanel {
 		JPanel panel_2 = new JPanel();
 		panel_ThongTin2.add(panel_2);
 		panel_2.setMaximumSize(new Dimension(32767, 65));
+		btnSuaThongTin.setBackground(new Color(51, 153, 204));
 		
 		panel_2.add(btnSuaThongTin);
+		btnLuuThongTin.setBackground(new Color(102, 153, 204));
 		
 		panel_2.add(btnLuuThongTin);
+		btnHuyLuu.setBackground(new Color(102, 153, 204));
 		
 		panel_2.add(btnHuyLuu);
 
 		btnLuuThongTin.setVisible(false);
 		btnHuyLuu.setVisible(false);
-		btnLuuAnh.setVisible(false);
 
 		addEvent();
 		loadThongTin();
@@ -620,7 +597,7 @@ public class ProfilePanel extends JPanel {
 		text_SDT.setText(NHANVIEN.getSDT());
 		text_Email.setText(TAIKHOAN.getGmail());
 		text_Quyen.setText(TAIKHOAN.getQuyen());
-		ImageIcon imageIcon = new ImageIcon(imgFolder = "src/main/resources/images/avtEmployee/" + NHANVIEN.getImage());
+		ImageIcon imageIcon = new ImageIcon(imgFolder  + NHANVIEN.getImage());
 		Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH); 
 		lbl_anh.setIcon(new ImageIcon(image));
 		if(NHANVIEN.getGioiTinh().equalsIgnoreCase("nam")){
@@ -716,6 +693,7 @@ public class ProfilePanel extends JPanel {
 
 
 	public  String chonAnhTuLocal() {
+		
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chọn ảnh");
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -729,8 +707,8 @@ public class ProfilePanel extends JPanel {
 			Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH); 
 			lbl_anh.setIcon(new ImageIcon(image));
 		
-			btnDoiAnh.setVisible(false);
-			btnLuuAnh.setVisible(true);
+			btnDoiAnh.setEnabled(false);
+			btnLuuAnh.setEnabled(true);
             return path;
 
         }
@@ -758,12 +736,21 @@ public class ProfilePanel extends JPanel {
 				NHANVIEN.setImage(fileName);
 				NhanVienBLL nvBLL = new NhanVienBLL();
 				nvBLL.updateNhanVien(NHANVIEN);
-				btnDoiAnh.setVisible(true);
-				btnLuuAnh.setVisible(false);
+				btnDoiAnh.setEnabled(true);
+				btnLuuAnh.setEnabled(false);
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.err.println("Lỗi khi lưu ảnh vào project.");
 			}
+
+		}
+		if(confirm == JOptionPane.NO_OPTION){
+			ImageIcon imageIcon = new ImageIcon(imgFolder  + NHANVIEN.getImage());
+			Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH); 
+			lbl_anh.setIcon(new ImageIcon(image));
+			panel_Anh.add(lbl_anh, BorderLayout.CENTER);
+			btnDoiAnh.setEnabled(true);
+			btnLuuAnh.setEnabled(false);
 
 		}
 	}
@@ -774,7 +761,7 @@ public class ProfilePanel extends JPanel {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setSize(900, 500);
 		frame.setLocationRelativeTo(null);
-		frame.getContentPane().add(new ProfilePanel(), BorderLayout.CENTER);
+		frame.getContentPane().add(new ProfilePanel(1), BorderLayout.CENTER);
 		frame.setVisible(true);
 	}
 

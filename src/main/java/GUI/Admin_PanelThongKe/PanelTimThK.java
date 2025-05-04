@@ -13,11 +13,11 @@ public class PanelTimThK extends JPanel {
 
     // Khai báo các biến instance để truy cập từ các phương thức khác
     private static JTextField txtMaDonHang;
-    private static JDateChooser dateChooserBatDau;
+    private static JDateChooser dateChooserBatDau = new JDateChooser();
     private static JTextField txtLoaiSanPham;
     private static SpinnerNumberModel min, max;
     private static JSpinner Max, Min;
-    private static JDateChooser dateChooserKetThuc;
+    private static JDateChooser  dateChooserKetThuc = new JDateChooser();
     private static JTextField txtMaNhanVien;
     private static JTextField txtTenNhanVien;
     private static JComboBox<String> cboSapXep;
@@ -30,6 +30,25 @@ public class PanelTimThK extends JPanel {
     private static JTextField txtMaSanPham;
     private static JTextField txtTenSanPham;
     private static JTextField txtMaLoaiSanPham;
+
+    JLabel lblMaNhanVien = new JLabel("Mã nhân viên");
+    JLabel lblTenNhanVien = new JLabel("Tên nhân viên");
+
+    public java.sql.Date getNgayBatDau() {
+        java.util.Date utilDate = dateChooserBatDau.getDate();
+        if(utilDate != null){
+            return new java.sql.Date(utilDate.getTime());
+        }
+        return null;
+    }
+    public java.sql.Date getNgayKetThuc() {
+        java.util.Date utilDate = dateChooserKetThuc.getDate();
+        if(utilDate != null){
+            return new java.sql.Date(utilDate.getTime());
+        }
+        return null;
+    }
+    
 
     public PanelTimThK() {
         setBackground(new Color(33,58,89));
@@ -58,7 +77,7 @@ public class PanelTimThK extends JPanel {
         gbc.gridy = 0;
         add(lblNgayBatDau, gbc);
 
-        dateChooserBatDau = new JDateChooser();
+   
         dateChooserBatDau.setDateFormatString("dd/MM/yyyy");
         dateChooserBatDau.setMaxSelectableDate(new java.util.Date());
         TienIch.checkngaynhaptutay(dateChooserBatDau, new java.sql.Date(System.currentTimeMillis()));
@@ -73,7 +92,7 @@ public class PanelTimThK extends JPanel {
         gbc.gridy = 0;
         add(lblNgayKetThuc, gbc);
 
-        dateChooserKetThuc = new JDateChooser();
+       
         dateChooserKetThuc.setDateFormatString("dd/MM/yyyy");
         dateChooserKetThuc.setMaxSelectableDate(new java.util.Date());
         TienIch.checkngaynhaptutay(dateChooserKetThuc, new java.sql.Date(System.currentTimeMillis()));
@@ -235,7 +254,6 @@ public class PanelTimThK extends JPanel {
         add(txtLoaiSanPham, gbc);
 
         // Dòng 7: Mã nhân viên, Tên nhân viên
-        JLabel lblMaNhanVien = new JLabel("Mã nhân viên");
         TienIch.timStyle(lblMaNhanVien);
         gbc.gridx = 0;
         gbc.gridy = 6;
@@ -247,7 +265,6 @@ public class PanelTimThK extends JPanel {
         gbc.gridy = 6;
         add(txtMaNhanVien, gbc);
 
-        JLabel lblTenNhanVien = new JLabel("Tên nhân viên");
         TienIch.timStyle(lblTenNhanVien);
         gbc.gridx = 2;
         gbc.gridy = 6;
@@ -292,7 +309,17 @@ public class PanelTimThK extends JPanel {
         System.out.println("Bạn đã nhập " + search.getMaDH());
     }
 
-    public static SearchFilterDTO filter(){
+    public void setVisibleNhanVien( boolean flag){
+        lblMaNhanVien.setVisible(flag);
+        lblTenNhanVien.setVisible(flag);
+        txtTenNhanVien.setVisible(flag);
+        txtMaNhanVien.setVisible(flag);
+    }
+    public void setMaNhanVien(int maNV){
+        txtMaNhanVien.setText(maNV + "");
+    }
+
+    public  SearchFilterDTO filter(){
         SearchFilterDTO search = new SearchFilterDTO();
         search.setMaDH(txtMaDonHang.getText().isEmpty()? null: Integer.parseInt(txtMaDonHang.getText()));
         search.setMaKH(txtMaKhachHang.getText().isEmpty()? null : Integer.parseInt(txtMaKhachHang.getText()));
@@ -315,11 +342,14 @@ public class PanelTimThK extends JPanel {
         return search;
     }
 
+
     
     public static void main(String[] args) {
         JFrame frame = new JFrame("Panel Tìm Thống Kê");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.add(new PanelTimThK());
+        PanelTimThK a = new PanelTimThK();
+        a.setVisibleNhanVien(false);
+        frame.add(a);
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);

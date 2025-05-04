@@ -1,283 +1,302 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
-import java.awt.*;
-
 import com.toedter.calendar.JDateChooser;
 
+import BLL.BaoCaoNhanVienBLL;
+import DTO.NhanVienDTO;
+import DTO.SearchNhanVienDTO;
+import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.TienIch;
+import java.awt.*;
+import java.util.ArrayList;
+import java.sql.Date;
 
 public class PanelTimVN extends JPanel {
-    // Khai báo các biến instance để truy cập từ các phương thức khác
-    private JTextField txtMaDonHang;
-    private JDateChooser dateChooserBatDau;
-    private JTextField txtLoaiSanPham;
-    private SpinnerNumberModel min, max;
-    private JSpinner Max, Min;
-    private JDateChooser dateChooserKetThuc;
-    private JTextField txtMaNhanVien;
-    private JTextField txtTenNhanVien;
-    private JComboBox<String> cboSapXep;
-    private JComboBox<String> cboTheoCot;
-    private JTextField txtMaKhachHang;
-    private JTextField txtTenKhachHang;
-    private JTextField txtMaKhuyenMai;
-    private JTextField txtTenKhuyenMai;
-    private JComboBox<String> cboPhuongThucThanhToan;
-    private JTextField txtMaSanPham;
-    private JTextField txtTenSanPham;
-    private JTextField txtMaLoaiSanPham;
+
+    private StyledTextField txtMaNV, txtTenNV, txtDiaChi, txtSoDienThoai, txtMaDonHang;
+    private JDateChooser dateSinhFrom, dateSinhTo;
+    private JComboBox<String> cbChucVu, cbSapXep, cbTheoCot;
+    private JSpinner minTongDonHang, maxTongDonHang, minDoanhSo, maxDoanhSo, minLuong, maxLuong;
 
     public PanelTimVN() {
-        setBackground(new Color(33,58,89));
-        // Thiết lập layout chính cho panel
+        setBackground(new Color(33, 58, 89));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5); // Khoảng cách giữa các thành phần
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(5, 10, 5, 10);
+        gbc.fill = GridBagConstraints.BOTH;
 
-        // Dòng 1: Mã đơn hàng, Ngày bắt đầu, Ngày kết thúc
-        JLabel lblMaDonHang = new JLabel("Mã đơn hàng");
-        TienIch.timStyle(lblMaDonHang);
+        Date today = new Date(System.currentTimeMillis());
+
+        // Dòng 0: Mã nhân viên, Tên nhân viên, Địa chỉ, ảnh gif
+        JLabel lbMaNV = new JLabel("Mã nhân viên");
+        TienIch.timStyle(lbMaNV);
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(lblMaDonHang, gbc);
+        add(lbMaNV, gbc);
 
-        txtMaDonHang = new JTextField(10);
-        TienIch.timStyle(txtMaDonHang);
+        txtMaNV = new StyledTextField(1, 10);
+        txtMaNV.setPlaceholder("Nhập mã nhân viên");
+        TienIch.timStyle(txtMaNV);
         gbc.gridx = 1;
         gbc.gridy = 0;
-        add(txtMaDonHang, gbc);
+        add(txtMaNV, gbc);
 
-        JLabel lblNgayBatDau = new JLabel("Ngày bắt đầu");
-        TienIch.timStyle(lblNgayBatDau);
+        JLabel lbTenNV = new JLabel("Tên nhân viên");
+        TienIch.timStyle(lbTenNV);
         gbc.gridx = 2;
         gbc.gridy = 0;
-        add(lblNgayBatDau, gbc);
+        add(lbTenNV, gbc);
 
-        dateChooserBatDau = new JDateChooser();
-        dateChooserBatDau.setDateFormatString("dd/MM/yyyy");
-        dateChooserBatDau.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateChooserBatDau, new java.sql.Date(System.currentTimeMillis()));
-        TienIch.timStyle(dateChooserBatDau);
+        txtTenNV = new StyledTextField(1, 10);
+        txtTenNV.setPlaceholder("Nhập tên nhân viên");
+        TienIch.timStyle(txtTenNV);
         gbc.gridx = 3;
         gbc.gridy = 0;
-        add(dateChooserBatDau, gbc);
+        add(txtTenNV, gbc);
 
-        JLabel lblNgayKetThuc = new JLabel("Ngày kết thúc");
-        TienIch.timStyle(lblNgayKetThuc);
+        JLabel lbDiaChi = new JLabel("Địa chỉ");
+        TienIch.timStyle(lbDiaChi);
         gbc.gridx = 4;
         gbc.gridy = 0;
-        add(lblNgayKetThuc, gbc);
+        add(lbDiaChi, gbc);
 
-        dateChooserKetThuc = new JDateChooser();
-        dateChooserKetThuc.setDateFormatString("dd/MM/yyyy");
-        dateChooserKetThuc.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateChooserKetThuc, new java.sql.Date(System.currentTimeMillis()));
-        TienIch.timStyle(dateChooserKetThuc);
+        txtDiaChi = new StyledTextField(1, 10);
+        txtDiaChi.setPlaceholder("Nhập địa chỉ");
+        TienIch.timStyle(txtDiaChi);
         gbc.gridx = 5;
         gbc.gridy = 0;
-        add(dateChooserKetThuc, gbc);
+        add(txtDiaChi, gbc);
 
-        // Dòng 2: Tổng tiền min, Tổng tiền max, Phương thức thanh toán
-        JLabel lblTongTienMin = new JLabel("Tổng tiền min");
-        TienIch.timStyle(lblTongTienMin);
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(lblTongTienMin, gbc);
-
-        min = new SpinnerNumberModel(5000, 5000, 9000000, 5000);
-        Min = new JSpinner(min);
-        TienIch.timStyle(Min);
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        add(Min, gbc);
-
-        JLabel lblTongTienMax = new JLabel("Tổng tiền max");
-        TienIch.timStyle(lblTongTienMax);
-        gbc.gridx = 2;
-        gbc.gridy = 1;
-        add(lblTongTienMax, gbc);
-
-        max = new SpinnerNumberModel(100000, 5000, 9000000, 5000);
-        Max = new JSpinner(max);
-        TienIch.timStyle(Max);
-        gbc.gridx = 3;
-        gbc.gridy = 1;
-        add(Max, gbc);
-
-        JLabel lblPhuongThucThanhToan = new JLabel("Phương thức thanh toán");
-        TienIch.timStyle(lblPhuongThucThanhToan);
-        gbc.gridx = 4;
-        gbc.gridy = 1;
-        add(lblPhuongThucThanhToan, gbc);
-
-        cboPhuongThucThanhToan = new JComboBox<>(new String[] { "BANK", "CASH" });
-        TienIch.timStyle(cboPhuongThucThanhToan);
-        gbc.gridx = 5;
-        gbc.gridy = 1;
-        add(cboPhuongThucThanhToan, gbc);
-
-        // Dòng 3: Mã khách hàng, Tên khách hàng
-        JLabel lblMaKhachHang = new JLabel("Mã khách hàng");
-        TienIch.timStyle(lblMaKhachHang);
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(lblMaKhachHang, gbc);
-
-        txtMaKhachHang = new JTextField(10);
-        TienIch.timStyle(txtMaKhachHang);
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        add(txtMaKhachHang, gbc);
-
-        JLabel lblTenKhachHang = new JLabel("Tên khách hàng");
-        TienIch.timStyle(lblTenKhachHang);
-        gbc.gridx = 2;
-        gbc.gridy = 2;
-        add(lblTenKhachHang, gbc);
-
-        txtTenKhachHang = new JTextField(10);
-        TienIch.timStyle(txtTenKhachHang);
-        gbc.gridx = 3;
-        gbc.gridy = 2;
-        add(txtTenKhachHang, gbc);
-
+        // GIF - chiếm 2 cột, 5 dòng
         JLabel gifIMG = new JLabel();
-        TienIch.anhGif(gifIMG, "searching.gif", 380, 250);
+        TienIch.anhGif(gifIMG, "searching.gif", 320, 180);
         gbc.gridx = 4;
         gbc.gridy = 2;
-        gbc.gridheight = 6;
+        gbc.gridheight = 5;
         gbc.gridwidth = 2;
         add(gifIMG, gbc);
         gbc.gridheight = 1;
         gbc.gridwidth = 1;
 
-        // Dòng 4: Mã khuyến mãi, Tên khuyến mãi
+        // Dòng 1: Ngày sinh từ, Ngày sinh đến, Chức vụ
+        JLabel lbNgaySinhTu = new JLabel("Ngày sinh từ");
+        TienIch.timStyle(lbNgaySinhTu);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        add(lbNgaySinhTu, gbc);
 
-        JLabel lblMaKhuyenMai = new JLabel("Mã khuyến mãi");
-        TienIch.timStyle(lblMaKhuyenMai);
+        dateSinhFrom = new JDateChooser();
+        dateSinhFrom.setMaxSelectableDate(today);
+        dateSinhFrom.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutay(dateSinhFrom, today);
+        TienIch.timStyle(dateSinhFrom);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        add(dateSinhFrom, gbc);
+
+        JLabel lbNgaySinhDen = new JLabel("Ngày sinh đến");
+        TienIch.timStyle(lbNgaySinhDen);
+        gbc.gridx = 2;
+        gbc.gridy = 1;
+        add(lbNgaySinhDen, gbc);
+
+        dateSinhTo = new JDateChooser();
+        dateSinhTo.setMaxSelectableDate(today);
+        dateSinhTo.setDateFormatString("dd/MM/yyyy");
+        TienIch.checkngaynhaptutay(dateSinhTo, today);
+        TienIch.timStyle(dateSinhTo);
+        gbc.gridx = 3;
+        gbc.gridy = 1;
+        add(dateSinhTo, gbc);
+
+        JLabel lbChucVu = new JLabel("Chức vụ");
+        TienIch.timStyle(lbChucVu);
+        gbc.gridx = 4;
+        gbc.gridy = 1;
+        add(lbChucVu, gbc);
+
+        cbChucVu = new JComboBox<>(new String[]{"TẤT CẢ", "ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN"});
+        TienIch.timStyle(cbChucVu);
+        gbc.gridx = 5;
+        gbc.gridy = 1;
+        add(cbChucVu, gbc);
+
+        // Dòng 2: Số điện thoại, Mã đơn hàng
+        JLabel lbSoDienThoai = new JLabel("Số điện thoại");
+        TienIch.timStyle(lbSoDienThoai);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        add(lbSoDienThoai, gbc);
+
+        txtSoDienThoai = new StyledTextField(1, 10);
+        txtSoDienThoai.setPlaceholder("Nhập số điện thoại");
+        TienIch.timStyle(txtSoDienThoai);
+        gbc.gridx = 1;
+        gbc.gridy = 2;
+        add(txtSoDienThoai, gbc);
+
+        JLabel lbMaDonHang = new JLabel("Mã đơn hàng");
+        TienIch.timStyle(lbMaDonHang);
+        gbc.gridx = 2;
+        gbc.gridy = 2;
+        add(lbMaDonHang, gbc);
+
+        txtMaDonHang = new StyledTextField(1, 10);
+        txtMaDonHang.setPlaceholder("Nhập mã đơn hàng");
+        TienIch.timStyle(txtMaDonHang);
+        gbc.gridx = 3;
+        gbc.gridy = 2;
+        add(txtMaDonHang, gbc);
+
+        // Dòng 3: Tổng đơn hàng từ, Tổng đơn hàng đến
+        JLabel lbTongDonHangTu = new JLabel("Tổng đơn hàng từ");
+        TienIch.timStyle(lbTongDonHangTu);
         gbc.gridx = 0;
         gbc.gridy = 3;
-        add(lblMaKhuyenMai, gbc);
+        add(lbTongDonHangTu, gbc);
 
-        txtMaKhuyenMai = new JTextField(10);
-        TienIch.timStyle(txtMaKhuyenMai);
+        minTongDonHang = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000, 1));
+        TienIch.timStyle(minTongDonHang);
         gbc.gridx = 1;
         gbc.gridy = 3;
-        add(txtMaKhuyenMai, gbc);
+        add(minTongDonHang, gbc);
 
-        JLabel lblTenKhuyenMai = new JLabel("Tên khuyến mãi");
-        TienIch.timStyle(lblTenKhuyenMai);
+        JLabel lbTongDonHangDen = new JLabel("Tổng đơn hàng đến");
+        TienIch.timStyle(lbTongDonHangDen);
         gbc.gridx = 2;
         gbc.gridy = 3;
-        add(lblTenKhuyenMai, gbc);
+        add(lbTongDonHangDen, gbc);
 
-        txtTenKhuyenMai = new JTextField(10);
-        TienIch.timStyle(txtTenKhuyenMai);
+        maxTongDonHang = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000, 1));
+        TienIch.timStyle(maxTongDonHang);
         gbc.gridx = 3;
         gbc.gridy = 3;
-        add(txtTenKhuyenMai, gbc);
+        add(maxTongDonHang, gbc);
 
-        // Dòng 5: Mã sản phẩm, Tên sản phẩm
-
-        JLabel lblMaSanPham = new JLabel("Mã sản phẩm");
-        TienIch.timStyle(lblMaSanPham);
+        // Dòng 4: Doanh số bán hàng từ, Doanh số bán hàng đến
+        JLabel lbDoanhSoTu = new JLabel("Doanh số từ");
+        TienIch.timStyle(lbDoanhSoTu);
         gbc.gridx = 0;
         gbc.gridy = 4;
-        add(lblMaSanPham, gbc);
+        add(lbDoanhSoTu, gbc);
 
-        txtMaSanPham = new JTextField(10);
-        TienIch.timStyle(txtMaSanPham);
+        minDoanhSo = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000_000, 1000));
+        TienIch.timStyle(minDoanhSo);
         gbc.gridx = 1;
         gbc.gridy = 4;
-        add(txtMaSanPham, gbc);
+        add(minDoanhSo, gbc);
 
-        JLabel lblTenSanPham = new JLabel("Tên sản phẩm");
-        TienIch.timStyle(lblTenSanPham);
+        JLabel lbDoanhSoDen = new JLabel("Doanh số đến");
+        TienIch.timStyle(lbDoanhSoDen);
         gbc.gridx = 2;
         gbc.gridy = 4;
-        add(lblTenSanPham, gbc);
+        add(lbDoanhSoDen, gbc);
 
-        txtTenSanPham = new JTextField(10);
-        TienIch.timStyle(txtTenSanPham);
+        maxDoanhSo = new JSpinner(new SpinnerNumberModel(0, 0, 1_000_000_000, 1000));
+        TienIch.timStyle(maxDoanhSo);
         gbc.gridx = 3;
         gbc.gridy = 4;
-        add(txtTenSanPham, gbc);
+        add(maxDoanhSo, gbc);
 
-        // Dòng 6: Mã loại sản phẩm, Loại sản phẩm
-
-        JLabel lblMaLoaiSanPham = new JLabel("Mã loại sản phẩm");
-        TienIch.timStyle(lblMaLoaiSanPham);
+        // Dòng 5: Lương từ, Lương đến
+        JLabel lbLuongTu = new JLabel("Lương từ");
+        TienIch.timStyle(lbLuongTu);
         gbc.gridx = 0;
         gbc.gridy = 5;
-        add(lblMaLoaiSanPham, gbc);
+        add(lbLuongTu, gbc);
 
-        txtMaLoaiSanPham = new JTextField(10);
-        TienIch.timStyle(txtMaLoaiSanPham);
+        minLuong = new JSpinner(new SpinnerNumberModel(0, 0, 100_000_000, 1000));
+        TienIch.timStyle(minLuong);
         gbc.gridx = 1;
         gbc.gridy = 5;
-        add(txtMaLoaiSanPham, gbc);
+        add(minLuong, gbc);
 
-        JLabel lblLoaiSanPham = new JLabel("Loại sản phẩm");
-        TienIch.timStyle(lblLoaiSanPham);
+        JLabel lbLuongDen = new JLabel("Lương đến");
+        TienIch.timStyle(lbLuongDen);
         gbc.gridx = 2;
         gbc.gridy = 5;
-        add(lblLoaiSanPham, gbc);
+        add(lbLuongDen, gbc);
 
-        txtLoaiSanPham = new JTextField(10);
-        TienIch.timStyle(txtLoaiSanPham);
+        maxLuong = new JSpinner(new SpinnerNumberModel(0, 0, 100_000_000, 1000));
+        TienIch.timStyle(maxLuong);
         gbc.gridx = 3;
         gbc.gridy = 5;
-        add(txtLoaiSanPham, gbc);
+        add(maxLuong, gbc);
 
-        // Dòng 7: Mã nhân viên, Tên nhân viên
-        JLabel lblMaNhanVien = new JLabel("Mã nhân viên");
-        TienIch.timStyle(lblMaNhanVien);
+        // Dòng 6: Sắp xếp, Theo cột
+        JLabel lbSapXep = new JLabel("Sắp xếp");
+        TienIch.timStyle(lbSapXep);
         gbc.gridx = 0;
         gbc.gridy = 6;
-        add(lblMaNhanVien, gbc);
+        add(lbSapXep, gbc);
 
-        txtMaNhanVien = new JTextField(10);
-        TienIch.timStyle(txtMaNhanVien);
+        cbSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        TienIch.timStyle(cbSapXep);
         gbc.gridx = 1;
         gbc.gridy = 6;
-        add(txtMaNhanVien, gbc);
+        add(cbSapXep, gbc);
 
-        JLabel lblTenNhanVien = new JLabel("Tên nhân viên");
-        TienIch.timStyle(lblTenNhanVien);
+        JLabel lbTheoCot = new JLabel("Theo cột");
+        TienIch.timStyle(lbTheoCot);
         gbc.gridx = 2;
         gbc.gridy = 6;
-        add(lblTenNhanVien, gbc);
+        add(lbTheoCot, gbc);
 
-        txtTenNhanVien = new JTextField(10);
-        TienIch.timStyle(txtTenNhanVien);
+        cbTheoCot = new JComboBox<>(new String[]{"Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Tổng đơn hàng", "Doanh số", "Lương"});
+        TienIch.timStyle(cbTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 6;
-        add(txtTenNhanVien, gbc);
-        // Dòng 8: Sắp xếp, Theo cột
-        JLabel lblSapXep = new JLabel("Sắp xếp");
-        TienIch.timStyle(lblSapXep);
-        gbc.gridx = 0;
-        gbc.gridy = 7;
-        add(lblSapXep, gbc);
+        add(cbTheoCot, gbc);
+    }
 
-        cboSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
-        TienIch.timStyle(cboSapXep);
-        gbc.gridx = 1;
-        gbc.gridy = 7;
-        add(cboSapXep, gbc);
+    public ArrayList<NhanVienDTO> ketqua(Date from, Date to){
+        int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+        maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+        Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+        SearchNhanVienDTO search = new SearchNhanVienDTO(
+        maNV, 
+        txtTenNV.getText(), 
+        txtDiaChi.getText(), 
+        ngayTu, 
+        ngayDen, 
+        (String) cbChucVu.getSelectedItem(), 
+        txtSoDienThoai.getText(), 
+        maDH, 
+        (int) minTongDonHang.getValue(), 
+        (int) maxTongDonHang.getValue(), 
+        (int) minDoanhSo.getValue(), 
+        (int) maxDoanhSo.getValue(), 
+        (int) minLuong.getValue(), 
+        (int) maxLuong.getValue(), 
+        (String) cbSapXep.getSelectedItem(), 
+        (String) cbTheoCot.getSelectedItem());
+        return BaoCaoNhanVienBLL.TimTotNhat(search, from, to);
+    }
 
-        JLabel lblTheoCot = new JLabel("Theo cột");
-        TienIch.timStyle(lblTheoCot);
-        gbc.gridx = 2;
-        gbc.gridy = 7;
-        add(lblTheoCot, gbc);
-
-        cboTheoCot = new JComboBox<>(new String[] { "Mã đơn hàng", "Mã Nhân Viên", "Ngày", "Thành Tiền" });
-        TienIch.timStyle(cboTheoCot);
-        gbc.gridx = 3;
-        gbc.gridy = 7;
-        add(cboTheoCot, gbc);
+    public ArrayList<NhanVienDTO> ketqua(){
+        int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+        maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+        Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+        SearchNhanVienDTO search = new SearchNhanVienDTO(
+        maNV, 
+        txtTenNV.getText(), 
+        txtDiaChi.getText(), 
+        ngayTu, 
+        ngayDen, 
+        (String) cbChucVu.getSelectedItem(), 
+        txtSoDienThoai.getText(), 
+        maDH, 
+        (int) minTongDonHang.getValue(), 
+        (int) maxTongDonHang.getValue(), 
+        (int) minDoanhSo.getValue(), 
+        (int) maxDoanhSo.getValue(), 
+        (int) minLuong.getValue(), 
+        (int) maxLuong.getValue(), 
+        (String) cbSapXep.getSelectedItem(), 
+        (String) cbTheoCot.getSelectedItem());
+        return BaoCaoNhanVienBLL.TimNhanVien(search);
     }
 }

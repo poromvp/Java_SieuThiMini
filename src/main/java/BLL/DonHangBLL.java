@@ -27,9 +27,14 @@ public class DonHangBLL {
         return DonHangDAL.getOrderById(maDH);
     }
 
-    // Lấy đơn hàng theo ID Thành Viên
+    // Lấy ds đơn hàng theo ID Thành Viên
     public static ArrayList<DonHangDTO> getOrderByKH(int maKH) {
         return DonHangDAL.getOrderByKH(maKH);
+    }
+
+    // Lấy ds đơn hàng theo ID Nhân Viên
+    public static ArrayList<DonHangDTO> getOrderByNV(int maNV) {
+        return DonHangDAL.getOrderByNV(maNV);
     }
 
     public static int tinhTongTienByMaDonHang(int maDH){
@@ -135,7 +140,7 @@ public class DonHangBLL {
             limit
         );
     }
-
+    //bo
     public static ArrayList<DonHangDTO> getOrderByThK(SearchFilterDTO search){
         return DonHangDAL.getOrderByThK(search);
     }

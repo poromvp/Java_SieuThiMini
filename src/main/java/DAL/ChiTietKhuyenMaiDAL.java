@@ -107,6 +107,28 @@ public class ChiTietKhuyenMaiDAL {
         }
     }
 
+    public static ChiTietKhuyenMaiDTO getDiscountDetail(int maKM, int maSP) {
+        String sql = "SELECT * FROM " + tableName + " WHERE maKM = ? AND maSP = ?";
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, maKM);
+            pstmt.setInt(2, maSP);
+            ResultSet rs =  pstmt.executeQuery();
+            if(rs.next()){
+                return new ChiTietKhuyenMaiDTO(
+                   rs.getInt("MaKM"), 
+                   rs.getInt("MaSP"),
+                   rs.getDouble("TileGiam"),
+                   rs.getString("TrangThai")
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     
     public static void main(String[] args) {
         System.out.println(getProductOnSaleToday(1));

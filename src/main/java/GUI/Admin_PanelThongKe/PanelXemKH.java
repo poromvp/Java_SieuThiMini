@@ -201,7 +201,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
 
         double sum = 0;
         for (DonHangDTO hd : HoaDon) {
-            sum += DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH());
+            sum += hd.getTongTien();
         }
         lbChiTieu = new JLabel(TienIch.formatVND(sum));
         TienIch.labelStyle(lbChiTieu, 2, 15, null);
@@ -238,7 +238,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
                     hd.getMaDH(),
                     hd.getMaNV(),
                     hd.getPtThanhToan(),
-                    TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                    TienIch.formatVND(hd.getTongTien()),
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
     }
@@ -291,11 +291,18 @@ public class PanelXemKH extends JPanel implements ActionListener{
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
         if (e.getSource() == searchItem) {
-            PanelTimKH panel = new PanelTimKH();
+            PanelTimKHHD panel = new PanelTimKHHD();
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                HoaDon = panel.ketqua(kh.getMaTV());
+                lbTongDonHang.setText(HoaDon.size() + "");
+                double sum = 0;
+                for (DonHangDTO hd : HoaDon) {
+                    sum += hd.getTongTien();
+                }
+                lbChiTieu.setText(TienIch.formatVND(sum) + "");
+                loadDonHang(HoaDon);
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();

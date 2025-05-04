@@ -19,7 +19,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
     JButton btnThem, btnKhoa, btnSua, btnTim, btnXemBlock, btnIn;
     StyledTable tb;
     DefaultTableModel model;
-    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembersACTIVE();
+    private ArrayList<TheThanhVienDTO> TTV;
 
     // Khởi tạo panel với tiêu đề và viền
     private void initPanel(JPanel pnl, String title) {
@@ -85,6 +85,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         Object[][] data = new Object[0][tencot.length];
         tb = new StyledTable(data, tencot);
         model = (DefaultTableModel) tb.getModel();
+        TTV = TheThanhVienBLL.getAllMembersACTIVE();
         loadThanhVien(TTV);
         StyledTable.hoverTable(tb, model);
         StyledTable.TableEvent(tb, model, "KH");
@@ -95,7 +96,6 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
     // Tải dữ liệu thành viên vào bảng
     private void loadThanhVien(ArrayList<TheThanhVienDTO> ttv) {
         model.setRowCount(0);
-        ttv = TheThanhVienBLL.getAllMembersACTIVE();
         for (TheThanhVienDTO tv : ttv) {
             model.addRow(new Object[] {
                     tv.getMaTV(),
@@ -127,7 +127,8 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                TTV = panel.ketqua();
+                loadThanhVien(TTV);
             }
         } else if (e.getSource() == btnIn) {
             PanelExport panel = new PanelExport();
@@ -205,6 +206,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                     boolean success = TheThanhVienBLL.deleteMember(Integer.parseInt(maTV));
                     if (success) {
                         TienIch.CustomMessage("Khóa thành viên thành công!");
+                        TTV = TheThanhVienBLL.getAllMembersACTIVE();
                         loadThanhVien(TTV);
                     } else {
                         TienIch.CustomMessage("Khóa thành viên thất bại");
@@ -230,12 +232,12 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                         ArrayList<TheThanhVienDTO> members = ExcelImporter.importFromExcel(file);
                         for (TheThanhVienDTO member : members) {
                             String kq = TheThanhVienBLL.addMember(member);
-                            if (!kq.contains("thành công")) {
+                            if (!kq.contains("Thêm thành viên thành công!")) {
                                 TienIch.CustomMessage("Lỗi khi thêm thành viên: " + kq);
                             }
                         }
+                        TTV = TheThanhVienBLL.getAllMembersACTIVE();
                         loadThanhVien(TTV);
-                        TienIch.CustomMessage("Nhập danh sách thành viên từ Excel thành công!");
                     } catch (Exception ex) {
                         TienIch.CustomMessage("Lỗi khi nhập từ Excel: " + ex.getMessage());
                     }
@@ -253,6 +255,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                             boolean success = TheThanhVienBLL.UndeleteMember(Integer.parseInt(maTV));
                             if (success) {
                                 TienIch.CustomMessage("Mở khóa thành viên thành công!");
+                                TTV = TheThanhVienBLL.getAllMembersACTIVE();
                                 loadThanhVien(TTV);
                             } else {
                                 TienIch.CustomMessage("Mở khóa thành viên thất bại");

@@ -3,24 +3,23 @@ package GUI.Admin_PanelThongKe;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import javax.swing.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.TheThanhVienBLL;
 import DTO.TheThanhVienDTO;
+import GUI.Admin_TheThanhVien.PanelXemDSLock;
 import GUI.ComponentCommon.*;
 
-public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListener {
+public class PanelBaoCaoKH extends JPanel implements ActionListener {
     JButton btnTim;
     JLabel lbMota;
-    JTabbedPane tab;
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel model;
     JScrollPane scr;
-    private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembers();
-    JPanel pn1, pn2, pn3, pn4;
+    private ArrayList<TheThanhVienDTO> TTV;
+    JPanel pn1;
     JPopupMenu popupMenu;
     JMenuItem exportItem;
 
@@ -84,18 +83,32 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        lbMota = new JLabel("*Standard: dành cho thành viên chi tiêu dưới 1,000,000 VND.");
+        lbMota = new JLabel("Danh sách Thẻ Thành Viên Hết Hạn");
+        lbMota.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                TienIch.setDarkUI();
+                PanelXemDSLock panel = new PanelXemDSLock();
+                int result = JOptionPane.showConfirmDialog(null, panel, "Danh sách TTV đã khóa",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (result == JOptionPane.OK_OPTION) {
+                    TienIch.CustomMessage("Đã hủy xem danh sách thẻ thành viên bị khóa");
+                }
+                TienIch.resetUI();
+            }
+        });
         TienIch.labelStyle(lbMota, 2, 15, null);
         add(lbMota, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 2;
 
         String[] tencot = { "Mã thành viên", "Họ tên", "Số điện thoại", "Điểm tích lũy" };
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
+        TTV = TheThanhVienBLL.getAllMembersACTIVE();
         loadThanhVien(TTV);
         StyledTable.hoverTable(tb, model);
         StyledTable.TableEvent(tb, model, "KH"); // Giữ sự kiện double-click
@@ -104,24 +117,8 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         pn1 = new JPanel();
         pn1.setLayout(new BorderLayout());
         pn1.add(scr, BorderLayout.CENTER);
+        add(pn1, gbc);
 
-        pn2 = new JPanel();
-        pn2.setLayout(new BorderLayout());
-
-        pn3 = new JPanel();
-        pn3.setLayout(new BorderLayout());
-
-        pn4 = new JPanel();
-        pn4.setLayout(new BorderLayout());
-
-        tab = new JTabbedPane();
-        tab.addTab("Standard", pn1);
-        tab.addTab("Tiềm năng", pn2);
-        tab.addTab("VIP", pn3);
-        tab.addTab("Diamond", pn4);
-        add(tab, gbc);
-
-        tab.addChangeListener(this);
         btnTim.addActionListener(this);
 
         // Thêm popup menu
@@ -154,17 +151,17 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                TTV = panel.ketqua();
+                loadThanhVien(TTV);
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
             int result = JOptionPane.showConfirmDialog(null, panel, "Export",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
-                if(panel.getSelectedFormat().equals("excel")){
+                if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
-                }
-                else{
+                } else {
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
@@ -176,21 +173,4 @@ public class PanelBaoCaoKH extends JPanel implements ChangeListener, ActionListe
         TienIch.resetUI();
     }
 
-    @Override
-    public void stateChanged(ChangeEvent e) {
-        int tabSelected = tab.getSelectedIndex();
-        if (tabSelected == 0) {
-            lbMota.setText("*Standard: dành cho thành viên chi tiêu dưới 1,000,000 VND.");
-            pn1.add(scr, BorderLayout.CENTER);
-        } else if (tabSelected == 1) {
-            lbMota.setText("*Tiềm năng: dành cho thành viên chi tiêu từ 1,000,000 - 3,000,000 VND.");
-            pn2.add(scr, BorderLayout.CENTER);
-        } else if (tabSelected == 2) {
-            lbMota.setText("*VIP: dành cho thành viên chi tiêu trên 3,000,000 VND.");
-            pn3.add(scr, BorderLayout.CENTER);
-        } else if (tabSelected == 3) {
-            lbMota.setText("*Kim cương: dành cho thành viên chi tiêu trên 10,000,000 VND.");
-            pn4.add(scr, BorderLayout.CENTER);
-        }
-    }
 }

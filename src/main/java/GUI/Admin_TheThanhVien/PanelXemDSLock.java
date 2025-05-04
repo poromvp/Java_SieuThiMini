@@ -113,7 +113,8 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
             int result = JOptionPane.showConfirmDialog(null, panel, "Nhập thông tin muốn tìm kiếm",
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
-                System.out.println("Bạn vừa nhập: ");
+                TTV = panel.ketquaLock();
+                loadThanhVien(TTV);
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();

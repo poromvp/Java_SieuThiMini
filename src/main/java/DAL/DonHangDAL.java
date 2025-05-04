@@ -179,7 +179,7 @@ public class DonHangDAL {
         return 0;
     }
 
-    // Lấy đơn hàng theo ID Thành Viên
+    // Lấy ds đơn hàng theo ID Thành Viên
     public static ArrayList<DonHangDTO> getOrderByKH(int maKH) {
         ArrayList<DonHangDTO> dsDonHang = new ArrayList<>();
         String sql = "SELECT * FROM DonHang WHERE maKH = ?";
@@ -189,7 +189,37 @@ public class DonHangDAL {
             stmt.setInt(1, maKH);
             ResultSet rs = stmt.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
+                DonHangDTO dh = new DonHangDTO(
+                        rs.getInt("maDH"),
+                        rs.getInt("maKH"),
+                        rs.getInt("maKM"),
+                        rs.getInt("maNV"),
+                        rs.getString("PTTToan"),
+                        rs.getString("NgayTT"),
+                        rs.getInt("maDTL"),
+                        rs.getInt("tienKD"),
+                        rs.getInt("TongTien"),
+                        rs.getString("trangThai"));
+                dsDonHang.add(dh);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return dsDonHang;
+    }
+
+    // Lấy ds đơn hàng theo ID Nhân Viên
+    public static ArrayList<DonHangDTO> getOrderByNV(int maNV) {
+        ArrayList<DonHangDTO> dsDonHang = new ArrayList<>();
+        String sql = "SELECT * FROM DonHang WHERE maNV = ?";
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, maNV);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
                 DonHangDTO dh = new DonHangDTO(
                         rs.getInt("maDH"),
                         rs.getInt("maKH"),
@@ -241,41 +271,39 @@ public class DonHangDAL {
     public static int insertOrder(DonHangDTO dh) {
         int generatedId = -1;
         String sql = "INSERT INTO DonHang(maKH, maKM, maNV, PTTToan, NgayTT, tienKD, TongTien, trangThai, maDTL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    
+
         try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-    
+                PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
             if (dh.getMaKH() != null) {
                 stmt.setInt(1, dh.getMaKH());
             } else {
                 stmt.setNull(1, Types.INTEGER);
             }
-    
+
             if (dh.getMaKM() != null) {
                 stmt.setInt(2, dh.getMaKM());
             } else {
                 stmt.setNull(2, Types.INTEGER);
             }
-    
+
             stmt.setInt(3, dh.getMaNV());
             stmt.setString(4, dh.getPtThanhToan());
-    
-           
-                stmt.setString(5, dh.getNgayTT());
-            
-    
+
+            stmt.setString(5, dh.getNgayTT());
+
             stmt.setDouble(6, dh.getTienKD());
             stmt.setDouble(7, dh.getTongTien());
             stmt.setString(8, dh.getTrangThai());
-    
+
             if (dh.getMaDTL() != null) {
                 stmt.setInt(9, dh.getMaDTL());
             } else {
                 stmt.setNull(9, Types.INTEGER);
             }
-    
+
             int affectedRows = stmt.executeUpdate();
-    
+
             if (affectedRows > 0) {
                 try (ResultSet rs = stmt.getGeneratedKeys()) {
                     if (rs.next()) {
@@ -283,15 +311,13 @@ public class DonHangDAL {
                     }
                 }
             }
-    
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    
+
         return generatedId;
     }
-    
-    
 
     // Cập nhật đơn hàng
     public static int updateOrder(DonHangDTO dh) {
@@ -348,16 +374,16 @@ public class DonHangDAL {
         ArrayList<DonHangDTO> dsDonHang = new ArrayList<>();
         ArrayList<Object> params = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
-            "SELECT * FROM donhang"
-          +" JOIN chitietdh ON donhang.maDH = chitietdh.maDH"
-          +" WHERE 1 = 1");
+                "SELECT * FROM donhang"
+                        + " JOIN chitietdh ON donhang.maDH = chitietdh.maDH"
+                        + " WHERE 1 = 1");
 
         if (search.getMaDH() != 0) {
             sql.append(" AND donhang.maDH = ?");
             params.add(search.getMaDH());
         }
 
-        if(search.getMaSP() != 0) {
+        if (search.getMaSP() != 0) {
             sql.append(" AND maSP = ?");
             params.add(search.maSP);
         }

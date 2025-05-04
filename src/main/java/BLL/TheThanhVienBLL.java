@@ -1,10 +1,9 @@
 package BLL;
 
-import DTO.TheThanhVienDTO;
-
 import java.util.ArrayList;
 
 import DAL.TheThanhVienDAL;
+import DTO.TheThanhVienDTO;
 
 public class TheThanhVienBLL {
 
@@ -25,8 +24,19 @@ public class TheThanhVienBLL {
 
     // Lấy thẻ thành viên theo mã
     public static TheThanhVienDTO getMemberById(int maTV) {
-        return TheThanhVienDAL.getMemberById(maTV);
+        if(maTV != 0){
+            return TheThanhVienDAL.getMemberById(maTV);
+        }
+        return null;
     }
+    public static TheThanhVienDTO getMemberById(Integer maTV) {
+        if(maTV != null){
+            return TheThanhVienDAL.getMemberById(maTV);
+        }
+        return null;
+    }
+    
+    
 
     // Lấy thẻ thành viên theo số điện thoại
     public static TheThanhVienDTO getMemberByPhone(String phone) {

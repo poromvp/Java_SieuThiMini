@@ -245,6 +245,8 @@ public class OrderPanel extends JPanel {
 		panel_5.setLayout(new BoxLayout(panel_5, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel = new JLabel("Loại sản phẩm");
+		lblNewLabel.setMinimumSize(new Dimension(2264, 13));
+		lblNewLabel.setMaximumSize(new Dimension(2283, 13));
 		lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_5.add(lblNewLabel);
 		
@@ -262,6 +264,8 @@ public class OrderPanel extends JPanel {
 		panel_6.setLayout(new BoxLayout(panel_6, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel_1 = new JLabel("Giá MIN\r\n");
+		lblNewLabel_1.setMinimumSize(new Dimension(2236, 13));
+		lblNewLabel_1.setMaximumSize(new Dimension(2236, 13));
 		lblNewLabel_1.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_6.add(lblNewLabel_1);
 		
@@ -275,6 +279,8 @@ public class OrderPanel extends JPanel {
 		panel_7.setLayout(new BoxLayout(panel_7, BoxLayout.Y_AXIS));
 		
 		JLabel lblNewLabel_2 = new JLabel("Giá MAX");
+		lblNewLabel_2.setMinimumSize(new Dimension(2238, 13));
+		lblNewLabel_2.setMaximumSize(new Dimension(2238, 13));
 		lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 14));
 		panel_7.add(lblNewLabel_2);
 		

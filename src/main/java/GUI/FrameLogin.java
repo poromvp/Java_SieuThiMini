@@ -22,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 
 import BLL.TaiKhoanBLL;
 import DTO.TaiKhoanDTO;

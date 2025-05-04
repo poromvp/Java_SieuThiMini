@@ -1,67 +1,46 @@
 package GUI.FormEmployee;
 
-import javax.swing.JPanel;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-
 import java.awt.BorderLayout;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
+import java.awt.Color;
 import java.awt.Dimension;
-
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import com.toedter.calendar.JDateChooser;
-
-import DTO.NhanVienDTO;
-
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Font;
-import java.awt.FlowLayout;
-
-import javax.swing.JRadioButton;
-
-import java.awt.Color;
-
-import javax.swing.border.EmptyBorder;
-
-import java.awt.Button;
-
-import javax.swing.JPasswordField;
-
 import java.awt.Panel;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.border.EmptyBorder;
+
+import com.toedter.calendar.JDateChooser;
 
 import BLL.NhanVienBLL;
 import BLL.TaiKhoanBLL;
+import DTO.NhanVienDTO;
 import DTO.TaiKhoanDTO;
-
-import javax.swing.JScrollPane;
-
-import DAL.NhanVienDAL;
-import javax.swing.SwingConstants;
-import java.io.*;
-import java.nio.file.*;
 
 
 
@@ -101,6 +80,7 @@ public class ProfilePanel extends JPanel {
 	private static TaiKhoanDTO TAIKHOAN  = new TaiKhoanDTO(1, "TRINHKHANG", "12345", "98654398765", "5678", "email", "76", "");
 	private JTextField text_Email;
 	private JTextField text_Quyen;
+
 	
 
 	/**
@@ -365,6 +345,7 @@ public class ProfilePanel extends JPanel {
 		lbl_NgaySinh.setPreferredSize(new Dimension(343, 30));
 		panel_NgaySinh.add(lbl_NgaySinh);
 		dateChooserNgaySinh = new JDateChooser();
+		dateChooserNgaySinh.setFont(new Font("Arial", Font.BOLD, 15));
 		dateChooserNgaySinh.getCalendarButton().setBackground(new Color(255, 255, 255));
 		dateChooserNgaySinh.setBackground(new Color(152, 251, 152));
 		dateChooserNgaySinh.setEnabled(false);

@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 
 import GUI.ComponentCommon.Header;
 import GUI.ComponentCommon.TienIch;
+import GUI.FormEmployee.BaoCaoPanel;
 import GUI.FormEmployee.HomePanel;
 import GUI.FormEmployee.InterfaceOrderManagement;
 import GUI.FormEmployee.LeftMenu;
@@ -38,7 +39,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
     private  OrderPanel pn_formOrder;
     private  InterfaceOrderManagement pn_formOrderManagement;
     private  HomePanel pn_formHome;
-    private  PanelMainBaoCao panelMainBaoCao;
+    private  BaoCaoPanel panelMainBaoCao;
     private  ProfilePanel panelProfile;
 
 
@@ -79,7 +80,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
         pn_formOrder = new OrderPanel();
         pn_formOrderManagement = new InterfaceOrderManagement();
         pn_formHome = new HomePanel();
-        panelMainBaoCao = new PanelMainBaoCao();
+        panelMainBaoCao = new BaoCaoPanel();
 
         pn_cardLayout.add(pn_formHome, "formHome");
         pn_cardLayout.add(panelProfile, "formUser");

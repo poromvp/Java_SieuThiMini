@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -25,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -33,34 +35,28 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 
-import BLL.ChiTietDonHangBLL;
-import BLL.ChiTietKhuyenMaiBLL;
-import BLL.DiemTichLuyBLL;
 import BLL.DonHangBLL;
-import BLL.KhuyenMaiBLL;
 import BLL.NhanVienBLL;
-import BLL.SanPhamBLL;
 import BLL.TheThanhVienBLL;
-import DTO.ChiTietDonHangDTO;
-import DTO.ChiTietKhuyenMaiDTO;
-import DTO.DiemTichLuyDTO;
 import DTO.DonHangDTO;
-import DTO.KhuyenMaiDTO;
-import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
 
 
 
-public class ChiTietDH_Dialog extends JDialog {
+public class ChiTietBC_Dialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private DonHangDTO DONHANG = new DonHangDTO(1, null, 1, 1, "BANK", "2005-04-27", 1,1, 1, "FINISHED");
-    private String[] HEADER = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng", "thành tiền"};
+    private String[] HEADER = {"Mã DH", "Mã KM", "Mã KH", "PT thanh toán", "Ngày mua", "thành tiền"};
 	private DefaultTableModel tableModel_SP = new DefaultTableModel(HEADER, 0);
 	private JTable tableProduct = new JTable(tableModel_SP);
     // private JScrollPane scrollPane_SP = new JScrollPane(tableProduct);
   	JTableHeader tableHeader = tableProduct.getTableHeader();
+	private ArrayList<DonHangDTO> DSHoaDon = DonHangBLL.getAllOrders();
+	JTextArea txtrNhapNoiDung = new JTextArea();
+
+
 
 	/**
 	 * Launch the application.
@@ -68,7 +64,7 @@ public class ChiTietDH_Dialog extends JDialog {
 	public static void main(String[] args) {
 		
 		try {
-			ChiTietDH_Dialog dialog = new ChiTietDH_Dialog(null, 5);
+			ChiTietBC_Dialog dialog = new ChiTietBC_Dialog(null);
 			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 			dialog.setVisible(true);
 		} catch (Exception e) {
@@ -79,12 +75,11 @@ public class ChiTietDH_Dialog extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public ChiTietDH_Dialog(JFrame parent, int maDH) {
-		super(parent, "Xem chi tiết đơn hàng !", true); 
+	public ChiTietBC_Dialog(JFrame parent) {
+		super(parent, "Xem chi tiết báo cáo !", true); 
 
-		DONHANG = DonHangBLL.getOrderById(maDH);
-
-		setBounds(100, 100, 976, 652);
+	
+		setBounds(100, 100, 976, 706);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		JScrollPane scrollPane = new JScrollPane(contentPanel);
@@ -141,7 +136,7 @@ public class ChiTietDH_Dialog extends JDialog {
 					panel_Infor.add(panel_tieuDe);
 					panel_tieuDe.setLayout(new BorderLayout(0, 0));
 					{
-						JLabel lbl_TieuDe = new JLabel("CHI TIẾT ĐƠN HÀNG");
+						JLabel lbl_TieuDe = new JLabel("BÁO CÁO BÁN HÀNG");
 						panel_tieuDe.add(lbl_TieuDe);
 						lbl_TieuDe.setMinimumSize(new Dimension(2299, 13));
 						lbl_TieuDe.setMaximumSize(new Dimension(2299, 213));
@@ -156,14 +151,15 @@ public class ChiTietDH_Dialog extends JDialog {
 					panel_Infor.add(panel_Item1);
 					panel_Item1.setLayout(new GridLayout(0, 2, 0, 0));
 					{
-						JLabel lbl_MaDH = new JLabel("Mã đơn hàng : " + DONHANG.getMaDH());
+						JLabel lbl_MaDH = new JLabel("");
 						panel_Item1.add(lbl_MaDH);
 						lbl_MaDH.setFont(new Font("Arial", Font.BOLD, 14));
 						lbl_MaDH.setPreferredSize(new Dimension(270, 25));
 						lbl_MaDH.setMinimumSize(new Dimension(270, 25));
 					}
 					{
-						JLabel lblNewLabel = new JLabel("Ngày thanh toán : " + DONHANG.getNgayTT());
+						LocalDate today = LocalDate.now();
+						JLabel lblNewLabel = new JLabel("Ngày báo cáo : " + today);
 						lblNewLabel.setFont(new Font("Arial", Font.BOLD, 14));
 						lblNewLabel.setMaximumSize(new Dimension(76, 25));
 						lblNewLabel.setPreferredSize(new Dimension(76, 25));
@@ -198,80 +194,59 @@ public class ChiTietDH_Dialog extends JDialog {
 					panel_item3.setLayout(new GridLayout(0, 2, 0, 0));
 					TheThanhVienDTO tv = TheThanhVienBLL.getMemberById(DONHANG.getMaKH());
 					{
-						JLabel lbl_tenKH = new JLabel("Tên khách hàng : " + (tv == null ? "null" : tv.getTenTV()));
-						lbl_tenKH.setFont(new Font("Arial", Font.BOLD, 14));
-						panel_item3.add(lbl_tenKH);
+						JLabel lbl_NgayBT = new JLabel("Thống kê từ ngày  : " + (BaoCaoPanel.getPanelTimkiem().getNgayBatDau() != null? "khang": " ngày thành lập"));
+						lbl_NgayBT.setFont(new Font("Arial", Font.BOLD, 14));
+						panel_item3.add(lbl_NgayBT);
 					}
 					{
-						JLabel lblNewLabel_3 = new JLabel("Mã khách hàng : " + (tv == null ? "null" : tv.getMaTV()));
-						lblNewLabel_3.setFont(new Font("Arial", Font.BOLD, 14));
-						panel_item3.add(lblNewLabel_3);
+						LocalDate today = LocalDate.now();
+						JLabel lbl_NgayKT = new JLabel("Thống kê đến ngày : " +  (BaoCaoPanel.getPanelTimkiem().getNgayKetThuc() != null?"khản" : today.toString()));
+						lbl_NgayKT.setFont(new Font("Arial", Font.BOLD, 14));
+						panel_item3.add(lbl_NgayKT);
 					}
 				}
-				{
-					JPanel panel = new JPanel();
-					panel.setPreferredSize(new Dimension(10, 25));
-					panel_Infor.add(panel);
-					panel.setLayout(new GridLayout(0, 2, 0, 0));
-					KhuyenMaiDTO km = KhuyenMaiBLL.getDiscountById(DONHANG.getMaKM());
-					{
-						JLabel lblNewLabel_2 = new JLabel("Tên khuyến mãi : \r\n" + (km == null ? "null" : km.getTenKM()));
-						lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 14));
-						panel.add(lblNewLabel_2);
-					}
-					{
-						JLabel lblNewLabel_4 = new JLabel("Mã khuyến mãi : " + (km == null ? "null" : km.getMaKM()));
-						lblNewLabel_4.setFont(new Font("Arial", Font.BOLD, 14));
-						panel.add(lblNewLabel_4);
-					}
-				}
-				{
-					JPanel panel = new JPanel();
-					panel.setPreferredSize(new Dimension(10, 25));
-					panel_Infor.add(panel);
-					panel.setLayout(new GridLayout(0, 2, 0, 0));
-					DiemTichLuyDTO dtl = DiemTichLuyBLL.getDiemTichLuyById(DONHANG.getMaDTL());
-					{
-						JLabel lblNewLabel_5 = new JLabel("Số điểm tích luỹ : " + (dtl == null ? "null" : dtl.getDiemTL()));
-						lblNewLabel_5.setFont(new Font("Arial", Font.BOLD, 14));
-						panel.add(lblNewLabel_5);
-					}
-					{
-						JLabel lblNewLabel_6 = new JLabel("Tỉ lệ giảm (của ĐTL) : " +  (dtl == null ? "null" : dtl.getTiLeGiam()) + " %");
-						lblNewLabel_6.setFont(new Font("Arial", Font.BOLD, 14));
-						panel.add(lblNewLabel_6);
-					}
-				}
+				
 				{
 					JPanel panel = new JPanel();
 					panel.setPreferredSize(new Dimension(10, 25));
 					panel_Infor.add(panel);
 					panel.setLayout(new GridLayout(0, 2, 0, 0));
 					{
-						JLabel lblNewLabel_7 = new JLabel("Phương thức thanh toán : " + DONHANG.getPtThanhToan());
-						lblNewLabel_7.setFont(new Font("Arial", Font.BOLD, 14));
-						panel.add(lblNewLabel_7);
-					}
-					{
-						JLabel lblNewLabel_8 = new JLabel("Tiền khách đưa/ chuyển : " + (DONHANG.getTienKD() == -1 ? 0 : DONHANG.getTienKD()) + " VNĐ");
-						lblNewLabel_8.setFont(new Font("Arial", Font.BOLD, 14));
-						panel.add(lblNewLabel_8);
-					}
-				}
-				{
-					JPanel panel = new JPanel();
-					panel.setPreferredSize(new Dimension(10, 25));
-					panel_Infor.add(panel);
-					panel.setLayout(new GridLayout(0, 2, 0, 0));
-					{
-						JLabel lblNewLabel_9 = new JLabel("Tổng tiền : " + DONHANG.getTongTien() + " VNĐ");
+						JLabel lblNewLabel_9 = new JLabel("Tổng đơn hàng : " + BaoCaoPanel.getSoDonhang() );
 						lblNewLabel_9.setFont(new Font("Arial", Font.BOLD, 14));
 						panel.add(lblNewLabel_9);
 					}
 					{
-						JLabel lblNewLabel_10 = new JLabel("Trạng thái thanh toán : Đã thanh toán");
+						JLabel lblNewLabel_10 = new JLabel("Tổng danh thu : " + BaoCaoPanel.getDanhThu() + " VND"); 
 						lblNewLabel_10.setFont(new Font("Arial", Font.BOLD, 14));
 						panel.add(lblNewLabel_10);
+					}
+				}
+				{
+					JPanel panel = new JPanel();
+					panel.setPreferredSize(new Dimension(600, 150));
+					panel_Infor.add(panel);
+					panel.setLayout(new BorderLayout(0, 0));
+					{
+						JLabel lblNewLabel_7 = new JLabel("Nội dung thống kê : ");
+						lblNewLabel_7.setMinimumSize(new Dimension(2222, 13));
+						lblNewLabel_7.setMaximumSize(new Dimension(2296, 13));
+						lblNewLabel_7.setPreferredSize(new Dimension(2296, 13));
+						lblNewLabel_7.setFont(new Font("Arial", Font.BOLD, 14));
+						panel.add(lblNewLabel_7);
+					}
+					{
+						txtrNhapNoiDung.setLineWrap(true);
+						txtrNhapNoiDung.setFont(new Font("Arial", Font.PLAIN, 14));
+						txtrNhapNoiDung.setText("Nhập nội dung ...");
+						txtrNhapNoiDung.setWrapStyleWord(true);
+						JScrollPane ScrollPaneNoiDung = new JScrollPane(txtrNhapNoiDung);
+						panel.add(ScrollPaneNoiDung);
+					}
+					{
+						JLabel lblNewLabel_2 = new JLabel("Nội dung báo cáo :");
+						lblNewLabel_2.setFont(new Font("Arial", Font.BOLD, 14));
+						panel.add(lblNewLabel_2, BorderLayout.NORTH);
 					}
 				}
 			}
@@ -285,21 +260,70 @@ public class ChiTietDH_Dialog extends JDialog {
 					panel_DanhSachSP.add(tableProduct.getTableHeader(), BorderLayout.NORTH);
 					panel_DanhSachSP.add(tableProduct, BorderLayout.CENTER);
 
-					ArrayList<ChiTietDonHangDTO> dsCTDH = ChiTietDonHangBLL.getChiTietByMaDH(DONHANG.getMaDH());
-					for(ChiTietDonHangDTO ctdh : dsCTDH){
-						SanPhamDTO sanPham = SanPhamBLL.getProductById(ctdh.getMaSP());
-						ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
-						double tiLe = ctkm == null ? 0.0 : ctkm.getTiLeGiam();
+					for(DonHangDTO hd : BaoCaoPanel.getDanhSachDonHang()){
 						tableModel_SP.addRow(new Object[]{
-							ctdh.getMaSP(), 
-							sanPham.getTenSP(),
-							sanPham.getGia(),
-							tiLe,
-							ctdh.getSoLuong(), 
-							sanPham.getGia()*( 1 - tiLe/100)*ctdh.getSoLuong()
+							hd.getMaDH(), 
+							hd.getMaKM(),
+							hd.getMaKH(),
+							hd.getPtThanhToan(),
+							hd.getNgayTT(), 
+							hd.getTongTien()
 						});
 					}
 					customizeTable1(tableProduct);
+				}
+			}
+			{
+				JPanel panel_chuKy = new JPanel();
+				panel_chuKy.setPreferredSize(new Dimension(10, 100));
+				panel_body.add(panel_chuKy, BorderLayout.SOUTH);
+				panel_chuKy.setLayout(new GridLayout(1, 0, 0, 0));
+				{
+					JPanel panel = new JPanel();
+					panel.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 12));
+					panel_chuKy.add(panel);
+					panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+					{
+						JLabel lblNewLabel_3 = new JLabel("Người làm báo cáo");
+						lblNewLabel_3.setFont(new Font("Arial", Font.BOLD, 14));
+						lblNewLabel_3.setHorizontalAlignment(SwingConstants.CENTER);
+						lblNewLabel_3.setMaximumSize(new Dimension(2285, 25));
+						lblNewLabel_3.setPreferredSize(new Dimension(2285, 25));
+						panel.add(lblNewLabel_3);
+					}
+					{
+						JLabel lblNewLabel_4 = new JLabel("Ký và ghi rõ họ tên");
+						lblNewLabel_4.setMaximumSize(new Dimension(2288, 13));
+						lblNewLabel_4.setPreferredSize(new Dimension(2288, 13));
+						lblNewLabel_4.setHorizontalAlignment(SwingConstants.CENTER);
+						lblNewLabel_4.setFont(new Font("Arial", Font.BOLD, 12));
+						panel.add(lblNewLabel_4);
+					}
+				}
+				{
+					JPanel panel = new JPanel();
+					panel_chuKy.add(panel);
+				}
+				{
+					JPanel panel = new JPanel();
+					panel_chuKy.add(panel);
+					panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+					{
+						JLabel lblNewLabel_5 = new JLabel("Ban quản lý siêu thị");
+						lblNewLabel_5.setFont(new Font("Arial", Font.BOLD, 14));
+						lblNewLabel_5.setHorizontalAlignment(SwingConstants.CENTER);
+						lblNewLabel_5.setMaximumSize(new Dimension(2288, 25));
+						lblNewLabel_5.setPreferredSize(new Dimension(2288, 25));
+						panel.add(lblNewLabel_5);
+					}
+					{
+						JLabel lblNewLabel_6 = new JLabel("Ký và ghi rõ họ tên");
+						lblNewLabel_6.setHorizontalAlignment(SwingConstants.CENTER);
+						lblNewLabel_6.setFont(new Font("Arial", Font.BOLD, 12));
+						lblNewLabel_6.setMaximumSize(new Dimension(2288, 13));
+						lblNewLabel_6.setPreferredSize(new Dimension(2288, 13));
+						panel.add(lblNewLabel_6);
+					}
 				}
 			}
 		}
@@ -309,13 +333,13 @@ public class ChiTietDH_Dialog extends JDialog {
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("IN HOÁ ĐƠN");
+				JButton okButton = new JButton("IN BÁO CÁO");
 				okButton.setBackground(new Color(51, 255, 102));
-				okButton.setActionCommand("In Hoá Dơn");
+				okButton.setActionCommand("In báo cáo");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);
 				okButton.addActionListener(e->{
-					int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn IN HOÁ ĐƠN  không ???", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+					int confirm = JOptionPane.showConfirmDialog(null, "Bạn có muốn IN BÁO CÁO  không ???", "Confirm", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 					if(confirm == JOptionPane.YES_OPTION){
 						exportPDF();
 					}
@@ -368,21 +392,38 @@ public class ChiTietDH_Dialog extends JDialog {
             e.printStackTrace();
         }
 		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setDialogTitle("Chọn thư mục để lưu đơn hàng");
+		chooser.setDialogTitle("Chọn nơi lưu báo cáo và đặt tên file");
+		chooser.setSelectedFile(new File("BaoCao.pdf")); // Tên file mặc định gợi ý
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+		int result = chooser.showSaveDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = chooser.getSelectedFile();
+
+			// Nếu người dùng không nhập đuôi .pdf, thêm vào
+			if (!selectedFile.getName().toLowerCase().endsWith(".pdf")) {
+				selectedFile = new File(selectedFile.getAbsolutePath() + ".pdf");
+			}
+
+			System.out.println("File sẽ lưu: " + selectedFile.getAbsolutePath());
+			// Gọi phương thức xuất báo cáo tại đây
+		}
 
 
 		try {
+		    // Trả về Look & Feel mặc định của Java (thường là Metal)
 		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		    SwingUtilities.updateComponentTreeUI(this); 
+		    // Cập nhật lại UI trên frame (nếu cần)
+		    SwingUtilities.updateComponentTreeUI(this); // yourFrame là JFrame hoặc JDialog
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
 
+		
 		int returnVal = chooser.showSaveDialog(null);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File selectedFolder = chooser.getSelectedFile();
-			String filePath = selectedFolder.getAbsolutePath() + File.separator + "DonHang_" + DONHANG.getMaDH() + ".pdf";
+			String filePath = selectedFolder.getAbsolutePath() + File.separator + "BaoCao_" + DONHANG.getMaDH() + ".pdf";
 			try {
 				// Tạo document mới
 				com.itextpdf.text.Document document = new com.itextpdf.text.Document();
@@ -398,6 +439,7 @@ public class ChiTietDH_Dialog extends JDialog {
 				com.itextpdf.text.Font fontTitle = new com.itextpdf.text.Font(baseFont, 22, com.itextpdf.text.Font.BOLD);
 				com.itextpdf.text.Font fontSubtitle = new com.itextpdf.text.Font(baseFont, 14, com.itextpdf.text.Font.ITALIC);
 				com.itextpdf.text.Font fontHeader = new com.itextpdf.text.Font(baseFont, 12, com.itextpdf.text.Font.BOLD, com.itextpdf.text.BaseColor.WHITE);
+				com.itextpdf.text.Font fontNormalSub = new com.itextpdf.text.Font(baseFont, 10);
 	
 				// Logo
 				String imagePath = "src/main/resources/images/icon/Logo_Main.png";
@@ -416,7 +458,7 @@ public class ChiTietDH_Dialog extends JDialog {
 				document.add(subtitle);
 		
 				// Thêm tiêu đề phần chi tiết đơn hàng
-				com.itextpdf.text.Paragraph subheading = new com.itextpdf.text.Paragraph("CHI TIẾT ĐƠN HÀNG\n\n", fontBold);
+				com.itextpdf.text.Paragraph subheading = new com.itextpdf.text.Paragraph("BÁO CÁO BÁN HÀNG\n\n", fontBold);
 				subheading.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 				document.add(subheading);
 		
@@ -427,12 +469,13 @@ public class ChiTietDH_Dialog extends JDialog {
 				infoTable.setSpacingAfter(10f);
 		
 				// Các thông tin đơn hàng
-				com.itextpdf.text.Phrase phrase_MaDH = new com.itextpdf.text.Phrase("Mã đơn hàng : " + DONHANG.getMaDH(), fontNormal);
+				com.itextpdf.text.Phrase phrase_MaDH = new com.itextpdf.text.Phrase(" " , fontNormal);
 				com.itextpdf.text.pdf.PdfPCell cell_MaDH = new com.itextpdf.text.pdf.PdfPCell(phrase_MaDH);
 				cell_MaDH.setBorder(0);  
 				infoTable.addCell(cell_MaDH);
 	
-				com.itextpdf.text.Phrase phrase_NgayTT = new com.itextpdf.text.Phrase("Ngày thanh toán : " + DONHANG.getNgayTT(), fontNormal);
+				LocalDate today = LocalDate.now();
+				com.itextpdf.text.Phrase phrase_NgayTT = new com.itextpdf.text.Phrase("Ngày báo cáo : " + today, fontNormal);
 				com.itextpdf.text.pdf.PdfPCell cell_NgayTT = new com.itextpdf.text.pdf.PdfPCell(phrase_NgayTT);
 				cell_NgayTT.setBorder(0);  
 				infoTable.addCell(cell_NgayTT);
@@ -447,70 +490,45 @@ public class ChiTietDH_Dialog extends JDialog {
 				com.itextpdf.text.pdf.PdfPCell cell_MaNV = new com.itextpdf.text.pdf.PdfPCell(phrase_MaNV);
 				cell_MaNV.setBorder(0);  
 				infoTable.addCell(cell_MaNV);
+				
+				
+				com.itextpdf.text.Phrase phrase_ngayBD = new com.itextpdf.text.Phrase("Thống kê từ ngày : " +(BaoCaoPanel.getPanelTimkiem().getNgayBatDau() != null? "khang": " ngày thành lập"), fontNormal);
+				com.itextpdf.text.pdf.PdfPCell cell_ngaBD = new com.itextpdf.text.pdf.PdfPCell(phrase_ngayBD);
+				cell_ngaBD.setBorder(0);  
+				infoTable.addCell(cell_ngaBD);
 	
-				TheThanhVienDTO tv = TheThanhVienBLL.getMemberById(DONHANG.getMaKH());
-				com.itextpdf.text.Phrase phrase_TenKH = new com.itextpdf.text.Phrase("Tên khách hàng : " + (tv == null ? "null" : tv.getTenTV()), fontNormal);
+				com.itextpdf.text.Phrase phrase_ngayKT = new com.itextpdf.text.Phrase("thống kê đến ngày : " +(BaoCaoPanel.getPanelTimkiem().getNgayKetThuc() != null?"khản" : today.toString()), fontNormal);
+				com.itextpdf.text.pdf.PdfPCell cell_ngayKT = new com.itextpdf.text.pdf.PdfPCell(phrase_ngayKT);
+				cell_ngayKT.setBorder(0);  
+				infoTable.addCell(cell_ngayKT);
+	
+	
+				com.itextpdf.text.Phrase phrase_TenKH = new com.itextpdf.text.Phrase("Tổng số đơn hàng : " + BaoCaoPanel.getSoDonhang(), fontNormal);
 				com.itextpdf.text.pdf.PdfPCell cell_TenKH = new com.itextpdf.text.pdf.PdfPCell(phrase_TenKH);
 				cell_TenKH.setBorder(0);  
 				infoTable.addCell(cell_TenKH);
 	
-				com.itextpdf.text.Phrase phrase_MaKH = new com.itextpdf.text.Phrase("Mã khách hàng : " + (tv == null ? "null" : tv.getMaTV()), fontNormal);
+				com.itextpdf.text.Phrase phrase_MaKH = new com.itextpdf.text.Phrase("Tổng danh thu : " + BaoCaoPanel.getDanhThu(), fontNormal);
 				com.itextpdf.text.pdf.PdfPCell cell_MaKH = new com.itextpdf.text.pdf.PdfPCell(phrase_MaKH);
 				cell_MaKH.setBorder(0);  
 				infoTable.addCell(cell_MaKH);
 	
-				KhuyenMaiDTO km = KhuyenMaiBLL.getDiscountById(DONHANG.getMaKM());
-				com.itextpdf.text.Phrase phrase_TenKM = new com.itextpdf.text.Phrase("Tên khuyến mãi : " + (km == null ? "null" : km.getTenKM()) , fontNormal);
+				com.itextpdf.text.Phrase phrase_TenKM = new com.itextpdf.text.Phrase("Nội dung báo cáo :\n " + txtrNhapNoiDung.getText() , fontNormal);
 				com.itextpdf.text.pdf.PdfPCell cell_TenKM = new com.itextpdf.text.pdf.PdfPCell(phrase_TenKM);
 				cell_TenKM.setBorder(0);  
-				infoTable.addCell(cell_TenKM);
-	
-				com.itextpdf.text.Phrase phrase_MaKM = new com.itextpdf.text.Phrase("Mã khuyến mãi : " + (km == null ? "null" : km.getMaKM())  , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_MaKM = new com.itextpdf.text.pdf.PdfPCell(phrase_MaKM);
-				cell_MaKM.setBorder(0);  
-				infoTable.addCell(cell_MaKM);
-	
-				DiemTichLuyDTO dtl = DiemTichLuyBLL.getDiemTichLuyById(DONHANG.getMaDTL());
-				com.itextpdf.text.Phrase phrase_DTL = new com.itextpdf.text.Phrase("Số điểm tích lũy : " + (dtl == null ? "null" : dtl.getDiemTL()) , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_DTL = new com.itextpdf.text.pdf.PdfPCell(phrase_DTL);
-				cell_DTL.setBorder(0);  
-				infoTable.addCell(cell_DTL);
-	
-				com.itextpdf.text.Phrase phrase_TLGiamDTL = new com.itextpdf.text.Phrase("Tỉ lệ giảm (ĐTL): " + (dtl == null ? "null" : dtl.getTiLeGiam()) + " %" , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_TLGiamDTL = new com.itextpdf.text.pdf.PdfPCell(phrase_TLGiamDTL);
-				cell_TLGiamDTL.setBorder(0);  
-				infoTable.addCell(cell_TLGiamDTL);
-	
-				com.itextpdf.text.Phrase phrase_PTTT = new com.itextpdf.text.Phrase("Phương thức thanh toán : "  + DONHANG.getPtThanhToan() , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_PTTT = new com.itextpdf.text.pdf.PdfPCell(phrase_PTTT);
-				cell_PTTT.setBorder(0);  
-				infoTable.addCell(cell_PTTT);
-	
-				com.itextpdf.text.Phrase phrase_TienKD = new com.itextpdf.text.Phrase("Tiền khách đưa/chuyển : " + (DONHANG.getTienKD() == -1 ? 0 : DONHANG.getTienKD()) + " VNĐ" , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_TienKD = new com.itextpdf.text.pdf.PdfPCell(phrase_TienKD);
-				cell_TienKD.setBorder(0);  
-				infoTable.addCell(cell_TienKD);
-	
-				com.itextpdf.text.Phrase phrase_TongTien = new com.itextpdf.text.Phrase("Tổng tiền : " + String.format("%,.0f", (double)DONHANG.getTongTien()) + " VNĐ" , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_TongTien = new com.itextpdf.text.pdf.PdfPCell(phrase_TongTien);
-				cell_TongTien.setBorder(0);  
-				infoTable.addCell(cell_TongTien);
-	
-				com.itextpdf.text.Phrase phrase_TrangThaiTT = new com.itextpdf.text.Phrase("Trạng thái thanh toán :  Đã thanh toán" , fontNormal);
-				com.itextpdf.text.pdf.PdfPCell cell_TrangThaiTT = new com.itextpdf.text.pdf.PdfPCell(phrase_TrangThaiTT);
-				cell_TrangThaiTT.setBorder(0);  
-				infoTable.addCell(cell_TrangThaiTT);
-	
+				
+				
 				document.add(infoTable);
+				document.add(phrase_TenKM);
 		
 				// Tạo bảng chi tiết sản phẩm
 				com.itextpdf.text.pdf.PdfPTable table = new com.itextpdf.text.pdf.PdfPTable(6);
 				table.setWidthPercentage(100);
-				table.setWidths(new float[]{1.2f, 3f, 2f, 2f, 2f, 2.5f});
+				table.setWidths(new float[]{1f, 1f, 1f, 2f, 3f, 2.5f});
 				table.setSpacingBefore(10f);
 		
 				// Header bảng
-				String[] headers = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng", "Thành tiền"};
+				String[] headers = {"Mã DH", "Mã KM", "Mã KH", "PT thanh toán", "Ngày mua", "thành tiền"};
 				for (String header : headers) {
 					com.itextpdf.text.pdf.PdfPCell cell = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(header, fontHeader));
 					cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
@@ -520,42 +538,84 @@ public class ChiTietDH_Dialog extends JDialog {
 				}
 	
 		
-				// Dữ liệu chi tiết đơn hàng
-				java.util.ArrayList<ChiTietDonHangDTO> dsCTDH = ChiTietDonHangBLL.getChiTietByMaDH(DONHANG.getMaDH());
-				for (ChiTietDonHangDTO ctdh : dsCTDH) {
-					SanPhamDTO sp = SanPhamBLL.getProductById(ctdh.getMaSP());
-					ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
-		
-					double tiLe = (ctkm != null) ? ctkm.getTiLeGiam() : 0.0;
-					double thanhTien = sp.getGia() * (1 - tiLe / 100.0) * ctdh.getSoLuong();
-		
-					com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(ctdh.getMaSP()), fontNormal));
+				for (DonHangDTO dh : BaoCaoPanel.getDanhSachDonHang()) {
+					com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(dh.getMaDH()), fontNormal));
 					cell1.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell1);
 	
-					com.itextpdf.text.pdf.PdfPCell cell2 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(sp.getTenSP(), fontNormal));
+					com.itextpdf.text.pdf.PdfPCell cell2 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(dh.getMaKM()), fontNormal));
 					cell2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell2);
-	
-					com.itextpdf.text.pdf.PdfPCell cell3 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.format("%,.0f", sp.getGia()), fontNormal));
+					
+					com.itextpdf.text.pdf.PdfPCell cell3 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(dh.getMaKH()), fontNormal));
 					cell3.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell3);
 	
-					com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(tiLe + " %", fontNormal));
+					com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(dh.getPtThanhToan(), fontNormal));
 					cell4.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell4);
 	
-					com.itextpdf.text.pdf.PdfPCell cell5 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(ctdh.getSoLuong()), fontNormal));
+		
+					com.itextpdf.text.pdf.PdfPCell cell5 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(dh.getNgayTT()), fontNormal));
 					cell5.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell5);
 	
-					com.itextpdf.text.pdf.PdfPCell cell6 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.format("%,.0f", thanhTien), fontNormal));
+					com.itextpdf.text.pdf.PdfPCell cell6 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.format("%,.0f", (double)dh.getTongTien()), fontNormal));
 					cell6.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell6);
 	
 				}
 		
 				document.add(table);
+				
+				com.itextpdf.text.pdf.PdfPTable table_chuKy = new com.itextpdf.text.pdf.PdfPTable(3);
+				infoTable.setWidthPercentage(100);
+				infoTable.setSpacingBefore(10f);
+				infoTable.setSpacingAfter(10f);
+				
+				com.itextpdf.text.Phrase phrase_TenNguoiLam = new com.itextpdf.text.Phrase("Người làm báo cáo", fontNormal);
+				com.itextpdf.text.pdf.PdfPCell cell_TenNguoilam = new com.itextpdf.text.pdf.PdfPCell(phrase_TenNguoiLam);
+				cell_TenNguoilam.setBorder(0);  
+				cell_TenNguoilam.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+				table_chuKy.addCell(cell_TenNguoilam);
+				
+				com.itextpdf.text.Phrase phrase_rong = new com.itextpdf.text.Phrase("", fontNormal);
+				com.itextpdf.text.pdf.PdfPCell cell_rong = new com.itextpdf.text.pdf.PdfPCell(phrase_rong);
+				cell_rong.setBorder(0);  
+				cell_rong.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+				table_chuKy.addCell(cell_rong);
+				
+				
+				com.itextpdf.text.Phrase phrase_quanLy = new com.itextpdf.text.Phrase("Ban quản lý siêu thị", fontNormal);
+				com.itextpdf.text.pdf.PdfPCell cell_quanLy = new com.itextpdf.text.pdf.PdfPCell(phrase_quanLy);
+				cell_quanLy.setBorder(0);  
+				cell_quanLy.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+				table_chuKy.addCell(cell_quanLy);
+				
+				
+				com.itextpdf.text.Phrase phrase_TenNguoiLam2 = new com.itextpdf.text.Phrase("Ký và ghi rõ họ tên", fontNormalSub);
+				com.itextpdf.text.pdf.PdfPCell cell_TenNguoilam2 = new com.itextpdf.text.pdf.PdfPCell(phrase_TenNguoiLam2);
+				cell_TenNguoilam2.setBorder(0);  
+				cell_TenNguoilam2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+				table_chuKy.addCell(cell_TenNguoilam2);
+				
+				
+				com.itextpdf.text.pdf.PdfPCell cell_rong2 = new com.itextpdf.text.pdf.PdfPCell(phrase_rong);
+				cell_rong2.setBorder(0);  
+				cell_rong2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+				table_chuKy.addCell(cell_rong2);
+				
+				
+				com.itextpdf.text.Phrase phrase_quanLy2 = new com.itextpdf.text.Phrase("Ký và ghi rõ họ tên", fontNormalSub);
+				com.itextpdf.text.pdf.PdfPCell cell_quanLy2 = new com.itextpdf.text.pdf.PdfPCell(phrase_quanLy2);
+				cell_quanLy2.setBorder(0);  
+				cell_quanLy2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+				table_chuKy.addCell(cell_quanLy2);
+				
+				
+				
+				document.add(table_chuKy);
+				
 				document.close();
 		
 				System.out.println("Xuất PDF thành công!");

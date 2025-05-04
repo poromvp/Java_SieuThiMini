@@ -393,7 +393,7 @@ public class ChiTietBC_Dialog extends JDialog {
         }
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle("Chọn nơi lưu báo cáo và đặt tên file");
-		chooser.setSelectedFile(new File("BaoCao.pdf")); // Tên file mặc định gợi ý
+		chooser.setSelectedFile(new File("BaoCao.pdf"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
 		int result = chooser.showSaveDialog(null);
@@ -406,28 +406,10 @@ public class ChiTietBC_Dialog extends JDialog {
 			}
 
 			System.out.println("File sẽ lưu: " + selectedFile.getAbsolutePath());
-			// Gọi phương thức xuất báo cáo tại đây
-		}
-
-
-		try {
-		    // Trả về Look & Feel mặc định của Java (thường là Metal)
-		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		    // Cập nhật lại UI trên frame (nếu cần)
-		    SwingUtilities.updateComponentTreeUI(this); // yourFrame là JFrame hoặc JDialog
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
-
-		
-		int returnVal = chooser.showSaveDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File selectedFolder = chooser.getSelectedFile();
-			String filePath = selectedFolder.getAbsolutePath() + File.separator + "BaoCao_" + DONHANG.getMaDH() + ".pdf";
 			try {
 				// Tạo document mới
 				com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-        		com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        		com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
         		document.open();
 		
 				// Font hỗ trợ tiếng Việt
@@ -619,13 +601,23 @@ public class ChiTietBC_Dialog extends JDialog {
 				document.close();
 		
 				System.out.println("Xuất PDF thành công!");
-				JOptionPane.showMessageDialog(null, "XUẤT ĐƠN HÀNG thành công !!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "XUẤT BÁO CÁO thành công !!", "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
 				
 			} catch (java.io.FileNotFoundException e) {
 				JOptionPane.showMessageDialog(null, "Không thể XUẤT ĐƠN HÀNG vì file đang được mở.\nVui lòng đóng file và thử lại.", "Lỗi File", JOptionPane.ERROR_MESSAGE);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+
+
+		try {
+		    // Trả về Look & Feel mặc định của Java (thường là Metal)
+		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		    // Cập nhật lại UI trên frame (nếu cần)
+		    SwingUtilities.updateComponentTreeUI(this); // yourFrame là JFrame hoặc JDialog
+		} catch (Exception e) {
+		    e.printStackTrace();
 		}
 	}
 	

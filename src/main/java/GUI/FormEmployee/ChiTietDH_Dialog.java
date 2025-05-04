@@ -368,25 +368,24 @@ public class ChiTietDH_Dialog extends JDialog {
             e.printStackTrace();
         }
 		JFileChooser chooser = new JFileChooser();
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setDialogTitle("Chọn thư mục để lưu đơn hàng");
+		chooser.setDialogTitle("Chọn nơi lưu báo cáo và đặt tên file");
+		chooser.setSelectedFile(new File("DonHang.pdf"));
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
+		int result = chooser.showSaveDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = chooser.getSelectedFile();
 
-		try {
-		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-		    SwingUtilities.updateComponentTreeUI(this); 
-		} catch (Exception e) {
-		    e.printStackTrace();
-		}
+			// Nếu người dùng không nhập đuôi .pdf, thêm vào
+			if (!selectedFile.getName().toLowerCase().endsWith(".pdf")) {
+				selectedFile = new File(selectedFile.getAbsolutePath() + ".pdf");
+			}
 
-		int returnVal = chooser.showSaveDialog(null);
-		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			File selectedFolder = chooser.getSelectedFile();
-			String filePath = selectedFolder.getAbsolutePath() + File.separator + "DonHang_" + DONHANG.getMaDH() + ".pdf";
+			System.out.println("File sẽ lưu: " + selectedFile.getAbsolutePath());
 			try {
 				// Tạo document mới
 				com.itextpdf.text.Document document = new com.itextpdf.text.Document();
-        		com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(filePath));
+        		com.itextpdf.text.pdf.PdfWriter.getInstance(document, new FileOutputStream(selectedFile));
         		document.open();
 		
 				// Font hỗ trợ tiếng Việt
@@ -566,6 +565,14 @@ public class ChiTietDH_Dialog extends JDialog {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		try {
+		    // Trả về Look & Feel mặc định của Java (thường là Metal)
+		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		    // Cập nhật lại UI trên frame (nếu cần)
+		    SwingUtilities.updateComponentTreeUI(this); // yourFrame là JFrame hoặc JDialog
+		} catch (Exception e) {
+		    e.printStackTrace();
 		}
 	}
 	

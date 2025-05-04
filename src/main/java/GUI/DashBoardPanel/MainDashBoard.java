@@ -103,15 +103,12 @@ public class MainDashBoard extends JPanel implements ActionListener {
             int userSelection = fileChooser.showSaveDialog(this);
 
             if (userSelection == JFileChooser.APPROVE_OPTION) {
-                File fileToSave = fileChooser.getSelectedFile();
-                // Lấy PanelChart từ pn1 (JPanel chứa PanelTomTat và PanelChart)
                 JScrollPane scrollPane = (JScrollPane) this.getComponent(0);
                 JPanel pn1 = (JPanel) scrollPane.getViewport().getView();
                 PanelChart panelChart = (PanelChart) pn1.getComponent(1);
-                // Lấy vechart từ PanelChart
                 vechart chart = (vechart) ((JScrollPane) panelChart.getComponent(0)).getViewport().getView();
-                PDFExporter.exportToPDF(panelChart, chart.timeFilter, chart.selectedMonth, chart.selectedYear, fileToSave.getAbsolutePath());
-                JOptionPane.showMessageDialog(this, "Báo cáo đã được lưu tại: " + fileToSave.getAbsolutePath());
+                PDFExporter.exportChartToPDFWithDialog(panelChart, chart.timeFilter, chart.selectedMonth,
+                        chart.selectedYear, "MANV_DEFAULT"); // Thay MANV_DEFAULT bằng mã nhân viên thực tế
             }
         }
     }

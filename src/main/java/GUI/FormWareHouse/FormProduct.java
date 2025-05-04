@@ -157,6 +157,7 @@ public class FormProduct extends JPanel {
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 
         JPanel panelBtn = new JPanel();
+        panelBtn.setBackground(Color.WHITE);
         panelBtn.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelBtn.add(themBtn);
         panelBtn.add(suaBtn);

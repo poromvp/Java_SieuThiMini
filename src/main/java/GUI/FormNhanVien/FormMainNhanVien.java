@@ -65,7 +65,7 @@ public class FormMainNhanVien extends JPanel {
         buttonPanel.add(btnXemNghiViec);
         ButtonCustom btnXuatPDF = new ButtonCustom("Xuất", "printer",12,50,40);
         buttonPanel.add(btnXuatPDF);
-        btnXuatPDF.addActionListener(e -> FormExport());
+        btnXuatPDF.addActionListener(e -> FormExport("Danh sách nhân viên"));
         add(buttonPanel, BorderLayout.SOUTH);
     }
    
@@ -173,11 +173,11 @@ private void deleteNhanVien() {
         dialog.add(formLichSu);
         dialog.setVisible(true);
     }
-    private void FormExport() {
+    private void FormExport(String title) {
         JDialog dialog = new JDialog(SwingUtilities.getWindowAncestor(this), "Export", Dialog.ModalityType.APPLICATION_MODAL);
         dialog.setSize(300, 150);
         dialog.setLocationRelativeTo(this);
-        FormExport formEx = new FormExport();
+        FormExport formEx = new FormExport(title);
         dialog.add(formEx);
         dialog.setVisible(true);
     }

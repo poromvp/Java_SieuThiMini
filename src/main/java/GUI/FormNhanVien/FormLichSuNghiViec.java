@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
+import GUI.ComponentCommon.TienIch;
 import BLL.NhanVienBLL;
 import DTO.NhanVienDTO;
 
@@ -68,7 +69,7 @@ public class FormLichSuNghiViec extends JPanel {
                     nv.getCCCD(),
                     nv.getDiaChi(),
                     nv.getSDT(),
-                    nv.getLuong(),
+                    TienIch.formatVND(nv.getLuong()),
                     "Nghỉ việc"
                 });
             }

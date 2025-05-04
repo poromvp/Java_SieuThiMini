@@ -15,7 +15,7 @@ public class FormExport extends JPanel {
     private JRadioButton rbExcel;
     private JRadioButton rbPDF;
     private FormTableNhanVien table = new FormTableNhanVien();
-    public FormExport() {
+    public FormExport(String title) {
         TitledBorder border = new TitledBorder("Chọn định dạng");
         border.setTitleColor(Color.BLACK);
         setLayout(new BorderLayout(10, 10));
@@ -36,17 +36,17 @@ public class FormExport extends JPanel {
         radioPanel.add(rbPDF);
 
         ButtonCustom btnExport = new ButtonCustom("XUẤT", 12, "blue");
-        btnExport.addActionListener(e -> xuatFile());
+        btnExport.addActionListener(e -> xuatFile(title));
 
         add(btnExport,BorderLayout.SOUTH);
         add(radioPanel, BorderLayout.CENTER);
         setVisible(true);
     }
-    public void xuatFile(){
+    public void xuatFile(String title){
         if (rbExcel.isSelected()) {
-            Export.exportToExcel(table.getNhanVienTable(), "Danh sách nhân viên");
+            Export.exportToExcel(table.getNhanVienTable(), title);
         } else if (rbPDF.isSelected()) {
-            Export.exportToPDF(table.getNhanVienTable(), "Danh sách nhân viên");
+            Export.exportToPDF(table.getNhanVienTable(), title);
         }
 
     }
@@ -55,7 +55,7 @@ public class FormExport extends JPanel {
             frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             frame.setSize(300, 150);
             frame.setLocationRelativeTo(null); 
-            frame.setContentPane(new FormExport());
+            frame.setContentPane(new FormExport("Danh sách"));
             frame.setVisible(true);
     }
 }

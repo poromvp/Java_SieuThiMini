@@ -8,6 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.TheThanhVienBLL;
+import DTO.SearchTheThanhVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.Admin_PanelThongKe.PanelExport;
 import GUI.Admin_PanelThongKe.PanelTimKH;
@@ -20,8 +21,11 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
     private ArrayList<TheThanhVienDTO> TTV = TheThanhVienBLL.getAllMembersINACTIVE();
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
+    public String MANV;
+    public SearchTheThanhVienDTO SEARCH = new SearchTheThanhVienDTO();
 
-    public PanelXemDSLock() {
+    public PanelXemDSLock(String MANV) {
+        this.MANV = MANV;
         TienIch.taoTitleBorder(this, "Danh sách Thẻ Thành Viên bị khóa");
         setLayout(new BorderLayout());
 
@@ -31,14 +35,14 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
         model = (DefaultTableModel) tb.getModel();
         loadThanhVien(TTV);
         StyledTable.hoverTable(tb, model);
-        StyledTable.TableEvent(tb, model, "KH");
+        StyledTable.TableEvent(tb, model, "KH", MANV);
         scr = new JScrollPane(tb);
         add(scr, BorderLayout.CENTER);
 
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         searchItem.addActionListener(this);
         exportItem.addActionListener(this);
         popupMenu.add(searchItem);
@@ -114,7 +118,13 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 TTV = panel.ketquaLock();
-                loadThanhVien(TTV);
+                if(TTV.size()!=0){
+                    SEARCH = panel.traSearch();
+                    loadThanhVien(TTV);
+                } else {
+                    TienIch.CustomMessage("Không tìm thấy");
+                    loadThanhVien(TTV);
+                }
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
@@ -124,7 +134,12 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
                 } else {
-                    panel.XuatPDF(model);
+                    if(TTV.size()!=0){
+                        PanelExport.InPDFTheThanhVienTheoSearch(TTV, SEARCH, MANV, " ĐÃ KHÓA");
+                        panel.XuatPDF(model);
+                    }else{
+                        TienIch.CustomMessage("Không có gì để in!");
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

@@ -13,6 +13,7 @@ import com.toedter.calendar.JDateChooser;
 
 import BLL.BaoCaoNhanVienBLL;
 import DTO.NhanVienDTO;
+import DTO.SearchNhanVienDTO;
 import GUI.ComponentCommon.*;
 
 public class PanelTotNhat extends JPanel implements ActionListener {
@@ -111,8 +112,9 @@ public class PanelTotNhat extends JPanel implements ActionListener {
             }
         });
     }
-
-    public PanelTotNhat() {
+    public String MANV;
+    public PanelTotNhat(String MANV) {
+        this.MANV = MANV;
         TienIch.taoTitleBorder(this, "Danh sách nhân viên có doanh số tốt nhất");
         setLayout(new BorderLayout());
         initPanelTool();
@@ -125,7 +127,7 @@ public class PanelTotNhat extends JPanel implements ActionListener {
         DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(new java.sql.Date(from.getDate().getTime()),
         new java.sql.Date(to.getDate().getTime()));
         loadNhanVien(DsNV);
-        TableControl.TableEvent(tb, model, "NV"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "NV", MANV); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         add(scr, BorderLayout.CENTER);
 
@@ -133,7 +135,7 @@ public class PanelTotNhat extends JPanel implements ActionListener {
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         searchItem.addActionListener(this);
         exportItem.addActionListener(this);
         popupMenu.add(searchItem);
@@ -199,7 +201,7 @@ public class PanelTotNhat extends JPanel implements ActionListener {
             });
         }
     }
-
+    public SearchNhanVienDTO SEARCH= new SearchNhanVienDTO();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -209,7 +211,13 @@ public class PanelTotNhat extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 DsNV = panel.ketqua(new Date(from.getDate().getTime()), new Date(to.getDate().getTime()));
-                loadNhanVien(DsNV);
+                if(DsNV.size()!=0){
+                    SEARCH = panel.trasearch();
+                    loadNhanVien(DsNV);
+                } else{
+                    loadNhanVien(DsNV);
+                    TienIch.CustomMessage("Không tìm thấy");
+                }
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
@@ -219,7 +227,12 @@ public class PanelTotNhat extends JPanel implements ActionListener {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
                 } else {
-                    panel.XuatPDF(model);
+                    if(DsNV.size()!=0){
+                        PanelExport.InPDFNhanVienTheoTotNhatSearch(DsNV, SEARCH, new Date(from.getDate().getTime()), new Date(to.getDate().getTime()), MANV);
+                        panel.XuatPDF(model);
+                    } else {
+                        TienIch.CustomMessage("Không có gì để in");
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

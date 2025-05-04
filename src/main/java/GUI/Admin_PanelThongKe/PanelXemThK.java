@@ -107,8 +107,9 @@ public class PanelXemThK extends JPanel {
         lbThu.setForeground(Color.GREEN);
         pn4.add(lbThu);
     }
-
-    public PanelXemThK(DefaultTableModel model, int dong) {
+    public String MANV;
+    public PanelXemThK(DefaultTableModel model, int dong, String MANV) {
+        this.MANV = MANV;
         setBackground(new Color(203, 238, 233));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

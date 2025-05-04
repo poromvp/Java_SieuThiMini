@@ -8,6 +8,7 @@ import javax.swing.border.*;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.TheThanhVienBLL;
+import DTO.SearchTheThanhVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.Admin_TheThanhVien.PanelXemDSLock;
 import GUI.ComponentCommon.*;
@@ -66,8 +67,9 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
             });
         }
     }
-
-    public PanelBaoCaoKH() {
+    public String MANV;
+    public PanelBaoCaoKH(String MANV) {
+        this.MANV=MANV;
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo khách hàng"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -88,7 +90,7 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 TienIch.setDarkUI();
-                PanelXemDSLock panel = new PanelXemDSLock();
+                PanelXemDSLock panel = new PanelXemDSLock(MANV);
                 int result = JOptionPane.showConfirmDialog(null, panel, "Danh sách TTV đã khóa",
                         JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
                 if (result == JOptionPane.OK_OPTION) {
@@ -111,7 +113,7 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
         TTV = TheThanhVienBLL.getAllMembersACTIVE();
         loadThanhVien(TTV);
         StyledTable.hoverTable(tb, model);
-        StyledTable.TableEvent(tb, model, "KH"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "KH", MANV); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
 
         pn1 = new JPanel();
@@ -123,7 +125,7 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
 
         // Thêm popup menu
         popupMenu = new JPopupMenu();
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         exportItem.addActionListener(this);
         popupMenu.add(exportItem);
         // Thêm sự kiện chuột phải cho bảng
@@ -142,7 +144,7 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
             });
         }
     }
-
+    public SearchTheThanhVienDTO SEARCH = new SearchTheThanhVienDTO();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -152,7 +154,13 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 TTV = panel.ketqua();
-                loadThanhVien(TTV);
+                if(TTV.size()!=0){
+                    SEARCH = panel.traSearch();
+                    loadThanhVien(TTV);
+                } else{
+                    TienIch.CustomMessage("Không tìm thấy");
+                    loadThanhVien(TTV);
+                }
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
@@ -162,7 +170,12 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
                 } else {
-                    panel.XuatPDF(model);
+                    if(TTV.size()!=0){
+                        PanelExport.InPDFTheThanhVienTheoSearch(TTV, SEARCH, MANV, "");
+                        panel.XuatPDF(model);
+                    } else{
+                        TienIch.CustomMessage("Không có gì để in");
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

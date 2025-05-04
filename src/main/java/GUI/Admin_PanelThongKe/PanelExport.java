@@ -1132,7 +1132,7 @@ public class PanelExport extends JPanel {
         int returnVal = chooser.showSaveDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File selectedFolder = chooser.getSelectedFile();
-            String filePath = selectedFolder.getAbsolutePath() + File.separator + "DanhSachNhanVien_"
+            String filePath = selectedFolder.getAbsolutePath() + File.separator + "DanhSachNhanVienTot_"
                     + System.currentTimeMillis() + ".pdf";
             try {
                 // Tạo document mới

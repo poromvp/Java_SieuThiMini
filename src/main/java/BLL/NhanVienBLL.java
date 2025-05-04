@@ -51,6 +51,8 @@ public class NhanVienBLL {
     public String getNameNV (String maNV){
         return dal.getNameNhanVien(maNV);
     }
-
+    public static List<String> getDanhSachKhuVuc() {
+        return NhanVienDAL.getAllKhuVuc();
+    }
     
 }

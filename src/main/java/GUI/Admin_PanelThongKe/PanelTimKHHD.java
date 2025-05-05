@@ -104,7 +104,7 @@ public class PanelTimKHHD extends JPanel {
         gbc.gridy = 1;
         add(lbPhuongThucThanhToan, gbc);
 
-        cbPhuongThucThanhToan = new JComboBox<>(new String[]{"TẤT CẢ", "CASH", "BANK"});
+        cbPhuongThucThanhToan = new JComboBox<>(new String[] { "TẤT CẢ", "CASH", "BANK" });
         TienIch.timStyle(cbPhuongThucThanhToan);
         gbc.gridx = 5;
         gbc.gridy = 1;
@@ -236,7 +236,7 @@ public class PanelTimKHHD extends JPanel {
         gbc.gridy = 6;
         add(lbSapXep, gbc);
 
-        cbSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        cbSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
         TienIch.timStyle(cbSapXep);
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -248,7 +248,8 @@ public class PanelTimKHHD extends JPanel {
         gbc.gridy = 6;
         add(lbTheoCot, gbc);
 
-        cbTheoCot = new JComboBox<>(new String[]{"Mã đơn hàng", "Ngày TT", "Thành tiền", "Mã nhân viên", "Mã khuyến mãi"});
+        cbTheoCot = new JComboBox<>(
+                new String[] { "Mã đơn hàng", "Ngày TT", "Thành tiền", "Mã nhân viên", "Mã khuyến mãi" });
         TienIch.timStyle(cbTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 6;
@@ -257,12 +258,14 @@ public class PanelTimKHHD extends JPanel {
 
     public ArrayList<DonHangDTO> ketqua(int MaKH) {
         int maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
-        maNV = txtMaNhanVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaNhanVien.getText().trim()),
-        maKM = txtMaKhuyenMai.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaKhuyenMai.getText().trim()),
-        maSP = txtMaSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText().trim()),
-        maLSP = txtMaLoaiSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText().trim());
-        Date tu = dateTTFrom.getDate()!=null ? new Date(dateTTFrom.getDate().getTime()) : null;
-        Date den = dateTTTo.getDate()!=null ? new Date(dateTTTo.getDate().getTime()) : null;
+                maNV = txtMaNhanVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaNhanVien.getText().trim()),
+                maKM = txtMaKhuyenMai.getText().trim().isEmpty() ? 0
+                        : Integer.parseInt(txtMaKhuyenMai.getText().trim()),
+                maSP = txtMaSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText().trim()),
+                maLSP = txtMaLoaiSanPham.getText().trim().isEmpty() ? 0
+                        : Integer.parseInt(txtMaLoaiSanPham.getText().trim());
+        Date tu = dateTTFrom.getDate() != null ? new Date(dateTTFrom.getDate().getTime()) : null;
+        Date den = dateTTTo.getDate() != null ? new Date(dateTTTo.getDate().getTime()) : null;
         SearchKHDHDTO search = new SearchKHDHDTO(
                 maDH,
                 tu,
@@ -281,5 +284,35 @@ public class PanelTimKHHD extends JPanel {
                 (String) cbSapXep.getSelectedItem(),
                 (String) cbTheoCot.getSelectedItem());
         return BaoCaoKhachHangBLL.TimKHDH(search, MaKH);
+    }
+
+    public SearchKHDHDTO traSearch() {
+        int maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+                maNV = txtMaNhanVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaNhanVien.getText().trim()),
+                maKM = txtMaKhuyenMai.getText().trim().isEmpty() ? 0
+                        : Integer.parseInt(txtMaKhuyenMai.getText().trim()),
+                maSP = txtMaSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText().trim()),
+                maLSP = txtMaLoaiSanPham.getText().trim().isEmpty() ? 0
+                        : Integer.parseInt(txtMaLoaiSanPham.getText().trim());
+        Date tu = dateTTFrom.getDate() != null ? new Date(dateTTFrom.getDate().getTime()) : null;
+        Date den = dateTTTo.getDate() != null ? new Date(dateTTTo.getDate().getTime()) : null;
+        SearchKHDHDTO search = new SearchKHDHDTO(
+                maDH,
+                tu,
+                den,
+                (int) minThanhTien.getValue(),
+                (int) maxThanhTien.getValue(),
+                (String) cbPhuongThucThanhToan.getSelectedItem(),
+                maNV,
+                txtTenNhanVien.getText().trim(),
+                maKM,
+                txtTenKhuyenMai.getText().trim(),
+                maSP,
+                txtTenSanPham.getText().trim(),
+                maLSP,
+                txtTenLoaiSanPham.getText().trim(),
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
+        return search;
     }
 }

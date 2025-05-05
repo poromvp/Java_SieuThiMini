@@ -11,6 +11,7 @@ import BLL.NhaCungCapBLL;
 import BLL.NhanVienBLL;
 import BLL.NhapHangBLL;
 import DTO.PhieuNhapHangDTO;
+import DTO.SearchLoHangDTO;
 import GUI.ComponentCommon.StyledTable;
 import GUI.ComponentCommon.TienIch;
 
@@ -22,7 +23,8 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
 
-    public PanelDSLoHang() {
+    public PanelDSLoHang(String MANV) {
+        this.MANV=MANV;
         TienIch.taoTitleBorder(this, "Danh sách nhập hàng");
         setLayout(new BorderLayout());
 
@@ -41,7 +43,7 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         searchItem.addActionListener(this);
         exportItem.addActionListener(this);
         popupMenu.add(searchItem);
@@ -118,7 +120,8 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
             });
         }
     }
-
+    public String MANV;
+    SearchLoHangDTO SEARCH = new SearchLoHangDTO();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -128,6 +131,11 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 DsNHang = panel.ketqua();
+                if(DsNHang.size()!=0){
+                    SEARCH = panel.trasearch();
+                } else {
+                    TienIch.CustomMessage("Không tìm thấy");
+                }
                 loadNhapHang(DsNHang);
             }
         } else if (e.getSource() == exportItem) {
@@ -138,6 +146,11 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(model);
                 } else {
+                    if(DsNHang.size()==0){
+                        TienIch.CustomMessage("Không có gì để in");
+                    } else{
+                        PanelExport.InPDFLoHangSearch(DsNHang, SEARCH, MANV);
+                    }
                     panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {

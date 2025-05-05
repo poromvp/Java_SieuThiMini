@@ -22,8 +22,10 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
     private JPanel rightPn;
     private LeftSidebarMenu leftMenu;
-    private static TaiKhoanDTO tk;
+    public TaiKhoanDTO tk;
+    public String maNV;
     public FrameAdmin(String maNV) {
+        this.maNV = maNV;
         setTitle("Frame Quản Lý");
         setSize(1300, 750);
         setLocationRelativeTo(null);
@@ -86,11 +88,11 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
     }
 
-    public void panelBaoCao() {
+    public void panelBaoCao(String MANV) {
         rightPn.removeAll();
         rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
-        PanelMainThongKe mainPanel = new PanelMainThongKe();
+        PanelMainThongKe mainPanel = new PanelMainThongKe(MANV);
         rightPn.add(mainPanel, BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
@@ -120,11 +122,11 @@ public class FrameAdmin extends JFrame implements ActionListener {
         add(rightPn);
     }
 
-    public void panelTheThanhVien() {
+    public void panelTheThanhVien(String MANV) {
         rightPn.removeAll();
         rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
-        PanelMainThanhVien mainPanel = new PanelMainThanhVien();
+        PanelMainThanhVien mainPanel = new PanelMainThanhVien(MANV);
         rightPn.add(mainPanel, BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
@@ -151,7 +153,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         } else if (e.getSource() == leftMenu.getBtnProduct()) {
             panelSanPham();
         } else if (e.getSource() == leftMenu.getBtnReport()) {
-            panelBaoCao();
+            panelBaoCao(maNV);
         } else if (e.getSource() == leftMenu.getBtnAccount()) {
             panelTaiKhoan();
         } else if (e.getSource() == leftMenu.getBtnLogout()) {
@@ -160,7 +162,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
             new FrameLogin();
             
         } else if (e.getSource() == leftMenu.getBtnTheTV()) {
-            panelTheThanhVien();
+            panelTheThanhVien(maNV);
         }else if (e.getSource() == leftMenu.getBtnKM()){
             panelKhuyenMai();
         }

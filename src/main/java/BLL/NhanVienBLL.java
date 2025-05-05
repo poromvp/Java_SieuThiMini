@@ -54,5 +54,9 @@ public class NhanVienBLL {
     public static List<String> getDanhSachKhuVuc() {
         return NhanVienDAL.getAllKhuVuc();
     }
-    
+
+    public boolean isNhanVienExists(int maNV) {
+        return dal.getNhanVienById(maNV) != null;
+    }
+
 }

@@ -35,7 +35,7 @@ public class ChiTietNhapHangDAL {
         return chiTietPNHList;
     }
     public boolean insertChiTietNhapHang(ChiTietPNHangDTO chiTiet) {
-        String query = "INSERT INTO ChiTietPNH (MaPNH, MaSP, MaLH, SoLuong, GiaNhap, TrangThai) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO ChiTietPNH (MaPNH, MaSP, MaLH, SoLuong, GiaNhap, NgaySX, NgayHH, TrangThai) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {

@@ -18,7 +18,7 @@ import java.util.List;
 
 public class FormAddProduct extends JPanel {
     private JComboBox trangThai;
-    private StyledTextField tenSP,giaSP,tenAnh,moTa;
+    private StyledTextField tenSP,giaSP,moTa;
     private String selectedImageName;
     private JComboBox<String> loaiSPCombo;
     private JComboBox<String> nccCombo;
@@ -70,33 +70,91 @@ public class FormAddProduct extends JPanel {
         nhapPanel.add(trangThai);
 
         ButtonCustom btn1 = new ButtonCustom("Thêm sản phẩm",16,"green");
-        btn1.addActionListener(e->{
-            try{
+        btn1.addActionListener(e -> {
+            try {
+                // Kiểm tra tên sản phẩm
+                String tenSanPham = tenSP.getText().trim();
+                if (tenSanPham.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Tên sản phẩm không được để trống!");
+                    return;
+                }
+                if (tenSanPham.length() > 255) {
+                    JOptionPane.showMessageDialog(null, "Tên sản phẩm không được vượt quá 255 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra giá sản phẩm
+                String giaText = giaSP.getText().trim();
+                if (giaText.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Giá sản phẩm không được để trống!");
+                    return;
+                }
+                double gia;
+                try {
+                    gia = Double.parseDouble(giaText);
+                    if (gia <= 0) {
+                        JOptionPane.showMessageDialog(null, "Giá sản phẩm phải lớn hơn 0!");
+                        return;
+                    }
+                    if (gia > 99999999.99) {
+                        JOptionPane.showMessageDialog(null, "Giá sản phẩm không được vượt quá 99999999.99!");
+                        return;
+                    }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Giá sản phẩm phải là số hợp lệ!");
+                    return;
+                }
+
+                // Kiểm tra loại sản phẩm
                 String selectedLoaiSP = (String) loaiSPCombo.getSelectedItem();
+                if (selectedLoaiSP == null) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn loại sản phẩm!");
+                    return;
+                }
                 int maLSP = Integer.parseInt(selectedLoaiSP.substring(selectedLoaiSP.indexOf("(") + 1, selectedLoaiSP.indexOf(")")));
 
+                // Kiểm tra nhà cung cấp
                 String selectedNCC = (String) nccCombo.getSelectedItem();
+                if (selectedNCC == null) {
+                    JOptionPane.showMessageDialog(null, "Vui lòng chọn nhà cung cấp!");
+                    return;
+                }
                 int maNCC = Integer.parseInt(selectedNCC.substring(selectedNCC.indexOf("(") + 1, selectedNCC.indexOf(")")));
+
+                // Kiểm tra mô tả
+                String moTaText = moTa.getText().trim();
+                if (moTaText.length() > 555) {
+                    JOptionPane.showMessageDialog(null, "Mô tả không được vượt quá 555 ký tự!");
+                    return;
+                }
+
+                // Kiểm tra tên ảnh
+                if (selectedImageName != null && selectedImageName.length() > 255) {
+                    JOptionPane.showMessageDialog(null, "Tên ảnh không được vượt quá 255 ký tự!");
+                    return;
+                }
+
+                // Tạo đối tượng sản phẩm
                 SanPhamDTO product = new SanPhamDTO(
                         0,
                         maNCC,
                         maLSP,
                         selectedImageName != null ? selectedImageName : "product-default.png",
-                        Double.parseDouble(giaSP.getText()),
-                        tenSP.getText(),
-                        moTa.getText(),
+                        gia,
+                        tenSanPham,
+                        moTaText,
                         (String) trangThai.getSelectedItem(),
                         0
                 );
-                if (SanPhamBLL.addProduct(product)){
-                    JOptionPane.showMessageDialog(null,"Thêm sản phẩm thành công !");
+
+                // Thêm sản phẩm
+                if (SanPhamBLL.addProduct(product)) {
+                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!");
                     clearFields();
-                }else{
-                    JOptionPane.showMessageDialog(null,"Thêm sản phẩm thất bại!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Thêm sản phẩm thất bại!");
                 }
-            }catch (NumberFormatException ex){
-                JOptionPane.showMessageDialog(null,"Vui lòng nhập đúng định dạng số !");
-            } catch (Exception ex){
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(null, "Lỗi: " + ex.getMessage());
             }
         });
@@ -112,7 +170,6 @@ public class FormAddProduct extends JPanel {
         giaSP.setText("");
         loaiSPCombo.setSelectedIndex(0);
         nccCombo.setSelectedIndex(0);
-        tenAnh.setText("");
         moTa.setText("");
     }
 

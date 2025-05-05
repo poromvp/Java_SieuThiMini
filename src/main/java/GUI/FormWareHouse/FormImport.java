@@ -1,5 +1,8 @@
 package GUI.FormWareHouse;
 
+import BLL.NhaCungCapBLL;
+import BLL.NhanVienBLL;
+import DTO.NhaCungCapDTO;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.StyledTable;
@@ -16,23 +19,35 @@ import java.util.ArrayList;
 
 public class FormImport extends JPanel {
     private NhapHangBLL nhapHangBLL = new NhapHangBLL();
+    private NhaCungCapBLL nhaCungCapBLL = new NhaCungCapBLL();
+    private NhanVienBLL nhanVienBLL = new NhanVienBLL();
     private StyledTable table;
+    private String maNV;
 
-    public FormImport() {
+    public FormImport(String maNV) {
+        this.maNV = maNV;
         setLayout(new BorderLayout());
         setBackground(Color.white);
 
         // Panel nhập thông tin
         JPanel nhapPnl = new JPanel();
-        nhapPnl.setLayout(new GridLayout(4, 1, 5, 5));
+        nhapPnl.setLayout(new GridLayout(3, 1, 5, 5));
         nhapPnl.setBorder(BorderFactory.createTitledBorder("Thông tin đơn hàng nhập vào"));
 
         JLabel lb1 = new JLabel("Tên đơn hàng");
         StyledTextField t1 = new StyledTextField();
-        JLabel lb2 = new JLabel("Mã nhân viên");
-        StyledTextField t2 = new StyledTextField();
-        JLabel lb3 = new JLabel("Mã nhà cung cấp");
-        StyledTextField t3 = new StyledTextField();
+//        JLabel lb2 = new JLabel("Mã nhân viên");
+//        StyledTextField t2 = new StyledTextField();
+        JLabel lb3 = new JLabel("Nhà cung cấp");
+        JComboBox<String> cbNhaCC = new JComboBox<>();
+        ArrayList<NhaCungCapDTO> nhaCCList = nhaCungCapBLL.getList();
+        for (NhaCungCapDTO nhaCC : nhaCCList) {
+            if (nhaCC.getTrangThai().equals("ACTIVE")) {
+                cbNhaCC.addItem(nhaCC.getMaNCC() + " - " + nhaCC.getTenNCC());
+            }
+        }
+        cbNhaCC.setSelectedIndex(-1);
+
         ButtonCustom btnThem = new ButtonCustom("Thêm","add",16,20,20);
         JPanel panelNhap = new JPanel();
         panelNhap.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -40,10 +55,10 @@ public class FormImport extends JPanel {
 
         nhapPnl.add(lb1);
         nhapPnl.add(t1);
-        nhapPnl.add(lb2);
-        nhapPnl.add(t2);
+//        nhapPnl.add(lb2);
+//        nhapPnl.add(t2);
         nhapPnl.add(lb3);
-        nhapPnl.add(t3);
+        nhapPnl.add(cbNhaCC);
         nhapPnl.add(panelNhap);
 
         add(nhapPnl, BorderLayout.NORTH);
@@ -53,13 +68,30 @@ public class FormImport extends JPanel {
             try {
                 // Lấy dữ liệu từ các trường nhập
                 String tenPNH = t1.getText().trim();
-                int maNV = Integer.parseInt(t2.getText().trim());
-                int maNCC = Integer.parseInt(t3.getText().trim());
+                int maNVValue = Integer.parseInt(maNV);
+                String nhaCCSelected = (String) cbNhaCC.getSelectedItem();
+
+                if (tenPNH.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Tên đơn hàng không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (!nhanVienBLL.isNhanVienExists(maNVValue)) {
+                    JOptionPane.showMessageDialog(this, "Mã nhân viên không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                if (nhaCCSelected == null) {
+                    JOptionPane.showMessageDialog(this, "Vui lòng chọn nhà cung cấp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                int maNCC = Integer.parseInt(nhaCCSelected.split(" - ")[0]);
 
                 // Tạo đối tượng PhieuNhapHangDTO
                 PhieuNhapHangDTO phieuNhap = new PhieuNhapHangDTO();
                 phieuNhap.setTenPNH(tenPNH);
-                phieuNhap.setMaNV(maNV);
+                phieuNhap.setMaNV(maNVValue);
                 phieuNhap.setMaNCC(maNCC);
                 phieuNhap.setNgayNhap(new java.util.Date());
                 phieuNhap.setTrangThai("FINISHED");
@@ -76,10 +108,9 @@ public class FormImport extends JPanel {
 
                 // Xóa nội dung các trường nhập sau khi mở FormAddImport
                 t1.setText("");
-                t2.setText("");
-                t3.setText("");
+                cbNhaCC.setSelectedIndex(-1);
             } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số cho mã nhân viên và mã nhà cung cấp!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Mã nhân viên không hợp lệ!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
                 ex.printStackTrace();
@@ -106,7 +137,6 @@ public class FormImport extends JPanel {
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollPane, BorderLayout.CENTER);
-
     }
 
     private Object[][] convertDTOToArray(ArrayList<PhieuNhapHangDTO> list) {
@@ -147,7 +177,7 @@ public class FormImport extends JPanel {
 
     private void showImportDetail(int maPNH) {
         JDialog detailDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chi tiết đơn nhập hàng", true);
-        detailDialog.setSize(800, 500);
+        detailDialog.setSize(1500, 700);
         detailDialog.setLayout(new BorderLayout());
         detailDialog.setLocationRelativeTo(null);
 
@@ -187,7 +217,7 @@ public class FormImport extends JPanel {
         f.setLayout(new BorderLayout());
         f.setLocationRelativeTo(null);
 
-        FormImport test = new FormImport();
+        FormImport test = new FormImport("1");
         f.add(test, BorderLayout.CENTER);
         f.setVisible(true);
     }

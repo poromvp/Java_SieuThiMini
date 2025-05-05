@@ -8,6 +8,7 @@ import BLL.NhanVienBLL;
 import BLL.TaiKhoanBLL;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
+import DTO.SearchNVDHDTO;
 import GUI.ComponentCommon.*;
 
 import java.awt.*;
@@ -19,8 +20,10 @@ public class PanelXemNV extends JPanel implements ActionListener {
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
     NhanVienDTO nv;
+    public String MANV;
 
-    public PanelXemNV(DefaultTableModel model, int dong) {
+    public PanelXemNV(DefaultTableModel model, int dong, String MANV) {
+        this.MANV = MANV;
         TienIch.setDarkUI();
         nv = new NhanVienBLL().getNhanVienByMa(model.getValueAt(dong, 0).toString());
         dsHoaDon = DonHangBLL.getOrderByNV(nv.getMaNV());
@@ -55,7 +58,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         searchItem.addActionListener(this);
         exportItem.addActionListener(this);
         popupMenu.add(searchItem);
@@ -225,7 +228,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
         modelMini = (DefaultTableModel) tb.getModel();
         loadDonHang(dsHoaDon);
         StyledTable.hoverTable(tb, modelMini);
-        StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, modelMini, "HD", MANV); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         scr.setPreferredSize(new Dimension(600, 120)); // Giữ kích thước
         pn3.add(scr, BorderLayout.CENTER);
@@ -296,6 +299,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
         }
     }
 
+    public SearchNVDHDTO SEARCH = new SearchNVDHDTO();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -305,6 +309,10 @@ public class PanelXemNV extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 dsHoaDon = panel.ketqua(nv.getMaNV());
+                SEARCH = panel.trasearch();
+                if(dsHoaDon.size() ==0){
+                    TienIch.CustomMessage("Không tìm thấy");
+                }
                 lbTongDonHang.setText(dsHoaDon.size() + "");
                 double sum = 0;
                 for (DonHangDTO hd : dsHoaDon) {
@@ -321,7 +329,12 @@ public class PanelXemNV extends JPanel implements ActionListener {
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(modelMini);
                 } else {
-                    panel.XuatPDF(modelMini);
+                    if(dsHoaDon.size()!=0){
+                        PanelExport.InPDFDonHangCuaNVTheoSearch(dsHoaDon, SEARCH, nv, MANV);
+                        panel.XuatPDF(modelMini);
+                    } else {
+                        TienIch.CustomMessage("Không có gì để in");
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

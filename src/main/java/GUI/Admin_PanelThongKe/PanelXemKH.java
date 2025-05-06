@@ -3,10 +3,10 @@ package GUI.Admin_PanelThongKe;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-
 import BLL.DonHangBLL;
 import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
+import DTO.SearchKHDHDTO;
 import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
 
@@ -14,13 +14,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class PanelXemKH extends JPanel implements ActionListener{
+public class PanelXemKH extends JPanel implements ActionListener {
     JPanel pn1, pn2, pn3;
     TheThanhVienDTO kh;
     JPopupMenu popupMenu;
     JMenuItem searchItem, exportItem;
+    public String MANV;
 
-    public PanelXemKH(DefaultTableModel model, int dong) {
+    public PanelXemKH(DefaultTableModel model, int dong, String MANV) {
+        this.MANV = MANV;
         TienIch.setDarkUI();
         kh = TheThanhVienBLL.getMemberById(Integer.parseInt(model.getValueAt(dong, 0).toString()));
         HoaDon = DonHangBLL.getOrderByKH(Integer.parseInt(model.getValueAt(dong, 0).toString()));
@@ -55,7 +57,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
         // Thêm popup menu
         popupMenu = new JPopupMenu();
         searchItem = new JMenuItem("Tìm Kiếm");
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         searchItem.addActionListener(this);
         exportItem.addActionListener(this);
         popupMenu.add(searchItem);
@@ -81,7 +83,7 @@ public class PanelXemKH extends JPanel implements ActionListener{
         gbc.gridheight = 6;
         gbc.ipadx = 10;
         JLabel avt = new JLabel();
-        TienIch.anhAVT(avt, kh.getTenAnh(),150, 250,"KH");
+        TienIch.anhAVT(avt, kh.getTenAnh(), 150, 250, "KH");
         pn1.add(avt, gbc);
         gbc.gridheight = 1;
 
@@ -211,21 +213,24 @@ public class PanelXemKH extends JPanel implements ActionListener{
     StyledTable tb; // Thay JTable bằng StyledTable
     DefaultTableModel modelMini;
     JScrollPane scr;
-    public ArrayList<DonHangDTO> HoaDon ;
+    public ArrayList<DonHangDTO> HoaDon;
 
     public void initPanel3() {
         TienIch.taoTitleBorder(pn3, "Danh sách các hóa đơn đã mua");
         pn3.setLayout(new BorderLayout());
         String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
-        for (DonHangDTO hd : HoaDon) {
-            System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " + hd.getPtThanhToan() + " " + hd.getNgayTT());
-        }
+        /*
+         * for (DonHangDTO hd : HoaDon) {
+         * System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " +
+         * hd.getPtThanhToan() + " " + hd.getNgayTT());
+         * }
+         */
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         modelMini = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
         StyledTable.hoverTable(tb, modelMini);
-        StyledTable.TableEvent(tb, modelMini, "HD"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, modelMini, "HD", MANV); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         scr.setPreferredSize(new Dimension(600, 120)); // Giữ kích thước
         pn3.add(scr, BorderLayout.CENTER);
@@ -287,6 +292,8 @@ public class PanelXemKH extends JPanel implements ActionListener{
         }
     }
 
+    public SearchKHDHDTO SEARCH = new SearchKHDHDTO();
+
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -296,6 +303,10 @@ public class PanelXemKH extends JPanel implements ActionListener{
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 HoaDon = panel.ketqua(kh.getMaTV());
+                if (HoaDon.size() == 0) {
+                    TienIch.CustomMessage("Không tìm thấy");
+                }
+                SEARCH = panel.traSearch();
                 lbTongDonHang.setText(HoaDon.size() + "");
                 double sum = 0;
                 for (DonHangDTO hd : HoaDon) {
@@ -312,7 +323,17 @@ public class PanelXemKH extends JPanel implements ActionListener{
                 if (panel.getSelectedFormat().equals("excel")) {
                     panel.XuatExccel(modelMini);
                 } else {
-                    panel.XuatPDF(modelMini);
+                    if (HoaDon.size() != 0) {
+                        double sum = 0;
+                        for (DonHangDTO hd : HoaDon) {
+                            sum += hd.getTongTien();
+                        }
+                        PanelExport.InPDFDonHangCuaTTVTheoSearch(HoaDon, SEARCH, kh, TienIch.formatVND(sum),
+                                HoaDon.size(), MANV);
+                        panel.XuatPDF(modelMini);
+                    } else {
+                        TienIch.CustomMessage("Không có gì để in");
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

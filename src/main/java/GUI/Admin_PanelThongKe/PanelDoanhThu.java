@@ -11,8 +11,6 @@ import javax.swing.table.*;
 import BLL.DonHangBLL;
 import BLL.SearchFilterBLL;
 import DTO.DonHangDTO;
-import DTO.SearchFilterDTO;
-import GUI.Export;
 import GUI.ComponentCommon.*;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
@@ -72,7 +70,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
-        StyledTable.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "HD", MANV); // Giữ sự kiện double-click
         StyledTable.hoverTable(tb, model);
         JScrollPane scr = new JScrollPane(tb);
         pn3.add(scr, BorderLayout.CENTER);
@@ -80,8 +78,9 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         showpupop(tb);
         showpupop(scr);
     }
-
-    public PanelDoanhThu() {
+    public String MANV;
+    public PanelDoanhThu(String MANV) {
+        this.MANV = MANV;
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo doanh thu tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -110,7 +109,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
 
         // Thêm popup menu
         popupMenu = new JPopupMenu();
-        exportItem = new JMenuItem("In Báo Cáo");
+        exportItem = new JMenuItem("Xuất file");
         exportItem.addActionListener(this);
         popupMenu.add(exportItem);
     }

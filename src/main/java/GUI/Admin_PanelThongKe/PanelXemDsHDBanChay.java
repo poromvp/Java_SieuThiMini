@@ -19,8 +19,9 @@ public class PanelXemDsHDBanChay extends JPanel {
     DefaultTableModel model;
     JScrollPane scr;
     public ArrayList<DonHangDTO> HoaDon = new ArrayList<>();
-
-    public PanelXemDsHDBanChay(SearchBanChayDTO search) {
+    public String MANV;
+    public PanelXemDsHDBanChay(SearchBanChayDTO search, String MANV) {
+        this.MANV = MANV;
         String[] parts = search.getChuoiMaDH().split("\\s*,\\s*");
         for (String part : parts) {
             System.out.println(Integer.parseInt(part));
@@ -38,7 +39,7 @@ public class PanelXemDsHDBanChay extends JPanel {
         model = (DefaultTableModel) tb.getModel();
         loadDonHang(HoaDon);
         StyledTable.hoverTable(tb, model);
-        StyledTable.TableEvent(tb, model, "HD"); // Giữ sự kiện double-click
+        StyledTable.TableEvent(tb, model, "HD", MANV); // Giữ sự kiện double-click
         scr = new JScrollPane(tb);
         TienIch.setPreferredSizeTuDong(scr, tb);
         add(scr, BorderLayout.CENTER);

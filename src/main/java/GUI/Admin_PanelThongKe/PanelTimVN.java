@@ -116,7 +116,7 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 1;
         add(lbChucVu, gbc);
 
-        cbChucVu = new JComboBox<>(new String[]{"TẤT CẢ", "ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN"});
+        cbChucVu = new JComboBox<>(new String[] { "TẤT CẢ", "ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN" });
         TienIch.timStyle(cbChucVu);
         gbc.gridx = 5;
         gbc.gridy = 1;
@@ -231,7 +231,7 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 6;
         add(lbSapXep, gbc);
 
-        cbSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        cbSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
         TienIch.timStyle(cbSapXep);
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -243,60 +243,86 @@ public class PanelTimVN extends JPanel {
         gbc.gridy = 6;
         add(lbTheoCot, gbc);
 
-        cbTheoCot = new JComboBox<>(new String[]{"Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Tổng đơn hàng", "Doanh số", "Lương"});
+        cbTheoCot = new JComboBox<>(
+                new String[] { "Mã nhân viên", "Tên nhân viên", "Ngày sinh", "Tổng đơn hàng", "Doanh số", "Lương" });
         TienIch.timStyle(cbTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 6;
         add(cbTheoCot, gbc);
     }
 
-    public ArrayList<NhanVienDTO> ketqua(Date from, Date to){
+    public ArrayList<NhanVienDTO> ketqua(Date from, Date to) {
         int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
-        maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+                maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
         Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
-        ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+                ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
         SearchNhanVienDTO search = new SearchNhanVienDTO(
-        maNV, 
-        txtTenNV.getText(), 
-        txtDiaChi.getText(), 
-        ngayTu, 
-        ngayDen, 
-        (String) cbChucVu.getSelectedItem(), 
-        txtSoDienThoai.getText(), 
-        maDH, 
-        (int) minTongDonHang.getValue(), 
-        (int) maxTongDonHang.getValue(), 
-        (int) minDoanhSo.getValue(), 
-        (int) maxDoanhSo.getValue(), 
-        (int) minLuong.getValue(), 
-        (int) maxLuong.getValue(), 
-        (String) cbSapXep.getSelectedItem(), 
-        (String) cbTheoCot.getSelectedItem());
+                maNV,
+                txtTenNV.getText(),
+                txtDiaChi.getText(),
+                ngayTu,
+                ngayDen,
+                (String) cbChucVu.getSelectedItem(),
+                txtSoDienThoai.getText(),
+                maDH,
+                (int) minTongDonHang.getValue(),
+                (int) maxTongDonHang.getValue(),
+                (int) minDoanhSo.getValue(),
+                (int) maxDoanhSo.getValue(),
+                (int) minLuong.getValue(),
+                (int) maxLuong.getValue(),
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
         return BaoCaoNhanVienBLL.TimTotNhat(search, from, to);
     }
 
-    public ArrayList<NhanVienDTO> ketqua(){
+    public ArrayList<NhanVienDTO> ketqua() {
         int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
-        maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+                maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
         Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
-        ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+                ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
         SearchNhanVienDTO search = new SearchNhanVienDTO(
-        maNV, 
-        txtTenNV.getText(), 
-        txtDiaChi.getText(), 
-        ngayTu, 
-        ngayDen, 
-        (String) cbChucVu.getSelectedItem(), 
-        txtSoDienThoai.getText(), 
-        maDH, 
-        (int) minTongDonHang.getValue(), 
-        (int) maxTongDonHang.getValue(), 
-        (int) minDoanhSo.getValue(), 
-        (int) maxDoanhSo.getValue(), 
-        (int) minLuong.getValue(), 
-        (int) maxLuong.getValue(), 
-        (String) cbSapXep.getSelectedItem(), 
-        (String) cbTheoCot.getSelectedItem());
+                maNV,
+                txtTenNV.getText(),
+                txtDiaChi.getText(),
+                ngayTu,
+                ngayDen,
+                (String) cbChucVu.getSelectedItem(),
+                txtSoDienThoai.getText(),
+                maDH,
+                (int) minTongDonHang.getValue(),
+                (int) maxTongDonHang.getValue(),
+                (int) minDoanhSo.getValue(),
+                (int) maxDoanhSo.getValue(),
+                (int) minLuong.getValue(),
+                (int) maxLuong.getValue(),
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
         return BaoCaoNhanVienBLL.TimNhanVien(search);
+    }
+
+    public SearchNhanVienDTO trasearch() {
+        int maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+                maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+        Date ngayTu = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+                ngayDen = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null;
+        SearchNhanVienDTO search = new SearchNhanVienDTO(
+                maNV,
+                txtTenNV.getText(),
+                txtDiaChi.getText(),
+                ngayTu,
+                ngayDen,
+                (String) cbChucVu.getSelectedItem(),
+                txtSoDienThoai.getText(),
+                maDH,
+                (int) minTongDonHang.getValue(),
+                (int) maxTongDonHang.getValue(),
+                (int) minDoanhSo.getValue(),
+                (int) maxDoanhSo.getValue(),
+                (int) minLuong.getValue(),
+                (int) maxLuong.getValue(),
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
+        return search;
     }
 }

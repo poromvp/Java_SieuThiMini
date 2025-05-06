@@ -252,28 +252,55 @@ public class PanelTimLoHang extends JPanel {
 
     public ArrayList<PhieuNhapHangDTO> ketqua() {
         int maDonNH = txtMaDonNhap.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonNhap.getText()),
-        maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
-        maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText()),
-        maSP = txtMaSP.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSP.getText()),
-        maLH = txtMaLoHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoHang.getText());
+                maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+                maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText()),
+                maSP = txtMaSP.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSP.getText()),
+                maLH = txtMaLoHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoHang.getText());
         Date ngayTu = dateFrom.getDate() != null ? new Date(dateFrom.getDate().getTime()) : null,
-        ngayDen = dateTo.getDate() != null ? new Date(dateTo.getDate().getTime()) : null;
+                ngayDen = dateTo.getDate() != null ? new Date(dateTo.getDate().getTime()) : null;
         SearchLoHangDTO search = new SearchLoHangDTO(
-            maDonNH,
-            txtTenDonNhap.getText(), 
-            ngayTu, 
-            ngayDen,
-            maNV,
-            txtTenNV.getText(), 
-            maNCC, 
-            txtTenNCC.getText(), 
-            (int) minTongGia.getValue(), 
-            (int) maxTongGia.getValue(), 
-            maSP,
-            txtTenSP.getText(), 
-            maLH, 
-            (String) cbSapXep.getSelectedItem(),
-            (String) cbTheoCot.getSelectedItem());
+                maDonNH,
+                txtTenDonNhap.getText(),
+                ngayTu,
+                ngayDen,
+                maNV,
+                txtTenNV.getText(),
+                maNCC,
+                txtTenNCC.getText(),
+                (int) minTongGia.getValue(),
+                (int) maxTongGia.getValue(),
+                maSP,
+                txtTenSP.getText(),
+                maLH,
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
         return BaoCaoKhoTongHopBLL.TimLoHang(search);
+    }
+
+    public SearchLoHangDTO trasearch() {
+        int maDonNH = txtMaDonNhap.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonNhap.getText()),
+                maNV = txtMaNV.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNV.getText()),
+                maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText()),
+                maSP = txtMaSP.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSP.getText()),
+                maLH = txtMaLoHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoHang.getText());
+        Date ngayTu = dateFrom.getDate() != null ? new Date(dateFrom.getDate().getTime()) : null,
+                ngayDen = dateTo.getDate() != null ? new Date(dateTo.getDate().getTime()) : null;
+        SearchLoHangDTO search = new SearchLoHangDTO(
+                maDonNH,
+                txtTenDonNhap.getText(),
+                ngayTu,
+                ngayDen,
+                maNV,
+                txtTenNV.getText(),
+                maNCC,
+                txtTenNCC.getText(),
+                (int) minTongGia.getValue(),
+                (int) maxTongGia.getValue(),
+                maSP,
+                txtTenSP.getText(),
+                maLH,
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
+        return search;
     }
 }

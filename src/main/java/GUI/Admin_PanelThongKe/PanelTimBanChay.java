@@ -156,4 +156,14 @@ public class PanelTimBanChay extends JPanel {
                 (String) cboTheoCot.getSelectedItem());
         return BaoCaoKhoTongHopBLL.TimBanChay(search, from, to);
     }
+
+    public SearchBanChayDTO trasearch() {
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        SearchBanChayDTO search = new SearchBanChayDTO(maSP,
+                txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(),
+                (int) Min.getValue(), (int) Max.getValue(), (String) cboSapXep.getSelectedItem(),
+                (String) cboTheoCot.getSelectedItem());
+        return search;
+    }
 }

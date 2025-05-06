@@ -337,4 +337,39 @@ public class PanelTimKH extends JPanel {
         );
         return BaoCaoKhachHangBLL.TimTTVLock(search);
     }
+
+    public SearchTheThanhVienDTO traSearch(){
+        int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
+        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+        tongMin = (int) minTongDonHang.getValue(),
+        tongMax = (int) maxTongDonHang.getValue(),
+        tienMin = (int) minTongChiTieu.getValue(),
+        tienMax = (int) maxTongChiTieu.getValue(),
+        diemMin = (int) minDiemTichLuy.getValue(),
+        diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
+        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+        SearchTheThanhVienDTO search = new SearchTheThanhVienDTO(
+            maTV,
+            txtTenThanhVien.getText().trim(),
+            txtDiaChi.getText().trim(),
+            sinhfrom,
+            sinhto,
+            txtSoDienThoai.getText().trim(),
+            maDH,
+            tongMin,
+            tongMax,
+            tienMin,
+            tienMax,
+            diemMin,
+            diemMax,
+            hanfrom,
+            hanto,
+            (String) cbSapXep.getSelectedItem(),
+            (String) cbTheoCot.getSelectedItem()
+        );
+        return search;
+    }
 }

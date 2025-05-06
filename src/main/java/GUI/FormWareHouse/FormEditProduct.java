@@ -32,9 +32,11 @@ public class FormEditProduct extends JDialog {
         setSize(400, 400);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+        setBackground(Color.white);
 
         JPanel nhapPanel = new JPanel();
         nhapPanel.setLayout(new GridLayout(7, 2, 5, 5));
+        nhapPanel.setBackground(Color.white);
 
         nhapPanel.add(new JLabel("Tên sản phẩm:"));
         tenSP = new StyledTextField();
@@ -48,6 +50,7 @@ public class FormEditProduct extends JDialog {
 
         nhapPanel.add(new JLabel("Loại sản phẩm"));
         loaiSPCombo = new JComboBox<>();
+        loaiSPCombo.setBackground(Color.white);
         List<LoaiSanPhamDTO> loaiSPList = new LoaiSanPhamBLL().getList();
         for(LoaiSanPhamDTO loai: loaiSPList){
             loaiSPCombo.addItem(loai.getTenLoaiSP() + " (" + loai.getMaLSP() + ")");
@@ -59,6 +62,7 @@ public class FormEditProduct extends JDialog {
 
         nhapPanel.add(new JLabel("Nhà cung cấp:"));
         nccCombo= new JComboBox<>();
+        nccCombo.setBackground(Color.white);
         List<NhaCungCapDTO> nccList = new NhaCungCapBLL().getList();
         for(NhaCungCapDTO ncc:nccList){
             nccCombo.addItem(ncc.getTenNCC()+" ("+ncc.getMaNCC()+") ");
@@ -87,6 +91,7 @@ public class FormEditProduct extends JDialog {
         nhapPanel.add(new JLabel("Trạng thái:"));
         String[] trangThaiOptions = {"ACTIVE", "INACTIVE"};
         trangThai = new JComboBox<>(trangThaiOptions);
+        trangThai.setBackground(Color.white);
         trangThai.setSelectedItem(product.getTrangThai());
         nhapPanel.add(trangThai);
 
@@ -123,6 +128,7 @@ public class FormEditProduct extends JDialog {
         });
 
         JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        btnPanel.setBackground(Color.white);
         btnPanel.add(saveBtn);
 
         add(nhapPanel, BorderLayout.CENTER);

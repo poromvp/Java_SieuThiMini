@@ -165,7 +165,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     hd.getMaDH(),
                     hd.getMaNV(),
                     hd.getPtThanhToan(),
-                    TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                    TienIch.formatVND(hd.getTongTien()),
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
     }
@@ -174,7 +174,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         double sumDoanhThu = 0;
         int sumDonHang = danhsach.size();
         for (DonHangDTO hd : danhsach) {
-            sumDoanhThu += DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH());
+            sumDoanhThu += hd.getTongTien();
         }
         tongdoanhthu = new JLabel(TienIch.formatVND(sumDoanhThu));
         tongdonhang = new JLabel(sumDonHang + " Đơn");

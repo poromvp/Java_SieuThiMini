@@ -6,6 +6,7 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.List;
 import java.io.File;
 
 import BLL.TheThanhVienBLL;
@@ -13,6 +14,7 @@ import DTO.SearchTheThanhVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.Admin_PanelThongKe.PanelExport;
 import GUI.Admin_PanelThongKe.PanelTimKH;
+import GUI.Admin_PanelThongKe.XuatFileExccel;
 import GUI.ComponentCommon.*;
 
 public class PanelMainThanhVien extends JPanel implements ActionListener, MouseListener {
@@ -124,6 +126,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         add(pn2, BorderLayout.CENTER);
     }
 
+    public ArrayList<String> SEARCH2 = new ArrayList<>();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -133,12 +136,13 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 TTV = panel.ketqua();
-                if (TTV.size() != 0) {
-                    SEARCH = panel.traSearch();
-                    loadThanhVien(TTV);
-                } else {
+                if (TTV.size() == 0) {
                     TienIch.CustomMessage("Không tìm thấy thẻ thành viên với tiêu chí như vậy!");
+                } else {
+                    SEARCH = panel.traSearch();
+                    SEARCH2 = panel.stringSearch();
                 }
+                loadThanhVien(TTV);
             }
         } else if (e.getSource() == btnIn) {
             PanelExport panel = new PanelExport();
@@ -146,7 +150,34 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.XuatExccel(model);
+                    if(TTV.size() == 0){
+                        TienIch.CustomMessage("Không có gì để xuất");
+                    } else {
+                        try {
+                            // Chuẩn bị dữ liệu cho exportToExcel
+                            ArrayList<List<Object>> data = new ArrayList<>();
+                            for (TheThanhVienDTO tv : TTV) {
+                                List<Object> row = new ArrayList<>();
+                                row.add(tv.getMaTV());
+                                row.add(tv.getTenTV());
+                                row.add(tv.getNgaySinh());
+                                row.add(tv.getDiaChi());
+                                row.add(tv.getDiemTL());
+                                row.add(tv.getSdt());
+                                row.add(tv.getNgayBD());
+                                row.add(tv.getNgayKT());
+                                data.add(row);
+                            }
+                            String[] columnNames = { "Mã thành viên", "Họ tên", "Ngày sinh", "Địa chỉ", "Điểm tích lũy", "Số điện thoại", "Ngày bắt đầu", "Ngày kết thúc"};
+                            String title = "DANH SÁCH THẺ THÀNH VIÊN";
+                            String manv = this.MANV;
+                            // Gọi hàm exportToExcel
+                            XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
+                            TienIch.CustomMessage("Xuất file Excel thành công!");
+                        } catch (Exception ex) {
+                            TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
+                        }
+                    }
                 } else {
                     if (TTV.size() != 0) {
                         PanelExport.InPDFTheThanhVienTheoSearch(TTV, SEARCH, MANV, "");

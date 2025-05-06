@@ -317,4 +317,54 @@ public class PanelTimNVHD extends JPanel {
                 (String) cbTheoCot.getSelectedItem());
         return search;
     }
+
+    public ArrayList<String> stringsearch(){
+        ArrayList<String> search = new ArrayList<>();
+        int maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+                maKH = txtMaKhachHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaKhachHang.getText().trim()),
+                maKM = txtMaKhuyenMai.getText().trim().isEmpty() ? 0
+                        : Integer.parseInt(txtMaKhuyenMai.getText().trim()),
+                maSP = txtMaSanPham.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText().trim()),
+                maLSP = txtMaLoaiSanPham.getText().trim().isEmpty() ? 0
+                        : Integer.parseInt(txtMaLoaiSanPham.getText().trim());
+        Date tu = dateTTFrom.getDate() != null ? new Date(dateTTFrom.getDate().getTime()) : null;
+        Date den = dateTTTo.getDate() != null ? new Date(dateTTTo.getDate().getTime()) : null;
+        if(maDH!=0){
+                search.add("Mã đơn hàng: "+maDH);
+        }
+        if(tu!=null && den!=null){
+                search.add("Ngày thanh toán từ: "+tu+" đến: "+den);
+        }
+        if((int) minThanhTien.getValue()!=0 && (int) maxThanhTien.getValue()!=0){
+                search.add("Thành tiền từ: "+(int) minThanhTien.getValue()+" đến: "+(int) maxThanhTien.getValue());
+        }
+        search.add("Phương thức thanh toán: "+(String) cbPhuongThucThanhToan.getSelectedItem());
+        if(maKH!=0){
+                search.add("Mã khách hàng: "+maKH);
+        }
+        if(!txtTenKhachHang.getText().trim().isEmpty()){
+                search.add("Tên khách hàng: "+txtTenKhachHang.getText().trim());
+        }
+        if(maKM!=0){
+                search.add("Mã khuyến mãi: "+maKM);
+        }
+        if(!txtTenKhuyenMai.getText().trim().isEmpty()){
+                search.add("Tên khuyến mãi: "+txtTenKhuyenMai.getText().trim());
+        }
+        if(maSP!=0){
+                search.add("Mã sản phẩm: "+maSP);
+        }
+        if(!txtTenSanPham.getText().trim().isEmpty()){
+                search.add("Tên sản phẩm: "+txtTenSanPham.getText().trim());
+        }
+        if(maLSP!=0){
+                search.add("Mã loại sản phẩm: "+maLSP);
+        }
+        if(!txtTenLoaiSanPham.getText().trim().isEmpty()){
+                search.add("Tên loại sản phẩm: "+txtTenLoaiSanPham.getText().trim());
+        }
+        search.add("Sắp xếp: "+(String) cbSapXep.getSelectedItem());
+        search.add("Theo cột: "+(String) cbTheoCot.getSelectedItem());
+        return search;
+    }
 }

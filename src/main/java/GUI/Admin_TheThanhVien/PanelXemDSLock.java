@@ -12,7 +12,9 @@ import DTO.SearchTheThanhVienDTO;
 import DTO.TheThanhVienDTO;
 import GUI.Admin_PanelThongKe.PanelExport;
 import GUI.Admin_PanelThongKe.PanelTimKH;
+import GUI.Admin_PanelThongKe.XuatFileExccel;
 import GUI.ComponentCommon.*;
+import java.util.List;
 
 public class PanelXemDSLock extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
@@ -108,7 +110,7 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
             });
         }
     }
-
+    public ArrayList<String> SEARCH2 = new ArrayList<>();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -120,11 +122,11 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
                 TTV = panel.ketquaLock();
                 if(TTV.size()!=0){
                     SEARCH = panel.traSearch();
-                    loadThanhVien(TTV);
+                    SEARCH2 = panel.stringSearch();
                 } else {
                     TienIch.CustomMessage("Không tìm thấy");
-                    loadThanhVien(TTV);
                 }
+                loadThanhVien(TTV);
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
@@ -132,7 +134,34 @@ public class PanelXemDSLock extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.XuatExccel(model);
+                    if(TTV.size() == 0){
+                        TienIch.CustomMessage("Không có gì để xuất");
+                    } else {
+                        try {
+                            // Chuẩn bị dữ liệu cho exportToExcel
+                            ArrayList<List<Object>> data = new ArrayList<>();
+                            for (TheThanhVienDTO tv : TTV) {
+                                List<Object> row = new ArrayList<>();
+                                row.add(tv.getMaTV());
+                                row.add(tv.getTenTV());
+                                row.add(tv.getNgaySinh());
+                                row.add(tv.getDiaChi());
+                                row.add(tv.getDiemTL());
+                                row.add(tv.getSdt());
+                                row.add(tv.getNgayBD());
+                                row.add(tv.getNgayKT());
+                                data.add(row);
+                            }
+                            String[] columnNames = { "Mã thành viên", "Họ tên", "Ngày sinh", "Địa chỉ", "Điểm tích lũy", "Số điện thoại", "Ngày bắt đầu", "Ngày kết thúc"};
+                            String title = "DANH SÁCH THẺ THÀNH VIÊN BỊ KHÓA";
+                            String manv = this.MANV;
+                            // Gọi hàm exportToExcel
+                            XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
+                            TienIch.CustomMessage("Xuất file Excel thành công!");
+                        } catch (Exception ex) {
+                            TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
+                        }
+                    }
                 } else {
                     if(TTV.size()!=0){
                         PanelExport.InPDFTheThanhVienTheoSearch(TTV, SEARCH, MANV, " ĐÃ KHÓA");

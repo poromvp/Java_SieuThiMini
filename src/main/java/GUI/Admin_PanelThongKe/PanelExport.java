@@ -52,6 +52,7 @@ import DTO.SearchNhanVienDTO;
 import DTO.SearchTheThanhVienDTO;
 import DTO.SearchTonKhoDTO;
 import DTO.TheThanhVienDTO;
+import GUI.Export;
 import GUI.ComponentCommon.TienIch;
 
 public class PanelExport extends JPanel {
@@ -94,6 +95,10 @@ public class PanelExport extends JPanel {
     public void XuatPDF(DefaultTableModel model) {
         this.tableModel = model;
         TienIch.CustomMessage("Xuất file ra file PDF...");
+    }
+
+    public void XuatExccel(JTable tb, String title){
+        Export.exportToExcel(tb, title);
     }
 
     public void XuatExccel(DefaultTableModel model) {

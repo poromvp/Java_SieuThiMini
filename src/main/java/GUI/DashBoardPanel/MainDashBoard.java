@@ -55,8 +55,9 @@ public class MainDashBoard extends JPanel implements ActionListener {
             });
         }
     }
-
-    public MainDashBoard() {
+    public String MANV;
+    public MainDashBoard(String MANV) {
+        this.MANV = MANV;
         setLayout(new BorderLayout());
         JPanel pn1 = new JPanel();
         pn1.setLayout(new GridBagLayout());
@@ -108,7 +109,7 @@ public class MainDashBoard extends JPanel implements ActionListener {
                 PanelChart panelChart = (PanelChart) pn1.getComponent(1);
                 vechart chart = (vechart) ((JScrollPane) panelChart.getComponent(0)).getViewport().getView();
                 PDFExporter.exportChartToPDFWithDialog(panelChart, chart.timeFilter, chart.selectedMonth,
-                        chart.selectedYear, "MANV_DEFAULT"); // Thay MANV_DEFAULT bằng mã nhân viên thực tế
+                        chart.selectedYear, MANV); // Thay MANV_DEFAULT bằng mã nhân viên thực tế
             }
         }
     }

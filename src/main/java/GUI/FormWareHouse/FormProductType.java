@@ -23,9 +23,11 @@ public class FormProductType extends JPanel implements ActionListener {
 
     public FormProductType() {
         setLayout(new BorderLayout());
+        setBackground(Color.white);
 
         // Panel chứa bảng
         JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBackground(Color.white);
         tablePanel.setBorder(BorderFactory.createTitledBorder("Loại sản phẩm"));
 
         // Tạo bảng
@@ -47,23 +49,29 @@ public class FormProductType extends JPanel implements ActionListener {
             }
         });
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBackground(Color.white);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         add(tablePanel, BorderLayout.CENTER);
 
         // Panel chứa form nhập liệu và nút
         JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.setBackground(Color.white);
         northPanel.setBorder(BorderFactory.createTitledBorder("Thông tin"));
 
         // Form nhập liệu
         JPanel formPanel = new JPanel(new BorderLayout());
+        formPanel.setBackground(Color.white);
         JPanel labelsPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        labelsPanel.setBackground(Color.white);
         JPanel fieldsPanel = new JPanel(new GridLayout(3, 1, 5, 5));
+        fieldsPanel.setBackground(Color.white);
 
         txtMaLSP = new StyledTextField(150, 30);
         txtMaLSP.setText("Mã loại sản phẩm sẽ đuơc tạo tự động");
         txtMaLSP.setEnabled(false);
         txtTenLSP = new StyledTextField(150, 30);
         cbTrangThai = new JComboBox<>(new String[]{"Hoạt động", "Ngừng hoạt động"});
+        cbTrangThai.setBackground(Color.white);
 
         labelsPanel.add(new JLabel("Mã LSP:"));
         labelsPanel.add(new JLabel("Tên LSP:"));
@@ -77,6 +85,7 @@ public class FormProductType extends JPanel implements ActionListener {
 
         // Panel chứa các nút
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setBackground(Color.white);
         btnAdd = new ButtonCustom("Thêm", "add", 14, 20, 20);
         btnEdit = new ButtonCustom("Sửa", "edit", 14, 20, 20);
         btnDelete = new ButtonCustom("Xóa", "del", 14, 20, 20);

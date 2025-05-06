@@ -23,9 +23,11 @@ public class FormSupplier extends JPanel implements ActionListener {
 
     public FormSupplier() {
         setLayout(new BorderLayout());
+        setBackground(Color.white);
 
         // Panel chứa bảng
         JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setBackground(Color.white);
         tablePanel.setBorder(BorderFactory.createTitledBorder("Nhà cung cấp"));
 
         // Tạo bảng
@@ -50,17 +52,22 @@ public class FormSupplier extends JPanel implements ActionListener {
             }
         });
         JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBackground(Color.white);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
         add(tablePanel, BorderLayout.CENTER);
 
         // Panel chứa form nhập liệu và nút
         JPanel northPanel = new JPanel(new BorderLayout());
+        northPanel.setBackground(Color.white);
         northPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Form nhập liệu
         JPanel formPanel = new JPanel(new BorderLayout());
+        formPanel.setBackground(Color.white);
         JPanel labelsPanel = new JPanel(new GridLayout(5, 1, 5, 5));
+        labelsPanel.setBackground(Color.white);
         JPanel fieldsPanel = new JPanel(new GridLayout(5, 1, 5, 5));
+        fieldsPanel.setBackground(Color.white);
 
         txtMaNCC = new StyledTextField(150, 30);
         txtMaNCC.setText("Mã nhà cung cấp sẽ được tạo tự động");
@@ -70,6 +77,7 @@ public class FormSupplier extends JPanel implements ActionListener {
         txtSdt = new StyledTextField(150, 30);
         txtDiaChi = new StyledTextField(150, 30);
         cbTrangThai = new JComboBox<>(new String[]{"Hoạt động", "Ngừng hoạt động"});
+        cbTrangThai.setBackground(Color.white);
 
         labelsPanel.add(new JLabel("Mã NCC:"));
         labelsPanel.add(new JLabel("Tên NCC:"));
@@ -87,6 +95,7 @@ public class FormSupplier extends JPanel implements ActionListener {
 
         // Panel chứa các nút
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setBackground(Color.white);
         btnAdd = new ButtonCustom("Thêm", "add", 14, 20, 20);
         btnEdit = new ButtonCustom("Sửa", "edit", 14, 20, 20);
         btnDelete = new ButtonCustom("Xóa", "del", 14, 20, 20);

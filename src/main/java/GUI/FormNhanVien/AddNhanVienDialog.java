@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -102,13 +104,12 @@ public class AddNhanVienDialog extends JDialog {
 
         add(buttonPanel, BorderLayout.SOUTH);
     }
-
     private void chonAnh() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter(
                 "Image files", "jpg", "jpeg", "png", "gif");
         fileChooser.setFileFilter(filter);
-    
+
         int result = fileChooser.showOpenDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
@@ -116,25 +117,26 @@ public class AddNhanVienDialog extends JDialog {
                 ImageIcon icon = new ImageIcon(selectedFile.getPath());
                 Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
                 imageLabel.setIcon(new ImageIcon(img));
-                
+
                 anhNV = selectedFile.getName();
                 nv.setImage(anhNV);
-    
-                File dest = new File(IMAGE_FOLDER + anhNV);
-                if (!dest.exists()) {
-                    java.nio.file.Files.copy(
-                        selectedFile.toPath(),
-                        dest.toPath(),
-                        java.nio.file.StandardCopyOption.REPLACE_EXISTING
-                    );
+
+                File destDir = new File("src/main/resources/images/ImageNhanVien");
+                if (!destDir.exists()) {
+                    destDir.mkdirs();
                 }
+
+                File destFile = new File(destDir, anhNV);
+                Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                JOptionPane.showMessageDialog(this, "Tải ảnh thành công!");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Lỗi khi chọn ảnh: " + ex.getMessage(),
                         "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
-    
+
 
     private void saveNhanVien() {
         try {

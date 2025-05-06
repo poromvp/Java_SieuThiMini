@@ -40,7 +40,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
-        panelDashBoard();
+        panelDashBoard(maNV);
 
         add(rightPn, BorderLayout.CENTER);
 
@@ -110,11 +110,11 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
     }
 
-    public void panelDashBoard() {
+    public void panelDashBoard(String MANV) {
         rightPn.removeAll();
         rightPn.setLayout(new BorderLayout());
 
-        MainDashBoard homePanel = new MainDashBoard();
+        MainDashBoard homePanel = new MainDashBoard(MANV);
         rightPn.add(homePanel, BorderLayout.CENTER);
 
         rightPn.revalidate();
@@ -147,7 +147,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == leftMenu.getBtnHome()) {
-            panelDashBoard();
+            panelDashBoard(maNV);
         } else if (e.getSource() == leftMenu.getBtnEmployee()) {
             panelNhanVien();
         } else if (e.getSource() == leftMenu.getBtnProduct()) {

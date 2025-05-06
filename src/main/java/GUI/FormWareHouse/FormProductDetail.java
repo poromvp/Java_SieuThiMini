@@ -16,6 +16,7 @@ public class FormProductDetail extends JDialog {
     public FormProductDetail(Frame parent, SanPhamDTO product) {
         super(parent, "Chi tiết sản phẩm", true);
         setSize(600, 400);
+        setBackground(Color.white);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
@@ -89,6 +90,7 @@ public class FormProductDetail extends JDialog {
 
         //Hien thi anh san pham
         JPanel imagePanel = new JPanel();
+        imagePanel.setBackground(Color.white);
         JLabel imageLabel = new JLabel();
         String imagePath = "src/main/resources/images/ImageProduct/"+product.getTenAnh();
         File imageFile = new File(imagePath);

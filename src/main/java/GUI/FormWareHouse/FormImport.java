@@ -31,6 +31,7 @@ public class FormImport extends JPanel {
 
         // Panel nhập thông tin
         JPanel nhapPnl = new JPanel();
+        nhapPnl.setBackground(Color.white);
         nhapPnl.setLayout(new GridLayout(3, 1, 5, 5));
         nhapPnl.setBorder(BorderFactory.createTitledBorder("Thông tin đơn hàng nhập vào"));
 
@@ -40,6 +41,7 @@ public class FormImport extends JPanel {
 //        StyledTextField t2 = new StyledTextField();
         JLabel lb3 = new JLabel("Nhà cung cấp");
         JComboBox<String> cbNhaCC = new JComboBox<>();
+        cbNhaCC.setBackground(Color.white);
         ArrayList<NhaCungCapDTO> nhaCCList = nhaCungCapBLL.getList();
         for (NhaCungCapDTO nhaCC : nhaCCList) {
             if (nhaCC.getTrangThai().equals("ACTIVE")) {
@@ -50,6 +52,7 @@ public class FormImport extends JPanel {
 
         ButtonCustom btnThem = new ButtonCustom("Thêm","add",16,20,20);
         JPanel panelNhap = new JPanel();
+        panelNhap.setBackground(Color.white);
         panelNhap.setLayout(new FlowLayout(FlowLayout.CENTER));
         panelNhap.add(btnThem);
 
@@ -98,13 +101,14 @@ public class FormImport extends JPanel {
 
                 // Mở FormAddImport
                 JDialog addImportDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm chi tiết đơn nhập hàng", true);
-                addImportDialog.setSize(800, 600);
+                addImportDialog.setSize(1200, 800);
                 addImportDialog.setLayout(new BorderLayout());
                 addImportDialog.setLocationRelativeTo(null);
 
                 FormAddImport addImportPanel = new FormAddImport(phieuNhap, this::refreshTable);
                 addImportDialog.add(addImportPanel, BorderLayout.CENTER);
                 addImportDialog.setVisible(true);
+                addImportDialog.setBackground(Color.WHITE);
 
                 // Xóa nội dung các trường nhập sau khi mở FormAddImport
                 t1.setText("");
@@ -136,6 +140,7 @@ public class FormImport extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBackground(Color.WHITE);
         add(scrollPane, BorderLayout.CENTER);
     }
 
@@ -177,7 +182,7 @@ public class FormImport extends JPanel {
 
     private void showImportDetail(int maPNH) {
         JDialog detailDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Chi tiết đơn nhập hàng", true);
-        detailDialog.setSize(1500, 700);
+        detailDialog.setSize(800, 500);
         detailDialog.setLayout(new BorderLayout());
         detailDialog.setLocationRelativeTo(null);
 

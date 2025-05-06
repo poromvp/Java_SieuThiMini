@@ -3,6 +3,9 @@ package GUI.DashBoardPanel;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
+import BLL.NhanVienBLL;
+import GUI.ComponentCommon.TienIch;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -11,7 +14,6 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -176,7 +178,7 @@ public class PDFExporter {
         }
     }
 
-    public static void exportChartToPDFWithDialog(PanelChart panelChart, String timeFilter, int selectedMonth, int selectedYear, String maNV) {
+    public static void exportChartToPDFWithDialog(PanelChart panelChart, String timeFilter, int selectedMonth, int selectedYear, String MANV) {
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setDialogTitle("Chọn nơi lưu báo cáo doanh thu");
@@ -207,7 +209,7 @@ public class PDFExporter {
                 // Ngày tháng năm và tên người in
                 LocalDate today = LocalDate.now();
                 String formattedDate = today.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-                String tenNhanVien = "Unknown";
+                String tenNhanVien = new NhanVienBLL().getNameNV(MANV);
                 Paragraph dateAndUser = new Paragraph("Ngày in: " + formattedDate + " | Người in: " + tenNhanVien, fontNormal);
                 dateAndUser.setAlignment(Element.ALIGN_RIGHT);
                 document.add(dateAndUser);
@@ -348,10 +350,10 @@ public class PDFExporter {
 
                 document.close();
 
-                JOptionPane.showMessageDialog(null, "Xuất báo cáo doanh thu thành công!", "Thành công", JOptionPane.INFORMATION_MESSAGE);
+                TienIch.CustomMessageNormal("Xuất báo cáo doanh thu thành công");
 
             } catch (java.io.FileNotFoundException e) {
-                JOptionPane.showMessageDialog(null, "Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở");
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi khi xuất file PDF: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);

@@ -372,4 +372,53 @@ public class PanelTimKH extends JPanel {
         );
         return search;
     }
+
+    public ArrayList<String> stringSearch(){
+        int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
+        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+        tongMin = (int) minTongDonHang.getValue(),
+        tongMax = (int) maxTongDonHang.getValue(),
+        tienMin = (int) minTongChiTieu.getValue(),
+        tienMax = (int) maxTongChiTieu.getValue(),
+        diemMin = (int) minDiemTichLuy.getValue(),
+        diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
+        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+        ArrayList<String> search = new ArrayList<>();
+        if(maTV!=0){
+            search.add("Mã thành viên: "+maTV);
+        }
+        if(!txtTenThanhVien.getText().trim().isEmpty()){
+            search.add("Tên thành viên: " + txtTenThanhVien.getText().trim());
+        }
+        if(!txtDiaChi.getText().trim().isEmpty()){
+            search.add("Địa chỉ: " + txtDiaChi.getText().trim());
+        }
+        if(sinhfrom!=null && sinhto!=null){
+            search.add("Ngày sinh từ: "+sinhfrom+" đến: "+sinhto);
+        }
+        if(!txtSoDienThoai.getText().trim().isEmpty()){
+            search.add("Số điện thoại: "+txtSoDienThoai.getText().trim());
+        }
+        if(maDH!=0){
+            search.add("Mã đơn hàng: "+maDH);
+        }
+        if(tongMin!=0 && tongMax!=0){
+            search.add("Tổng đơn hàng từ: "+tongMin+" đến: "+tongMax);
+        }
+        if(tienMin!=0 && tienMax!=0){
+            search.add("Tổng chi tiêu từ: "+tienMin+" đến: "+tienMax);
+        }
+        if(diemMin!=0 && diemMax!=0){
+            search.add("Điểm tích lũy từ: "+diemMin+" đến: "+diemMax);
+        }
+        if(hanfrom!=null && hanto!=null){
+            search.add("Hạn thẻ từ: "+hanfrom+" đến: "+hanto);
+        }
+        search.add("Sắp xếp: "+(String) cbSapXep.getSelectedItem());
+        search.add(" Theo cột: "+(String) cbTheoCot.getSelectedItem());
+        return search;
+    }
 }

@@ -24,16 +24,16 @@ public class PanelXemDsHDBanChay extends JPanel {
         this.MANV = MANV;
         String[] parts = search.getChuoiMaDH().split("\\s*,\\s*");
         for (String part : parts) {
-            System.out.println(Integer.parseInt(part));
+            //System.out.println(Integer.parseInt(part));
             HoaDon.add(DonHangBLL.getOrderById(Integer.parseInt(part)));
         }
 
         TienIch.taoTitleBorder(this, "Danh sách các hóa đơn");
         setLayout(new BorderLayout());
         String[] tencot = { "Mã đơn hàng", "Mã nhân viên", "PTTT", "Thành tiền", "Ngày" };
-        for (DonHangDTO hd : HoaDon) {
+        /*for (DonHangDTO hd : HoaDon) {
             System.out.println(hd.getMaDH() + " " + hd.getMaNV() + " " + hd.getPtThanhToan() + " " + hd.getNgayTT());
-        }
+        }*/
         Object[][] data = new Object[0][tencot.length]; // Dữ liệu rỗng
         tb = new StyledTable(data, tencot); // Khởi tạo StyledTable
         model = (DefaultTableModel) tb.getModel();
@@ -52,7 +52,7 @@ public class PanelXemDsHDBanChay extends JPanel {
                     hd.getMaDH(),
                     hd.getMaNV(),
                     hd.getPtThanhToan(),
-                    TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                    TienIch.formatVND(hd.getTongTien()),
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
     }

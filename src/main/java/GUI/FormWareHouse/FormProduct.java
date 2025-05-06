@@ -33,6 +33,7 @@ public class FormProduct extends JPanel {
         JPanel timKiempnl = new JPanel();
         timKiempnl.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
         timKiempnl.setLayout(new GridLayout(2, 2, 5, 5));
+        timKiempnl.setBackground(Color.white);
 
         JLabel mamSPLabel = new JLabel("Mã sản phẩm: ");
         JTextField maSPText = new JTextField();
@@ -42,6 +43,7 @@ public class FormProduct extends JPanel {
 
         JLabel loaiSPLabel = new JLabel("Loại sản phẩm:");
         JComboBox<String> loaiSPCb = new JComboBox<>();
+        loaiSPCb.setBackground(Color.white);
         loaiSPCb.addItem("Tất cả");
         List<LoaiSanPhamDTO> loaiSPList = lsp.getList();
         for(LoaiSanPhamDTO loai : loaiSPList){
@@ -155,6 +157,7 @@ public class FormProduct extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBackground(Color.white);
 
         JPanel panelBtn = new JPanel();
         panelBtn.setBackground(Color.WHITE);
@@ -170,6 +173,7 @@ public class FormProduct extends JPanel {
         infoProduct.setLayout(new BorderLayout());
         infoProduct.add(scrollPane,BorderLayout.CENTER);
         infoProduct.add(panelBtn,BorderLayout.SOUTH);
+        infoProduct.setBackground(Color.white);
         infoProduct.setVisible(true);
 
         add(infoProduct,BorderLayout.CENTER);

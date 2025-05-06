@@ -47,6 +47,7 @@ public class FormAddImport extends JPanel {
 
         // Panel hiển thị danh sách sản phẩm của nhà cung cấp
         JPanel supplierProductPanel = new JPanel();
+        supplierProductPanel.setBackground(Color.white);
         supplierProductPanel.setLayout(new BorderLayout());
         supplierProductPanel.setBorder(BorderFactory.createTitledBorder("Danh sách sản phẩm của nhà cung cấp"));
 
@@ -71,6 +72,7 @@ public class FormAddImport extends JPanel {
 
         JScrollPane productScrollPane = new JScrollPane(productTable);
         productScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        productScrollPane.setBackground(Color.white);
         supplierProductPanel.add(productScrollPane, BorderLayout.CENTER);
 
 // Thêm panel vào layout chính
@@ -78,6 +80,7 @@ public class FormAddImport extends JPanel {
 
         // Panel nhập thông tin sản phẩm
         JPanel import_info = new JPanel();
+        import_info.setBackground(Color.white);
         import_info.setBorder(BorderFactory.createTitledBorder("Thông tin sản phẩm"));
         import_info.setLayout(new GridLayout(8, 2, 5, 5));
 
@@ -121,21 +124,6 @@ public class FormAddImport extends JPanel {
                 Date nsxValue = nsxChooser.getDate();
                 Date hsdValue = hsdChooser.getDate();
 
-//                // Kiểm tra MaSP tồn tại
-//                if (!sanPhamBLL.isSanPhamExists(maSPValue)) {
-//                    JOptionPane.showMessageDialog(this, "Mã sản phẩm không tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                    return;
-//                }
-
-//                // Kiểm tra MaLH không trùng trong cùng phiếu nhập
-//                for (ChiTietPNHangDTO ct : chiTietList) {
-//                    if (ct.getMaLH() == maLHValue) {
-//                        JOptionPane.showMessageDialog(this, "Mã lô hàng đã tồn tại trong phiếu nhập này!", "Lỗi", JOptionPane.ERROR_MESSAGE);
-//                        return;
-//                    }
-//                }
-
-                // Validate số lượng và giá nhập
                 if (!chiTietNhapBLL.validateSoLuong(soLuongValue) || !chiTietNhapBLL.validateGiaNhap(giaNhapValue)) {
                     JOptionPane.showMessageDialog(this, "Số lượng và giá nhập phải lớn hơn 0!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
@@ -236,6 +224,7 @@ public class FormAddImport extends JPanel {
         btnHuy.addActionListener(e -> SwingUtilities.getWindowAncestor(this).dispose());
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBackground(Color.white);
         buttonPanel.add(btnThemSanPham);
         buttonPanel.add(btnHoanTat);
         buttonPanel.add(btnHuy);
@@ -247,6 +236,7 @@ public class FormAddImport extends JPanel {
 
         // Panel hiển thị danh sách sản phẩm
         JPanel product_info = new JPanel();
+        product_info.setBackground(Color.white);
         product_info.setLayout(new BorderLayout());
         product_info.setBorder(BorderFactory.createTitledBorder("Danh sách sản phẩm đã thêm"));
 

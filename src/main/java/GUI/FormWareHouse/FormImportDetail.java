@@ -26,12 +26,14 @@ public class FormImportDetail extends JPanel {
     public FormImportDetail(int maPNH) {
         this.maPNH = maPNH;
         setLayout(new BorderLayout());
+        setBackground(Color.white);
 
         // Lấy thông tin phiếu nhập
         PhieuNhapHangDTO phieuNhap = nhapHangBLL.getPhieuNhapHangById(maPNH);
 
         // Panel thông tin chung
         JPanel infoPanel = new JPanel(new GridLayout(3, 2, 10, 10));
+        infoPanel.setBackground(Color.white);
         infoPanel.setBorder(BorderFactory.createTitledBorder("Thông tin đơn nhập hàng"));
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -56,6 +58,7 @@ public class FormImportDetail extends JPanel {
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setBackground(Color.white);
         add(scrollPane, BorderLayout.CENTER);
 
 //        // Panel nút chức năng

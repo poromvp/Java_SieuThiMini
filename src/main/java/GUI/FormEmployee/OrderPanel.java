@@ -1002,6 +1002,16 @@ public class OrderPanel extends JPanel {
 		});
 
 		btnTaoMoi.addActionListener(e->{
+
+			int confirm = JOptionPane.showConfirmDialog(
+			null,
+			"Bạn có chắc chắn xoá đơn hiện tại để thêm mới không?",
+			"Xác nhận",
+			JOptionPane.YES_NO_OPTION,
+			JOptionPane.QUESTION_MESSAGE
+		);
+		
+		if (confirm == JOptionPane.NO_OPTION) {
 			panel_ButtonLuuInDH.removeAll();
 			panel_ButtonLuuInDH.add(btnLuuDonHang);
 			panel_ButtonLuuInDH.repaint();
@@ -1017,6 +1027,9 @@ public class OrderPanel extends JPanel {
 			// textMuaDTL .setText("");
 			textTenOrID.setText("");
 			JUST_MADONHANG = -1;
+			
+		}
+
 		});
 		
 

@@ -61,36 +61,36 @@ public class NhapHangDAL {
         return false;
     }
 
-    public boolean updatePhieuNhapHang(PhieuNhapHangDTO phieuNhap){
-        String query = "UPDATE PhieuNhapHang SET TenPNH = ?, MaNCC = ?, MaNV = ?, NgayNhap = ?, TrangThai = ? WHERE MaPNH = ?";
-        try (Connection conn = DBConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)){
-            pstmt.setString(1, phieuNhap.getTenPNH());
-            pstmt.setInt(2, phieuNhap.getMaNCC());
-            pstmt.setInt(3, phieuNhap.getMaNV());
-            pstmt.setDate(4, new java.sql.Date(phieuNhap.getNgayNhap().getTime()));
-            pstmt.setString(5, phieuNhap.getTrangThai());
-            pstmt.setInt(6, phieuNhap.getMaPNH());
+//    public boolean updatePhieuNhapHang(PhieuNhapHangDTO phieuNhap){
+//        String query = "UPDATE PhieuNhapHang SET TenPNH = ?, MaNCC = ?, MaNV = ?, NgayNhap = ?, TrangThai = ? WHERE MaPNH = ?";
+//        try (Connection conn = DBConnection.getConnection();
+//            PreparedStatement pstmt = conn.prepareStatement(query)){
+//            pstmt.setString(1, phieuNhap.getTenPNH());
+//            pstmt.setInt(2, phieuNhap.getMaNCC());
+//            pstmt.setInt(3, phieuNhap.getMaNV());
+//            pstmt.setDate(4, new java.sql.Date(phieuNhap.getNgayNhap().getTime()));
+//            pstmt.setString(5, phieuNhap.getTrangThai());
+//            pstmt.setInt(6, phieuNhap.getMaPNH());
+//
+//            return pstmt.executeUpdate() > 0;
+//        }catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
-            return pstmt.executeUpdate() > 0;
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    public boolean deletePhieuNhapHang(int maPNH){
-        String query = "UPDATE PhieuNhapHang SET TrangThai = 'DELETED' WHERE MaPNH = ?";
-
-        try(Connection conn = DBConnection.getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)){
-            pstmt.setInt(1, maPNH);
-            return pstmt.executeUpdate() > 0;
-        } catch ( SQLException e){
-            e.printStackTrace();
-        }
-        return false;
-    }
+//    public boolean deletePhieuNhapHang(int maPNH){
+//        String query = "UPDATE PhieuNhapHang SET TrangThai = 'DELETED' WHERE MaPNH = ?";
+//
+//        try(Connection conn = DBConnection.getConnection();
+//            PreparedStatement pstmt = conn.prepareStatement(query)){
+//            pstmt.setInt(1, maPNH);
+//            return pstmt.executeUpdate() > 0;
+//        } catch ( SQLException e){
+//            e.printStackTrace();
+//        }
+//        return false;
+//    }
 
     public PhieuNhapHangDTO getPhieuNhapHangById(int maPNH) {
         String query = "SELECT * FROM PhieuNhapHang WHERE MaPNH = ? AND TrangThai != 'DELETED'";

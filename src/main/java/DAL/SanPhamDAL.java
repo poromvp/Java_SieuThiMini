@@ -128,19 +128,19 @@ public class SanPhamDAL {
         StringBuilder sql = new StringBuilder("SELECT * FROM SanPham WHERE 1=1");
         List<Object> params = new ArrayList<>();
 
-        // Thêm điều kiện tìm theo mã sản phẩm
+
         if (maSP != null && !maSP.isEmpty()) {
             sql.append(" AND maSP = ?");
             params.add(Integer.parseInt(maSP));
         }
 
-        // Thêm điều kiện tìm theo tên sản phẩm
+
         if (tenSP != null && !tenSP.isEmpty()) {
             sql.append(" AND tenSP LIKE ?");
             params.add("%" + tenSP + "%");
         }
 
-        // Thêm điều kiện lọc theo loại sản phẩm
+
         if (maLSP != -1) {
             sql.append(" AND maLSP = ?");
             params.add(maLSP);

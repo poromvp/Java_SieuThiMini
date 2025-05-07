@@ -8,6 +8,7 @@ import GUI.ComponentCommon.StyledTextField;
 import GUI.ComponentCommon.StyledTable;
 import BLL.NhapHangBLL;
 import DTO.PhieuNhapHangDTO;
+import com.toedter.calendar.JDateChooser;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +17,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class FormImport extends JPanel {
     private NhapHangBLL nhapHangBLL = new NhapHangBLL();
@@ -28,6 +30,11 @@ public class FormImport extends JPanel {
         this.maNV = maNV;
         setLayout(new BorderLayout());
         setBackground(Color.white);
+        //Panel phia tren
+        JPanel northPanel = new JPanel();
+        northPanel.setBackground(Color.white);
+        northPanel.setLayout(new BorderLayout());
+        northPanel.setPreferredSize(new Dimension(5000,300));
 
         // Panel nhập thông tin
         JPanel nhapPnl = new JPanel();
@@ -37,8 +44,6 @@ public class FormImport extends JPanel {
 
         JLabel lb1 = new JLabel("Tên đơn hàng");
         StyledTextField t1 = new StyledTextField();
-//        JLabel lb2 = new JLabel("Mã nhân viên");
-//        StyledTextField t2 = new StyledTextField();
         JLabel lb3 = new JLabel("Nhà cung cấp");
         JComboBox<String> cbNhaCC = new JComboBox<>();
         cbNhaCC.setBackground(Color.white);
@@ -58,18 +63,104 @@ public class FormImport extends JPanel {
 
         nhapPnl.add(lb1);
         nhapPnl.add(t1);
-//        nhapPnl.add(lb2);
-//        nhapPnl.add(t2);
         nhapPnl.add(lb3);
         nhapPnl.add(cbNhaCC);
         nhapPnl.add(panelNhap);
 
-        add(nhapPnl, BorderLayout.NORTH);
+        //Panel tim kiem
+        JPanel panelSearch = new JPanel();
+        panelSearch.setLayout(new GridLayout(5,2,5,5));
+        panelSearch.setBorder(BorderFactory.createTitledBorder("Tìm kiếm: "));
+        panelSearch.setBackground(Color.white);
+        panelSearch.add(new JLabel("Mã đơn nhập hàng:"));
+        StyledTextField maPNHSearch = new StyledTextField();
+        panelSearch.add(maPNHSearch);
+        panelSearch.add(new JLabel("Tên đơn nhập hàng:"));
+        StyledTextField tenPNHSearch = new StyledTextField();
+        panelSearch.add(tenPNHSearch);
+        panelSearch.add(new JLabel("Từ:"));
+        JDateChooser startDate = new JDateChooser();
+        startDate.setDateFormatString("dd/MM/yyyy");
+        panelSearch.add(startDate);
 
-        // Thêm sự kiện cho nút Thêm
+        panelSearch.add(new JLabel("Đến:"));
+        JDateChooser endDate = new JDateChooser();
+        endDate.setDateFormatString("dd/MM/yyyy");
+        panelSearch.add(endDate);
+
+        JPanel buttonPanelSearch = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanelSearch.setBackground(Color.white);
+        ButtonCustom searchBtn = new ButtonCustom("Tìm kiếm", "search", 16, 20, 20);
+        buttonPanelSearch.add(searchBtn);
+        panelSearch.add(new JLabel());
+        panelSearch.add(buttonPanelSearch); // Thêm panel chứa nút vào GridLayout
+
+        searchBtn.addActionListener(e -> {
+            try {
+                String maPNHText = maPNHSearch.getText().trim();
+                String tenPNHText = tenPNHSearch.getText().trim();
+                Date startDateValue = startDate.getDate();
+                Date endDateValue = endDate.getDate();
+
+                ArrayList<PhieuNhapHangDTO> list = nhapHangBLL.getAllPhieuNhapHang();
+                ArrayList<PhieuNhapHangDTO> filteredList = new ArrayList<>();
+
+                for (PhieuNhapHangDTO phieu : list) {
+                    boolean match = true;
+
+                    if (!maPNHText.isEmpty()) {
+                        if (phieu.getMaPNH() != Integer.parseInt(maPNHText)) {
+                            match = false;
+                        }
+                    }
+
+                    if (!tenPNHText.isEmpty()) {
+                        if (!phieu.getTenPNH().toLowerCase().contains(tenPNHText.toLowerCase())) {
+                            match = false;
+                        }
+                    }
+
+
+                    if (startDateValue != null && phieu.getNgayNhap().before(startDateValue)) {
+                        match = false;
+                    }
+                    if (endDateValue != null && phieu.getNgayNhap().after(endDateValue)) {
+                        match = false;
+                    }
+
+                    if (match) {
+                        filteredList.add(phieu);
+                    }
+                }
+
+                // Cập nhật bảng với danh sách đã lọc
+                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                model.setRowCount(0); // Xóa các hàng hiện tại
+                Object[][] data = convertDTOToArray(filteredList);
+                for (Object[] row : data) {
+                    model.addRow(row); // Thêm từng hàng mới
+                }
+
+                if (filteredList.isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "Không tìm thấy phiếu nhập hàng nào!", "Thông báo", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Mã phiếu nhập hàng phải là số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Đã xảy ra lỗi khi tìm kiếm: " + ex.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
+                ex.printStackTrace();
+            }
+        });
+
+
+        add(northPanel,BorderLayout.NORTH);
+        northPanel.add(nhapPnl, BorderLayout.CENTER);
+        northPanel.add(panelSearch,BorderLayout.EAST);
+
+        // Su kien cho nut Them
         btnThem.addActionListener(e -> {
             try {
-                // Lấy dữ liệu từ các trường nhập
                 String tenPNH = t1.getText().trim();
                 int maNVValue = Integer.parseInt(maNV);
                 String nhaCCSelected = (String) cbNhaCC.getSelectedItem();
@@ -164,7 +255,7 @@ public class FormImport extends JPanel {
         }
         return data;
     }
-    // Cần học lại
+
     private void refreshTable() {
         ArrayList<PhieuNhapHangDTO> list = nhapHangBLL.getAllPhieuNhapHang();
         if (list == null || list.isEmpty()) {

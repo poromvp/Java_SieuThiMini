@@ -135,6 +135,14 @@ public class AddNhanVienDialog extends JDialog {
                         "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
         }
+        else {
+            // dùng ảnh mặc định
+            anhNV = "default.png";
+            nv.setImage(anhNV);
+            ImageIcon icon = new ImageIcon("src/main/resources/images/ImageNhanVien/default.png");
+            Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+            imageLabel.setIcon(new ImageIcon(img));
+        }
     }
 
 

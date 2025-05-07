@@ -64,8 +64,8 @@ public class PanelThemThanhVien extends JPanel {
         formPanel.add(new JLabel("Ngày sinh:"));
         dateNgaySinh.setDateFormatString("dd/MM/yyyy");
         dateNgaySinh.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateNgaySinh,null);
-        TienIch.checkngaynhapdutuoi(dateNgaySinh,null);
+        TienIch.checkngaynhaptutay(dateNgaySinh, null);
+        TienIch.checkngaynhapdutuoi(dateNgaySinh, null);
         formPanel.add(dateNgaySinh);
 
         formPanel.add(new JLabel("Địa chỉ:"));
@@ -95,7 +95,7 @@ public class PanelThemThanhVien extends JPanel {
         if (getDiaChi() == null || getDiaChi().trim().isEmpty()) {
             return false;
         }
-        if (getSDT() == null || getSDT().trim().isEmpty() || getSDT().length()!=10) {
+        if (getSDT() == null || getSDT().trim().isEmpty() || getSDT().length() != 10) {
             return false;
         }
         if (getTenAnh() == null || getTenAnh().trim().isEmpty()) {
@@ -104,7 +104,7 @@ public class PanelThemThanhVien extends JPanel {
         return true;
     }
 
-    public TheThanhVienDTO create1TV(){
+    public TheThanhVienDTO create1TV() {
         return new TheThanhVienDTO(getTenTV(), getNgaySinh(), getDiaChi(), getSDT(), getTenAnh());
     }
 
@@ -114,7 +114,11 @@ public class PanelThemThanhVien extends JPanel {
     }
 
     public java.sql.Date getNgaySinh() {
-        return new java.sql.Date(dateNgaySinh.getDate().getTime());
+        if (dateNgaySinh.getDate() == null) {
+            return null;
+        } else {
+            return new java.sql.Date(dateNgaySinh.getDate().getTime());
+        }
     }
 
     public String getDiaChi() {

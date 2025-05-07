@@ -997,6 +997,7 @@ public class OrderPanel extends JPanel {
 		});
 
 		btnInDH.addActionListener(e->{
+			JOptionPane.showMessageDialog(null, " id " + JUST_MADONHANG);
 			new ChiTietDH_Dialog(null, JUST_MADONHANG).setVisible(true);;
 		});
 

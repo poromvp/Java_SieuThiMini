@@ -236,10 +236,10 @@ CREATE TABLE `loaisp` (
 
 INSERT INTO `loaisp` (`MaLSP`, `TenLoaiSP`, `TrangThai`) VALUES
 (1, 'Thực phẩm', 'ACTIVE'),
-(2, 'Đồ uống', 'ACTIVE'),
-(3, 'Gia dụng', 'ACTIVE'),
-(4, 'Thời trang', 'ACTIVE'),
-(5, 'Mỹ phẩm', 'ACTIVE');
+(2, 'Các loại gia vị', 'ACTIVE'),
+(3, 'Đồ uống', 'ACTIVE'),
+(4, 'Bánh kẹo', 'ACTIVE'),
+(5, 'Vật dụng gia đình', 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -260,11 +260,11 @@ CREATE TABLE `nhancc` (
 --
 
 INSERT INTO `nhancc` (`MaNCC`, `TenNCC`, `SDT`, `DiaChi`, `TrangThai`) VALUES
-(1, 'Công ty Vinamilk', '0988881111', 'TP Hồ Chí Minh', 'ACTIVE'),
-(2, 'Công ty TH True Milk', '0988882222', 'Nghệ An', 'ACTIVE'),
-(3, 'Công ty Nestlé', '0988883333', 'Hà Nội', 'ACTIVE'),
-(4, 'Công ty Orion', '0988884444', 'Bình Dương', 'ACTIVE'),
-(5, 'Công ty Ajinomoto', '0988885555', 'Đồng Nai', 'ACTIVE');
+(1, 'Công ty A', '0988881111', 'TP Hồ Chí Minh', 'ACTIVE'),
+(2, 'Công ty B', '0988882222', 'Nghệ An', 'ACTIVE'),
+(3, 'Công ty C', '0988883333', 'Hà Nội', 'ACTIVE'),
+(4, 'Công ty D', '0988884444', 'Bình Dương', 'ACTIVE'),
+(5, 'Công ty E', '0988885555', 'Đồng Nai', 'ACTIVE');
 
 -- --------------------------------------------------------
 
@@ -349,74 +349,29 @@ CREATE TABLE `sanpham` (
 --
 
 INSERT INTO `sanpham` (`MaSP`, `MaNCC`, `MaLSP`, `TenAnh`, `Gia`, `TenSP`, `MoTa`, `TrangThai`, `SoLuongTon`) VALUES
-(51, 1, 1, 'sp1.jpg', 15000.00, 'Bánh Oreo', 'Bánh quy nhân kem', 'ACTIVE', 0),
-(52, 2, 2, 'sp2.jpg', 12000.50, 'Sữa Vinamilk', 'Sữa tươi nguyên chất', 'ACTIVE', 0),
-(53, 3, 3, 'sp3.jpg', 25000.00, 'Mì Hảo Hảo', 'Mì gói chua cay', 'ACTIVE', 0),
-(54, 4, 4, 'sp4.jpg', 8000.75, 'Nước suối Lavie', 'Nước khoáng thiên nhiên', 'ACTIVE', 0),
-(55, 5, 5, 'sp5.jpg', 35000.00, 'Cà phê G7', 'Cà phê hòa tan đậm đà', 'ACTIVE', 0);
-
--- Sản phẩm cho MaLSP = 1 (Thực phẩm)
-INSERT INTO `sanpham` (`MaSP`, `MaNCC`, `MaLSP`, `TenAnh`, `Gia`, `TenSP`, `MoTa`, `TrangThai`, `SoLuongTon`) VALUES
-(1, 1, 1, 'thucpham1.jpg', 10000, 'Gạo ST25', 'Gạo ngon đặc sản', 'ACTIVE', 50),
-(2, 1, 1, 'thucpham2.jpg', 20000, 'Nước mắm Nam Ngư', 'Nước mắm truyền thống', 'ACTIVE', 100),
-(3, 1, 1, 'thucpham3.jpg', 15000, 'Trứng gà', 'Trứng gà ta', 'ACTIVE', 200),
-(4, 1, 1, 'thucpham4.jpg', 25000, 'Thịt heo', 'Thịt heo tươi sạch', 'ACTIVE', 80),
-(5, 1, 1, 'thucpham5.jpg', 5000, 'Muối i-ốt', 'Muối ăn tốt cho sức khỏe', 'ACTIVE', 300),
-(6, 1, 1, 'thucpham6.jpg', 12000, 'Dầu ăn Neptune', 'Dầu ăn cao cấp', 'ACTIVE', 120),
-(7, 1, 1, 'thucpham7.jpg', 8000, 'Đường trắng', 'Đường tinh luyện', 'ACTIVE', 150),
-(8, 1, 1, 'thucpham8.jpg', 18000, 'Sữa tươi', 'Sữa tươi tiệt trùng', 'ACTIVE', 100),
-(9, 1, 1, 'thucpham9.jpg', 3000, 'Mì tôm', 'Mì ăn liền Hảo Hảo', 'ACTIVE', 500),
-(10, 1, 1, 'thucpham10.jpg', 4000, 'Bánh mì', 'Bánh mì truyền thống', 'ACTIVE', 90);
-
--- Sản phẩm cho MaLSP = 2 (Đồ uống)
-INSERT INTO `sanpham` VALUES
-(11, 2, 2, 'douong1.jpg', 10000, 'Coca Cola', 'Nước ngọt có ga', 'ACTIVE', 200),
-(12, 2, 2, 'douong2.jpg', 9000, 'Pepsi', 'Nước ngọt vị cola', 'ACTIVE', 180),
-(13, 2, 2, 'douong3.jpg', 12000, 'Trà xanh C2', 'Trà xanh giải nhiệt', 'ACTIVE', 160),
-(14, 2, 2, 'douong4.jpg', 15000, 'Revive', 'Nước bù khoáng', 'ACTIVE', 140),
-(15, 2, 2, 'douong5.jpg', 20000, 'Nước cam Twister', 'Nước ép cam', 'ACTIVE', 130),
-(16, 2, 2, 'douong6.jpg', 11000, 'Number 1', 'Nước tăng lực', 'ACTIVE', 170),
-(17, 2, 2, 'douong7.jpg', 25000, 'Cafe sữa', 'Cà phê sữa đá', 'ACTIVE', 100),
-(18, 2, 2, 'douong8.jpg', 13000, 'Trà sữa', 'Trà sữa vị truyền thống', 'ACTIVE', 120),
-(19, 2, 2, 'douong9.jpg', 8000, 'Lavie 500ml', 'Nước suối đóng chai', 'ACTIVE', 300),
-(20, 2, 2, 'douong10.jpg', 7000, 'Sting dâu', 'Nước tăng lực vị dâu', 'ACTIVE', 220);
-
-INSERT INTO `sanpham` VALUES
-(21, 3, 3, 'giadung1.jpg', 50000, 'Chảo chống dính', 'Chảo nấu ăn chất lượng', 'ACTIVE', 80),
-(22, 3, 3, 'giadung2.jpg', 30000, 'Bộ dao nhà bếp', 'Dao thép không gỉ', 'ACTIVE', 100),
-(23, 3, 3, 'giadung3.jpg', 40000, 'Nồi inox', 'Nồi inox 3 lớp đáy', 'ACTIVE', 90),
-(24, 3, 3, 'giadung4.jpg', 60000, 'Bình đun siêu tốc', 'Bình 1.8L tự ngắt điện', 'ACTIVE', 70),
-(25, 3, 3, 'giadung5.jpg', 20000, 'Máy xay sinh tố mini', 'Máy xay hoa quả mini', 'ACTIVE', 50),
-(26, 3, 3, 'giadung6.jpg', 10000, 'Bàn chải nhà tắm', 'Dụng cụ vệ sinh đa năng', 'ACTIVE', 150),
-(27, 3, 3, 'giadung7.jpg', 8000, 'Kéo cắt thực phẩm', 'Kéo bếp đa năng', 'ACTIVE', 200),
-(28, 3, 3, 'giadung8.jpg', 25000, 'Khăn lau bếp', 'Khăn siêu thấm', 'ACTIVE', 300),
-(29, 3, 3, 'giadung9.jpg', 35000, 'Thớt gỗ', 'Thớt gỗ tự nhiên', 'ACTIVE', 120),
-(30, 3, 3, 'giadung10.jpg', 75000, 'Bàn ủi hơi nước', 'Bàn ủi mini tiện lợi', 'ACTIVE', 60);
-
-INSERT INTO `sanpham` VALUES
-(31, 4, 4, 'thoitrang1.jpg', 150000, 'Áo thun nam', 'Áo cotton 100%', 'ACTIVE', 100),
-(32, 4, 4, 'thoitrang2.jpg', 250000, 'Quần jeans nữ', 'Quần co giãn thời trang', 'ACTIVE', 80),
-(33, 4, 4, 'thoitrang3.jpg', 300000, 'Áo sơ mi nam', 'Áo sơ mi công sở', 'ACTIVE', 70),
-(34, 4, 4, 'thoitrang4.jpg', 100000, 'Mũ lưỡi trai', 'Mũ thời trang mùa hè', 'ACTIVE', 90),
-(35, 4, 4, 'thoitrang5.jpg', 120000, 'Vớ thể thao', 'Vớ cotton thoáng khí', 'ACTIVE', 200),
-(36, 4, 4, 'thoitrang6.jpg', 350000, 'Giày thể thao', 'Giày sneaker nam nữ', 'ACTIVE', 60),
-(37, 4, 4, 'thoitrang7.jpg', 180000, 'Túi xách nữ', 'Túi da công sở', 'ACTIVE', 70),
-(38, 4, 4, 'thoitrang8.jpg', 90000, 'Thắt lưng nam', 'Thắt lưng da PU', 'ACTIVE', 150),
-(39, 4, 4, 'thoitrang9.jpg', 220000, 'Đầm dự tiệc', 'Váy thời trang cao cấp', 'ACTIVE', 40),
-(40, 4, 4, 'thoitrang10.jpg', 50000, 'Khăn choàng cổ', 'Khăn vải lụa mềm mại', 'ACTIVE', 110);
+(1, 1, 1, 'camoi.png', 10000, 'Cá mòi', 'Cá mòi ngon, đậm đà', 'ACTIVE', 50),
+(2, 1, 1, 'thithop.png', 20000, 'Thịt hộp', 'Thịt hộp siêu ngon', 'ACTIVE', 100),
+(3, 1, 1, 'xucxich.png', 15000, 'Xúc xích', 'Xúc xích hihi', 'ACTIVE', 200),
+(4, 1, 1, 'trungga.png', 25000, 'Trứng gà ', 'Trứng gà công nghiệp', 'ACTIVE', 80),
+(5, 1, 1, 'mitom.png', 5000, 'Mì tôm', 'Mì ăn liền Hảo Hảo', 'ACTIVE', 500),
+(6, 1, 2, 'dauan.png', 12000, 'Dầu ăn Neptune', 'Dầu ăn cao cấp', 'ACTIVE', 120),
+(7, 1, 2, 'duong.png', 8000, 'Đường trắng', 'Đường tinh luyện', 'ACTIVE', 150),
+(8, 1, 2, 'muoi.png', 18000, 'Muối', 'Muối sạch', 'ACTIVE', 100),
+(9, 1, 2, 'hatnem.png', 3000, 'Hạt nêm', 'Hạt nêm siêu ngon', 'ACTIVE', 500),
+(10, 1, 2, 'nuocmam.png', 4000, 'Nước mắm', 'Nước mắm cá cơm', 'ACTIVE', 90);
 
 
 INSERT INTO `sanpham` VALUES
-(41, 5, 5, 'mypham1.jpg', 120000, 'Sữa rửa mặt', 'Làm sạch sâu da mặt', 'ACTIVE', 100),
-(42, 5, 5, 'mypham2.jpg', 250000, 'Kem chống nắng', 'SPF50+, dưỡng ẩm da', 'ACTIVE', 80),
-(43, 5, 5, 'mypham3.jpg', 180000, 'Son môi', 'Son lì không trôi', 'ACTIVE', 90),
-(44, 5, 5, 'mypham4.jpg', 300000, 'Kem dưỡng da', 'Dưỡng trắng da ban đêm', 'ACTIVE', 70),
-(45, 5, 5, 'mypham5.jpg', 95000, 'Tẩy trang', 'Nước tẩy trang dịu nhẹ', 'ACTIVE', 150),
-(46, 5, 5, 'mypham6.jpg', 200000, 'Nước hoa mini', 'Hương thơm quyến rũ', 'ACTIVE', 60),
-(47, 5, 5, 'mypham7.jpg', 175000, 'Phấn nền', 'Làm mịn da, che khuyết điểm', 'ACTIVE', 100),
-(48, 5, 5, 'mypham8.jpg', 110000, 'Kẻ mắt', 'Bút kẻ mắt không lem', 'ACTIVE', 120),
-(49, 5, 5, 'mypham9.jpg', 220000, 'Mặt nạ dưỡng da', 'Dưỡng ẩm và làm sáng da', 'ACTIVE', 90),
-(50, 5, 5, 'mypham10.jpg', 80000, 'Bông tẩy trang', 'Bông cotton 100%', 'ACTIVE', 200);
+(11, 2, 3, 'cocacola.png', 10000, 'Coca Cola', 'Nước ngọt có ga', 'ACTIVE', 200),
+(12, 2, 3, 'pepsi.png', 9000, 'Pepsi', 'Nước ngọt vị cola', 'ACTIVE', 180),
+(13, 2, 3, 'c2.png', 12000, 'Trà xanh C2', 'Trà xanh giải nhiệt', 'ACTIVE', 160),
+(14, 2, 3, 'revive.png', 15000, 'Revive', 'Nước bù khoáng', 'ACTIVE', 140),
+(15, 2, 3, 'nuoccam.png', 20000, 'Nước cam Twister', 'Nước ép cam', 'ACTIVE', 130),
+(16, 2, 4, 'banhoshi.png', 11000, 'Bánh oshi', 'Bánh ngon', 'ACTIVE', 170),
+(17, 2, 4, 'banhmi.png', 25000, 'Bánh mỳ Kinh Đô', 'Bánh ngon', 'ACTIVE', 100),
+(18, 2, 4, 'banhxep.png', 13000, 'Bánh xếp', 'Bánh ngon', 'ACTIVE', 120),
+(19, 2, 5, 'banchai.png', 8000, 'Bàn chải PS', 'Bàn chải xịn', 'ACTIVE', 300),
+(20, 2, 5, 'thamchuichan.png', 7000, 'Thảm chùi chân', 'Thảm chùi chân xịn ', 'ACTIVE', 220);
 
 -- --------------------------------------------------------
 

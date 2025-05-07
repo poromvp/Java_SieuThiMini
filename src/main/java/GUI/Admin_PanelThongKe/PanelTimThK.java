@@ -346,8 +346,12 @@ public class PanelTimThK extends JPanel {
         search.setMaLSP(txtMaLoaiSanPham.getText().isEmpty() ? null : Integer.parseInt(txtMaLoaiSanPham.getText()));
         search.setMaNV(txtMaNhanVien.getText().isEmpty() ? null : Integer.parseInt(txtMaNhanVien.getText()));
         search.setMaSP(txtMaSanPham.getText().isEmpty() ? null : Integer.parseInt(txtMaSanPham.getText()));
-        search.setNgayBD((Date) dateChooserBatDau.getDate() == null ? null : (Date) dateChooserBatDau.getDate());
-        search.setNgayBD((Date) dateChooserKetThuc.getDate() == null ? null : (Date) dateChooserKetThuc.getDate());
+        java.util.Date utilStart = dateChooserBatDau.getDate();
+        java.util.Date utilEnd = dateChooserKetThuc.getDate();
+
+        search.setNgayBD(utilStart == null ? null : new java.sql.Date(utilStart.getTime()));
+        search.setNgayKT(utilEnd == null ? null : new java.sql.Date(utilEnd.getTime()));
+                
         search.setPhuongThucTT((String) cboPhuongThucThanhToan.getSelectedItem());
         search.setSort((String) cboSapXep.getSelectedItem());
         search.setTenCot((String) cboTheoCot.getSelectedItem());

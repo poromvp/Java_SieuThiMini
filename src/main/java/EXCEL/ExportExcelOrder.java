@@ -153,7 +153,7 @@ public class ExportExcelOrder extends JFrame  {
                 Row row = sheet.createRow(rowIndex++);
 
                 SanPhamDTO sp = SanPhamBLL.getProductById(ctdh.getMaSP());
-                ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
+                ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(DONHANG.getMaKM(), ctdh.getMaSP());
 
                 double tiLe = (ctkm != null) ? ctkm.getTiLeGiam() : 0.0;
                 double thanhTien = sp.getGia() * (1 - tiLe / 100.0) * ctdh.getSoLuong();

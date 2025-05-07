@@ -60,7 +60,7 @@ public class TheThanhVienBLL {
 
     // Cập nhật thông tin thẻ thành viên
     public static boolean updateMember(TheThanhVienDTO member) {
-        if(getMemberByPhone(member.getSdt())!=null){
+        if(getMemberByPhone(member.getSdt()).getMaTV() != member.getMaTV()){
             return false;
         }
         int result = TheThanhVienDAL.updateMember(member);

@@ -20,7 +20,6 @@ import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
 import DTO.SearchBanChayDTO;
 import DTO.SearchTonKhoDTO;
-import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.*;
 import GUI.FormWareHouse.FormProductDetail;
 
@@ -324,7 +323,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
     public SearchBanChayDTO SEARCH = new SearchBanChayDTO();
     public SearchTonKhoDTO SEARCH2 = new SearchTonKhoDTO();
-    public ArrayList SEARCH22 = new ArrayList<>();
+    public ArrayList<String> SEARCH22 = new ArrayList<>();
 
     @Override
     public void actionPerformed(ActionEvent e) {

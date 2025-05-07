@@ -9,6 +9,8 @@ import GUI.ComponentCommon.TienIch;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class PanelThemThanhVien extends JPanel {
@@ -71,14 +73,16 @@ public class PanelThemThanhVien extends JPanel {
         formPanel.add(txtDiaChi);
 
         formPanel.add(new JLabel("SĐT:"));
-        txtSDT.setPlaceholder("Nhập số điện thoại");
+        txtSDT.setPlaceholder("Số điện thoại (10 chữ số)");
         formPanel.add(txtSDT);
+        TienIch.chiduocnhapso(txtSDT);
 
         formPanel.add(new JLabel("Ảnh đại diện:"));
         formPanel.add(btnChonAnh);
 
         add(formPanel, BorderLayout.CENTER);
         add(lblImagePreview, BorderLayout.EAST);
+
     }
 
     public boolean ktraBieuThucChinhQuy() {
@@ -91,7 +95,7 @@ public class PanelThemThanhVien extends JPanel {
         if (getDiaChi() == null || getDiaChi().trim().isEmpty()) {
             return false;
         }
-        if (getSDT() == null || getSDT().trim().isEmpty()) {
+        if (getSDT() == null || getSDT().trim().isEmpty() || getSDT().length()!=10) {
             return false;
         }
         if (getTenAnh() == null || getTenAnh().trim().isEmpty()) {

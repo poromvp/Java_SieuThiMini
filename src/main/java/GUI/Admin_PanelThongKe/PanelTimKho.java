@@ -206,6 +206,13 @@ public class PanelTimKho extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 5;
         add(cboTheoCot, gbc);
+
+        TienIch.sukienSoSanh(Min, Max);
+        TienIch.sukienSoSanh(Min2, Max2);
+
+        TienIch.chiduocnhapso(txtMaSanPham);
+        TienIch.chiduocnhapso(txtMaLoaiSanPham);
+        TienIch.chiduocnhapso(txtMaNCC);
     }
 
     public ArrayList<SanPhamDTO> ketqua() {
@@ -247,11 +254,11 @@ public class PanelTimKho extends JPanel {
         if(!txtLoaiSanPham.getText().trim().isEmpty()){
             search.add("Tên loại sản phẩm: "+txtLoaiSanPham.getText().trim());
         }
-        if((int) Min.getValue()!=0 && (int) Max.getValue()!=0){
+        if((int) Min.getValue()!=0 || (int) Max.getValue()!=0){
             search.add("Số lượng tồn từ: "+(int) Min.getValue()+" đến: "+(int) Max.getValue());
         }
-        if((int) Min2.getValue()!=0 && (int) Max2.getValue()!=0){
-            search.add("Đơn giá từ: "+(int) Min2.getValue()+" đến: "+(int) Max2.getValue());
+        if((int) Min2.getValue()!=0 || (int) Max2.getValue()!=0){
+            search.add("Đơn giá từ: "+TienIch.formatVND((int) Min2.getValue())+" đến: "+TienIch.formatVND((int) Max2.getValue()));
         }
         if(maNCC!=0){
             search.add("Mã mã nhà cung cấp: "+maNCC);

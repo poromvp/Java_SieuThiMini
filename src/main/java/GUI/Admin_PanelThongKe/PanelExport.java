@@ -2,6 +2,7 @@ package GUI.Admin_PanelThongKe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,18 +11,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
-
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Font;
@@ -71,8 +74,20 @@ public class PanelExport extends JPanel {
         // Panel radio button
         JPanel radioPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
         radioPanel.setBackground(new Color(33, 58, 89));
-        rbExcel = new JRadioButton("Excel");
-        rbPDF = new JRadioButton("PDF");
+
+        ImageIcon icon1 = new ImageIcon("src/main/resources/images/icon/excel.png");
+        ImageIcon icon2 = new ImageIcon("src/main/resources/images/icon/pdf.png");
+
+        rbExcel = new JRadioButton("");
+        rbExcel.setIcon(TienIch.seticon(icon1));
+        rbExcel.setHorizontalTextPosition(SwingConstants.LEFT);
+        rbExcel.setBorderPainted(true);
+        
+        rbPDF = new JRadioButton("");
+        rbPDF.setIcon(TienIch.seticon(icon2));
+        rbPDF.setHorizontalTextPosition(SwingConstants.LEFT);
+        rbPDF.setBorderPainted(true);
+
 
         rbExcel.setForeground(Color.WHITE);
         rbPDF.setForeground(Color.WHITE);
@@ -97,7 +112,7 @@ public class PanelExport extends JPanel {
         TienIch.CustomMessage("Xuất file ra file PDF...");
     }
 
-    public void XuatExccel(JTable tb, String title){
+    public void XuatExccel(JTable tb, String title) {
         Export.exportToExcel(tb, title);
     }
 
@@ -190,7 +205,7 @@ public class PanelExport extends JPanel {
                 String fontPath = "src/main/resources/fonts/arial.ttf";
                 BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 Font fontNormal = new Font(baseFont, 12);
-                //Font fontBold = new Font(baseFont, 12, Font.BOLD);
+                // Font fontBold = new Font(baseFont, 12, Font.BOLD);
                 Font fontTitle = new Font(baseFont, 22, Font.BOLD);
                 Font fontHeader = new Font(baseFont, 12, Font.BOLD, com.itextpdf.text.BaseColor.WHITE);
 
@@ -282,7 +297,7 @@ public class PanelExport extends JPanel {
                 String fontPath = "src/main/resources/fonts/arial.ttf";
                 BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
                 Font fontNormal = new Font(baseFont, 12);
-                //Font fontBold = new Font(baseFont, 12, Font.BOLD);
+                // Font fontBold = new Font(baseFont, 12, Font.BOLD);
                 Font fontTitle = new Font(baseFont, 22, Font.BOLD);
                 Font fontHeader = new Font(baseFont, 12, Font.BOLD, com.itextpdf.text.BaseColor.WHITE);
 
@@ -397,7 +412,8 @@ public class PanelExport extends JPanel {
         }
     }
 
-    public static void InPDFTheThanhVienTheoSearch(ArrayList<?> list, SearchTheThanhVienDTO search, String MANV,
+    public static void InPDFTheThanhVienTheoSearch(ArrayList<TheThanhVienDTO> list, SearchTheThanhVienDTO search,
+            String MANV,
             String tua) {
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -466,7 +482,9 @@ public class PanelExport extends JPanel {
                 }
                 if (search.getSinhFrom() != null && search.getSinhTo() != null) {
                     Paragraph sinh = new Paragraph(
-                            "Ngày sinh từ: " + search.getSinhFrom() + " đến: " + search.getSinhTo(), fontNormal);
+                            "Ngày sinh từ: " + TienIch.ddmmyyyy(search.getSinhFrom()) + " đến: "
+                                    + TienIch.ddmmyyyy(search.getSinhTo()),
+                            fontNormal);
                     sinh.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(sinh);
                 }
@@ -482,24 +500,28 @@ public class PanelExport extends JPanel {
                     madh.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(madh);
                 }
-                if (search.getDhMin() != 0 && search.getDhMax() != 0) {
+                if (search.getDhMin() != 0 || search.getDhMax() != 0) {
                     Paragraph numdh = new Paragraph(
                             "Tổng đơn hàng từ: " + search.getDhMin() + " đến " + search.getDhMax(), fontNormal);
                     document.add(numdh);
                 }
-                if (search.getTongMin() != 0 && search.getTongMax() != 0) {
+                if (search.getTongMin() != 0 || search.getTongMax() != 0) {
                     Paragraph numchitieu = new Paragraph(
-                            "Tổng chi tiêu từ: " + search.getTongMin() + " đến " + search.getTongMax(), fontNormal);
+                            "Tổng chi tiêu từ: " + TienIch.formatVND(search.getTongMin()) + " đến "
+                                    + TienIch.formatVND(search.getTongMax()),
+                            fontNormal);
                     document.add(numchitieu);
                 }
-                if (search.getDtlMin() != 0 && search.getDtlMax() != 0) {
+                if (search.getDtlMin() != 0 || search.getDtlMax() != 0) {
                     Paragraph numdtl = new Paragraph(
                             "Điểm tích lũy từ: " + search.getDtlMin() + " đến " + search.getDtlMax(), fontNormal);
                     document.add(numdtl);
                 }
                 if (search.getNgayMin() != null && search.getNgayMax() != null) {
                     Paragraph ngay = new Paragraph(
-                            "Hạn thẻ từ: " + search.getNgayMin() + " đến " + search.getNgayMax(), fontNormal);
+                            "Hạn thẻ từ: " + TienIch.ddmmyyyy(search.getNgayMin()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgayMax()),
+                            fontNormal);
                     ngay.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngay);
                 }
@@ -530,26 +552,16 @@ public class PanelExport extends JPanel {
                 }
 
                 // Dữ liệu bảng
-                for (Object obj : list) {
-                    // Giả sử obj là một đối tượng có các phương thức getter
+                for (TheThanhVienDTO obj : list) {
                     try {
-                        java.lang.reflect.Method getMaThanhVien = obj.getClass().getMethod("getMaTV");
-                        java.lang.reflect.Method getHoTen = obj.getClass().getMethod("getTenTV");
-                        java.lang.reflect.Method getNgaySinh = obj.getClass().getMethod("getNgaySinh");
-                        java.lang.reflect.Method getDiaChi = obj.getClass().getMethod("getDiaChi");
-                        java.lang.reflect.Method getSoDienThoai = obj.getClass().getMethod("getSdt");
-                        java.lang.reflect.Method getDiemTichLuy = obj.getClass().getMethod("getDiemTL");
-                        java.lang.reflect.Method getNgayBD = obj.getClass().getMethod("getNgayBD");
-                        java.lang.reflect.Method getNgayKT = obj.getClass().getMethod("getNgayKT");
-
-                        String maThanhVien = String.valueOf(getMaThanhVien.invoke(obj));
-                        String hoTen = String.valueOf(getHoTen.invoke(obj));
-                        String soDienThoai = String.valueOf(getSoDienThoai.invoke(obj));
-                        String diemTichLuy = String.valueOf(getDiemTichLuy.invoke(obj));
-                        String ngaysinh = String.valueOf(getNgaySinh.invoke(obj));
-                        String diachi = String.valueOf(getDiaChi.invoke(obj));
-                        String ngayBD = String.valueOf(getNgayBD.invoke(obj));
-                        String ngayKT = String.valueOf(getNgayKT.invoke(obj));
+                        String maThanhVien = obj.getMaTV() + "";
+                        String hoTen = obj.getTenTV();
+                        String soDienThoai = obj.getSdt();
+                        String diemTichLuy = obj.getDiemTL() + "";
+                        String ngaysinh = TienIch.ddmmyyyy(obj.getNgaySinh());
+                        String diachi = obj.getDiaChi();
+                        String ngayBD = TienIch.ddmmyyyy(obj.getNgayBD());
+                        String ngayKT = TienIch.ddmmyyyy(obj.getNgayKT());
 
                         PdfPCell cell1 = new PdfPCell(new Paragraph(maThanhVien, fontNormal));
                         PdfPCell cell2 = new PdfPCell(new Paragraph(hoTen, fontNormal));
@@ -681,8 +693,8 @@ public class PanelExport extends JPanel {
                 Paragraph sdt = new Paragraph("Số điện thoại: " + member.getSdt(), fontBold);
                 Paragraph diem = new Paragraph("Điểm: " + member.getDiemTL() + "", fontBold);
                 Paragraph maTV = new Paragraph("Mã: " + member.getMaTV() + "", fontBold);
-                Paragraph ngayBD = new Paragraph("Hạn thẻ từ:  " + member.getNgayBD() + "", fontBold);
-                Paragraph ngayKT = new Paragraph("Hạn thẻ đến: " + member.getNgayKT() + "", fontBold);
+                Paragraph ngayBD = new Paragraph("Hạn thẻ từ:  " + TienIch.ddmmyyyy(member.getNgayBD()) + "", fontBold);
+                Paragraph ngayKT = new Paragraph("Hạn thẻ đến: " + TienIch.ddmmyyyy(member.getNgayKT()) + "", fontBold);
                 Paragraph tt1 = new Paragraph("Tổng đơn hàng: " + SODONHANG + "", fontBold);
                 Paragraph tt2 = new Paragraph("Tổng chi tiêu: " + TONGCHITIEU + "", fontBold);
 
@@ -737,14 +749,17 @@ public class PanelExport extends JPanel {
                 }
                 if (search.getNgayTTfrom() != null && search.getNgayTTto() != null) {
                     Paragraph ngayTT = new Paragraph(
-                            "Ngày thanh toán từ: " + search.getNgayTTfrom() + " đến " + search.getNgayTTto(),
+                            "Ngày thanh toán từ: " + TienIch.ddmmyyyy(search.getNgayTTfrom()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgayTTto()),
                             fontNormal);
                     ngayTT.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngayTT);
                 }
-                if (search.getTienMin() != 0 && search.getTienMax() != 0) {
+                if (search.getTienMin() != 0 || search.getTienMax() != 0) {
                     Paragraph thanhtien = new Paragraph(
-                            "Thành tiền từ: " + search.getTienMin() + " đến " + search.getTienMax(), fontNormal);
+                            "Thành tiền từ: " + TienIch.formatVND(search.getTienMin()) + " đến "
+                                    + TienIch.formatVND(search.getTienMax()),
+                            fontNormal);
                     document.add(thanhtien);
                 }
                 if (search.getPTTT() != null) {
@@ -836,7 +851,7 @@ public class PanelExport extends JPanel {
                                 : "Không";
                         String tennhanvien = new NhanVienBLL().getNhanVienByMa(obj.getMaNV() + "").getTenNV();
                         String phuongthucthanhtoan = obj.getPtThanhToan();
-                        String ngaythanhtoan = obj.getNgayTT();
+                        String ngaythanhtoan = TienIch.ddmmyyyy(obj.getNgayTT());
                         String madiemtichluy = obj.getMaDTL() != 0 ? obj.getMaDTL() + "" : "Không";
                         String tienkhachdua = TienIch.formatVND(obj.getTienKD());
                         String tongtien = TienIch.formatVND(obj.getTongTien());
@@ -980,7 +995,9 @@ public class PanelExport extends JPanel {
                 }
                 if (search.getNgaySinhFrom() != null && search.getNgaySinhTo() != null) {
                     Paragraph ngaySinh = new Paragraph(
-                            "Ngày sinh từ: " + search.getNgaySinhFrom() + " đến " + search.getNgaySinhTo(), fontNormal);
+                            "Ngày sinh từ: " + TienIch.ddmmyyyy(search.getNgaySinhFrom()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgaySinhTo()),
+                            fontNormal);
                     ngaySinh.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngaySinh);
                 }
@@ -1003,19 +1020,23 @@ public class PanelExport extends JPanel {
                     maDH.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(maDH);
                 }
-                if (search.getTongDHMin() != 0 && search.getTongDHMax() != 0) {
+                if (search.getTongDHMin() != 0 || search.getTongDHMax() != 0) {
                     Paragraph tongDonHang = new Paragraph(
                             "Tổng đơn hàng từ: " + search.getTongDHMin() + " đến " + search.getTongDHMax(), fontNormal);
                     document.add(tongDonHang);
                 }
-                if (search.getDoanhSoMin() != 0 && search.getDoanhSoMax() != 0) {
+                if (search.getDoanhSoMin() != 0 || search.getDoanhSoMax() != 0) {
                     Paragraph doanhSo = new Paragraph(
-                            "Doanh số từ: " + search.getDoanhSoMin() + " đến " + search.getDoanhSoMax(), fontNormal);
+                            "Doanh số từ: " + TienIch.formatVND(search.getDoanhSoMin()) + " đến "
+                                    + TienIch.formatVND(search.getDoanhSoMax()),
+                            fontNormal);
                     document.add(doanhSo);
                 }
-                if (search.getLuongMin() != 0 && search.getLuongMax() != 0) {
+                if (search.getLuongMin() != 0 || search.getLuongMax() != 0) {
                     Paragraph Luong = new Paragraph(
-                            "Lương từ: " + search.getLuongMin() + " đến " + search.getLuongMax(), fontNormal);
+                            "Lương từ: " + TienIch.formatVND(search.getLuongMin()) + " đến "
+                                    + TienIch.formatVND(search.getLuongMax()),
+                            fontNormal);
                     document.add(Luong);
                 }
                 if (search.getOrder() != null && search.getBy() != null) {
@@ -1050,7 +1071,7 @@ public class PanelExport extends JPanel {
                         String manhanvien = obj.getMaNV() + "";
                         String tennhanvien = obj.getTenNV();
                         String gioitinh = obj.getGioiTinh();
-                        String ngaysinh = obj.getNgaySinh() + "";
+                        String ngaysinh = TienIch.ddmmyyyy(obj.getNgaySinh()) + "";
                         String cancuoccongdan = obj.getCCCD();
                         String diachi = obj.getDiaChi();
                         String sodienthoai = obj.getSDT();
@@ -1176,7 +1197,8 @@ public class PanelExport extends JPanel {
                 document.add(title);
 
                 // Từ ngày
-                Paragraph ngay = new Paragraph("Từ ngày: " + from + " đến: " + to + "\n", fontBold);
+                Paragraph ngay = new Paragraph(
+                        "Từ ngày: " + TienIch.ddmmyyyy(from) + " đến: " + TienIch.ddmmyyyy(to) + "\n", fontBold);
                 ngay.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
                 document.add(ngay);
 
@@ -1202,7 +1224,9 @@ public class PanelExport extends JPanel {
                 }
                 if (search.getNgaySinhFrom() != null && search.getNgaySinhTo() != null) {
                     Paragraph ngaySinh = new Paragraph(
-                            "Ngày sinh từ: " + search.getNgaySinhFrom() + " đến " + search.getNgaySinhTo(), fontNormal);
+                            "Ngày sinh từ: " + TienIch.ddmmyyyy(search.getNgaySinhFrom()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgaySinhTo()),
+                            fontNormal);
                     ngaySinh.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngaySinh);
                 }
@@ -1225,19 +1249,23 @@ public class PanelExport extends JPanel {
                     maDH.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(maDH);
                 }
-                if (search.getTongDHMin() != 0 && search.getTongDHMax() != 0) {
+                if (search.getTongDHMin() != 0 || search.getTongDHMax() != 0) {
                     Paragraph tongDonHang = new Paragraph(
                             "Tổng đơn hàng từ: " + search.getTongDHMin() + " đến " + search.getTongDHMax(), fontNormal);
                     document.add(tongDonHang);
                 }
-                if (search.getDoanhSoMin() != 0 && search.getDoanhSoMax() != 0) {
+                if (search.getDoanhSoMin() != 0 || search.getDoanhSoMax() != 0) {
                     Paragraph doanhSo = new Paragraph(
-                            "Doanh số từ: " + search.getDoanhSoMin() + " đến " + search.getDoanhSoMax(), fontNormal);
+                            "Doanh số từ: " + TienIch.formatVND(search.getDoanhSoMin()) + " đến "
+                                    + TienIch.formatVND(search.getDoanhSoMax()),
+                            fontNormal);
                     document.add(doanhSo);
                 }
-                if (search.getLuongMin() != 0 && search.getLuongMax() != 0) {
+                if (search.getLuongMin() != 0 || search.getLuongMax() != 0) {
                     Paragraph Luong = new Paragraph(
-                            "Lương từ: " + search.getLuongMin() + " đến " + search.getLuongMax(), fontNormal);
+                            "Lương từ: " + TienIch.formatVND(search.getLuongMin()) + " đến "
+                                    + TienIch.formatVND(search.getLuongMax()),
+                            fontNormal);
                     document.add(Luong);
                 }
                 if (search.getOrder() != null && search.getBy() != null) {
@@ -1272,7 +1300,7 @@ public class PanelExport extends JPanel {
                         String manhanvien = obj.getMaNV() + "";
                         String tennhanvien = obj.getTenNV();
                         String gioitinh = obj.getGioiTinh();
-                        String ngaysinh = obj.getNgaySinh() + "";
+                        String ngaysinh = TienIch.ddmmyyyy(obj.getNgaySinh()) + "";
                         String cancuoccongdan = obj.getCCCD();
                         String diachi = obj.getDiaChi();
                         String sodienthoai = obj.getSDT();
@@ -1403,7 +1431,7 @@ public class PanelExport extends JPanel {
                 avt.scaleToFit(150, 350);
 
                 Paragraph tenTV = new Paragraph("Họ và tên: " + nhanvien.getTenNV(), fontBold);
-                Paragraph namSinh = new Paragraph("Ngày sinh: " + nhanvien.getNgaySinh(), fontBold);
+                Paragraph namSinh = new Paragraph("Ngày sinh: " + TienIch.ddmmyyyy(nhanvien.getNgaySinh()), fontBold);
                 Paragraph diaChi = new Paragraph("Địa chỉ: " + nhanvien.getDiaChi(), fontBold);
                 Paragraph sdt = new Paragraph("Số điện thoại: " + nhanvien.getSDT(), fontBold);
                 Paragraph diem = new Paragraph("Chức vụ: " + new TaiKhoanBLL().getQuyenNV(nhanvien.getMaNV() + "") + "",
@@ -1465,14 +1493,17 @@ public class PanelExport extends JPanel {
                 }
                 if (search.getNgayTTfrom() != null && search.getNgayTTto() != null) {
                     Paragraph ngayTT = new Paragraph(
-                            "Ngày thanh toán từ: " + search.getNgayTTfrom() + " đến " + search.getNgayTTto(),
+                            "Ngày thanh toán từ: " + TienIch.ddmmyyyy(search.getNgayTTfrom()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgayTTto()),
                             fontNormal);
                     ngayTT.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngayTT);
                 }
-                if (search.getTienMin() != 0 && search.getTienMax() != 0) {
+                if (search.getTienMin() != 0 || search.getTienMax() != 0) {
                     Paragraph thanhtien = new Paragraph(
-                            "Thành tiền từ: " + search.getTienMin() + " đến " + search.getTienMax(), fontNormal);
+                            "Thành tiền từ: " + TienIch.formatVND(search.getTienMin()) + " đến "
+                                    + TienIch.formatVND(search.getTienMax()),
+                            fontNormal);
                     document.add(thanhtien);
                 }
                 if (search.getPTTT() != null) {
@@ -1566,7 +1597,7 @@ public class PanelExport extends JPanel {
                                 ? TheThanhVienBLL.getMemberById(obj.getMaKH()).getTenTV()
                                 : "Không";
                         String phuongthucthanhtoan = obj.getPtThanhToan();
-                        String ngaythanhtoan = obj.getNgayTT();
+                        String ngaythanhtoan = TienIch.ddmmyyyy(obj.getNgayTT());
                         String madiemtichluy = obj.getMaDTL() != 0 ? obj.getMaDTL() + "" : "Không";
                         String tienkhachdua = TienIch.formatVND(obj.getTienKD());
                         String tongtien = TienIch.formatVND(obj.getTongTien());
@@ -1690,7 +1721,8 @@ public class PanelExport extends JPanel {
                 document.add(title);
 
                 // Từ ngày
-                Paragraph ngay = new Paragraph("Từ ngày: " + from + " đến: " + to + "\n", fontBold);
+                Paragraph ngay = new Paragraph(
+                        "Từ ngày: " + TienIch.ddmmyyyy(from) + " đến: " + TienIch.ddmmyyyy(to) + "\n", fontBold);
                 ngay.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
                 document.add(ngay);
 
@@ -1719,10 +1751,11 @@ public class PanelExport extends JPanel {
                         document.add(tenLSP);
                     }
                 }
-                if (search.getSLmin() !=0 && search.getSLmax()!=0){
-                    Paragraph soLuong = new Paragraph("Số lượng bán ra từ: " + search.getSLmin() + " đến: "+search.getSLmax(), fontNormal);
-                        soLuong.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
-                        document.add(soLuong);
+                if (search.getSLmin() != 0 || search.getSLmax() != 0) {
+                    Paragraph soLuong = new Paragraph(
+                            "Số lượng bán ra từ: " + search.getSLmin() + " đến: " + search.getSLmax(), fontNormal);
+                    soLuong.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(soLuong);
                 }
                 if (search.getSort() != null && search.getBy() != null) {
                     Paragraph orderby = new Paragraph(
@@ -1736,11 +1769,11 @@ public class PanelExport extends JPanel {
                 int columnCount = 5; // Dựa trên dữ liệu
                 PdfPTable pdfTable = new PdfPTable(columnCount);
                 pdfTable.setWidthPercentage(100);
-                pdfTable.setWidths(new float[] { 0.5f, 2f, 2f, 1.5f, 2f});
+                pdfTable.setWidths(new float[] { 0.5f, 2f, 2f, 1.5f, 2f });
                 pdfTable.setSpacingBefore(10f);
 
                 // Header bảng
-                String[] headers = { "Mã SP", "Loại", "Sản Phẩm", "Số lượng bán ra", "Mã các đơn hàng"};
+                String[] headers = { "Mã SP", "Loại", "Sản Phẩm", "Số lượng bán ra", "Mã các đơn hàng" };
                 for (String header : headers) {
                     PdfPCell cell = new PdfPCell(new Paragraph(header, fontHeader));
                     cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
@@ -1891,15 +1924,17 @@ public class PanelExport extends JPanel {
                         document.add(tenLSP);
                     }
                 }
-                if (search.getSLmin() !=0 && search.getSLmax()!=0){
-                    Paragraph soLuong = new Paragraph("Số lượng tồn từ: " + search.getSLmin() + " đến: "+search.getSLmax(), fontNormal);
-                        soLuong.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
-                        document.add(soLuong);
+                if (search.getSLmin() != 0 || search.getSLmax() != 0) {
+                    Paragraph soLuong = new Paragraph(
+                            "Số lượng tồn từ: " + search.getSLmin() + " đến: " + search.getSLmax(), fontNormal);
+                    soLuong.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(soLuong);
                 }
-                if (search.getGiamin() !=0 && search.getGiamax()!=0){
-                    Paragraph giaTien = new Paragraph("Đơn giá từ: " + search.getGiamin() + " đến: "+search.getGiamax(), fontNormal);
-                        giaTien.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
-                        document.add(giaTien);
+                if (search.getGiamin() != 0 || search.getGiamax() != 0) {
+                    Paragraph giaTien = new Paragraph("Đơn giá từ: " + TienIch.formatVND(search.getGiamin()) + " đến: "
+                            + TienIch.formatVND(search.getGiamax()), fontNormal);
+                    giaTien.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(giaTien);
                 }
                 if (search.getMaNCC() != 0) {
                     Paragraph maNCC = new Paragraph("Mã nhà cung cấp: " + search.getMaNCC(), fontNormal);
@@ -1925,11 +1960,11 @@ public class PanelExport extends JPanel {
                 int columnCount = 6; // Dựa trên dữ liệu
                 PdfPTable pdfTable = new PdfPTable(columnCount);
                 pdfTable.setWidthPercentage(100);
-                pdfTable.setWidths(new float[] { 0.5f, 2f, 2f, 1.5f, 2f, 1.8f});
+                pdfTable.setWidths(new float[] { 0.5f, 2f, 2f, 1.5f, 2f, 1.8f });
                 pdfTable.setSpacingBefore(10f);
 
                 // Header bảng
-                String[] headers = { "Mã SP", "Loại", "Sản Phẩm", "Số lượng tồn", "Nhà cung cấp", "Đơn giá"};
+                String[] headers = { "Mã SP", "Loại", "Sản Phẩm", "Số lượng tồn", "Nhà cung cấp", "Đơn giá" };
                 for (String header : headers) {
                     PdfPCell cell = new PdfPCell(new Paragraph(header, fontHeader));
                     cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
@@ -2060,7 +2095,7 @@ public class PanelExport extends JPanel {
                 document.add(title);
 
                 // Tiêu chí lọc
-                if (search.getMaDonNH() !=0){
+                if (search.getMaDonNH() != 0) {
                     Paragraph maDonNH = new Paragraph("Mã đơn nhập hàng: " + search.getMaDonNH(), fontNormal);
                     maDonNH.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(maDonNH);
@@ -2072,9 +2107,10 @@ public class PanelExport extends JPanel {
                         document.add(tenDonNH);
                     }
                 }
-                if (search.getNgayTu()!=null && search.getNgayDen()!=null){
+                if (search.getNgayTu() != null && search.getNgayDen() != null) {
                     Paragraph ngay = new Paragraph(
-                            "Ngày nhập từ: " + search.getNgayTu() + " đến " + search.getNgayDen(),
+                            "Ngày nhập từ: " + TienIch.ddmmyyyy(search.getNgayTu()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgayDen()),
                             fontNormal);
                     ngay.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngay);
@@ -2103,10 +2139,11 @@ public class PanelExport extends JPanel {
                         document.add(tenNCC);
                     }
                 }
-                if (search.getGiaMin() !=0 && search.getGiaMax()!=0){
-                    Paragraph giaNhap = new Paragraph("Giá nhập từ: " + search.getGiaMin() + " đến: "+search.getGiaMax(), fontNormal);
-                        giaNhap.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
-                        document.add(giaNhap);
+                if (search.getGiaMin() != 0 || search.getGiaMax() != 0) {
+                    Paragraph giaNhap = new Paragraph("Giá nhập từ: " + TienIch.formatVND(search.getGiaMin()) + " đến: "
+                            + TienIch.formatVND(search.getGiaMax()), fontNormal);
+                    giaNhap.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(giaNhap);
                 }
                 if (search.getMaSP() != 0) {
                     Paragraph maSP = new Paragraph("Mã sản phẩm: " + search.getMaSP(), fontNormal);
@@ -2137,11 +2174,11 @@ public class PanelExport extends JPanel {
                 int columnCount = 5; // Dựa trên dữ liệu
                 PdfPTable pdfTable = new PdfPTable(columnCount);
                 pdfTable.setWidthPercentage(100);
-                pdfTable.setWidths(new float[] { 0.5f, 2f, 2f, 2f, 2f});
+                pdfTable.setWidths(new float[] { 0.5f, 2f, 2f, 2f, 2f });
                 pdfTable.setSpacingBefore(10f);
 
                 // Header bảng
-                String[] headers = { "Mã đơn", "Tên", "Ngày nhập", "Nhân viên", "Nhà cung cấp"};
+                String[] headers = { "Mã đơn", "Tên", "Ngày nhập", "Nhân viên", "Nhà cung cấp" };
                 for (String header : headers) {
                     PdfPCell cell = new PdfPCell(new Paragraph(header, fontHeader));
                     cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
@@ -2155,8 +2192,8 @@ public class PanelExport extends JPanel {
                     try {
                         String maphieunhaphang = obj.getMaPNH() + "";
                         String tendonnhaphang = obj.getTenPNH();
-                        String ngaynhap = obj.getNgayNhap() + "";
-                        String nhanvien = new NhanVienBLL().getNhanVienByMa(obj.getMaNV()+"").getTenNV();
+                        String ngaynhap = TienIch.ddmmyyyy(obj.getNgayNhap()) + "";
+                        String nhanvien = new NhanVienBLL().getNhanVienByMa(obj.getMaNV() + "").getTenNV();
                         String tennhacungcap = new NhaCungCapBLL().getNhaCungCap(obj.getMaNCC()).getTenNCC();
 
                         PdfPCell cell1 = new PdfPCell(new Paragraph(maphieunhaphang, fontNormal));

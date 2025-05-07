@@ -249,6 +249,15 @@ public class PanelTimLoHang extends JPanel {
                 gbc.gridx = 3;
                 gbc.gridy = 7;
                 add(cbTheoCot, gbc);
+
+                TienIch.checkFromTo(dateFrom, dateTo);
+                TienIch.sukienSoSanh(minTongGia, maxTongGia);
+
+                TienIch.chiduocnhapso(txtMaDonNhap);
+                TienIch.chiduocnhapso(txtMaNV);
+                TienIch.chiduocnhapso(txtMaNCC);
+                TienIch.chiduocnhapso(txtMaSP);
+                TienIch.chiduocnhapso(txtMaLoHang);
         }
 
         public ArrayList<PhieuNhapHangDTO> ketqua() {
@@ -321,7 +330,7 @@ public class PanelTimLoHang extends JPanel {
                         search.add("Tên đơn nhập hàng: " + txtTenDonNhap.getText().trim());
                 }
                 if (ngayTu != null && ngayDen != null) {
-                        search.add("Ngày nhập từ: " + ngayTu + " đến: " + ngayDen);
+                        search.add("Ngày nhập từ: " + TienIch.ddmmyyyy(ngayTu) + " đến: " + TienIch.ddmmyyyy(ngayDen));
                 }
                 if (maNV != 0) {
                         search.add("Mã nhân viên: " + maNV);
@@ -335,9 +344,9 @@ public class PanelTimLoHang extends JPanel {
                 if (!txtTenNCC.getText().trim().isEmpty()) {
                         search.add("Tên nhà cung cấp: " + txtTenNCC.getText().trim());
                 }
-                if ((int) minTongGia.getValue() != 0 && (int) maxTongGia.getValue() != 0) {
-                        search.add("Giá nhập từ: " + (int) minTongGia.getValue() + " đến: "
-                                        + (int) maxTongGia.getValue());
+                if ((int) minTongGia.getValue() != 0 || (int) maxTongGia.getValue() != 0) {
+                        search.add("Giá nhập từ: " + TienIch.formatVND((int) minTongGia.getValue()) + " đến: "
+                                        + TienIch.formatVND((int) maxTongGia.getValue()));
                 }
                 if (maSP != 0) {
                         search.add("Mã sản phẩm: " + maSP);

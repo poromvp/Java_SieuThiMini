@@ -1,6 +1,9 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import com.toedter.calendar.JDateChooser;
 
 import BLL.BaoCaoKhachHangBLL;
@@ -36,7 +39,7 @@ public class PanelTimKH extends JPanel {
         add(lbMaThanhVien, gbc);
 
         txtMaThanhVien = new StyledTextField(1, 10);
-        txtMaThanhVien.setPlaceholder("Nhập mã thành viên");
+        txtMaThanhVien.setPlaceholder("1, 2, 3, 4,....");
         TienIch.timStyle(txtMaThanhVien);
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -131,7 +134,7 @@ public class PanelTimKH extends JPanel {
         add(lbMaDonHang, gbc);
 
         txtMaDonHang = new StyledTextField(1, 10);
-        txtMaDonHang.setPlaceholder("Nhập mã đơn hàng");
+        txtMaDonHang.setPlaceholder("1, 2, 3, 4,....");
         TienIch.timStyle(txtMaDonHang);
         gbc.gridx = 3;
         gbc.gridy = 2;
@@ -221,6 +224,7 @@ public class PanelTimKH extends JPanel {
 
         dateHanTheFrom = new JDateChooser();
         dateHanTheFrom.setDateFormatString("dd/MM/yyyy");
+        dateHanTheFrom.setMaxSelectableDate(today);
         TienIch.timStyle(dateHanTheFrom);
         gbc.gridx = 1;
         gbc.gridy = 6;
@@ -246,7 +250,7 @@ public class PanelTimKH extends JPanel {
         gbc.gridy = 7;
         add(lbSapXep, gbc);
 
-        cbSapXep = new JComboBox<>(new String[]{"Tăng dần", "Giảm dần"});
+        cbSapXep = new JComboBox<>(new String[] { "Tăng dần", "Giảm dần" });
         TienIch.timStyle(cbSapXep);
         gbc.gridx = 1;
         gbc.gridy = 7;
@@ -258,167 +262,174 @@ public class PanelTimKH extends JPanel {
         gbc.gridy = 7;
         add(lbTheoCot, gbc);
 
-        cbTheoCot = new JComboBox<>(new String[]{"Mã khách hàng", "Tên khách hàng", "Ngày sinh", "Tổng đơn hàng", "Tổng chi tiêu", "Điểm tích lũy", "Hạn thẻ"});
+        cbTheoCot = new JComboBox<>(new String[] { "Mã khách hàng", "Tên khách hàng", "Ngày sinh", "Tổng đơn hàng",
+                "Tổng chi tiêu", "Điểm tích lũy", "Hạn thẻ" });
         TienIch.timStyle(cbTheoCot);
         gbc.gridx = 3;
         gbc.gridy = 7;
         add(cbTheoCot, gbc);
 
+        TienIch.chiduocnhapso(txtMaThanhVien);
+        TienIch.chiduocnhapso(txtSoDienThoai);
+        TienIch.chiduocnhapso(txtMaDonHang);
+
         TienIch.checkFromTo(dateSinhFrom, dateSinhTo);
         TienIch.checkFromTo(dateHanTheFrom, dateHanTheTo);
+        TienIch.checkngaynhapdutuoi(dateSinhFrom, today);
+
+        TienIch.sukienSoSanh(minTongDonHang, maxTongDonHang);
+        TienIch.sukienSoSanh(minTongChiTieu, maxTongChiTieu);
+        TienIch.sukienSoSanh(minDiemTichLuy, maxDiemTichLuy);
     }
 
-    public ArrayList<TheThanhVienDTO> ketqua(){
+    public ArrayList<TheThanhVienDTO> ketqua() {
         int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
-        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
-        tongMin = (int) minTongDonHang.getValue(),
-        tongMax = (int) maxTongDonHang.getValue(),
-        tienMin = (int) minTongChiTieu.getValue(),
-        tienMax = (int) maxTongChiTieu.getValue(),
-        diemMin = (int) minDiemTichLuy.getValue(),
-        diemMax = (int) maxDiemTichLuy.getValue();
-        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
-        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
-        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
-        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+                maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+                tongMin = (int) minTongDonHang.getValue(),
+                tongMax = (int) maxTongDonHang.getValue(),
+                tienMin = (int) minTongChiTieu.getValue(),
+                tienMax = (int) maxTongChiTieu.getValue(),
+                diemMin = (int) minDiemTichLuy.getValue(),
+                diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+                sinhto = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null,
+                hanfrom = dateHanTheFrom.getDate() != null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+                hanto = dateHanTheTo.getDate() != null ? new Date(dateHanTheTo.getDate().getTime()) : null;
         SearchTheThanhVienDTO search = new SearchTheThanhVienDTO(
-            maTV,
-            txtTenThanhVien.getText().trim(),
-            txtDiaChi.getText().trim(),
-            sinhfrom,
-            sinhto,
-            txtSoDienThoai.getText().trim(),
-            maDH,
-            tongMin,
-            tongMax,
-            tienMin,
-            tienMax,
-            diemMin,
-            diemMax,
-            hanfrom,
-            hanto,
-            (String) cbSapXep.getSelectedItem(),
-            (String) cbTheoCot.getSelectedItem()
-        );
+                maTV,
+                txtTenThanhVien.getText().trim(),
+                txtDiaChi.getText().trim(),
+                sinhfrom,
+                sinhto,
+                txtSoDienThoai.getText().trim(),
+                maDH,
+                tongMin,
+                tongMax,
+                tienMin,
+                tienMax,
+                diemMin,
+                diemMax,
+                hanfrom,
+                hanto,
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
         return BaoCaoKhachHangBLL.TimTTV(search);
     }
 
-    public ArrayList<TheThanhVienDTO> ketquaLock(){
+    public ArrayList<TheThanhVienDTO> ketquaLock() {
         int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
-        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
-        tongMin = (int) minTongDonHang.getValue(),
-        tongMax = (int) maxTongDonHang.getValue(),
-        tienMin = (int) minTongChiTieu.getValue(),
-        tienMax = (int) maxTongChiTieu.getValue(),
-        diemMin = (int) minDiemTichLuy.getValue(),
-        diemMax = (int) maxDiemTichLuy.getValue();
-        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
-        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
-        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
-        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+                maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+                tongMin = (int) minTongDonHang.getValue(),
+                tongMax = (int) maxTongDonHang.getValue(),
+                tienMin = (int) minTongChiTieu.getValue(),
+                tienMax = (int) maxTongChiTieu.getValue(),
+                diemMin = (int) minDiemTichLuy.getValue(),
+                diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+                sinhto = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null,
+                hanfrom = dateHanTheFrom.getDate() != null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+                hanto = dateHanTheTo.getDate() != null ? new Date(dateHanTheTo.getDate().getTime()) : null;
         SearchTheThanhVienDTO search = new SearchTheThanhVienDTO(
-            maTV,
-            txtTenThanhVien.getText().trim(),
-            txtDiaChi.getText().trim(),
-            sinhfrom,
-            sinhto,
-            txtSoDienThoai.getText().trim(),
-            maDH,
-            tongMin,
-            tongMax,
-            tienMin,
-            tienMax,
-            diemMin,
-            diemMax,
-            hanfrom,
-            hanto,
-            (String) cbSapXep.getSelectedItem(),
-            (String) cbTheoCot.getSelectedItem()
-        );
+                maTV,
+                txtTenThanhVien.getText().trim(),
+                txtDiaChi.getText().trim(),
+                sinhfrom,
+                sinhto,
+                txtSoDienThoai.getText().trim(),
+                maDH,
+                tongMin,
+                tongMax,
+                tienMin,
+                tienMax,
+                diemMin,
+                diemMax,
+                hanfrom,
+                hanto,
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
         return BaoCaoKhachHangBLL.TimTTVLock(search);
     }
 
-    public SearchTheThanhVienDTO traSearch(){
+    public SearchTheThanhVienDTO traSearch() {
         int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
-        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
-        tongMin = (int) minTongDonHang.getValue(),
-        tongMax = (int) maxTongDonHang.getValue(),
-        tienMin = (int) minTongChiTieu.getValue(),
-        tienMax = (int) maxTongChiTieu.getValue(),
-        diemMin = (int) minDiemTichLuy.getValue(),
-        diemMax = (int) maxDiemTichLuy.getValue();
-        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
-        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
-        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
-        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+                maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+                tongMin = (int) minTongDonHang.getValue(),
+                tongMax = (int) maxTongDonHang.getValue(),
+                tienMin = (int) minTongChiTieu.getValue(),
+                tienMax = (int) maxTongChiTieu.getValue(),
+                diemMin = (int) minDiemTichLuy.getValue(),
+                diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+                sinhto = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null,
+                hanfrom = dateHanTheFrom.getDate() != null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+                hanto = dateHanTheTo.getDate() != null ? new Date(dateHanTheTo.getDate().getTime()) : null;
         SearchTheThanhVienDTO search = new SearchTheThanhVienDTO(
-            maTV,
-            txtTenThanhVien.getText().trim(),
-            txtDiaChi.getText().trim(),
-            sinhfrom,
-            sinhto,
-            txtSoDienThoai.getText().trim(),
-            maDH,
-            tongMin,
-            tongMax,
-            tienMin,
-            tienMax,
-            diemMin,
-            diemMax,
-            hanfrom,
-            hanto,
-            (String) cbSapXep.getSelectedItem(),
-            (String) cbTheoCot.getSelectedItem()
-        );
+                maTV,
+                txtTenThanhVien.getText().trim(),
+                txtDiaChi.getText().trim(),
+                sinhfrom,
+                sinhto,
+                txtSoDienThoai.getText().trim(),
+                maDH,
+                tongMin,
+                tongMax,
+                tienMin,
+                tienMax,
+                diemMin,
+                diemMax,
+                hanfrom,
+                hanto,
+                (String) cbSapXep.getSelectedItem(),
+                (String) cbTheoCot.getSelectedItem());
         return search;
     }
 
-    public ArrayList<String> stringSearch(){
+    public ArrayList<String> stringSearch() {
         int maTV = txtMaThanhVien.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaThanhVien.getText().trim()),
-        maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
-        tongMin = (int) minTongDonHang.getValue(),
-        tongMax = (int) maxTongDonHang.getValue(),
-        tienMin = (int) minTongChiTieu.getValue(),
-        tienMax = (int) maxTongChiTieu.getValue(),
-        diemMin = (int) minDiemTichLuy.getValue(),
-        diemMax = (int) maxDiemTichLuy.getValue();
-        Date sinhfrom = dateSinhFrom.getDate()!=null ? new Date(dateSinhFrom.getDate().getTime()) : null,
-        sinhto = dateSinhTo.getDate()!=null ? new Date(dateSinhTo.getDate().getTime()) : null,
-        hanfrom = dateHanTheFrom.getDate()!=null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
-        hanto = dateHanTheTo.getDate()!=null ? new Date(dateHanTheTo.getDate().getTime()) : null;
+                maDH = txtMaDonHang.getText().trim().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText().trim()),
+                tongMin = (int) minTongDonHang.getValue(),
+                tongMax = (int) maxTongDonHang.getValue(),
+                tienMin = (int) minTongChiTieu.getValue(),
+                tienMax = (int) maxTongChiTieu.getValue(),
+                diemMin = (int) minDiemTichLuy.getValue(),
+                diemMax = (int) maxDiemTichLuy.getValue();
+        Date sinhfrom = dateSinhFrom.getDate() != null ? new Date(dateSinhFrom.getDate().getTime()) : null,
+                sinhto = dateSinhTo.getDate() != null ? new Date(dateSinhTo.getDate().getTime()) : null,
+                hanfrom = dateHanTheFrom.getDate() != null ? new Date(dateHanTheFrom.getDate().getTime()) : null,
+                hanto = dateHanTheTo.getDate() != null ? new Date(dateHanTheTo.getDate().getTime()) : null;
         ArrayList<String> search = new ArrayList<>();
-        if(maTV!=0){
-            search.add("Mã thành viên: "+maTV);
+        if (maTV != 0) {
+            search.add("Mã thành viên: " + maTV);
         }
-        if(!txtTenThanhVien.getText().trim().isEmpty()){
+        if (!txtTenThanhVien.getText().trim().isEmpty()) {
             search.add("Tên thành viên: " + txtTenThanhVien.getText().trim());
         }
-        if(!txtDiaChi.getText().trim().isEmpty()){
+        if (!txtDiaChi.getText().trim().isEmpty()) {
             search.add("Địa chỉ: " + txtDiaChi.getText().trim());
         }
-        if(sinhfrom!=null && sinhto!=null){
-            search.add("Ngày sinh từ: "+sinhfrom+" đến: "+sinhto);
+        if (sinhfrom != null && sinhto != null) {
+            search.add("Ngày sinh từ: " + TienIch.ddmmyyyy(sinhfrom) + " đến: " + TienIch.ddmmyyyy(sinhto));
         }
-        if(!txtSoDienThoai.getText().trim().isEmpty()){
-            search.add("Số điện thoại: "+txtSoDienThoai.getText().trim());
+        if (!txtSoDienThoai.getText().trim().isEmpty()) {
+            search.add("Số điện thoại: " + txtSoDienThoai.getText().trim());
         }
-        if(maDH!=0){
-            search.add("Mã đơn hàng: "+maDH);
+        if (maDH != 0) {
+            search.add("Mã đơn hàng: " + maDH);
         }
-        if(tongMin!=0 && tongMax!=0){
-            search.add("Tổng đơn hàng từ: "+tongMin+" đến: "+tongMax);
+        if (tongMin != 0 || tongMax != 0) {
+            search.add("Tổng đơn hàng từ: " + tongMin + " đến: " + tongMax);
         }
-        if(tienMin!=0 && tienMax!=0){
-            search.add("Tổng chi tiêu từ: "+tienMin+" đến: "+tienMax);
+        if (tienMin != 0 || tienMax != 0) {
+            search.add("Tổng chi tiêu từ: " + TienIch.formatVND(tienMin) + " đến: " + TienIch.formatVND(tienMax));
         }
-        if(diemMin!=0 && diemMax!=0){
-            search.add("Điểm tích lũy từ: "+diemMin+" đến: "+diemMax);
+        if (diemMin != 0 || diemMax != 0) {
+            search.add("Điểm tích lũy từ: " + diemMin + " đến: " + diemMax);
         }
-        if(hanfrom!=null && hanto!=null){
-            search.add("Hạn thẻ từ: "+hanfrom+" đến: "+hanto);
+        if (hanfrom != null && hanto != null) {
+            search.add("Hạn thẻ từ: " + TienIch.ddmmyyyy(hanfrom) + " đến: " + TienIch.ddmmyyyy(hanto));
         }
-        search.add("Sắp xếp: "+(String) cbSapXep.getSelectedItem());
-        search.add(" Theo cột: "+(String) cbTheoCot.getSelectedItem());
+        search.add("Sắp xếp: " + (String) cbSapXep.getSelectedItem());
+        search.add(" Theo cột: " + (String) cbTheoCot.getSelectedItem());
         return search;
     }
 }

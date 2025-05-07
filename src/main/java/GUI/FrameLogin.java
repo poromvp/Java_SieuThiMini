@@ -15,7 +15,10 @@ import java.awt.Window;
 import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -110,7 +113,27 @@ public class FrameLogin extends JFrame {
         ));
         setPreferredSize(new Dimension(200, 30));
         rightPanel.add(passWord, gbc);
+         
+        JCheckBox showPass = new JCheckBox("Hiện mật khẩu");
+        showPass.setBackground(Color.WHITE);
 
+        JPanel showPassPanel = new JPanel();
+        showPassPanel.setBackground(Color.WHITE);
+        showPassPanel.setLayout(new BoxLayout(showPassPanel, BoxLayout.X_AXIS)); 
+        showPassPanel.add(Box.createHorizontalGlue()); 
+        showPassPanel.add(showPass); 
+        gbc.gridx = 1;  // Cột 2
+        gbc.gridy = 3;  // Dòng 3
+        gbc.gridwidth = 2;  // Chiếm toàn bộ chiều rộng
+        rightPanel.add(showPassPanel, gbc);
+        
+        showPass.addActionListener(e -> {
+            if (showPass.isSelected()) {
+                passWord.setEchoChar((char) 0);
+            } else {
+                passWord.setEchoChar('*');  
+            }
+        });
         // Nút đăng nhập
         gbc.gridx = 0;
         gbc.gridy++;

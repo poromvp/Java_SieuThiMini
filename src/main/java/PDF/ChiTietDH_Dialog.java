@@ -289,7 +289,7 @@ public class ChiTietDH_Dialog extends JDialog {
 					ArrayList<ChiTietDonHangDTO> dsCTDH = ChiTietDonHangBLL.getChiTietByMaDH(DONHANG.getMaDH());
 					for(ChiTietDonHangDTO ctdh : dsCTDH){
 						SanPhamDTO sanPham = SanPhamBLL.getProductById(ctdh.getMaSP());
-						ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
+						ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(DONHANG.getMaKM(), ctdh.getMaSP());
 						double tiLe = ctkm == null ? 0.0 : (double)ctkm.getTiLeGiam();
 						tableModel_SP.addRow(new Object[]{
 							ctdh.getMaSP(), 
@@ -587,7 +587,7 @@ public class ChiTietDH_Dialog extends JDialog {
 				java.util.ArrayList<ChiTietDonHangDTO> dsCTDH = ChiTietDonHangBLL.getChiTietByMaDH(DONHANG.getMaDH());
 				for (ChiTietDonHangDTO ctdh : dsCTDH) {
 					SanPhamDTO sp = SanPhamBLL.getProductById(ctdh.getMaSP());
-					ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
+					ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(DONHANG.getMaKM(), ctdh.getMaSP());
 		
 					double tiLe = (ctkm != null) ? (double) ctkm.getTiLeGiam() : 0.0;
 					double thanhTien = sp.getGia() * (1 - tiLe / 100.0) * ctdh.getSoLuong();

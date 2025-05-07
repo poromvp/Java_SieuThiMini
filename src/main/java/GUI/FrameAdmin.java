@@ -16,6 +16,7 @@ import GUI.FormNhanVien.FormMainNhanVien;
 import GUI.FormNhanVien.LeftSidebarMenu;
 import GUI.FormTaiKhoan.FormMainAccount;
 import GUI.FormWareHouse.FormProduct;
+import GUI.KhuyenMai.DiscountPanel;
 import JDBC.DBConnection;
 
 public class FrameAdmin extends JFrame implements ActionListener {
@@ -40,7 +41,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
-        panelDashBoard();
+        panelDashBoard(maNV);
 
         add(rightPn, BorderLayout.CENTER);
 
@@ -110,11 +111,11 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.repaint();
     }
 
-    public void panelDashBoard() {
+    public void panelDashBoard(String MANV) {
         rightPn.removeAll();
         rightPn.setLayout(new BorderLayout());
 
-        MainDashBoard homePanel = new MainDashBoard();
+        MainDashBoard homePanel = new MainDashBoard(MANV);
         rightPn.add(homePanel, BorderLayout.CENTER);
 
         rightPn.revalidate();
@@ -137,7 +138,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.removeAll();
         rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
-        DiscountManagementPanel mainPanel = new DiscountManagementPanel();
+        DiscountPanel mainPanel = new DiscountPanel();
         rightPn.add(mainPanel,BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
@@ -147,7 +148,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == leftMenu.getBtnHome()) {
-            panelDashBoard();
+            panelDashBoard(maNV);
         } else if (e.getSource() == leftMenu.getBtnEmployee()) {
             panelNhanVien();
         } else if (e.getSource() == leftMenu.getBtnProduct()) {

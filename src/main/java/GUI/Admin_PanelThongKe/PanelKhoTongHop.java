@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -128,7 +129,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             }
         });
     }
+
     public String MANV;
+
     public PanelKhoTongHop(String MANV) {
         this.MANV = MANV;
         setBorder(new CompoundBorder(new TitledBorder("Báo cáo kho tổng hợp"), new EmptyBorder(4, 4, 4, 4)));
@@ -317,8 +320,11 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
             pn3.add(scr, BorderLayout.CENTER);
         }
     }
+
     public SearchBanChayDTO SEARCH = new SearchBanChayDTO();
     public SearchTonKhoDTO SEARCH2 = new SearchTonKhoDTO();
+    public ArrayList<String> SEARCH22 = new ArrayList<>();
+
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -342,16 +348,18 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                 if (panel instanceof PanelTimBanChay pnbanchay) {
                     DsSP = pnbanchay.ketqua(new java.sql.Date(from.getDate().getTime()),
                             new java.sql.Date(to.getDate().getTime()));
-                    if(DsSP.size()!=0){
-                        SEARCH = ((PanelTimBanChay)panel).trasearch();
+                    if (DsSP.size() != 0) {
+                        SEARCH = ((PanelTimBanChay) panel).trasearch();
+                        SEARCH22 = ((PanelTimBanChay) panel).stringsearch();
                     } else {
                         TienIch.CustomMessage("Không tìm thấy");
                     }
                     loadSanPham(DsSP);
-                } else if(panel instanceof PanelTimKho pntimkho){
+                } else if (panel instanceof PanelTimKho pntimkho) {
                     DsSP2 = pntimkho.ketqua();
-                    if(DsSP2.size()!=0){
-                        SEARCH2 = ((PanelTimKho)panel).trasearch();
+                    if (DsSP2.size() != 0) {
+                        SEARCH2 = ((PanelTimKho) panel).trasearch();
+                        SEARCH22 = ((PanelTimKho)panel).stringsearch();
                     } else {
                         TienIch.CustomMessage("Không tìm thấy");
                     }
@@ -366,17 +374,71 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.XuatExccel(model);
-                } else {
-                    if(tab.getSelectedIndex()==0){
-                        if(DsSP.size()==0){
-                            TienIch.CustomMessage("Không có gì để in");
-                        } else{
-                            PanelExport.InPDFSanPhamBanChaySearch(DsSP, SEARCH, new java.sql.Date(from.getDate().getTime()),
-                            new java.sql.Date(to.getDate().getTime()), MANV);
+                    if (tab.getSelectedIndex() == 0) {
+                        if (DsSP.size() == 0) {
+                            TienIch.CustomMessage("Không có gì để xuất");
+                        } else {
+                            try {
+                                // Chuẩn bị dữ liệu cho exportToExcel
+                                ArrayList<List<Object>> data = new ArrayList<>();
+                                for (SearchBanChayDTO sanpham : DsSP) {
+                                    List<Object> row = new ArrayList<>();
+                                    row.add(sanpham.getMaSP());
+                                    row.add(sanpham.getTenLSP());
+                                    row.add(sanpham.getTenSP());
+                                    row.add(sanpham.getSLbanra());
+                                    row.add(sanpham.getChuoiMaDH());
+                                    data.add(row);
+                                }
+                                String[] columnNames = { "Mã sản phẩm", "Loại sản phẩm", "Sản phẩm", "Số lượng bán ra", "Của các đơn hàng"};
+                                String title = "DANH SÁCH SẢN PHẨM BÁN CHẠY TỪ "+TienIch.ddmmyyyy(new java.sql.Date(from.getDate().getTime())) + " ĐẾN " + TienIch.ddmmyyyy(new java.sql.Date(to.getDate().getTime()));
+                                String manv = this.MANV;
+                                // Gọi hàm exportToExcel
+                                XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH22);
+                                TienIch.CustomMessage("Xuất file Excel thành công!");
+                            } catch (Exception ex) {
+                                TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
+                            }
                         }
-                    } else{
-                        if(DsSP2.size()==0){
+                    } else {
+                        if (DsSP2.size() == 0) {
+                            TienIch.CustomMessage("Không có gì để xuất");
+                        } else {
+                            try {
+                                // Chuẩn bị dữ liệu cho exportToExcel
+                                ArrayList<List<Object>> data = new ArrayList<>();
+                                for (SanPhamDTO sanpham : DsSP2) {
+                                    List<Object> row = new ArrayList<>();
+                                    row.add(sanpham.getMaSP());
+                                    row.add(new LoaiSanPhamBLL().getLoaiSanPham(sanpham.getMaLSP()).getTenLoaiSP());
+                                    row.add(new NhaCungCapBLL().getNhaCungCap(sanpham.getMaNCC()).getTenNCC());
+                                    row.add(sanpham.getTenSP());
+                                    row.add(TienIch.formatVND(sanpham.getGia()));
+                                    row.add(sanpham.getSoLuongTon());
+                                    data.add(row);
+                                }
+                                String[] columnNames = { "Mã sản phẩm", "Loại sản phẩm", "Nhà cung cấp", "Tên sản phẩm", "Đơn giá", "Số lượng tồn"};
+                                String title = "DANH SÁCH SẢN PHẨM TỒN KHO";
+                                String manv = this.MANV;
+                                // Gọi hàm exportToExcel
+                                XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH22);
+                                TienIch.CustomMessage("Xuất file Excel thành công!");
+                            } catch (Exception ex) {
+                                TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
+                            }
+                        }
+                    }
+                } else {
+                    if (tab.getSelectedIndex() == 0) {
+                        if (DsSP.size() == 0) {
+                            TienIch.CustomMessage("Không có gì để in");
+                        } else {
+                            PanelExport.InPDFSanPhamBanChaySearch(DsSP, SEARCH,
+                                    new java.sql.Date(from.getDate().getTime()),
+                                    new java.sql.Date(to.getDate().getTime()), MANV);
+                        }
+                    } else {
+                        if (DsSP2.size() == 0) {
                             TienIch.CustomMessage("Không có gì để in");
                         } else {
                             PanelExport.InPDFSanPhamTonKhoSearch(DsSP2, SEARCH2, MANV);

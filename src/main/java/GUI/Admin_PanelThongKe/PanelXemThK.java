@@ -93,7 +93,7 @@ public class PanelXemThK extends JPanel {
         TienIch.labelStyle(thu, 4, 15, null);
         pn4.add(thu);
 
-        lbThu = new JLabel(TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(donhang.getMaDH())));
+        lbThu = new JLabel(TienIch.formatVND(donhang.getTongTien()));
         TienIch.labelStyle(lbThu, 4, 15, null);
         lbThu.setForeground(Color.GREEN);
         pn4.add(lbThu);

@@ -238,7 +238,7 @@ public class ChiTietDH_Dialog extends JDialog {
 						panel.add(lblNewLabel_5);
 					}
 					{
-						JLabel lblNewLabel_6 = new JLabel("Tỉ lệ giảm (của ĐTL) : " +  (dtl == null ? "null" : dtl.getTiLeGiam()) + " %");
+						JLabel lblNewLabel_6 = new JLabel("Tỉ lệ giảm (của ĐTL) : " +  (dtl == null ? "null" : (double)dtl.getTiLeGiam()) + " %");
 						lblNewLabel_6.setFont(new Font("Arial", Font.BOLD, 14));
 						panel.add(lblNewLabel_6);
 					}
@@ -290,7 +290,7 @@ public class ChiTietDH_Dialog extends JDialog {
 					for(ChiTietDonHangDTO ctdh : dsCTDH){
 						SanPhamDTO sanPham = SanPhamBLL.getProductById(ctdh.getMaSP());
 						ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
-						double tiLe = ctkm == null ? 0.0 : ctkm.getTiLeGiam();
+						double tiLe = ctkm == null ? 0.0 : (double)ctkm.getTiLeGiam();
 						tableModel_SP.addRow(new Object[]{
 							ctdh.getMaSP(), 
 							sanPham.getTenSP(),
@@ -539,7 +539,7 @@ public class ChiTietDH_Dialog extends JDialog {
 				cell_DTL.setBorder(0);  
 				infoTable.addCell(cell_DTL);
 	
-				com.itextpdf.text.Phrase phrase_TLGiamDTL = new com.itextpdf.text.Phrase("Tỉ lệ giảm (ĐTL): " + (dtl == null ? "null" : dtl.getTiLeGiam()) + " %" , fontNormal);
+				com.itextpdf.text.Phrase phrase_TLGiamDTL = new com.itextpdf.text.Phrase("Tỉ lệ giảm (ĐTL): " + (dtl == null ? "null" : (double) dtl.getTiLeGiam()) + " %" , fontNormal);
 				com.itextpdf.text.pdf.PdfPCell cell_TLGiamDTL = new com.itextpdf.text.pdf.PdfPCell(phrase_TLGiamDTL);
 				cell_TLGiamDTL.setBorder(0);  
 				infoTable.addCell(cell_TLGiamDTL);
@@ -589,7 +589,7 @@ public class ChiTietDH_Dialog extends JDialog {
 					SanPhamDTO sp = SanPhamBLL.getProductById(ctdh.getMaSP());
 					ChiTietKhuyenMaiDTO ctkm = ChiTietKhuyenMaiBLL.getDiscountDetail(ctdh.getMaDH(), ctdh.getMaSP());
 		
-					double tiLe = (ctkm != null) ? ctkm.getTiLeGiam() : 0.0;
+					double tiLe = (ctkm != null) ? (double) ctkm.getTiLeGiam() : 0.0;
 					double thanhTien = sp.getGia() * (1 - tiLe / 100.0) * ctdh.getSoLuong();
 		
 					com.itextpdf.text.pdf.PdfPCell cell1 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(String.valueOf(ctdh.getMaSP()), fontNormal));
@@ -604,7 +604,7 @@ public class ChiTietDH_Dialog extends JDialog {
 					cell3.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell3);
 	
-					com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph(tiLe + " %", fontNormal));
+					com.itextpdf.text.pdf.PdfPCell cell4 = new com.itextpdf.text.pdf.PdfPCell(new com.itextpdf.text.Paragraph( (double)tiLe + " %", fontNormal));
 					cell4.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
 					table.addCell(cell4);
 	

@@ -145,6 +145,11 @@ public class PanelTimBanChay extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 3;
         add(cboTheoCot, gbc);
+
+        TienIch.sukienSoSanh(Min, Max);
+
+        TienIch.chiduocnhapso(txtMaSanPham);
+        TienIch.chiduocnhapso(txtMaLoaiSanPham);
     }
 
     public ArrayList<SearchBanChayDTO> ketqua(Date from, Date to) {
@@ -164,6 +169,30 @@ public class PanelTimBanChay extends JPanel {
                 txtTenSanPham.getText(), maLSP, txtLoaiSanPham.getText(),
                 (int) Min.getValue(), (int) Max.getValue(), (String) cboSapXep.getSelectedItem(),
                 (String) cboTheoCot.getSelectedItem());
+        return search;
+    }
+
+    public ArrayList<String> stringsearch(){
+        ArrayList<String> search = new ArrayList<>();
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        if(maSP!=0){
+            search.add("Mã sản phẩm: "+maSP);
+        }
+        if(!txtTenSanPham.getText().trim().isEmpty()){
+            search.add("Tên sản phẩm: "+txtTenSanPham.getText());
+        }
+        if(maLSP!=0){
+            search.add("Mã loại sản phẩm: "+maLSP);
+        }
+        if(!txtLoaiSanPham.getText().trim().isEmpty()){
+            search.add("Tên loại sản phẩm: "+txtLoaiSanPham.getText());
+        }
+        if((int) Min.getValue() !=0 || (int) Max.getValue()!=0){
+            search.add("Số lượng bán ra từ: "+(int) Min.getValue()+" đến: "+(int) Max.getValue());
+        }
+        search.add("Sắp xếp: "+(String) cboSapXep.getSelectedItem());
+        search.add(" Theo cột: "+(String) cboTheoCot.getSelectedItem());
         return search;
     }
 }

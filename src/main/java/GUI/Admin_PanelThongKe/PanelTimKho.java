@@ -206,6 +206,13 @@ public class PanelTimKho extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 5;
         add(cboTheoCot, gbc);
+
+        TienIch.sukienSoSanh(Min, Max);
+        TienIch.sukienSoSanh(Min2, Max2);
+
+        TienIch.chiduocnhapso(txtMaSanPham);
+        TienIch.chiduocnhapso(txtMaLoaiSanPham);
+        TienIch.chiduocnhapso(txtMaNCC);
     }
 
     public ArrayList<SanPhamDTO> ketqua() {
@@ -227,6 +234,40 @@ public class PanelTimKho extends JPanel {
                 (int) Min.getValue(), (int) Max.getValue(), (int) Min2.getValue(), (int) Max2.getValue(), maNCC,
                 txtTenNCC.getText(), (String) cboSapXep.getSelectedItem(),
                 (String) cboTheoCot.getSelectedItem());
+        return search;
+    }
+
+    public ArrayList<String> stringsearch(){
+        ArrayList<String> search = new ArrayList<>();
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        int maNCC = txtMaNCC.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNCC.getText());
+        if(maSP!=0){
+            search.add("Mã sản phẩm: "+maSP);
+        }
+        if(!txtTenSanPham.getText().trim().isEmpty()){
+            search.add("Tên sản phẩm: "+txtTenSanPham.getText().trim());
+        }
+        if(maLSP!=0){
+            search.add("Mã loại sản phẩm: "+maLSP);
+        }
+        if(!txtLoaiSanPham.getText().trim().isEmpty()){
+            search.add("Tên loại sản phẩm: "+txtLoaiSanPham.getText().trim());
+        }
+        if((int) Min.getValue()!=0 || (int) Max.getValue()!=0){
+            search.add("Số lượng tồn từ: "+(int) Min.getValue()+" đến: "+(int) Max.getValue());
+        }
+        if((int) Min2.getValue()!=0 || (int) Max2.getValue()!=0){
+            search.add("Đơn giá từ: "+TienIch.formatVND((int) Min2.getValue())+" đến: "+TienIch.formatVND((int) Max2.getValue()));
+        }
+        if(maNCC!=0){
+            search.add("Mã mã nhà cung cấp: "+maNCC);
+        }
+        if(!txtTenNCC.getText().trim().isEmpty()){
+            search.add("Tên nhà cung cấp: "+txtTenNCC.getText().trim());
+        }
+        search.add("Sắp xếp: "+(String) cboSapXep.getSelectedItem());
+        search.add("Theo cột: "+(String) cboTheoCot.getSelectedItem());
         return search;
     }
 }

@@ -165,7 +165,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     hd.getMaDH(),
                     hd.getMaNV(),
                     hd.getPtThanhToan(),
-                    TienIch.formatVND(DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH())),
+                    TienIch.formatVND(hd.getTongTien()),
                     TienIch.ddmmyyyy(hd.getNgayTT()) });
         }
     }
@@ -174,7 +174,7 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         double sumDoanhThu = 0;
         int sumDonHang = danhsach.size();
         for (DonHangDTO hd : danhsach) {
-            sumDoanhThu += DonHangBLL.tinhTongTienByMaDonHang(hd.getMaDH());
+            sumDoanhThu += hd.getTongTien();
         }
         tongdoanhthu = new JLabel(TienIch.formatVND(sumDoanhThu));
         tongdonhang = new JLabel(sumDonHang + " Đơn");
@@ -189,6 +189,9 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 HoaDon = SearchFilterBLL.timKiem_SapXepDonHang(panel.filter());
+                if(HoaDon.size()==0){
+                    TienIch.CustomMessage("Không tìm thấy");
+                }
                 System.out.println(HoaDon.size());
              loadDonHang(HoaDon);
             }
@@ -198,9 +201,17 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.exportJTableToPDF(tb);
+                    if(HoaDon.size()==0){
+                        TienIch.CustomMessage("Không có gì để in");
+                    } else {
+
+                    }
                 } else {
-                    panel.XuatPDF(model);
+                    if(HoaDon.size()==0){
+                        TienIch.CustomMessage("Không có gì để in");
+                    } else {
+                        
+                    }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

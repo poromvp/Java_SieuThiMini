@@ -12,8 +12,10 @@ import BLL.NhanVienBLL;
 import BLL.NhapHangBLL;
 import DTO.PhieuNhapHangDTO;
 import DTO.SearchLoHangDTO;
+import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.StyledTable;
 import GUI.ComponentCommon.TienIch;
+import java.util.List;
 
 public class PanelDSLoHang extends JPanel implements ActionListener {
     StyledTable tb; // Thay JTable bằng StyledTable
@@ -122,6 +124,7 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
     }
     public String MANV;
     SearchLoHangDTO SEARCH = new SearchLoHangDTO();
+    public ArrayList<String> SEARCH2 = new ArrayList<>();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -133,6 +136,7 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                 DsNHang = panel.ketqua();
                 if(DsNHang.size()!=0){
                     SEARCH = panel.trasearch();
+                    SEARCH2 = panel.stringsearch();
                 } else {
                     TienIch.CustomMessage("Không tìm thấy");
                 }
@@ -144,7 +148,31 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.getSelectedFormat().equals("excel")) {
-                    panel.XuatExccel(model);
+                    if(DsNHang.size() == 0){
+                        TienIch.CustomMessage("Không có gì để xuất");
+                    } else {
+                        try {
+                            // Chuẩn bị dữ liệu cho exportToExcel
+                            ArrayList<List<Object>> data = new ArrayList<>();
+                            for (PhieuNhapHangDTO nhaphang : DsNHang) {
+                                List<Object> row = new ArrayList<>();
+                                row.add(nhaphang.getMaPNH());
+                                row.add(nhaphang.getTenPNH());
+                                row.add(TienIch.ddmmyyyy(nhaphang.getNgayNhap()));
+                                row.add(new NhanVienBLL().getNhanVienByMa(nhaphang.getMaNV()+"").getTenNV());
+                                row.add(new NhaCungCapBLL().getNhaCungCap((nhaphang.getMaNCC())).getTenNCC());
+                                data.add(row);
+                            }
+                            String[] columnNames = { "Mã phiếu nhập", "Tên phiếu nhập", "Ngày nhập", "Nhân viên", "Nhà cung cấp"};
+                            String title = "DANH SÁCH PHIẾU NHẬP";
+                            String manv = this.MANV;
+                            // Gọi hàm exportToExcel
+                            XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
+                            TienIch.CustomMessage("Xuất file Excel thành công!");
+                        } catch (Exception ex) {
+                            TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
+                        }
+                    }
                 } else {
                     if(DsNHang.size()==0){
                         TienIch.CustomMessage("Không có gì để in");

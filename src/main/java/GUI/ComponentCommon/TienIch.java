@@ -4,11 +4,15 @@ import javax.swing.*;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.DocumentFilter;
 
 import com.toedter.calendar.JDateChooser;
-
-import BLL.BaoCaoKhoTongHopBLL;
-
 import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
@@ -277,6 +281,13 @@ public class TienIch {
         return currencyFormatter.format(amount);
     }
 
+    public static String formatVND(int amount) {
+        Locale localeVN = new Locale("vi", "VN");
+        Number intress = amount;
+        NumberFormat currencyFormatter = NumberFormat.getCurrencyInstance(localeVN);
+        return currencyFormatter.format(intress);
+    }
+
     public static LocalDate convertDateToLocalDate(Date dateToConvert) {
         return dateToConvert.toInstant()
                 .atZone(ZoneId.of("Asia/Ho_Chi_Minh"))
@@ -322,8 +333,8 @@ public class TienIch {
             }
         });
     }
-    
-    public static void checkFromTo(JDateChooser from, JDateChooser to){
+
+    public static void checkFromTo(JDateChooser from, JDateChooser to) {
         from.addPropertyChangeListener("date", _ -> {
             if (from.getDate() != null && to.getDate() != null) {
                 Date select1 = new java.sql.Date(from.getDate().getTime());
@@ -533,21 +544,130 @@ public class TienIch {
     }
 
     public static BufferedImage captureComponent(Component comp) {
-        comp.doLayout();  // bắt buộc
-        comp.setSize(comp.getPreferredSize());  // bắt buộc
-    
+        comp.doLayout(); // bắt buộc
+        comp.setSize(comp.getPreferredSize()); // bắt buộc
+
         int width = comp.getWidth();
         int height = comp.getHeight();
-    
+
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException("Component has invalid size.");
         }
-    
+
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = image.createGraphics();
         comp.paint(g2d);
         g2d.dispose();
         return image;
     }
-    
+
+    public static void sosanhSpinner(JSpinner a, JSpinner b) {
+        int min = (Integer) a.getValue();
+        int max = (Integer) b.getValue();
+
+        if (min > max) {
+            CustomMessage(" 'Giá trị từ' không được lớn hơn 'Giá trị đến'.");
+            // Gán lại max = min
+            b.setValue(min);
+        }
+    }
+
+    public static void sukienSoSanh(JSpinner a, JSpinner b) {
+        a.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                TienIch.sosanhSpinner(a, b);
+            }
+        });
+
+        b.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                TienIch.sosanhSpinner(a, b);
+            }
+        });
+    }
+
+    private static final int MAX_LENGTH = 10;
+
+    public static void chiduocnhapso(JTextField txt) {
+        Document doc = txt.getDocument();
+        if (doc instanceof AbstractDocument) {
+            ((AbstractDocument) doc).setDocumentFilter(new DocumentFilter() {
+                @Override
+                public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, 0, string)) {
+                        super.insertString(fb, offset, string, attr);
+                    }
+                }
+
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, length, text)) {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                }
+
+                private boolean isValidInput(FilterBypass fb, int offset, int length, String text) throws BadLocationException {
+                    if (!text.matches("\\d*")) {
+                        showWarning("Chỉ được nhập số");
+                        return false;
+                    }
+
+                    String oldText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                    String newText = oldText.substring(0, offset) + text + oldText.substring(offset + length);
+
+                    if (newText.length() > MAX_LENGTH) {
+                        showWarning("Tối đa " + MAX_LENGTH + " chữ số");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                private void showWarning(String msg) {
+                    CustomMessage(msg);
+                }
+            });
+        }
+    }
+
+    // Phương thức static để nhập mã thành viên chỉ chứa số
+    public static Integer getValidMemberId(String title, String prompt) {
+        String input;
+        boolean validInput = false;
+
+        while (!validInput) {
+            input = JOptionPane.showInputDialog(null, prompt, title, JOptionPane.PLAIN_MESSAGE);
+
+            // Kiểm tra nếu người dùng nhấn Cancel hoặc đóng dialog
+            if (input == null) {
+                CustomMessage("Đã hủy nhập mã thành viên");
+                return null; // Trả về null nếu hủy
+            }
+
+            // Kiểm tra nếu chuỗi rỗng
+            if (input.trim().isEmpty()) {
+                CustomMessage("Mã thành viên không được rỗng!");
+                continue;
+            }
+
+            // Kiểm tra nếu chuỗi chỉ chứa số
+            if (input.matches("\\d+")) {
+                validInput = true;
+                return Integer.parseInt(input); // Trả về số nguyên hợp lệ
+            } else {
+                CustomMessage("Mã thành viên chỉ được chứa số!");
+            }
+        }
+        return null; // Trường hợp này khó xảy ra, nhưng thêm để hoàn chỉnh
+    }
+
+    public static Icon seticon(ImageIcon img) {
+        Image scaledImage = img.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
+        Icon scaledIcon = new ImageIcon(scaledImage);
+        return scaledIcon;
+    }
 }

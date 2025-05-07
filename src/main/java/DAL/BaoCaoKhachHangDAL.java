@@ -171,10 +171,10 @@ public class BaoCaoKhachHangDAL {
             param.add(search.getSinhFrom());
             param.add(search.getSinhTo());
         }
-        if (search.getDtlMin() != 0 && search.getDhMax() != 0) {
+        if (search.getDtlMin() != 0 || search.getDtlMax() != 0) {
             where.append("AND kh.DiemTL BETWEEN ? AND ? ");
-            param.add(search.getDhMin());
-            param.add(search.getDhMax());
+            param.add(search.getDtlMin());
+            param.add(search.getDtlMax());
         }
         if (search.getNgayMin() != null && search.getNgayMax() != null) {
             where.append("AND kh.NgayBD BETWEEN ? AND ? ");
@@ -316,10 +316,10 @@ public class BaoCaoKhachHangDAL {
             param.add(search.getSinhFrom());
             param.add(search.getSinhTo());
         }
-        if (search.getDtlMin() != 0 && search.getDhMax() != 0) {
+        if (search.getDtlMin() != 0 || search.getDtlMax() != 0) {
             where.append("AND kh.DiemTL BETWEEN ? AND ? ");
-            param.add(search.getDhMin());
-            param.add(search.getDhMax());
+            param.add(search.getDtlMin());
+            param.add(search.getDtlMax());
         }
         if (search.getNgayMin() != null && search.getNgayMax() != null) {
             where.append("AND kh.NgayBD BETWEEN ? AND ? ");

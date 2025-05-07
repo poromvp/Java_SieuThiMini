@@ -145,6 +145,11 @@ public class PanelTimBanChay extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 3;
         add(cboTheoCot, gbc);
+
+        TienIch.sukienSoSanh(Min, Max);
+
+        TienIch.chiduocnhapso(txtMaSanPham);
+        TienIch.chiduocnhapso(txtMaLoaiSanPham);
     }
 
     public ArrayList<SearchBanChayDTO> ketqua(Date from, Date to) {
@@ -183,7 +188,7 @@ public class PanelTimBanChay extends JPanel {
         if(!txtLoaiSanPham.getText().trim().isEmpty()){
             search.add("Tên loại sản phẩm: "+txtLoaiSanPham.getText());
         }
-        if((int) Min.getValue() !=0 && (int) Max.getValue()!=0){
+        if((int) Min.getValue() !=0 || (int) Max.getValue()!=0){
             search.add("Số lượng bán ra từ: "+(int) Min.getValue()+" đến: "+(int) Max.getValue());
         }
         search.add("Sắp xếp: "+(String) cboSapXep.getSelectedItem());

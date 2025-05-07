@@ -110,6 +110,8 @@ public class PanelSuaThanhVien extends JPanel {
 
         add(formPanel, BorderLayout.CENTER);
         add(lblImagePreview, BorderLayout.EAST);
+
+        TienIch.chiduocnhapso(txtSDT);
     }
 
     public TheThanhVienDTO getDTOTheThanhVien() {

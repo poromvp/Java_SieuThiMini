@@ -254,6 +254,15 @@ public class PanelTimNVHD extends JPanel {
         gbc.gridx = 3;
         gbc.gridy = 6;
         add(cbTheoCot, gbc);
+
+        TienIch.checkFromTo(dateTTFrom, dateTTTo);
+        TienIch.sukienSoSanh(minThanhTien, maxThanhTien);
+
+        TienIch.chiduocnhapso(txtMaDonHang);
+        TienIch.chiduocnhapso(txtMaKhachHang);
+        TienIch.chiduocnhapso(txtMaKhuyenMai);
+        TienIch.chiduocnhapso(txtMaSanPham);
+        TienIch.chiduocnhapso(txtMaLoaiSanPham);
     }
 
     public ArrayList<DonHangDTO> ketqua(int MaNV) {
@@ -333,10 +342,10 @@ public class PanelTimNVHD extends JPanel {
                 search.add("Mã đơn hàng: "+maDH);
         }
         if(tu!=null && den!=null){
-                search.add("Ngày thanh toán từ: "+tu+" đến: "+den);
+                search.add("Ngày thanh toán từ: "+TienIch.ddmmyyyy(tu)+" đến: "+TienIch.ddmmyyyy(den));
         }
-        if((int) minThanhTien.getValue()!=0 && (int) maxThanhTien.getValue()!=0){
-                search.add("Thành tiền từ: "+(int) minThanhTien.getValue()+" đến: "+(int) maxThanhTien.getValue());
+        if((int) minThanhTien.getValue()!=0 || (int) maxThanhTien.getValue()!=0){
+                search.add("Thành tiền từ: "+(int) minThanhTien.getValue()+" đến: "+TienIch.formatVND((int) maxThanhTien.getValue()));
         }
         search.add("Phương thức thanh toán: "+(String) cbPhuongThucThanhToan.getSelectedItem());
         if(maKH!=0){

@@ -250,6 +250,9 @@ public class PanelTimVN extends JPanel {
                 gbc.gridx = 3;
                 gbc.gridy = 6;
                 add(cbTheoCot, gbc);
+
+                TienIch.checkFromTo(dateSinhFrom, dateSinhTo);
+                TienIch.checkngaynhapdutuoi(dateSinhFrom, today);
         }
 
         public ArrayList<NhanVienDTO> ketqua(Date from, Date to) {
@@ -348,7 +351,7 @@ public class PanelTimVN extends JPanel {
                         search.add("Địa chỉ: " + txtDiaChi.getText().trim());
                 }
                 if (ngayTu != null && ngayDen != null) {
-                        search.add("Ngày sinh từ: " + ngayTu + " đến: " + ngayDen);
+                        search.add("Ngày sinh từ: " + TienIch.ddmmyyyy(ngayTu) + " đến: " + TienIch.ddmmyyyy(ngayDen));
                 }
                 search.add("Chức vụ: " + (String) cbChucVu.getSelectedItem());
                 if (!txtSoDienThoai.getText().trim().isEmpty()) {
@@ -357,16 +360,16 @@ public class PanelTimVN extends JPanel {
                 if (maDH != 0) {
                         search.add("Mã đơn hàng: " + maDH);
                 }
-                if ((int) minTongDonHang.getValue() != 0 && (int) maxTongDonHang.getValue() != 0) {
+                if ((int) minTongDonHang.getValue() != 0 || (int) maxTongDonHang.getValue() != 0) {
                         search.add("Tổng đơn hàng thực hiện từ: " + (int) minTongDonHang.getValue() + " đến: "
                                         + (int) maxTongDonHang.getValue());
                 }
-                if ((int) minDoanhSo.getValue() != 0 && (int) maxDoanhSo.getValue() != 0) {
-                        search.add("Doanh số bán hàng từ: " + (int) minDoanhSo.getValue() + " đến: "
-                                        + (int) maxDoanhSo.getValue());
+                if ((int) minDoanhSo.getValue() != 0 || (int) maxDoanhSo.getValue() != 0) {
+                        search.add("Doanh số bán hàng từ: " + TienIch.formatVND((int) minDoanhSo.getValue()) + " đến: "
+                                        + TienIch.formatVND((int) maxDoanhSo.getValue()));
                 }
-                if ((int) minLuong.getValue() != 0 && (int) maxLuong.getValue() != 0) {
-                        search.add("Lương từ: " + (int) minLuong.getValue() + " đến: " + (int) maxLuong.getValue());
+                if ((int) minLuong.getValue() != 0 || (int) maxLuong.getValue() != 0) {
+                        search.add("Lương từ: " + TienIch.formatVND((int) minLuong.getValue()) + " đến: " + TienIch.formatVND((int) maxLuong.getValue()));
                 }
                 search.add("Sắp xếp: " + (String) cbSapXep.getSelectedItem());
                 search.add("Theo cột: " + (String) cbTheoCot.getSelectedItem());

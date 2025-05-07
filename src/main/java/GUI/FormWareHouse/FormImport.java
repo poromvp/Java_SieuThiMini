@@ -55,7 +55,7 @@ public class FormImport extends JPanel {
         }
         cbNhaCC.setSelectedIndex(-1);
 
-        ButtonCustom btnThem = new ButtonCustom("Thêm","add",16,20,20);
+        ButtonCustom btnThem = new ButtonCustom("Thêm","add",16,40,40);
         JPanel panelNhap = new JPanel();
         panelNhap.setBackground(Color.white);
         panelNhap.setLayout(new FlowLayout(FlowLayout.CENTER));
@@ -90,7 +90,7 @@ public class FormImport extends JPanel {
 
         JPanel buttonPanelSearch = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanelSearch.setBackground(Color.white);
-        ButtonCustom searchBtn = new ButtonCustom("Tìm kiếm", "search", 16, 20, 20);
+        ButtonCustom searchBtn = new ButtonCustom("Tìm kiếm", "search", 16, 40, 40);
         buttonPanelSearch.add(searchBtn);
         panelSearch.add(new JLabel());
         panelSearch.add(buttonPanelSearch); // Thêm panel chứa nút vào GridLayout
@@ -192,7 +192,7 @@ public class FormImport extends JPanel {
 
                 // Mở FormAddImport
                 JDialog addImportDialog = new JDialog((Frame) SwingUtilities.getWindowAncestor(this), "Thêm chi tiết đơn nhập hàng", true);
-                addImportDialog.setSize(1200, 800);
+                addImportDialog.setSize(1400, 800);
                 addImportDialog.setLayout(new BorderLayout());
                 addImportDialog.setLocationRelativeTo(null);
 

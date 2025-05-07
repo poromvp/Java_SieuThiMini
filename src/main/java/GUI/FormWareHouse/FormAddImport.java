@@ -166,7 +166,7 @@ public class FormAddImport extends JPanel {
                 nsxChooser.cleanup();
                 hsdChooser.cleanup();
 
-                JOptionPane.showMessageDialog(this, "Thêm sản phẩm thành công!");
+                JOptionPane.showMessageDialog(null, "Thêm sản phẩm thành công!");
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Vui lòng nhập đúng định dạng số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             }

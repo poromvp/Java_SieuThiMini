@@ -75,7 +75,7 @@ public class FormProduct extends JPanel {
         add(timKiempnl,BorderLayout.NORTH);
 
 
-        ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,20,20);
+        ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,40,40);
         themBtn.addActionListener(e -> {
             JDialog info_product = new JDialog((Frame) null,true);
             info_product.setSize(400,300);
@@ -86,7 +86,7 @@ public class FormProduct extends JPanel {
             loadTableData();
         });
 
-        ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,20,20);
+        ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,40,40);
         suaBtn.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow >= 0) {
@@ -103,7 +103,7 @@ public class FormProduct extends JPanel {
         });
 
 
-        ButtonCustom xoaBtn = new ButtonCustom("Xóa","del",16,20,20);
+        ButtonCustom xoaBtn = new ButtonCustom("Xóa","del",16,40,40);
         xoaBtn.addActionListener(e ->{
             int selectedRow = table.getSelectedRow();
             if(selectedRow >= 0){
@@ -119,8 +119,8 @@ public class FormProduct extends JPanel {
             }
         });
 
-        ButtonCustom importExcelBtn = new ButtonCustom("Nhập từ Excel","importExcel",16,20,20);
-        ButtonCustom exportExcelBtn = new ButtonCustom("Xuất ra Excel","exportExcel",16,20,20);
+        ButtonCustom importExcelBtn = new ButtonCustom("Nhập từ Excel","importExcel",16,40,40);
+        ButtonCustom exportExcelBtn = new ButtonCustom("Xuất ra Excel","exportExcel",16,40,40);
 
         importExcelBtn.addActionListener(e -> {
             if (ImportExcelProduct.importProduct((JFrame) SwingUtilities.getWindowAncestor(this))) {
@@ -209,7 +209,7 @@ public class FormProduct extends JPanel {
         FormProduct test = new FormProduct();
         JFrame frame = new JFrame("Thông tin sản phẩm");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1200, 800);
+        frame.setSize(1400, 800);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
         frame.add(test,BorderLayout.CENTER);

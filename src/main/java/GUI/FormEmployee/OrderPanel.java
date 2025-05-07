@@ -109,6 +109,7 @@ import com.google.zxing.common.HybridBinarizer;
 import BLL.ChiTietKhuyenMaiBLL;
 import BLL.SanPhamBLL;
 import DTO.SanPhamDTO;
+import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.RoundedComponent;
 import GUI.ComponentCommon.StyledTextField;
 import GUI.QR.ScanQR;
@@ -150,8 +151,8 @@ public class OrderPanel extends JPanel {
 	JPanel panel_TienKD = new JPanel();
 
 
-	JButton btnLuuDonHang = new JButton("Lưu đơn hàng\r\n");
-	JButton btnInDH = new JButton("In hoá đơn");
+	ButtonCustom btnLuuDonHang = new ButtonCustom("Lưu đơn hàng\r\n",12,"green");
+	ButtonCustom btnInDH = new ButtonCustom("In hoá đơn",12,"black");
 
 
 	private static int JUST_MADONHANG = -1;
@@ -164,7 +165,7 @@ public class OrderPanel extends JPanel {
 	private JScrollPane scrollPaneTimKiem = new JScrollPane(tableTimKiem);
 	private JComboBox<String> combobox_LoaiSP = new JComboBox<>(new String[]{"Tất cả"});
 
-	private JButton toggleButton = new JButton("Bật Scan");
+	private ButtonCustom toggleButton = new ButtonCustom("Bật Scan",12,"pink");
 
     private static final String[] HEADER = {"Mã SP", "Tên SP", "Giá", "Giảm giá", "Số lượng", "thành tiền"};
     private static DefaultTableModel tableModel_SP = new DefaultTableModel(HEADER, 0);
@@ -176,7 +177,7 @@ public class OrderPanel extends JPanel {
 	private JTextField textTenOrID;
 	private JSpinner spinner_GiaMin;
 	private JSpinner spinner_GiaMax;
-	JButton btnTaoMoi = new JButton("Tạo mới ĐH");
+	ButtonCustom btnTaoMoi = new ButtonCustom("Tạo mới ĐH",12,"red");
 
 
 

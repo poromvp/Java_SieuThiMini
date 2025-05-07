@@ -9,8 +9,6 @@ import GUI.ComponentCommon.TienIch;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class PanelThemThanhVien extends JPanel {
@@ -30,6 +28,17 @@ public class PanelThemThanhVien extends JPanel {
 
         // Các thành phần nhập liệu
         txtTenTV = new StyledTextField();
+        txtTenTV.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                // Chỉ cho phép nhập chữ cái, khoảng trắng, và các ký tự điều khiển (như backspace)
+                if (Character.isDigit(c)) {
+                    evt.consume(); // Ngăn nhập số
+                    TienIch.CustomMessage("Tên không được chứa số");
+                }
+            }
+        });
         dateNgaySinh = new JDateChooser();
         txtDiaChi = new StyledTextField();
         txtSDT = new StyledTextField();
@@ -86,6 +95,10 @@ public class PanelThemThanhVien extends JPanel {
     }
 
     public boolean ktraBieuThucChinhQuy() {
+        if (!TienIch.isValidName(getTenTV())) {
+            TienIch.CustomMessage("Chỉ được có chữ");
+            return false;
+        }
         if (getTenTV() == null || getTenTV().trim().isEmpty()) {
             return false;
         }

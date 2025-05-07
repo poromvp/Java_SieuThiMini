@@ -32,6 +32,17 @@ public class PanelSuaThanhVien extends JPanel {
 
         // Các thành phần nhập liệu
         txtTenTV = new StyledTextField();
+        txtTenTV.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                // Chỉ cho phép nhập chữ cái, khoảng trắng, và các ký tự điều khiển (như backspace)
+                if (Character.isDigit(c)) {
+                    evt.consume(); // Ngăn nhập số
+                    TienIch.CustomMessage("Tên không được chứa số");
+                }
+            }
+        });
         dateNgaySinh = new JDateChooser();
         txtDiaChi = new StyledTextField();
         txtSDT = new StyledTextField();
@@ -115,9 +126,14 @@ public class PanelSuaThanhVien extends JPanel {
     }
 
     public TheThanhVienDTO getDTOTheThanhVien() {
+        if (!TienIch.isValidName(txtTenTV.getText())) {
+            JOptionPane.showMessageDialog(this, "Tên không hợp lệ, chỉ được chứa chữ cái và khoảng trắng!");
+            return null; // Hoặc xử lý theo cách khác
+        }
+    
         TheThanhVienDTO dto = new TheThanhVienDTO();
         dto.setNgaySinh(new java.sql.Date(dateNgaySinh.getDate().getTime()));
-        System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
+        System.out.println("Ngày sinh: " + TienIch.ddmmyyyy(dateNgaySinh.getDate()));
         dto.setNgayKT(new java.sql.Date(dateNgayKT.getDate().getTime()));
         dto.setTenTV(txtTenTV.getText());
         dto.setDiaChi(txtDiaChi.getText());
@@ -130,7 +146,6 @@ public class PanelSuaThanhVien extends JPanel {
             dto.setDiemTL(existing.getDiemTL());
             dto.setNgayBD(existing.getNgayBD());
             dto.setTrangThai(existing.getTrangThai());
-            // Các trường khác nếu cần
         }
         return dto;
     }

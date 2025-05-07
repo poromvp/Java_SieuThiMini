@@ -57,7 +57,6 @@ public class FormAddImport extends JPanel {
         productTable = new StyledTable(productData, productHeader);
         productTable.setEditable(false);
 
-// Xử lý double-click để điền mã sản phẩm
         productTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -75,7 +74,7 @@ public class FormAddImport extends JPanel {
         productScrollPane.setBackground(Color.white);
         supplierProductPanel.add(productScrollPane, BorderLayout.CENTER);
 
-// Thêm panel vào layout chính
+
         add(supplierProductPanel, BorderLayout.WEST);
 
         // Panel nhập thông tin sản phẩm
@@ -129,13 +128,11 @@ public class FormAddImport extends JPanel {
                     return;
                 }
 
-                // Kiểm tra nếu ngày không được chọn
                 if (nsxValue == null || hsdValue == null) {
                     JOptionPane.showMessageDialog(this, "Vui lòng chọn ngày sản xuất và hạn sử dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
-                // Kiểm tra ngày sản xuất và hạn sử dụng
                 Date currentDate = new Date();
                 if (nsxValue.after(currentDate)) {
                     JOptionPane.showMessageDialog(this, "Ngày sản xuất không được trong tương lai!", "Lỗi", JOptionPane.ERROR_MESSAGE);
@@ -209,8 +206,8 @@ public class FormAddImport extends JPanel {
                 }
                 if(allChiTietSaved){
                     JOptionPane.showMessageDialog(this, "Hoàn tất đơn nhập hàng thành công!");
-                    refreshCallback.run(); // Gọi callback để làm mới bảng trong FormImport
-                    SwingUtilities.getWindowAncestor(this).dispose(); // Đóng dialog
+                    refreshCallback.run();
+                    SwingUtilities.getWindowAncestor(this).dispose();
                 }else {
                     JOptionPane.showMessageDialog(this, "Lưu chi tiết đơn nhập hàng thất bại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                 }
@@ -243,6 +240,7 @@ public class FormAddImport extends JPanel {
         String[] headerCol = {"STT", "Mã SP", "Mã lô hàng", "Số lượng", "Giá nhập","Ngày sản xuất","Hạn sử dụng", "Thành tiền"};
         table = new StyledTable(new Object[0][8], headerCol);
         table.setEditable(false);
+        table.setEnabled(false);
 
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);

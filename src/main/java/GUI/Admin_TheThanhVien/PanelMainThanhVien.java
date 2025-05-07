@@ -201,6 +201,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
             if (result == JOptionPane.OK_OPTION) {
                 if (panel.ktraBieuThucChinhQuy()) {
                     String kq = TheThanhVienBLL.addMember(panel.create1TV());
+                    TTV = TheThanhVienBLL.getAllMembersACTIVE();
                     TienIch.CustomMessage(kq);
                     loadThanhVien(TTV);
                 } else {
@@ -225,6 +226,7 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                             boolean success = TheThanhVienBLL.updateMember(panel.getDTOTheThanhVien());
                             if (success) {
                                 TienIch.CustomMessage("Cập nhật thành viên thành công!");
+                                TTV = TheThanhVienBLL.getAllMembersACTIVE();
                                 loadThanhVien(TTV);
                             } else {
                                 if(TheThanhVienBLL.getMemberByPhone(panel.getDTOTheThanhVien().getSdt())!=null){

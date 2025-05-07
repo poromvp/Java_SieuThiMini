@@ -16,6 +16,7 @@ import javax.swing.table.JTableHeader;
 import GUI.Admin_PanelThongKe.PanelXemKH;
 import GUI.Admin_PanelThongKe.PanelXemNV;
 import GUI.Admin_PanelThongKe.PanelXemThK;
+import PDF.ChiTietDH_Dialog;
 
 
 public class StyledTable extends JTable {
@@ -47,8 +48,11 @@ public class StyledTable extends JTable {
                                     JOptionPane.PLAIN_MESSAGE);
                         } else if (loaiXem.equals("HD")) {
                             PanelXemThK panel = new PanelXemThK(model, selectedRow, MANV);
-                            JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết Hóa Đơn",
-                                    JOptionPane.PLAIN_MESSAGE);
+                            // JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết Hóa Đơn",
+                            TienIch.resetUI();
+                            new ChiTietDH_Dialog(null, Integer.parseInt(tb.getValueAt(selectedRow, 0).toString())).setVisible(true);;
+                            
+                                    // JOptionPane.PLAIN_MESSAGE);
                         } else if (loaiXem.equals("KH")) {
                             PanelXemKH panel = new PanelXemKH(model, selectedRow, MANV);
                             JOptionPane.showMessageDialog(null, panel, "Xem Chi Tiết", JOptionPane.PLAIN_MESSAGE);

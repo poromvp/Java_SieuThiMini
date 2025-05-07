@@ -154,7 +154,7 @@ public class OrderPanel extends JPanel {
 	JButton btnInDH = new JButton("In hoá đơn");
 
 
-	int JUST_MADONHANG = -1;
+	private static int JUST_MADONHANG = -1;
 
 
 
@@ -176,6 +176,8 @@ public class OrderPanel extends JPanel {
 	private JTextField textTenOrID;
 	private JSpinner spinner_GiaMin;
 	private JSpinner spinner_GiaMax;
+	JButton btnTaoMoi = new JButton("Tạo mới ĐH");
+
 
 
 	private static JLabel label_qr;
@@ -644,12 +646,12 @@ public class OrderPanel extends JPanel {
 				btnLuuDonHang.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_ButtonLuuInDH.add(btnLuuDonHang);
 				
-				JButton btnHuy = new JButton("Huỷ đơn hàng\r\n");
+				btnTaoMoi.setBackground(new Color(255, 0, 51));
 				// btnHuy.setBackground(new Color(255, 51, 0));
-				RoundedComponent.setRadius(12);
-				btnHuy = RoundedComponent.createRoundedButton(btnHuy, new Color(255, 51, 0));
-				btnHuy.setFont(new Font("Arial", Font.BOLD, 14));
-				panel_2.add(btnHuy);
+				// RoundedComponent.setRadius(12);
+				// btnHuy = RoundedComponent.createRoundedButton(btnHuy, new Color(255, 51, 0));
+				btnTaoMoi.setFont(new Font("Arial", Font.BOLD, 14));
+				panel_2.add(btnTaoMoi);
 
 
 				// //////////////////////////////////////////////////
@@ -997,6 +999,24 @@ public class OrderPanel extends JPanel {
 		btnInDH.addActionListener(e->{
 			new ChiTietDH_Dialog(null, JUST_MADONHANG).setVisible(true);;
 		});
+
+		btnTaoMoi.addActionListener(e->{
+			panel_ButtonLuuInDH.removeAll();
+			panel_ButtonLuuInDH.add(btnLuuDonHang);
+			panel_ButtonLuuInDH.repaint();
+			panel_ButtonLuuInDH.revalidate();			
+			tableModel_SP.setRowCount(0);
+			textFieldTongTien.setText("0 VND");
+			text_ThanhTien .setText("0 VND");
+			textKhuyenMai .setText("???");
+			// textTheThanhVien .setText("");
+			textSDT .setText("???");
+			textTenKH .setText("???");
+			textDiem .setText("???");
+			// textMuaDTL .setText("");
+			textTenOrID.setText("");
+			JUST_MADONHANG = -1;
+		});
 		
 
 	};
@@ -1238,21 +1258,67 @@ public class OrderPanel extends JPanel {
 				return ;
 			}
 		}else{
-			maDH = DonHangBLL.insertOrder(new DonHangDTO(1, null, maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
-			JUST_MADONHANG = maDH;
+			JUST_MADONHANG = DonHangBLL.insertOrder(new DonHangDTO(1, null, maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+			// JUST_MADONHANG 
 		}
 
 		for( int i = 0; i < tableProduct.getRowCount(); i++){
-			ChiTietDonHangBLL.insertOrderDetail(new ChiTietDonHangDTO(maDH, (int) tableProduct.getValueAt(i, 0), (int)tableProduct.getValueAt(i, 4), "ACTIVE"));
+			ChiTietDonHangBLL.insertOrderDetail(new ChiTietDonHangDTO(JUST_MADONHANG, (int) tableProduct.getValueAt(i, 0), (int)tableProduct.getValueAt(i, 4), "ACTIVE"));
 		}
 		JOptionPane.showMessageDialog(null, "Lưu đơn hàng thành công !!!");
 		panel_ButtonLuuInDH.removeAll();
 		panel_ButtonLuuInDH.add(btnInDH);
 		panel_ButtonLuuInDH.repaint();
-		panel_ButtonLuuInDH.revalidate();
+		panel_ButtonLuuInDH.revalidate();		
+	}
 
-			
+	public void taoMoiDonHang(){
 		
+	
+	
+	rdbbtnKhongMuaDTL = new JRadioButton("Không");
+	rdbtnMuaDTL = new JRadioButton("Có\r\n");
+
+	comboBoxPTTT = new JComboBox(new String[]{ "Tiền mặt", "Chuyển khoản"});
+	comboBoxDTL = new JComboBox();
+	spinner_tienKD = new JSpinner();
+
+
+	JButton btnLuuDonHang = new JButton("Lưu đơn hàng\r\n");
+	JButton btnInDH = new JButton("In hoá đơn");
+
+
+
+
+
+	// private JTable	tableTimKiem = new JTable(model_timKiem);
+	// private JScrollPane scrollPaneTimKiem = new JScrollPane(tableTimKiem);
+	// private JComboBox<String> combobox_LoaiSP = new JComboBox<>(new String[]{"Tất cả"});
+
+	// private JButton toggleButton = new JButton("Bật Scan");
+
+  	 tableModel_SP = new DefaultTableModel(HEADER, 0);
+	tableProduct = new JTable(tableModel_SP);
+	// spinner_GiaMin;
+	// spinner_GiaMax;
+
+
+
+
+	 NHANVIEN = new NhanVienDTO(
+            1,
+            "Nguyễn Văn A",
+            null,
+            "Nam",
+            "123 Đường ABC, Quận 1",
+            "0123456789",
+            "123456789012",
+            8000000.0,
+            1
+        ); 
+
+	khachHang = null;
+
 	}
 
 	public static void main(String[] args) {

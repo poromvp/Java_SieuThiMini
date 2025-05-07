@@ -42,7 +42,7 @@ public class FormSupplier extends JPanel implements ActionListener {
                     if (selectedRow >= 0) {
                         txtMaNCC.setForeground(Color.BLACK);
                         txtMaNCC.setText(table.getValueAt(selectedRow, 0).toString());
-                        txtMaNCC.setEnabled(false); // Vô hiệu hóa khi chọn để sửa
+                        txtMaNCC.setEnabled(false);
                         txtTenNCC.setText(table.getValueAt(selectedRow, 1).toString());
                         txtSdt.setText(table.getValueAt(selectedRow, 2).toString());
                         txtDiaChi.setText(table.getValueAt(selectedRow, 3).toString());
@@ -152,7 +152,7 @@ public class FormSupplier extends JPanel implements ActionListener {
             JOptionPane.showMessageDialog(this, "Địa chỉ không được để trống!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
-        // Kiểm tra định dạng số điện thoại (10 chữ số)
+
         if (!txtSdt.getText().trim().matches("\\d{10}")) {
             JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;

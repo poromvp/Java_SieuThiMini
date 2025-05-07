@@ -89,13 +89,13 @@ public class DiscountPanel extends JPanel {
 		setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		panel.setBackground(new Color(204, 255, 255));
+		panel.setBackground(Color.white);
 		panel.setBorder(new EmptyBorder(15, 15, 15, 15));
 		add(panel, BorderLayout.NORTH);
 		panel.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(new Color(204, 255, 255));
+		panel_2.setBackground(Color.white);
 		panel_2.setPreferredSize(new Dimension(10, 120));
 		panel.add(panel_2, BorderLayout.CENTER);
 		panel_2.setLayout(new GridLayout(0, 4, 10, 10));
@@ -142,18 +142,18 @@ public class DiscountPanel extends JPanel {
 		
 		JPanel panel_5 = new JPanel();
 		panel_5.setBorder(new EmptyBorder(5, 5, 5, 5));
-		panel_2.add(panel_5);
+		// panel_2.add(panel_5);
 		panel_5.setLayout(new GridLayout(1, 0, 5, 5));
 		
 		JButton btnExcel = new JButton("Excel");
 		btnExcel.setBackground(new Color(0, 204, 0));
 		btnExcel.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 14));
-		panel_5.add(btnExcel);
+		// panel_5.add(btnExcel);
 		
 		JButton btnPDF = new JButton("PDF");
 		btnPDF.setBackground(new Color(255, 0, 51));
 		btnPDF.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 14));
-		panel_5.add(btnPDF);
+		// panel_5.add(btnPDF);
 		
 		JPanel panel_8 = new JPanel();
 		panel_2.add(panel_8);
@@ -208,7 +208,7 @@ public class DiscountPanel extends JPanel {
 		panel_19.add(comboBox_column);
 		
 		JPanel panel_3 = new JPanel();
-		panel_3.setBackground(new Color(204, 255, 255));
+		panel_3.setBackground(Color.white);
 		panel_3.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panel_3.setPreferredSize(new Dimension(180, 10));
 		panel.add(panel_3, BorderLayout.EAST);
@@ -251,7 +251,7 @@ public class DiscountPanel extends JPanel {
 		panel_1.setLayout(new BorderLayout(0, 0));
 		
 		JPanel panel_17 = new JPanel();
-		panel_17.setBackground(new Color(204, 255, 255));
+		panel_17.setBackground(Color.white);
 		panel_17.setBorder(new EmptyBorder(0, 15, 15, 15));
 		panel_1.add(panel_17, BorderLayout.CENTER);
 		panel_17.setLayout(new BorderLayout(0, 0));

@@ -16,6 +16,7 @@ import GUI.FormNhanVien.FormMainNhanVien;
 import GUI.FormNhanVien.LeftSidebarMenu;
 import GUI.FormTaiKhoan.FormMainAccount;
 import GUI.FormWareHouse.FormProduct;
+import GUI.KhuyenMai.DiscountPanel;
 import JDBC.DBConnection;
 
 public class FrameAdmin extends JFrame implements ActionListener {
@@ -137,7 +138,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         rightPn.removeAll();
         rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
-        DiscountManagementPanel mainPanel = new DiscountManagementPanel();
+        DiscountPanel mainPanel = new DiscountPanel();
         rightPn.add(mainPanel,BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();

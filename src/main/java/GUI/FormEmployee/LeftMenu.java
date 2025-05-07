@@ -11,6 +11,7 @@ import BLL.NhanVienBLL;
 import BLL.TaiKhoanBLL;
 import GUI.ComponentCommon.StyledLeftMenubutton;
 import GUI.FrameEmployee;
+import GUI.FrameLogin;
 
 public class LeftMenu extends JPanel implements ActionListener {
 
@@ -19,6 +20,7 @@ public class LeftMenu extends JPanel implements ActionListener {
     private JButton btn_user;
 //    private JButton btn_orderManagement;
     private JButton btn_report;
+    private JButton btn_logout;
     private NhanVienBLL bllnv = new NhanVienBLL();
     private TaiKhoanBLL blltk = new TaiKhoanBLL();
     // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
@@ -73,6 +75,7 @@ public class LeftMenu extends JPanel implements ActionListener {
         btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
         btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
         btn_user = new StyledLeftMenubutton("src/main/resources/images/icon/user.png", "Người dùng");
+        btn_logout = new StyledLeftMenubutton("src/main/resources/images/exit.png","Đăng Xuất");
 //        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí đơn hàng");
 
 
@@ -81,19 +84,22 @@ public class LeftMenu extends JPanel implements ActionListener {
 //        setButtonStyle(btn_orderManagement);
         setButtonStyle(btn_report);
         setButtonStyle(btn_user);
-
+        setButtonStyle(btn_logout);
 
         btn_home.addActionListener(this);
         btn_sell.addActionListener(this);
 //        btn_orderManagement.addActionListener(this);
         btn_report.addActionListener(this);
         btn_user.addActionListener(this);
+        btn_logout.addActionListener(this);
 
         add(btn_home);
         add(btn_user);
         add(btn_sell);
 //        add(btn_orderManagement);
         add(btn_report);
+        add(Box.createVerticalGlue());
+        add(btn_logout);
     }
 
 
@@ -140,6 +146,12 @@ public class LeftMenu extends JPanel implements ActionListener {
         if (e.getSource() == btn_user) {
             System.out.println("click btn_user");
             FrameEmployee.setPage("formUser", "Người dùng");
+        }
+        if (e.getSource() == btn_logout) {
+            JOptionPane.showMessageDialog(null, "Đăng xuất thành công");
+            JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
+            frame.dispose();  
+            new FrameLogin();
         }
     }
 }

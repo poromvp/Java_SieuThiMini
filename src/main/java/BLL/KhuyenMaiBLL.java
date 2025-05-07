@@ -2,10 +2,50 @@ package BLL;
 
 import java.util.ArrayList;
 
+import java.sql.Date;
+
 import DAL.KhuyenMaiDAL;
 import DTO.KhuyenMaiDTO;
 
 public class KhuyenMaiBLL {
+
+
+    public static ArrayList<KhuyenMaiDTO> getFilteredDiscounts(
+        String idOrTenKM, String trangThai, String idOrTenSP,
+        Date ngayBD, Date ngayKT, String sapXep, String cot) {
+
+        if(trangThai.equalsIgnoreCase("tất cả")){
+            trangThai = null;
+        }
+        
+        String sort = sapXep.equalsIgnoreCase("tăng dần") ? "ASC" : "DESC";
+        String column = "khuyenmai.MaKM"; 
+
+        switch (cot) {
+            case "Tên khuyến mãi":
+                column = "khuyenmai.TenKM";
+                break;
+            case "Ngày bắt đầu":
+                column = "khuyenmai.NgayBD";
+                break;
+            case "Ngày kết thúc":
+                column = "khuyenmai.NgayKT";
+                break;
+        }
+
+        return KhuyenMaiDAL.getFilterDiscount(
+            idOrTenKM, trangThai, idOrTenSP, ngayBD, ngayKT, sort, column);
+    }
+
+    public static boolean kiemTraHopLeNgay(Date ngayBD, Date ngayKT){
+        return KhuyenMaiDAL.kiemTraHopLeNgay(ngayBD, ngayKT);
+    }
+
+    public static boolean kiemTraHopLeNgayCuaKM(int maKM,Date ngayBD, Date ngayKT){
+        return KhuyenMaiDAL.kiemTraHopLeNgayCuaKM(maKM, ngayBD, ngayKT);
+    }
+    
+    
 
     public static ArrayList<KhuyenMaiDTO> getAllDiscounts() {
         return KhuyenMaiDAL.getAllDiscount();
@@ -15,19 +55,19 @@ public class KhuyenMaiBLL {
         return KhuyenMaiDAL.getDiscountById(id);
     }
 
-    public static boolean addDiscount(KhuyenMaiDTO khuyenMai) {
+    public static int addDiscount(KhuyenMaiDTO khuyenMai) {
         if (khuyenMai == null) {
             System.out.println("Dữ liệu khuyến mãi không hợp lệ!");
-            return false;
+            return 0;
         }
 
         if (khuyenMai.getTenKM().trim().isEmpty()) {
             System.out.println("Tên khuyến mãi không được để trống!");
-            return false;
+            return 0;
         }
 
         int result = KhuyenMaiDAL.insertDiscount(khuyenMai);
-        return result > 0;
+        return result ;
     }
 
     public static boolean updateDiscount(KhuyenMaiDTO khuyenMai) {

@@ -50,6 +50,15 @@ public class ChiTietKhuyenMaiBLL {
         return result > 0;
     }
 
+    public static boolean deleteAllDiscountDetail(int maKM) {
+        if (maKM <= 0 ) {
+            System.out.println("Mã khuyến mãi hoặc mã sản phẩm không hợp lệ!");
+            return false;
+        }
+        int result = ChiTietKhuyenMaiDAL.deleteAllDiscountDetail(maKM);
+        return result > 0;
+    }
+
     public static ChiTietKhuyenMaiDTO getDiscountDetail(int maKM, int maSP) {
         if (maKM <= 0 || maSP <= 0) {
             System.out.println("Mã khuyến mãi hoặc mã sản phẩm không hợp lệ!");

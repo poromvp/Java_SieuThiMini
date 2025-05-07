@@ -2,13 +2,26 @@ package GUI.Admin_QuanLyKM;
 
 
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import javax.swing.*;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import BLL.ChiTietKhuyenMaiBLL;
@@ -137,7 +150,7 @@ public class DiscountManagementPanel extends JPanel {
     private void addDiscount() {
         try {
             KhuyenMaiDTO km = createDiscountFromInput();
-            if (KhuyenMaiBLL.addDiscount(km)) {
+            if (KhuyenMaiBLL.addDiscount(km)>0) {
                 JOptionPane.showMessageDialog(this, "Thêm khuyến mãi thành công!");
                 loadDiscounts();
                 clearForm();

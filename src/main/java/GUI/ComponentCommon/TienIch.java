@@ -479,7 +479,7 @@ public class TienIch {
         if (loai.equals("KH")) {
             icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
         } else {
-            icon = new ImageIcon(TienIch.class.getResource("/images/avtEmployee/" + file));
+            icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
         }
         Image img = icon.getImage();
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);

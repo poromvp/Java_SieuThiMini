@@ -106,6 +106,19 @@ public class ChiTietKhuyenMaiDAL {
             return 0;
         }
     }
+    public static int deleteAllDiscountDetail(int maKM) {
+        String sql = "DELETE FROM " + tableName + " WHERE maKM = ? ";
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement pstmt = connection.prepareStatement(sql);
+            pstmt.setInt(1, maKM);
+            return pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
 
     public static ChiTietKhuyenMaiDTO getDiscountDetail(int maKM, int maSP) {
         String sql = "SELECT * FROM " + tableName + " WHERE maKM = ? AND maSP = ?";

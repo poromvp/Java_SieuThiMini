@@ -26,19 +26,19 @@ public class NhapHangBLL {
         return false;
     }
 
-    // Cập nhật phiếu nhập hàng
-    public boolean updatePhieuNhapHang(PhieuNhapHangDTO phieuNhap) {
-        // Validate dữ liệu trước khi cập nhật
-        if (validatePhieuNhap(phieuNhap)) {
-            return nhapHangDAL.updatePhieuNhapHang(phieuNhap);
-        }
-        return false;
-    }
+//    // Cập nhật phiếu nhập hàng
+//    public boolean updatePhieuNhapHang(PhieuNhapHangDTO phieuNhap) {
+//        // Validate dữ liệu trước khi cập nhật
+//        if (validatePhieuNhap(phieuNhap)) {
+//            return nhapHangDAL.updatePhieuNhapHang(phieuNhap);
+//        }
+//        return false;
+//    }
 
-    // Xóa phiếu nhập hàng
-    public boolean deletePhieuNhapHang(int maPNH) {
-        return nhapHangDAL.deletePhieuNhapHang(maPNH);
-    }
+//    // Xóa phiếu nhập hàng
+//    public boolean deletePhieuNhapHang(int maPNH) {
+//        return nhapHangDAL.deletePhieuNhapHang(maPNH);
+//    }
 
     // Tìm kiếm phiếu nhập hàng theo mã
     public PhieuNhapHangDTO getPhieuNhapHangById(int maPNH) {

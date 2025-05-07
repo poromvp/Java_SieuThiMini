@@ -16,6 +16,7 @@ import com.toedter.calendar.JDateChooser;
 import java.awt.image.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.text.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -669,5 +670,15 @@ public class TienIch {
         Image scaledImage = img.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
         Icon scaledIcon = new ImageIcon(scaledImage);
         return scaledIcon;
+    }
+
+    // Kiểm tra tên chỉ chứa chữ cái (bao gồm dấu tiếng Việt) và khoảng trắng
+    public static boolean isValidName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            return false;
+        }
+        // Biểu thức chính quy: chỉ cho phép chữ cái (bao gồm tiếng Việt) và khoảng trắng
+        String regex = "^[\\p{L}\\s]+$";
+        return Pattern.matches(regex, name);
     }
 }

@@ -53,8 +53,14 @@ public class ExcelImporter {
                         continue;
                     }
 
+                    // Kiểm tra tên hợp lệ
+                    if (!TienIch.isValidName(tenTV)) {
+                        TienIch.CustomMessage("Dòng thứ " + (i++) + " không hợp lệ do tên chứa số hoặc ký tự đặc biệt");
+                        continue;
+                    }
+
                     Period period = Period.between(birthDate, currentDate);
-                    
+
                     if (period.getYears() < 18) {
                         TienIch.CustomMessage("Dòng thứ " + (i++) + " không hợp lệ do chưa đủ 18 tuổi");
                         continue;

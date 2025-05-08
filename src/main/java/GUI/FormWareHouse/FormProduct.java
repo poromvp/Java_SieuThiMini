@@ -30,10 +30,14 @@ public class FormProduct extends JPanel {
         setBackground(Color.white);
 
         // Tạo panel Tìm Kiếm
-        JPanel timKiempnl = new JPanel();
-        timKiempnl.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
-        timKiempnl.setLayout(new GridLayout(2, 2, 5, 5));
-        timKiempnl.setBackground(Color.white);
+        JPanel searchPanel = new JPanel();
+        searchPanel.setBackground(Color.white);
+        searchPanel.setLayout(new BorderLayout());
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
+
+        JPanel timKiempnlInput = new JPanel();
+        timKiempnlInput.setLayout(new GridLayout(3, 2, 5, 5));
+        timKiempnlInput.setBackground(Color.white);
 
         JLabel mamSPLabel = new JLabel("Mã sản phẩm: ");
         JTextField maSPText = new JTextField();
@@ -63,19 +67,25 @@ public class FormProduct extends JPanel {
             updateTableData(results);
         });
 
-        timKiempnl.add(mamSPLabel);
-        timKiempnl.add(maSPText);
-        timKiempnl.add(tenSPLabel);
-        timKiempnl.add(tenSPText);
-        timKiempnl.add(loaiSPLabel);
-        timKiempnl.add(loaiSPCb);
-        timKiempnl.add(new JLabel());
-        timKiempnl.add(timBtn);
+        timKiempnlInput.add(mamSPLabel);
+        timKiempnlInput.add(maSPText);
+        timKiempnlInput.add(tenSPLabel);
+        timKiempnlInput.add(tenSPText);
+        timKiempnlInput.add(loaiSPLabel);
+        timKiempnlInput.add(loaiSPCb);
 
-        add(timKiempnl,BorderLayout.NORTH);
+        JPanel btnSearchPanel = new JPanel();
+        btnSearchPanel.setBackground(Color.white);
+        btnSearchPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        btnSearchPanel.add(timBtn);
+
+        searchPanel.add(timKiempnlInput,BorderLayout.CENTER);
+        searchPanel.add(btnSearchPanel,BorderLayout.EAST);
+
+        add(searchPanel,BorderLayout.NORTH);
 
 
-        ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,40,40);
+        ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,20,20);
         themBtn.addActionListener(e -> {
             JDialog info_product = new JDialog((Frame) null,true);
             info_product.setSize(400,300);
@@ -86,7 +96,7 @@ public class FormProduct extends JPanel {
             loadTableData();
         });
 
-        ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,40,40);
+        ButtonCustom suaBtn = new ButtonCustom("Sửa","edit",16,20,20);
         suaBtn.addActionListener(e -> {
             int selectedRow = table.getSelectedRow();
             if (selectedRow >= 0) {
@@ -103,7 +113,7 @@ public class FormProduct extends JPanel {
         });
 
 
-        ButtonCustom xoaBtn = new ButtonCustom("Xóa","del",16,40,40);
+        ButtonCustom xoaBtn = new ButtonCustom("Xóa","del",16,20,20);
         xoaBtn.addActionListener(e ->{
             int selectedRow = table.getSelectedRow();
             if(selectedRow >= 0){
@@ -119,8 +129,8 @@ public class FormProduct extends JPanel {
             }
         });
 
-        ButtonCustom importExcelBtn = new ButtonCustom("Nhập từ Excel","importExcel",16,40,40);
-        ButtonCustom exportExcelBtn = new ButtonCustom("Xuất ra Excel","exportExcel",16,40,40);
+        ButtonCustom importExcelBtn = new ButtonCustom("Nhập từ Excel","importExcel",16,20,20);
+        ButtonCustom exportExcelBtn = new ButtonCustom("Xuất ra Excel","exportExcel",16,20,20);
 
         importExcelBtn.addActionListener(e -> {
             if (ImportExcelProduct.importProduct((JFrame) SwingUtilities.getWindowAncestor(this))) {
@@ -209,7 +219,7 @@ public class FormProduct extends JPanel {
         FormProduct test = new FormProduct();
         JFrame frame = new JFrame("Thông tin sản phẩm");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1400, 800);
+        frame.setSize(1200, 800);
         frame.setLayout(new BorderLayout());
         frame.setLocationRelativeTo(null);
         frame.add(test,BorderLayout.CENTER);

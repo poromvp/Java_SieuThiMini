@@ -96,10 +96,10 @@ public class FormSupplier extends JPanel implements ActionListener {
         // Panel chứa các nút
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         buttonPanel.setBackground(Color.white);
-        btnAdd = new ButtonCustom("Thêm", "add", 14, 40, 40);
-        btnEdit = new ButtonCustom("Sửa", "edit", 14, 40, 40);
-        btnDelete = new ButtonCustom("Xóa", "del", 14, 40, 40);
-        btnReset = new ButtonCustom("Làm mới","reset",14,40,40);
+        btnAdd = new ButtonCustom("Thêm", "add", 14, 20, 20);
+        btnEdit = new ButtonCustom("Sửa", "edit", 14, 20, 20);
+        btnDelete = new ButtonCustom("Xóa", "del", 14, 20, 20);
+        btnReset = new ButtonCustom("Làm mới","reset",14,20,20);
         btnAdd.addActionListener(this);
         btnEdit.addActionListener(this);
         btnDelete.addActionListener(this);
@@ -153,8 +153,8 @@ public class FormSupplier extends JPanel implements ActionListener {
             return false;
         }
 
-        if (!txtSdt.getText().trim().matches("\\d{10}")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if (!txtSdt.getText().trim().matches("0\\d{9}") ) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số và bắt đầu bằng số 0 !", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

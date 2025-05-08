@@ -30,10 +30,14 @@ public class FormProduct extends JPanel {
         setBackground(Color.white);
 
         // Tạo panel Tìm Kiếm
-        JPanel timKiempnl = new JPanel();
-        timKiempnl.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
-        timKiempnl.setLayout(new GridLayout(2, 2, 5, 5));
-        timKiempnl.setBackground(Color.white);
+        JPanel searchPanel = new JPanel();
+        searchPanel.setBackground(Color.white);
+        searchPanel.setLayout(new BorderLayout());
+        searchPanel.setBorder(BorderFactory.createTitledBorder("Tìm Kiếm"));
+
+        JPanel timKiempnlInput = new JPanel();
+        timKiempnlInput.setLayout(new GridLayout(3, 2, 5, 5));
+        timKiempnlInput.setBackground(Color.white);
 
         JLabel mamSPLabel = new JLabel("Mã sản phẩm: ");
         JTextField maSPText = new JTextField();
@@ -63,16 +67,22 @@ public class FormProduct extends JPanel {
             updateTableData(results);
         });
 
-        timKiempnl.add(mamSPLabel);
-        timKiempnl.add(maSPText);
-        timKiempnl.add(tenSPLabel);
-        timKiempnl.add(tenSPText);
-        timKiempnl.add(loaiSPLabel);
-        timKiempnl.add(loaiSPCb);
-        timKiempnl.add(new JLabel());
-        timKiempnl.add(timBtn);
+        timKiempnlInput.add(mamSPLabel);
+        timKiempnlInput.add(maSPText);
+        timKiempnlInput.add(tenSPLabel);
+        timKiempnlInput.add(tenSPText);
+        timKiempnlInput.add(loaiSPLabel);
+        timKiempnlInput.add(loaiSPCb);
 
-        add(timKiempnl,BorderLayout.NORTH);
+        JPanel btnSearchPanel = new JPanel();
+        btnSearchPanel.setBackground(Color.white);
+        btnSearchPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        btnSearchPanel.add(timBtn);
+
+        searchPanel.add(timKiempnlInput,BorderLayout.CENTER);
+        searchPanel.add(btnSearchPanel,BorderLayout.EAST);
+
+        add(searchPanel,BorderLayout.NORTH);
 
 
         ButtonCustom themBtn = new ButtonCustom("Thêm","add",16,20,20);

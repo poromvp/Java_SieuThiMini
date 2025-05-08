@@ -9,8 +9,6 @@ import GUI.ComponentCommon.TienIch;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.io.File;
 
 public class PanelThemThanhVien extends JPanel {
@@ -30,6 +28,17 @@ public class PanelThemThanhVien extends JPanel {
 
         // Các thành phần nhập liệu
         txtTenTV = new StyledTextField();
+        txtTenTV.addKeyListener(new java.awt.event.KeyAdapter() {
+            @Override
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                char c = evt.getKeyChar();
+                // Chỉ cho phép nhập chữ cái, khoảng trắng, và các ký tự điều khiển (như backspace)
+                if (Character.isDigit(c)) {
+                    evt.consume(); // Ngăn nhập số
+                    TienIch.CustomMessage("Tên không được chứa số");
+                }
+            }
+        });
         dateNgaySinh = new JDateChooser();
         txtDiaChi = new StyledTextField();
         txtSDT = new StyledTextField();
@@ -64,8 +73,8 @@ public class PanelThemThanhVien extends JPanel {
         formPanel.add(new JLabel("Ngày sinh:"));
         dateNgaySinh.setDateFormatString("dd/MM/yyyy");
         dateNgaySinh.setMaxSelectableDate(new java.util.Date());
-        TienIch.checkngaynhaptutay(dateNgaySinh,null);
-        TienIch.checkngaynhapdutuoi(dateNgaySinh,null);
+        TienIch.checkngaynhaptutay(dateNgaySinh, null);
+        TienIch.checkngaynhapdutuoi(dateNgaySinh, null);
         formPanel.add(dateNgaySinh);
 
         formPanel.add(new JLabel("Địa chỉ:"));
@@ -86,6 +95,10 @@ public class PanelThemThanhVien extends JPanel {
     }
 
     public boolean ktraBieuThucChinhQuy() {
+        if (!TienIch.isValidName(getTenTV())) {
+            TienIch.CustomMessage("Chỉ được có chữ");
+            return false;
+        }
         if (getTenTV() == null || getTenTV().trim().isEmpty()) {
             return false;
         }
@@ -95,7 +108,7 @@ public class PanelThemThanhVien extends JPanel {
         if (getDiaChi() == null || getDiaChi().trim().isEmpty()) {
             return false;
         }
-        if (getSDT() == null || getSDT().trim().isEmpty() || getSDT().length()!=10) {
+        if (getSDT() == null || getSDT().trim().isEmpty() || getSDT().length() != 10) {
             return false;
         }
         if (getTenAnh() == null || getTenAnh().trim().isEmpty()) {
@@ -104,7 +117,7 @@ public class PanelThemThanhVien extends JPanel {
         return true;
     }
 
-    public TheThanhVienDTO create1TV(){
+    public TheThanhVienDTO create1TV() {
         return new TheThanhVienDTO(getTenTV(), getNgaySinh(), getDiaChi(), getSDT(), getTenAnh());
     }
 
@@ -114,7 +127,11 @@ public class PanelThemThanhVien extends JPanel {
     }
 
     public java.sql.Date getNgaySinh() {
-        return new java.sql.Date(dateNgaySinh.getDate().getTime());
+        if (dateNgaySinh.getDate() == null) {
+            return null;
+        } else {
+            return new java.sql.Date(dateNgaySinh.getDate().getTime());
+        }
     }
 
     public String getDiaChi() {

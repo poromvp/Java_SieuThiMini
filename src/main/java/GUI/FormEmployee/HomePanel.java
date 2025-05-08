@@ -34,7 +34,7 @@ public class HomePanel extends JPanel {
         setLayout(new BorderLayout(0, 0));
         
         panelCenter = new JPanel();
-        panelCenter.setBackground(new Color(175, 238, 238));
+        panelCenter.setBackground(new Color(128,128,128));
         add(panelCenter, BorderLayout.CENTER);
         panelCenter.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.X_AXIS));
@@ -44,6 +44,7 @@ public class HomePanel extends JPanel {
 		panelItem1 = RoundedComponent.createRoundedPanel(panelItem1, Color.white);
 		panelItem1.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelItem1.setLayout(new BoxLayout(panelItem1, BoxLayout.Y_AXIS));
+		
         // panelCenter.add(panel);
         
         ImageIcon icon = new ImageIcon("src/main/resources/images/icon/tinhchinhxac_128px.png");
@@ -80,7 +81,7 @@ public class HomePanel extends JPanel {
 		ImageIcon icon1 = new ImageIcon("src/main/resources/images/icon/tinhchinhxac_128px.png");
         Image scaledImage1 = icon1.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
         panelItem2.setLayout(new BoxLayout(panelItem2, BoxLayout.Y_AXIS));
-  
+		
         JLabel lblNewLabel1 = new JLabel();
         lblNewLabel1.setIcon(new ImageIcon(scaledImage1));
         lblNewLabel1.setAlignmentX(Component.CENTER_ALIGNMENT); 
@@ -190,7 +191,7 @@ public class HomePanel extends JPanel {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new EmptyBorder(10, 10, 10, 10));
-		panel_2.setBackground(new Color(175, 238, 238));
+		panel_2.setBackground(new Color(128,128,128));
 		add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		// C:\Users\KHANG\GIT-SGU\Java_SieuThiMini\src\main\resources\images\anhcho1.png
@@ -208,7 +209,7 @@ public class HomePanel extends JPanel {
         editorPaneTieuDe.setText(
             "<html>" +
                 "<body style='text-align: center; margin: 0; padding: 10px;'>" +
-                    "<div style='width: 100%; font-size: 20px; font-family: Arial; font-weight: bold; color: black;'>" +
+                    "<div style='width: 100%; font-size: 20px; font-family: Arial; font-weight: bold; color: white;'>" +
                         "ỨNG DỤNG QUẢN LÝ CỬA HÀNG SIÊU THỊ MINI <br>Bán hàng nhanh - Quản lý chuẩn - Tối ưu lợi nhuận" +
                     "</div>" +
                 "</body>" +
@@ -218,7 +219,7 @@ public class HomePanel extends JPanel {
         editorPaneTieuDe.setOpaque(false);
 		
 		JPanel panel_4 = new JPanel();
-		panel_4 = RoundedComponent.createRoundedPanel(panel_4, Color.WHITE);
+		panel_4.setBackground(new Color(44, 51, 51));
 		panel_4.add(editorPaneTieuDe);
 		panel_2.add(panel_4, BorderLayout.CENTER);
 

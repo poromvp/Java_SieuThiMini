@@ -3,6 +3,7 @@ package GUI.DashBoardPanel;
 import javax.swing.*;
 
 import BLL.ChartBLL;
+import GUI.ComponentCommon.ButtonCustom;
 
 import java.awt.*;
 import java.time.LocalDate;
@@ -223,7 +224,7 @@ public class PanelChart extends JPanel {
             }
         });
 
-        JButton animateButton = new JButton("Load lại");
+        ButtonCustom animateButton = new ButtonCustom("Load lại",12,"black");
         animateButton.addActionListener(_ -> {
             int numBars;
             int currentYear = today.getYear();

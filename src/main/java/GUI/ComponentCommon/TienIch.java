@@ -544,6 +544,28 @@ public class TienIch {
         panel.setBorder(new CompoundBorder(border, emptyBorder));
     }
 
+    public static void taoTitleBorder(JRadioButton rd, String title) {
+        TitledBorder border = new TitledBorder(title);
+        EmptyBorder emptyBorder = new EmptyBorder(4, 4, 4, 4);
+        border.setTitleColor(Color.WHITE);
+        border.setTitleFont(new Font("Segoe UI", Font.BOLD, 13));
+        rd.setBorder(new CompoundBorder(border, emptyBorder));
+    }
+
+    public static void eventRadio(JRadioButton rd){
+        rd.addChangeListener(_ -> {
+            if (rd.isSelected()) {
+                // Khi được chọn: đổi màu nền và chữ
+                rd.setBackground(Color.PINK);
+                rd.setOpaque(true); // Bật opaque để màu nền hiển thị
+            } else {
+                // Khi không được chọn: khôi phục màu mặc định
+                rd.setBackground(new Color(33, 58, 89));
+                rd.setOpaque(true);
+            }
+        });
+    }
+
     public static BufferedImage captureComponent(Component comp) {
         comp.doLayout(); // bắt buộc
         comp.setSize(comp.getPreferredSize()); // bắt buộc
@@ -680,5 +702,31 @@ public class TienIch {
         // Biểu thức chính quy: chỉ cho phép chữ cái (bao gồm tiếng Việt) và khoảng trắng
         String regex = "^[\\p{L}\\s]+$";
         return Pattern.matches(regex, name);
+    }
+
+    private static LookAndFeel previousLookAndFeel = null;
+    public static void setlookandfeel(boolean enable, Component parentComponent) {
+        try {
+            if (enable) {
+                // Lưu LookAndFeel hiện tại trước khi thay đổi
+                previousLookAndFeel = UIManager.getLookAndFeel();
+                // Bật giao diện hệ thống
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } else {
+                // Khôi phục LookAndFeel trước đó (hoặc giao diện mặc định nếu không có)
+                if (previousLookAndFeel != null) {
+                    UIManager.setLookAndFeel(previousLookAndFeel);
+                } else {
+                    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                }
+            }
+
+            // Cập nhật giao diện cho thành phần cha (nếu có)
+            if (parentComponent != null) {
+                SwingUtilities.updateComponentTreeUI(parentComponent);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

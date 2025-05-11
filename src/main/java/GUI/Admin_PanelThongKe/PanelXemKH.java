@@ -350,7 +350,6 @@ public class PanelXemKH extends JPanel implements ActionListener {
                             String manv = this.MANV;
                             // Gọi hàm exportToExcel
                             XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
-                            TienIch.CustomMessage("Xuất file Excel thành công!");
                         } catch (Exception ex) {
                             TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
                         }
@@ -363,7 +362,6 @@ public class PanelXemKH extends JPanel implements ActionListener {
                         }
                         PanelExport.InPDFDonHangCuaTTVTheoSearch(HoaDon, SEARCH, kh, TienIch.formatVND(sum),
                                 HoaDon.size(), MANV);
-                        panel.XuatPDF(modelMini);
                     } else {
                         TienIch.CustomMessage("Không có gì để in");
                     }

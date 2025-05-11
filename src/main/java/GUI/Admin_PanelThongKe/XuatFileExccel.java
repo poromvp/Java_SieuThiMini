@@ -13,6 +13,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import BLL.NhanVienBLL;
+import GUI.ComponentCommon.TienIch;
 
 import org.apache.poi.ss.usermodel.*;
 import java.util.List;
@@ -146,6 +147,9 @@ public class XuatFileExccel {
             sheet.autoSizeColumn(i);
         }
 
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
+
         // Open file chooser
         JFileChooser fileChooser = new JFileChooser("src/main/resources/file/export/");
         fileChooser.setDialogTitle("Chọn nơi lưu file Excel");
@@ -163,7 +167,11 @@ public class XuatFileExccel {
             try (FileOutputStream fileOut = new FileOutputStream(filePath)) {
                 workbook.write(fileOut);
             }
+            TienIch.CustomMessageNormal("Xuất file excel thành công");
+        } else {
+            TienIch.CustomMessageNormal("Đã hủy xuất file");
         }
+        TienIch.setlookandfeel(false, null);
 
         // Close workbook
         workbook.close();

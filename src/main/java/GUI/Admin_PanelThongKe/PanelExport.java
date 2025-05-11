@@ -2,7 +2,6 @@ package GUI.Admin_PanelThongKe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -35,7 +33,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.sql.Date;
 
 import BLL.KhuyenMaiBLL;
 import BLL.LoaiSanPhamBLL;
@@ -81,11 +78,15 @@ public class PanelExport extends JPanel {
         rbExcel = new JRadioButton("");
         rbExcel.setIcon(TienIch.seticon(icon1));
         rbExcel.setHorizontalTextPosition(SwingConstants.LEFT);
+        TienIch.taoTitleBorder(rbExcel, "Excel");
+        TienIch.eventRadio(rbExcel);
         rbExcel.setBorderPainted(true);
         
         rbPDF = new JRadioButton("");
         rbPDF.setIcon(TienIch.seticon(icon2));
         rbPDF.setHorizontalTextPosition(SwingConstants.LEFT);
+        TienIch.taoTitleBorder(rbPDF, "PDF");
+        TienIch.eventRadio(rbPDF);
         rbPDF.setBorderPainted(true);
 
 
@@ -415,6 +416,9 @@ public class PanelExport extends JPanel {
     public static void InPDFTheThanhVienTheoSearch(ArrayList<TheThanhVienDTO> list, SearchTheThanhVienDTO search,
             String MANV,
             String tua) {
+                
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách thẻ thành viên");
@@ -623,7 +627,7 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách thẻ thành viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách thẻ thành viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
                 TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
@@ -631,11 +635,16 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFDonHangCuaTTVTheoSearch(ArrayList<DonHangDTO> list, SearchKHDHDTO search,
             TheThanhVienDTO member, String TONGCHITIEU, int SODONHANG, String MANV) {
+                TienIch.resetUI();
+                TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách đơn hàng của thẻ thành viên");
@@ -916,7 +925,7 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách đơn hàng của thành viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách đơn hàng của thành viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
                 TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
@@ -924,10 +933,15 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFNhanVienTheoSearch(ArrayList<NhanVienDTO> list, SearchNhanVienDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách nhân viên");
@@ -1145,12 +1159,16 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
-
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFNhanVienTheoTotNhatSearch(ArrayList<NhanVienDTO> list, SearchNhanVienDTO search, Date from,
             Date to, String MANV) {
+                TienIch.resetUI();
+                TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách nhân viên");
@@ -1374,11 +1392,16 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFDonHangCuaNVTheoSearch(ArrayList<DonHangDTO> list, SearchNVDHDTO search,
             NhanVienDTO nhanvien, String MANV) {
+                TienIch.resetUI();
+                TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách đơn hàng do nhân viên làm");
@@ -1670,11 +1693,16 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFSanPhamBanChaySearch(ArrayList<SearchBanChayDTO> list, SearchBanChayDTO search, Date from,
             Date to, String MANV) {
+                TienIch.resetUI();
+                TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách sản phẩm bán chạy");
@@ -1850,10 +1878,15 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFSanPhamTonKhoSearch(ArrayList<SanPhamDTO> list, SearchTonKhoDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách sản phẩm tồn kho");
@@ -2045,10 +2078,15 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFLoHangSearch(ArrayList<PhieuNhapHangDTO> list, SearchLoHangDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách lô hàng");
@@ -2255,6 +2293,9 @@ public class PanelExport extends JPanel {
                 e.printStackTrace();
                 TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 }

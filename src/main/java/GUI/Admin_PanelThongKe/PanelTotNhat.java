@@ -250,7 +250,6 @@ public class PanelTotNhat extends JPanel implements ActionListener {
                             String manv = this.MANV;
                             // Gọi hàm exportToExcel
                             XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
-                            TienIch.CustomMessage("Xuất file Excel thành công!");
                         } catch (Exception ex) {
                             TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
                         }
@@ -258,7 +257,6 @@ public class PanelTotNhat extends JPanel implements ActionListener {
                 } else {
                     if(DsNV.size()!=0){
                         PanelExport.InPDFNhanVienTheoTotNhatSearch(DsNV, SEARCH, new Date(from.getDate().getTime()), new Date(to.getDate().getTime()), MANV);
-                        panel.XuatPDF(model);
                     } else {
                         TienIch.CustomMessage("Không có gì để in");
                     }

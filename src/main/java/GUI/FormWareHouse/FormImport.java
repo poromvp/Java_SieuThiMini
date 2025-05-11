@@ -34,12 +34,12 @@ public class FormImport extends JPanel {
         JPanel northPanel = new JPanel();
         northPanel.setBackground(Color.white);
         northPanel.setLayout(new BorderLayout());
-        northPanel.setPreferredSize(new Dimension(5000,300));
+//        northPanel.setPreferredSize(new Dimension(5000,250));
 
         // Panel nhập thông tin
         JPanel nhapPnl = new JPanel();
         nhapPnl.setBackground(Color.white);
-        nhapPnl.setLayout(new GridLayout(3, 1, 5, 5));
+        nhapPnl.setLayout(new BorderLayout());
         nhapPnl.setBorder(BorderFactory.createTitledBorder("Thông tin đơn hàng nhập vào"));
 
         JLabel lb1 = new JLabel("Tên đơn hàng");
@@ -58,42 +58,54 @@ public class FormImport extends JPanel {
         ButtonCustom btnThem = new ButtonCustom("Thêm","add",16,20,20);
         JPanel panelNhap = new JPanel();
         panelNhap.setBackground(Color.white);
-        panelNhap.setLayout(new FlowLayout(FlowLayout.CENTER));
-        panelNhap.add(btnThem);
+        panelNhap.setLayout(new GridLayout(2,2,5,5));
 
-        nhapPnl.add(lb1);
-        nhapPnl.add(t1);
-        nhapPnl.add(lb3);
-        nhapPnl.add(cbNhaCC);
-        nhapPnl.add(panelNhap);
+
+        JPanel btnAddPanel = new JPanel();
+        btnAddPanel.setBackground(Color.white);
+        btnAddPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        btnAddPanel.add(btnThem);
+
+        panelNhap.add(lb1);
+        panelNhap.add(t1);
+        panelNhap.add(lb3);
+        panelNhap.add(cbNhaCC);
+        nhapPnl.add(panelNhap,BorderLayout.NORTH);
+        nhapPnl.add(btnAddPanel,BorderLayout.SOUTH);
 
         //Panel tim kiem
         JPanel panelSearch = new JPanel();
-        panelSearch.setLayout(new GridLayout(5,2,5,5));
+        panelSearch.setLayout(new BorderLayout());
         panelSearch.setBorder(BorderFactory.createTitledBorder("Tìm kiếm: "));
         panelSearch.setBackground(Color.white);
-        panelSearch.add(new JLabel("Mã đơn nhập hàng:"));
+
+        JPanel panelSearchInput = new JPanel();
+        panelSearchInput.setLayout(new GridLayout(4,2,5,5));
+
+        panelSearchInput.setBackground(Color.white);
+        panelSearchInput.add(new JLabel("Mã đơn nhập hàng:"));
         StyledTextField maPNHSearch = new StyledTextField();
-        panelSearch.add(maPNHSearch);
-        panelSearch.add(new JLabel("Tên đơn nhập hàng:"));
+        panelSearchInput.add(maPNHSearch);
+        panelSearchInput.add(new JLabel("Tên đơn nhập hàng:"));
         StyledTextField tenPNHSearch = new StyledTextField();
-        panelSearch.add(tenPNHSearch);
-        panelSearch.add(new JLabel("Từ:"));
+        panelSearchInput.add(tenPNHSearch);
+        panelSearchInput.add(new JLabel("Từ:"));
         JDateChooser startDate = new JDateChooser();
         startDate.setDateFormatString("dd/MM/yyyy");
-        panelSearch.add(startDate);
+        panelSearchInput.add(startDate);
 
-        panelSearch.add(new JLabel("Đến:"));
+        panelSearchInput.add(new JLabel("Đến:"));
         JDateChooser endDate = new JDateChooser();
         endDate.setDateFormatString("dd/MM/yyyy");
-        panelSearch.add(endDate);
+        panelSearchInput.add(endDate);
 
         JPanel buttonPanelSearch = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanelSearch.setBackground(Color.white);
         ButtonCustom searchBtn = new ButtonCustom("Tìm kiếm", "search", 16, 20, 20);
         buttonPanelSearch.add(searchBtn);
-        panelSearch.add(new JLabel());
-        panelSearch.add(buttonPanelSearch); // Thêm panel chứa nút vào GridLayout
+
+        panelSearch.add(panelSearchInput,BorderLayout.NORTH);
+        panelSearch.add(buttonPanelSearch,BorderLayout.SOUTH); // Thêm panel chứa nút vào GridLayout
 
         searchBtn.addActionListener(e -> {
             try {

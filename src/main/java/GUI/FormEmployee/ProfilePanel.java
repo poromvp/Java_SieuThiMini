@@ -41,6 +41,7 @@ import BLL.NhanVienBLL;
 import BLL.TaiKhoanBLL;
 import DTO.NhanVienDTO;
 import DTO.TaiKhoanDTO;
+import GUI.ComponentCommon.ButtonCustom;
 
 
 
@@ -55,16 +56,16 @@ public class ProfilePanel extends JPanel {
 	private JTextField text_SDT;
 	private JTextField textLuong;
 	private JPasswordField passwordField;
-	private JButton btn_DoiTenOrMatKhau;
+	private ButtonCustom btn_DoiTenOrMatKhau;
 	JRadioButton rdbtnNu = new JRadioButton("Nữ");
 	JRadioButton rdbtnNam = new JRadioButton("Nam");
-	JButton btnSuaThongTin = new JButton("Sửa thông tin");
-	JButton btnLuuThongTin = new JButton("Lưu thông tin");
-	JButton btnHuyLuu = new JButton("Huỷ Lưu");
+	ButtonCustom btnSuaThongTin = new ButtonCustom("Sửa thông tin",12,"orange");
+	ButtonCustom btnLuuThongTin = new ButtonCustom("Lưu thông tin",12,"green");
+	ButtonCustom btnHuyLuu = new ButtonCustom("Huỷ Lưu",12,"red");
 	JPanel panel_GioiTinh2 = new JPanel();
 	JLabel lbl_anh = new JLabel();
-	JButton btnDoiAnh = new JButton("Đổi ảnh");
-	JButton btnLuuAnh = new JButton("Lưu ảnh");
+	ButtonCustom btnDoiAnh = new ButtonCustom("Đổi ảnh",12,"black");
+	ButtonCustom btnLuuAnh = new ButtonCustom("Lưu ảnh",12,"blue");
 	String imgPath = "";
 	JPanel panel_Anh = new JPanel();
 	String imgFolder = "src/main/resources/images/avtEmployee/";
@@ -177,7 +178,7 @@ public class ProfilePanel extends JPanel {
 		panel.add(panel_1);
 		panel_1.setLayout(new GridLayout(0, 1, 10, 5));
 		
-		btn_DoiTenOrMatKhau = new JButton("Đổi Tên/Mật khẩu");
+		btn_DoiTenOrMatKhau = new ButtonCustom("Đổi Tên/Mật khẩu",12,"orange");
 		btn_DoiTenOrMatKhau.setBackground(new Color(153, 204, 255));
 		panel_1.add(btn_DoiTenOrMatKhau);
 		

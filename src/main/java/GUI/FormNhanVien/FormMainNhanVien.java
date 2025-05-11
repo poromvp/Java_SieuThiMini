@@ -85,7 +85,8 @@ public class FormMainNhanVien extends JPanel {
                 String cccd = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 4));
                 String diaChi = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 5));
                 String soDT = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 6));
-                String luong = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 7));
+                String luongStr = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 7));
+                luongStr = luongStr.replaceAll("[^\\d]", "");
                 String trangThai = String.valueOf(employeeTablePanel.getNhanVienTable().getValueAt(selectedRow, 8));
     
                 NhanVienDTO nv = bll.getNhanVienByMa(maNV);
@@ -94,7 +95,7 @@ public class FormMainNhanVien extends JPanel {
                 EditNhanVienDialog dialog = new EditNhanVienDialog(
                     SwingUtilities.getWindowAncestor(this),
                     employeeTablePanel,
-                    maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luong, trangThai, anhNV
+                    maNV, hoTen, gioiTinh, ngaySinh, cccd, diaChi, soDT, luongStr, trangThai, anhNV
                 );
                 dialog.setVisible(true);
             } catch (Exception e) {

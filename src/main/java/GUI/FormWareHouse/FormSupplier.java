@@ -153,8 +153,8 @@ public class FormSupplier extends JPanel implements ActionListener {
             return false;
         }
 
-        if (!txtSdt.getText().trim().matches("\\d{10}")) {
-            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+        if (!txtSdt.getText().trim().matches("0\\d{9}") ) {
+            JOptionPane.showMessageDialog(this, "Số điện thoại phải là 10 chữ số và bắt đầu bằng số 0 !", "Lỗi", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;

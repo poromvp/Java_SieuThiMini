@@ -179,11 +179,12 @@ public class PDFExporter {
     }
 
     public static void exportChartToPDFWithDialog(PanelChart panelChart, String timeFilter, int selectedMonth, int selectedYear, String MANV) {
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         chooser.setDialogTitle("Chọn nơi lưu báo cáo doanh thu");
         chooser.setSelectedFile(new File("BaoCaoDoanhThu_" + System.currentTimeMillis() + ".pdf"));
-
+        TienIch.setlookandfeel(false, null);
         int returnVal = chooser.showSaveDialog(null);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File selectedFile = chooser.getSelectedFile();
@@ -358,6 +359,8 @@ public class PDFExporter {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Đã xảy ra lỗi khi xuất file PDF: " + e.getMessage(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
     }
 

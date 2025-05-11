@@ -3,14 +3,19 @@ package GUI.Admin_PanelThongKe;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.*;
 import javax.swing.border.*;
 import javax.swing.table.*;
 
 import BLL.DonHangBLL;
+import BLL.KhuyenMaiBLL;
+import BLL.NhanVienBLL;
 import BLL.SearchFilterBLL;
+import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
+import DTO.SearchFilterDTO;
 import GUI.ComponentCommon.*;
 
 public class PanelDoanhThu extends JPanel implements ActionListener {
@@ -180,6 +185,8 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
         tongdonhang = new JLabel(sumDonHang + " Đơn");
     }
 
+    public SearchFilterDTO SEARCH = new SearchFilterDTO();
+    public ArrayList<String> SEARCH2 = new ArrayList<>();
     @Override
     public void actionPerformed(ActionEvent e) {
         TienIch.setDarkUI();
@@ -189,11 +196,13 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
             if (result == 0) {
                 HoaDon = SearchFilterBLL.timKiem_SapXepDonHang(panel.filter());
+                SEARCH = panel.filter();
+                SEARCH2 = panel.stringsearch();
                 if(HoaDon.size()==0){
                     TienIch.CustomMessage("Không tìm thấy");
                 }
                 System.out.println(HoaDon.size());
-             loadDonHang(HoaDon);
+                loadDonHang(HoaDon);
             }
         } else if (e.getSource() == exportItem) {
             PanelExport panel = new PanelExport();
@@ -204,13 +213,36 @@ public class PanelDoanhThu extends JPanel implements ActionListener {
                     if(HoaDon.size()==0){
                         TienIch.CustomMessage("Không có gì để in");
                     } else {
-
+                        try {
+                            // Chuẩn bị dữ liệu cho exportToExcel
+                            ArrayList<List<Object>> data = new ArrayList<>();
+                            for (DonHangDTO dh : HoaDon) {
+                                List<Object> row = new ArrayList<>();
+                                row.add(dh.getMaDH());
+                                row.add(dh.getMaKM()!=0?KhuyenMaiBLL.getDiscountById(dh.getMaKM()).getTenKM():"Không có");
+                                row.add(dh.getMaKH()!=0?TheThanhVienBLL.getMemberById(dh.getMaKH()).getTenTV():"Không có");
+                                row.add(new NhanVienBLL().getNameNV(dh.getMaNV()+""));
+                                row.add(dh.getPtThanhToan());
+                                row.add(dh.getNgayTT());
+                                row.add(dh.getMaDTL()!=0?dh.getMaDTL():"Không có");
+                                row.add(TienIch.formatVND(dh.getTienKD()));
+                                row.add(TienIch.formatVND(dh.getTongTien()));
+                                data.add(row);
+                            }
+                            String[] columnNames = { "Mã đơn hàng", "Khuyến mãi", "Khách hàng", "Nhân viên", "Phương thức thanh toán", "Ngày thanh toán", "Mã điểm tích lũy", "Tiền khách đưa", "Thành tiền"};
+                            String title = "DANH SÁCH ĐƠN HÀNG";
+                            String manv = this.MANV;
+                            // Gọi hàm exportToExcel
+                            XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
+                        } catch (Exception ex) {
+                            TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
+                        }
                     }
                 } else {
                     if(HoaDon.size()==0){
                         TienIch.CustomMessage("Không có gì để in");
                     } else {
-                        
+                        PanelExport.InPDFDonHang(HoaDon, SEARCH, MANV);
                     }
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {

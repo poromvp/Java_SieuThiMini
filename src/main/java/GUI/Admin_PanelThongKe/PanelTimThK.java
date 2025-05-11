@@ -3,6 +3,7 @@ package GUI.Admin_PanelThongKe;
 import javax.swing.*;
 import java.awt.*;
 import java.sql.Date;
+import java.util.ArrayList;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -362,6 +363,65 @@ public class PanelTimThK extends JPanel {
         search.setTenSP(txtTenSanPham.getText().isEmpty() ? null : txtTenSanPham.getText());
         search.setTongTienMax((Integer) max.getValue());
         search.setTongTienMin((Integer) min.getValue());
+        return search;
+    }
+
+    public ArrayList<String> stringsearch() {
+        ArrayList<String> search = new ArrayList<>();
+        int maDH = txtMaDonHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaDonHang.getText());
+        int maKH = txtMaKhachHang.getText().isEmpty() ? 0 : Integer.parseInt(txtMaKhachHang.getText());
+        int maKM = txtMaKhuyenMai.getText().isEmpty() ? 0 : Integer.parseInt(txtMaKhuyenMai.getText());
+        int maSP = txtMaSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaSanPham.getText());
+        int maLSP = txtMaLoaiSanPham.getText().isEmpty() ? 0 : Integer.parseInt(txtMaLoaiSanPham.getText());
+        int maNV = txtMaNhanVien.getText().isEmpty() ? 0 : Integer.parseInt(txtMaNhanVien.getText());
+        Date ngayBD = dateChooserBatDau.getDate() != null ? new Date(dateChooserBatDau.getDate().getTime()) : null;
+        Date ngayKT = dateChooserKetThuc.getDate() != null ? new Date(dateChooserKetThuc.getDate().getTime()) : null;
+
+        if (maDH != 0) {
+            search.add("Mã đơn hàng: " + maDH);
+        }
+        if (ngayBD != null && ngayKT != null) {
+            search.add("Ngày từ: " + TienIch.ddmmyyyy(ngayBD) + " đến: " + TienIch.ddmmyyyy(ngayKT));
+        }
+        if ((int) min.getValue() != 5000 || (int) max.getValue() != 9000000) {
+            search.add("Tổng tiền từ: " + TienIch.formatVND((int) min.getValue()) + " đến: " + TienIch.formatVND((int) max.getValue()));
+        }
+        if (!cboPhuongThucThanhToan.getSelectedItem().equals("tất cả")) {
+            search.add("Phương thức thanh toán: " + cboPhuongThucThanhToan.getSelectedItem());
+        }
+        if (maKH != 0) {
+            search.add("Mã khách hàng: " + maKH);
+        }
+        if (!txtTenKhachHang.getText().trim().isEmpty()) {
+            search.add("Tên khách hàng: " + txtTenKhachHang.getText().trim());
+        }
+        if (maKM != 0) {
+            search.add("Mã khuyến mãi: " + maKM);
+        }
+        if (!txtTenKhuyenMai.getText().trim().isEmpty()) {
+            search.add("Tên khuyến mãi: " + txtTenKhuyenMai.getText().trim());
+        }
+        if (maSP != 0) {
+            search.add("Mã sản phẩm: " + maSP);
+        }
+        if (!txtTenSanPham.getText().trim().isEmpty()) {
+            search.add("Tên sản phẩm: " + txtTenSanPham.getText().trim());
+        }
+        if (maLSP != 0) {
+            search.add("Mã loại sản phẩm: " + maLSP);
+        }
+        if (!txtLoaiSanPham.getText().trim().isEmpty()) {
+            search.add("Loại sản phẩm: " + txtLoaiSanPham.getText().trim());
+        }
+        if (maNV != 0) {
+            search.add("Mã nhân viên: " + maNV);
+        }
+        if (!txtTenNhanVien.getText().trim().isEmpty()) {
+            search.add("Tên nhân viên: " + txtTenNhanVien.getText().trim());
+        }
+        search.add("Sắp xếp: " + cboSapXep.getSelectedItem());
+        search.add("Theo cột: " + cboTheoCot.getSelectedItem());
+
         return search;
     }
 

@@ -168,7 +168,6 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                             String manv = this.MANV;
                             // Gọi hàm exportToExcel
                             XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
-                            TienIch.CustomMessage("Xuất file Excel thành công!");
                         } catch (Exception ex) {
                             TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
                         }
@@ -179,7 +178,6 @@ public class PanelDSLoHang extends JPanel implements ActionListener {
                     } else{
                         PanelExport.InPDFLoHangSearch(DsNHang, SEARCH, MANV);
                     }
-                    panel.XuatPDF(model);
                 }
             } else if (result == JOptionPane.CANCEL_OPTION) {
                 TienIch.CustomMessage("Đã hủy xuất file");

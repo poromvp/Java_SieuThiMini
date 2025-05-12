@@ -1,6 +1,9 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
+
+import GUI.ComponentCommon.TienIch;
+
 import java.awt.*;
 
 public class PanelMainThongKe extends JPanel{
@@ -23,6 +26,8 @@ public class PanelMainThongKe extends JPanel{
 
         PanelBaoCaoKH pn4 = new PanelBaoCaoKH(MANV);
         tab.addTab("Báo cáo khách hàng", pn4);
+
+        TienIch.lamDepTabbedPaneEdgeStyle(tab);
         
         add(tab);
 

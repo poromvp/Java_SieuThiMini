@@ -4,6 +4,7 @@ import javax.swing.*;
 
 import BLL.ChartBLL;
 import GUI.ComponentCommon.ButtonCustom;
+import GUI.ComponentCommon.TienIch;
 
 import java.awt.*;
 import java.time.LocalDate;
@@ -151,7 +152,7 @@ public class PanelChart extends JPanel {
                 if (chart.selectedYear == currentYear && chart.selectedMonth > currentMonth) {
                     chart.selectedMonth = currentMonth;
                     monthBox.setSelectedIndex(currentMonth - 1);
-                    JOptionPane.showMessageDialog(null, "Không thể chọn tháng tương lai!");
+                    TienIch.CustomMessageNormal("Không thể chọn tháng tương lai!");
                 }
 
                 int numBars = chart.getDaysInMonth(chart.selectedMonth, chart.selectedYear);
@@ -182,7 +183,7 @@ public class PanelChart extends JPanel {
                     chart.selectedYear = (inputYear > currentYear) ? currentYear : inputYear;
                     yearField.setText(String.valueOf(chart.selectedYear));
                     if (inputYear > currentYear) {
-                        JOptionPane.showMessageDialog(null, "Không thể chọn năm tương lai!");
+                        TienIch.CustomMessageNormal("Không thể chọn năm tương lai!");
                     }
                 } catch (NumberFormatException e) {
                     chart.selectedYear = currentYear;
@@ -292,13 +293,20 @@ public class PanelChart extends JPanel {
         JPanel pn1 = new JPanel();
         pn1.setLayout(new FlowLayout());
 
-        pn1.add(new JLabel("Lọc:"));
+        JLabel loc = new JLabel("Lọc:");
+        pn1.add(loc);
         pn1.add(filterBox);
         pn1.add(thang);
         pn1.add(monthBox);
+        TienIch.lamDepComboBox(filterBox);
+        TienIch.lamDepComboBox(monthBox);
         pn1.add(yearLabel);
         pn1.add(yearField);
         pn1.add(animateButton);
+        TienIch.lamDepTextField(yearField);
+        TienIch.lamDepLabel(yearLabel);
+        TienIch.lamDepLabel(thang);
+        TienIch.lamDepLabel(loc);
 
         JScrollPane scr = new JScrollPane(chart);
         scr.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);

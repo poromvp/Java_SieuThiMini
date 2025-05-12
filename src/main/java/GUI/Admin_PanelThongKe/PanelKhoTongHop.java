@@ -195,7 +195,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         tab = new JTabbedPane();
         tab.addTab("Danh sách bán chạy", pn1);
         tab.addTab("Danh sách tồn kho", pn2);
-        // tab.addTab("Danh sách hàng sắp hết", pn3);
+        TienIch.lamDepTabbedPaneEdgeStyle(tab);
         add(tab, gbc);
 
         // Thêm popup menu

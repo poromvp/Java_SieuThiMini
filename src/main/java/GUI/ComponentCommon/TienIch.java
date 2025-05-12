@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicComboBoxUI;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -15,6 +17,7 @@ import javax.swing.text.DocumentFilter;
 import com.toedter.calendar.JDateChooser;
 import java.awt.image.*;
 import java.awt.event.*;
+import java.awt.geom.Path2D;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.text.*;
@@ -475,13 +478,55 @@ public class TienIch {
         lb.setIcon(new ImageIcon(resizedImg));
     }
 
-    public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
+    /*public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
         ImageIcon icon;
         if (loai.equals("KH")) {
             icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
         } else {
             icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
         }
+        Image img = icon.getImage();
+        Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+        lb.setIcon(new ImageIcon(resizedImg));
+        lb.setHorizontalAlignment(SwingConstants.CENTER);
+        lb.setVerticalAlignment(SwingConstants.CENTER);
+    }*/
+
+    public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
+        ImageIcon icon = null;
+        String defaultImage = "error.jpg"; // Đường dẫn đến hình ảnh mặc định
+
+        try {
+            // Kiểm tra loại và tải hình ảnh
+            if (loai.equals("KH")) {
+                icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+            } else {
+                icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+            }
+
+            // Kiểm tra xem icon có hợp lệ không (nếu file không tồn tại, getResource trả về null)
+            if (icon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+                throw new Exception("Hình ảnh không hợp lệ hoặc không tồn tại");
+            }
+        } catch (Exception e) {
+            // Nếu có lỗi (file không tồn tại, tên file không hợp lệ, hoặc ngoại lệ khác), sử dụng hình ảnh mặc định
+            try {
+                icon = new ImageIcon(TienIch.class.getResource("/images/icon/"+defaultImage));
+                if (icon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
+                    // Nếu cả error.jpg cũng không tồn tại, hiển thị thông báo trên JLabel
+                    lb.setText("Không tìm thấy error.jpg");
+                    lb.setIcon(null);
+                    return;
+                }
+            } catch (Exception ex) {
+                // Nếu không tải được error.jpg, hiển thị thông báo trên JLabel
+                lb.setText("Lỗi tải hình ảnh mặc định");
+                lb.setIcon(null);
+                return;
+            }
+        }
+
+        // Thay đổi kích thước hình ảnh và đặt vào JLabel
         Image img = icon.getImage();
         Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
         lb.setIcon(new ImageIcon(resizedImg));
@@ -552,7 +597,7 @@ public class TienIch {
         rd.setBorder(new CompoundBorder(border, emptyBorder));
     }
 
-    public static void eventRadio(JRadioButton rd){
+    public static void eventRadio(JRadioButton rd) {
         rd.addChangeListener(_ -> {
             if (rd.isSelected()) {
                 // Khi được chọn: đổi màu nền và chữ
@@ -633,7 +678,8 @@ public class TienIch {
                     }
                 }
 
-                private boolean isValidInput(FilterBypass fb, int offset, int length, String text) throws BadLocationException {
+                private boolean isValidInput(FilterBypass fb, int offset, int length, String text)
+                        throws BadLocationException {
                     if (!text.matches("\\d*")) {
                         showWarning("Chỉ được nhập số");
                         return false;
@@ -688,6 +734,43 @@ public class TienIch {
         return null; // Trường hợp này khó xảy ra, nhưng thêm để hoàn chỉnh
     }
 
+    public static void chiDuocNhapChu(JTextField textField) {
+        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
+
+            private boolean showedWarning = false; // Biến cờ
+
+            private void showMessageOnce(String message) {
+                if (!showedWarning) {
+                    showedWarning = true;
+                    TienIch.CustomMessage(message);
+
+                    // Đặt lại cờ sau 500ms để tránh hiện nhiều lần
+                    new javax.swing.Timer(500, _ -> showedWarning = false).start();
+                }
+            }
+
+            @Override
+            public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                    throws BadLocationException {
+                if (string != null && string.matches("[\\p{L}\\s]+")) {
+                    super.insertString(fb, offset, string, attr);
+                } else {
+                    showMessageOnce("Chỉ được nhập chữ và khoảng trắng");
+                }
+            }
+
+            @Override
+            public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                    throws BadLocationException {
+                if (text != null && text.matches("[\\p{L}\\s]+")) {
+                    super.replace(fb, offset, length, text, attrs);
+                } else {
+                    showMessageOnce("Chỉ được nhập chữ và khoảng trắng");
+                }
+            }
+        });
+    }
+
     public static Icon seticon(ImageIcon img) {
         Image scaledImage = img.getImage().getScaledInstance(32, 32, Image.SCALE_SMOOTH);
         Icon scaledIcon = new ImageIcon(scaledImage);
@@ -699,12 +782,14 @@ public class TienIch {
         if (name == null || name.trim().isEmpty()) {
             return false;
         }
-        // Biểu thức chính quy: chỉ cho phép chữ cái (bao gồm tiếng Việt) và khoảng trắng
+        // Biểu thức chính quy: chỉ cho phép chữ cái (bao gồm tiếng Việt) và khoảng
+        // trắng
         String regex = "^[\\p{L}\\s]+$";
         return Pattern.matches(regex, name);
     }
 
     private static LookAndFeel previousLookAndFeel = null;
+
     public static void setlookandfeel(boolean enable, Component parentComponent) {
         try {
             if (enable) {
@@ -727,6 +812,230 @@ public class TienIch {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public static void lamDepTabbedPaneEdgeStyle(JTabbedPane tabbedPane) {
+        tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        tabbedPane.setForeground(Color.BLACK);
+        tabbedPane.setBackground(new Color(33, 58, 89));
+        tabbedPane.setOpaque(false);
+        tabbedPane.setFocusable(false);
+
+        tabbedPane.setUI(new BasicTabbedPaneUI() {
+            @Override
+            protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex,
+                    int x, int y, int w, int h, boolean isSelected) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                Color bgColor = isSelected ? Color.ORANGE : new Color(245, 245, 245);
+                g2.setColor(bgColor);
+
+                Path2D path = new Path2D.Double();
+                int arc = 12;
+
+                // Vẽ hình tab cong sóng như Edge
+                path.moveTo(x, y + h);
+                path.quadTo(x, y, x + arc, y); // bo góc trái
+                path.curveTo(x + w / 3, y, x + 2 * w / 3, y, x + w - arc, y); // cong sóng
+                path.quadTo(x + w, y, x + w, y + h); // bo góc phải
+                path.closePath();
+
+                g2.fill(path);
+            }
+
+            @Override
+            protected void paintTabBorder(Graphics g, int tabPlacement, int tabIndex,
+                    int x, int y, int w, int h, boolean isSelected) {
+                // Không vẽ viền
+            }
+
+            @Override
+            protected void paintFocusIndicator(Graphics g, int tabPlacement, Rectangle[] rects,
+                    int tabIndex, Rectangle iconRect, Rectangle textRect, boolean isSelected) {
+                // Không hiển thị viền focus
+            }
+        });
+    }
+
+    public static void lamDepComboBox(JComboBox<?> comboBox) {
+        comboBox.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        comboBox.setForeground(Color.BLACK);
+        comboBox.setBackground(Color.WHITE);
+        comboBox.setFocusable(false);
+
+        comboBox.setUI(new BasicComboBoxUI() {
+            @Override
+            public void paintCurrentValueBackground(Graphics g, Rectangle bounds, boolean hasFocus) {
+                // Không vẽ nền khi focus
+            }
+
+            @Override
+            protected JButton createArrowButton() {
+                JButton button = new JButton("▼");
+                button.setBorder(BorderFactory.createEmptyBorder());
+                button.setForeground(Color.DARK_GRAY);
+                button.setBackground(new Color(240, 240, 240));
+                button.setFocusPainted(false);
+                return button;
+            }
+        });
+
+        // Bo góc và viền đẹp hơn
+        comboBox.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(160, 160, 160), 1),
+                BorderFactory.createEmptyBorder(4, 8, 4, 8)));
+
+        // Tùy chỉnh renderer để chỉnh font + padding đẹp hơn
+        comboBox.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value,
+                    int index, boolean isSelected, boolean cellHasFocus) {
+                JLabel lbl = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                lbl.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                lbl.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+                if (isSelected) {
+                    lbl.setBackground(new Color(255, 200, 100)); // Màu nền khi hover hoặc chọn
+                    lbl.setForeground(Color.BLACK);
+                }
+                return lbl;
+            }
+        });
+    }
+
+    public static void lamDepTextField(JTextField textField) {
+        // Cài đặt phông chữ và màu sắc cho JTextField
+        textField.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        textField.setForeground(Color.BLACK);
+        textField.setBackground(Color.WHITE);
+
+        // Cài đặt viền cho JTextField
+        textField.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(160, 160, 160), 1),
+                BorderFactory.createEmptyBorder(6, 10, 6, 10)));
+        textField.setCaretColor(Color.BLACK); // Màu con trỏ khi gõ
+
+        // KeyListener để chỉ cho phép nhập số
+        chiduocnhapsoNormal(textField);
+    }
+
+    public static void chiduocnhapsoNormal(JTextField txt) {
+        Document doc = txt.getDocument();
+        if (doc instanceof AbstractDocument) {
+            ((AbstractDocument) doc).setDocumentFilter(new DocumentFilter() {
+                @Override
+                public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, 0, string)) {
+                        super.insertString(fb, offset, string, attr);
+                    }
+                }
+
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, length, text)) {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                }
+
+                private boolean isValidInput(FilterBypass fb, int offset, int length, String text)
+                        throws BadLocationException {
+                    if (!text.matches("\\d*")) {
+                        showWarning("Chỉ được nhập số");
+                        return false;
+                    }
+
+                    String oldText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                    String newText = oldText.substring(0, offset) + text + oldText.substring(offset + length);
+
+                    if (newText.length() > MAX_LENGTH) {
+                        showWarning("Tối đa " + MAX_LENGTH + " chữ số");
+                        return false;
+                    }
+
+                    return true;
+                }
+
+                private void showWarning(String msg) {
+                    CustomMessageNormal(msg);
+                }
+            });
+        }
+    }
+
+    public static void lamDepLabel(JLabel label) {
+        label.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        label.setForeground(new Color(50, 50, 50)); // Màu chữ đậm, dễ đọc
+        label.setOpaque(true); // Cho phép nền hiển thị
+        label.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+    }
+
+    private static final int MAX_LENGTH_DATE = 10; // Độ dài tối đa cho định dạng dd/MM/yyyy
+    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{0,2}(/\\d{0,2}(/\\d{0,4})?)?"); // Kiểm tra định dạng tạm thời
+
+    public static void chiduocnhapDDMMYYYY(JDateChooser dateChooser) {
+        // Lấy JTextField bên trong JDateChooser
+        JTextField editor = (JTextField) dateChooser.getDateEditor().getUiComponent();
+        Document doc = editor.getDocument();
+        if (doc instanceof AbstractDocument) {
+            ((AbstractDocument) doc).setDocumentFilter(new DocumentFilter() {
+                @Override
+                public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, 0, string)) {
+                        super.insertString(fb, offset, string, attr);
+                    }
+                }
+
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, length, text)) {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                }
+
+                private boolean isValidInput(FilterBypass fb, int offset, int length, String text)
+                        throws BadLocationException {
+                    // Kiểm tra ký tự đầu vào: chỉ cho phép số và dấu /
+                    if (!text.matches("[0-9/]*")) {
+                        CustomMessage("Chỉ được nhập số và dấu /!");
+                        return false;
+                    }
+
+                    // Lấy văn bản hiện tại và xây dựng văn bản mới sau khi thêm
+                    String oldText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                    String newText = oldText.substring(0, offset) + text + oldText.substring(offset + length);
+
+                    // Kiểm tra độ dài tối đa
+                    if (newText.length() > MAX_LENGTH_DATE) {
+                        CustomMessage("Định dạng ngày tối đa " + MAX_LENGTH_DATE + " ký tự (dd/MM/yyyy)!");
+                        return false;
+                    }
+
+                    // Kiểm tra định dạng tạm thời
+                    if (!DATE_PATTERN.matcher(newText).matches()) {
+                        CustomMessage("Định dạng ngày không hợp lệ! Vui lòng nhập theo dd/MM/yyyy.");
+                        return false;
+                    }
+
+                    // Nếu văn bản đầy đủ (10 ký tự), kiểm tra định dạng ngày hợp lệ
+                    if (newText.length() == MAX_LENGTH_DATE) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        sdf.setLenient(false); // Không cho phép ngày không hợp lệ (ví dụ: 32/13/2025)
+                        try {
+                            sdf.parse(newText);
+                        } catch (ParseException e) {
+                            CustomMessage("Ngày không hợp lệ! Vui lòng nhập lại theo định dạng dd/MM/yyyy.");
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            });
         }
     }
 }

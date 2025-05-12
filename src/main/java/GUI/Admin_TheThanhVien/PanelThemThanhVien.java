@@ -28,18 +28,9 @@ public class PanelThemThanhVien extends JPanel {
 
         // Các thành phần nhập liệu
         txtTenTV = new StyledTextField();
-        txtTenTV.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                char c = evt.getKeyChar();
-                // Chỉ cho phép nhập chữ cái, khoảng trắng, và các ký tự điều khiển (như backspace)
-                if (Character.isDigit(c)) {
-                    evt.consume(); // Ngăn nhập số
-                    TienIch.CustomMessage("Tên không được chứa số");
-                }
-            }
-        });
+        TienIch.chiDuocNhapChu(txtTenTV);
         dateNgaySinh = new JDateChooser();
+        TienIch.chiduocnhapDDMMYYYY(dateNgaySinh);
         txtDiaChi = new StyledTextField();
         txtSDT = new StyledTextField();
         JButton btnChonAnh = new JButton("Chọn ảnh");

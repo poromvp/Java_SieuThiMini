@@ -59,4 +59,8 @@ public class NhanVienBLL {
         return dal.getNhanVienById(maNV) != null;
     }
 
+    public NhanVienDTO getNhanVienById(int maNV){
+        return dal.getNhanVienById(maNV);
+    }
+
 }

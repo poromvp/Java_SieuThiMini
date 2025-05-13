@@ -72,6 +72,7 @@ public class ButtonCustom extends JButton {
             case "printer" -> new ImageIcon("src/main/resources/images/icon/printer.png");
             case "importExcel" -> new ImageIcon("src/main/resources/images/icon/importExcel.png");
             case "exportExcel" -> new ImageIcon("src/main/resources/images/icon/exportExcel.png");
+            case "exportPdf" -> new ImageIcon("src/main/resources/images/icon/pdf.png");
             default -> null;
         };
     

@@ -135,7 +135,8 @@ public class TaiKhoanDAL {
         return taiKhoanList;
     }
     public boolean loginCheck (String tenTK, String mk){
-        String sql = "SELECT * FROM TAIKHOAN WHERE TenTK = ? AND MATKHAU = ?";
+        String sql = "SELECT * FROM TAIKHOAN WHERE BINARY TenTK = ? AND BINARY MATKHAU = ?";
+
         try {
             ResultSet rs = DBConnection.executeQuery(sql, tenTK,mk);
             return rs.next();

@@ -40,6 +40,7 @@ public class FormEditAccount extends JDialog {
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         maNVField = new StyledTextField();
+        maNVField.setEnabled(false);
         tenTKField = new StyledTextField();
         matKhauField = new StyledTextField();
         gmailField = new StyledTextField();

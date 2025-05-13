@@ -213,6 +213,10 @@ public class PanelTimKho extends JPanel {
         TienIch.chiduocnhapso(txtMaSanPham);
         TienIch.chiduocnhapso(txtMaLoaiSanPham);
         TienIch.chiduocnhapso(txtMaNCC);
+
+        TienIch.chiDuocNhapChu(txtTenSanPham);
+        TienIch.chiDuocNhapChu(txtLoaiSanPham);
+        TienIch.chiDuocNhapChu(txtTenNCC);
     }
 
     public ArrayList<SanPhamDTO> ketqua() {

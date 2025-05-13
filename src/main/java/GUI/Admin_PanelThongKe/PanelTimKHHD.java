@@ -265,6 +265,14 @@ public class PanelTimKHHD extends JPanel {
                 TienIch.chiduocnhapso(txtMaKhuyenMai);
                 TienIch.chiduocnhapso(txtMaSanPham);
                 TienIch.chiduocnhapso(txtMaLoaiSanPham);
+
+                TienIch.chiduocnhapDDMMYYYY(dateTTFrom);
+                TienIch.chiduocnhapDDMMYYYY(dateTTTo);
+
+                TienIch.chiDuocNhapChu(txtTenNhanVien);
+                TienIch.chiDuocNhapChu(txtTenKhuyenMai);
+                TienIch.chiDuocNhapChu(txtTenSanPham);
+                TienIch.chiDuocNhapChu(txtTenLoaiSanPham);
         }
 
         public ArrayList<DonHangDTO> ketqua(int MaKH) {

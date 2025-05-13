@@ -1,8 +1,6 @@
 package GUI.Admin_PanelThongKe;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import com.toedter.calendar.JDateChooser;
 
@@ -272,6 +270,8 @@ public class PanelTimKH extends JPanel {
         TienIch.chiduocnhapso(txtMaThanhVien);
         TienIch.chiduocnhapso(txtSoDienThoai);
         TienIch.chiduocnhapso(txtMaDonHang);
+
+        TienIch.chiDuocNhapChu(txtTenThanhVien);
 
         TienIch.chiduocnhapDDMMYYYY(dateSinhFrom);
         TienIch.chiduocnhapDDMMYYYY(dateSinhTo);

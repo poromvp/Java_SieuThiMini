@@ -1015,13 +1015,6 @@ public class PanelExport extends JPanel {
                     ngaySinh.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngaySinh);
                 }
-                if (search.getQuyen() != null) {
-                    if (!search.getQuyen().trim().isEmpty()) {
-                        Paragraph chucVu = new Paragraph("Chức vụ: " + search.getQuyen(), fontNormal);
-                        chucVu.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
-                        document.add(chucVu);
-                    }
-                }
                 if (search.getSDT() != null) {
                     if (!search.getSDT().trim().isEmpty()) {
                         Paragraph SDT = new Paragraph("Số điện thoại: " + search.getSDT(), fontNormal);
@@ -1247,13 +1240,6 @@ public class PanelExport extends JPanel {
                             fontNormal);
                     ngaySinh.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
                     document.add(ngaySinh);
-                }
-                if (search.getQuyen() != null) {
-                    if (!search.getQuyen().trim().isEmpty()) {
-                        Paragraph chucVu = new Paragraph("Chức vụ: " + search.getQuyen(), fontNormal);
-                        chucVu.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
-                        document.add(chucVu);
-                    }
                 }
                 if (search.getSDT() != null) {
                     if (!search.getSDT().trim().isEmpty()) {

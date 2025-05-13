@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import java.sql.Date;
+import java.time.LocalDate;
 
 public class PanelThemThanhVien extends JPanel {
 
@@ -42,6 +44,8 @@ public class PanelThemThanhVien extends JPanel {
 
         // Sự kiện chọn ảnh
         btnChonAnh.addActionListener((ActionEvent _) -> {
+            TienIch.resetUI();
+            TienIch.setlookandfeel(true, null);
             JFileChooser chooser = new JFileChooser("src/main/resources/images/avtMember");
             int result = chooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
@@ -54,6 +58,8 @@ public class PanelThemThanhVien extends JPanel {
                 lblImagePreview.setIcon(new ImageIcon(img));
                 lblImagePreview.setText(""); // Xóa chữ "Chưa chọn ảnh"
             }
+            TienIch.setlookandfeel(false, null);
+            TienIch.setDarkUI();
         });
 
         // Thêm vào panel
@@ -65,7 +71,8 @@ public class PanelThemThanhVien extends JPanel {
         dateNgaySinh.setDateFormatString("dd/MM/yyyy");
         dateNgaySinh.setMaxSelectableDate(new java.util.Date());
         TienIch.checkngaynhaptutay(dateNgaySinh, null);
-        TienIch.checkngaynhapdutuoi(dateNgaySinh, null);
+        LocalDate today = LocalDate.now();
+        TienIch.checkngaynhapdutuoi(dateNgaySinh, Date.valueOf(today.minusYears(18)));
         formPanel.add(dateNgaySinh);
 
         formPanel.add(new JLabel("Địa chỉ:"));
@@ -83,6 +90,27 @@ public class PanelThemThanhVien extends JPanel {
         add(formPanel, BorderLayout.CENTER);
         add(lblImagePreview, BorderLayout.EAST);
 
+    }
+    public int ktranull(){
+        if(txtTenTV.getText().isEmpty()){
+            return 2;
+        }
+        if(dateNgaySinh.getDate()==null){
+            return 3;
+        }
+        if(txtDiaChi.getText().isEmpty()){
+            return 4;
+        }
+        if(txtSDT.getText().isEmpty()){
+            return 5;
+        }
+        if(txtSDT.getText().length()!=10){
+            return 6;
+        }
+        if(getTenAnh()==null){
+            return 7;
+        }
+        return 1;
     }
 
     public boolean ktraBieuThucChinhQuy() {

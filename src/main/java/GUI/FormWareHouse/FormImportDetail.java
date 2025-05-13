@@ -5,10 +5,12 @@ import BLL.NhapHangBLL;
 import DTO.ChiTietPNHangDTO;
 import DTO.PhieuNhapHangDTO;
 import GUI.ComponentCommon.StyledTable;
+import PDF.ExportPdfImport;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -62,16 +64,17 @@ public class FormImportDetail extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
 //        // Panel nút chức năng
-//        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-//        JButton addButton = new JButton("Thêm sản phẩm");
-//        JButton deleteButton = new JButton("Xóa sản phẩm");
-//
-//        addButton.addActionListener(e -> showAddProductDialog());
-//        deleteButton.addActionListener(e -> deleteSelectedProduct());
-//
-//        buttonPanel.add(addButton);
-//        buttonPanel.add(deleteButton);
-//        add(buttonPanel, BorderLayout.SOUTH);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        JButton exportButton = new JButton("Xuất PDF");
+
+// Thêm ActionListener cho nút Xuất PDF
+        exportButton.addActionListener(e -> {
+            ExportPdfImport exportPdf = new ExportPdfImport();
+            exportPdf.exportPDF(phieuNhap);
+        });
+
+        buttonPanel.add(exportButton);
+        add(buttonPanel, BorderLayout.SOUTH);
     }
 
     private Object[][] convertDTOToArray(ArrayList<ChiTietPNHangDTO> list) {

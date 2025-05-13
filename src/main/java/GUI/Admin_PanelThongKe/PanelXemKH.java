@@ -3,7 +3,6 @@ package GUI.Admin_PanelThongKe;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-import BLL.DiemTichLuyBLL;
 import BLL.DonHangBLL;
 import BLL.KhuyenMaiBLL;
 import BLL.NhanVienBLL;

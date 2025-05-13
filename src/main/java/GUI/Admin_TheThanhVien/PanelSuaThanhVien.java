@@ -32,17 +32,7 @@ public class PanelSuaThanhVien extends JPanel {
 
         // Các thành phần nhập liệu
         txtTenTV = new StyledTextField();
-        txtTenTV.addKeyListener(new java.awt.event.KeyAdapter() {
-            @Override
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                char c = evt.getKeyChar();
-                // Chỉ cho phép nhập chữ cái, khoảng trắng, và các ký tự điều khiển (như backspace)
-                if (Character.isDigit(c)) {
-                    evt.consume(); // Ngăn nhập số
-                    TienIch.CustomMessage("Tên không được chứa số");
-                }
-            }
-        });
+        TienIch.chiDuocNhapChu(txtTenTV);
         dateNgaySinh = new JDateChooser();
         txtDiaChi = new StyledTextField();
         txtSDT = new StyledTextField();
@@ -59,7 +49,7 @@ public class PanelSuaThanhVien extends JPanel {
         TienIch.checkngaynhapdutuoi(dateNgaySinh, member.getNgaySinh());
 
         dateNgayKT.setDateFormatString("dd/MM/yyyy");
-        dateNgayKT.setMinSelectableDate(member.getNgayKT());
+        dateNgayKT.setMinSelectableDate(TienIch.addTwoYearsToDate(member.getNgayBD()));
         TienIch.checkngayKT(dateNgayKT, member.getNgayBD(), member.getNgayKT());
 
         // Label hiển thị ảnh
@@ -89,9 +79,13 @@ public class PanelSuaThanhVien extends JPanel {
 
         // Sự kiện chọn ảnh
         btnChonAnh.addActionListener(_ -> {
+            TienIch.resetUI();
+            TienIch.setlookandfeel(true, null);
             JFileChooser chooser = new JFileChooser("src/main/resources/images/avtMember");
             int result = chooser.showOpenDialog(this);
             if (result == JFileChooser.APPROVE_OPTION) {
+                TienIch.setDarkUI();
+                TienIch.setlookandfeel(false, null);
                 File file = chooser.getSelectedFile();
                 tenAnh = file.getName();
                 ImageIcon icon = new ImageIcon(file.getAbsolutePath());
@@ -99,6 +93,8 @@ public class PanelSuaThanhVien extends JPanel {
                 lblImagePreview.setIcon(new ImageIcon(img));
                 lblImagePreview.setText("");
             }
+            TienIch.setDarkUI();
+            TienIch.setlookandfeel(false, null);
         });
 
         // Thêm vào panel
@@ -123,14 +119,34 @@ public class PanelSuaThanhVien extends JPanel {
         add(lblImagePreview, BorderLayout.EAST);
 
         TienIch.chiduocnhapso(txtSDT);
+
+        TienIch.chiduocnhapDDMMYYYY(dateNgaySinh);
+        TienIch.chiduocnhapDDMMYYYY(dateNgayKT);
+    }
+
+    public int ktranull(){
+        if(txtTenTV.getText().isEmpty()){
+            return 2;
+        }
+        if(dateNgaySinh.getDate() == null){
+            return 3;
+        }
+        if(txtDiaChi.getText().isEmpty()){
+            return 4;
+        }
+        if(txtSDT.getText().isEmpty()){
+            return 5;
+        }
+        if(txtSDT.getText().length()!=10){
+            return 6;
+        }
+        if(dateNgayKT.getDate() == null){
+            return 7;
+        }
+        return 1;
     }
 
     public TheThanhVienDTO getDTOTheThanhVien() {
-        if (!TienIch.isValidName(txtTenTV.getText())) {
-            JOptionPane.showMessageDialog(this, "Tên không hợp lệ, chỉ được chứa chữ cái và khoảng trắng!");
-            return null; // Hoặc xử lý theo cách khác
-        }
-    
         TheThanhVienDTO dto = new TheThanhVienDTO();
         dto.setNgaySinh(new java.sql.Date(dateNgaySinh.getDate().getTime()));
         System.out.println("Ngày sinh: " + TienIch.ddmmyyyy(dateNgaySinh.getDate()));

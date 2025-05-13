@@ -73,6 +73,9 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
         TienIch.timStyle(to);
         to.setDate(today);
 
+        TienIch.chiduocnhapDDMMYYYYNormal(to);
+        TienIch.chiduocnhapDDMMYYYYNormal(from);
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         JLabel tu = new JLabel("Từ");
@@ -89,43 +92,44 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
 
         gbc.gridx = 3;
         pnTool.add(to);
-        sukien();
+
+        TienIch.checkFromToBanChay(from, to);
+        khongthedetrong(firstDayOfMonth, today);
     }
 
-    public void sukien() {
+    public void khongthedetrong(Date first, Date today) {
         from.addPropertyChangeListener("date", _ -> {
             if (from.getDate() != null && to.getDate() != null) {
                 Date select1 = new java.sql.Date(from.getDate().getTime());
                 Date select2 = new java.sql.Date(to.getDate().getTime());
-                if (select1.after(select2)) {
-                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
-                    return;
-                }
-                System.out.println("Ngày được chọn (SQL) từ: " + select1);
-                System.out.println("Ngày được chọn (SQL) tới: " + select2);
                 DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
                 loadSanPham(DsSP);
+                return;
             } else {
-                TienIch.CustomMessage("Không thể để trống");
-                from.setDate(new Date(System.currentTimeMillis()));
+                from.setDate(first);
+                to.setDate(today);
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
+                loadSanPham(DsSP);
+                return;
             }
         });
-
         to.addPropertyChangeListener("date", _ -> {
             if (from.getDate() != null && to.getDate() != null) {
                 Date select1 = new java.sql.Date(from.getDate().getTime());
                 Date select2 = new java.sql.Date(to.getDate().getTime());
-                if (select1.after(select2)) {
-                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
-                    return;
-                }
-                System.out.println("Ngày được chọn (SQL) từ: " + select1);
-                System.out.println("Ngày được chọn (SQL) tới: " + select2);
                 DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
                 loadSanPham(DsSP);
+                return;
             } else {
-                TienIch.CustomMessage("Không thể để trống");
-                to.setDate(new Date(System.currentTimeMillis()));
+                from.setDate(first);
+                to.setDate(today);
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                DsSP = BaoCaoKhoTongHopBLL.getAllSPBanChay(select1, select2);
+                loadSanPham(DsSP);
+                return;
             }
         });
     }
@@ -359,7 +363,7 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                     DsSP2 = pntimkho.ketqua();
                     if (DsSP2.size() != 0) {
                         SEARCH2 = ((PanelTimKho) panel).trasearch();
-                        SEARCH22 = ((PanelTimKho)panel).stringsearch();
+                        SEARCH22 = ((PanelTimKho) panel).stringsearch();
                     } else {
                         TienIch.CustomMessage("Không tìm thấy");
                     }
@@ -390,8 +394,11 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                                     row.add(sanpham.getChuoiMaDH());
                                     data.add(row);
                                 }
-                                String[] columnNames = { "Mã sản phẩm", "Loại sản phẩm", "Sản phẩm", "Số lượng bán ra", "Của các đơn hàng"};
-                                String title = "DANH SÁCH SẢN PHẨM BÁN CHẠY TỪ "+TienIch.ddmmyyyy(new java.sql.Date(from.getDate().getTime())) + " ĐẾN " + TienIch.ddmmyyyy(new java.sql.Date(to.getDate().getTime()));
+                                String[] columnNames = { "Mã sản phẩm", "Loại sản phẩm", "Sản phẩm", "Số lượng bán ra",
+                                        "Của các đơn hàng" };
+                                String title = "DANH SÁCH SẢN PHẨM BÁN CHẠY TỪ "
+                                        + TienIch.ddmmyyyy(new java.sql.Date(from.getDate().getTime())) + " ĐẾN "
+                                        + TienIch.ddmmyyyy(new java.sql.Date(to.getDate().getTime()));
                                 String manv = this.MANV;
                                 // Gọi hàm exportToExcel
                                 XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH22);
@@ -416,7 +423,8 @@ public class PanelKhoTongHop extends JPanel implements ChangeListener, ActionLis
                                     row.add(sanpham.getSoLuongTon());
                                     data.add(row);
                                 }
-                                String[] columnNames = { "Mã sản phẩm", "Loại sản phẩm", "Nhà cung cấp", "Tên sản phẩm", "Đơn giá", "Số lượng tồn"};
+                                String[] columnNames = { "Mã sản phẩm", "Loại sản phẩm", "Nhà cung cấp", "Tên sản phẩm",
+                                        "Đơn giá", "Số lượng tồn" };
                                 String title = "DANH SÁCH SẢN PHẨM TỒN KHO";
                                 String manv = this.MANV;
                                 // Gọi hàm exportToExcel

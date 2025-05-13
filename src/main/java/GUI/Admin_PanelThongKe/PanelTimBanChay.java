@@ -150,6 +150,9 @@ public class PanelTimBanChay extends JPanel {
 
         TienIch.chiduocnhapso(txtMaSanPham);
         TienIch.chiduocnhapso(txtMaLoaiSanPham);
+
+        TienIch.chiDuocNhapChu(txtTenSanPham);
+        TienIch.chiDuocNhapChu(txtLoaiSanPham);
     }
 
     public ArrayList<SearchBanChayDTO> ketqua(Date from, Date to) {

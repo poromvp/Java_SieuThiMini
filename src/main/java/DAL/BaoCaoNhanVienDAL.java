@@ -63,8 +63,7 @@ public class BaoCaoNhanVienDAL {
                         +
                         "COALESCE(SUM(dh.TongTien), 0) AS DoanhSo, COUNT(dh.MaDH) AS TongDonHang " +
                         "FROM nhanvien nv " +
-                        "LEFT JOIN donhang dh ON nv.MaNV = dh.MaNV " +
-                        "LEFT JOIN taikhoan tk ON nv.MaNV = tk.MaNV ");
+                        "LEFT JOIN donhang dh ON nv.MaNV = dh.MaNV ");
         StringBuilder where = new StringBuilder("WHERE dh.NgayTT BETWEEN ? AND ?");
         param.add(from);
         param.add(to);
@@ -89,10 +88,6 @@ public class BaoCaoNhanVienDAL {
         if (search.getNgaySinhTo() != null) {
             where.append("AND nv.NgaySinh <= ? ");
             param.add(search.getNgaySinhTo());
-        }
-        if (!search.getQuyen().equals("TẤT CẢ")) {
-            where.append("AND tk.Quyen = ? ");
-            param.add(search.getQuyen().trim());
         }
         if (!search.getSDT().trim().isEmpty()) {
             where.append("AND nv.SDT = ? ");
@@ -209,7 +204,6 @@ public class BaoCaoNhanVienDAL {
                         +
                         "COALESCE(COUNT(dh.MaDH), 0) AS TongDonHang, COALESCE(SUM(dh.TongTien), 0) AS DoanhSo " +
                         "FROM nhanvien nv " +
-                        "LEFT JOIN taikhoan tk ON nv.MaNV = tk.MaNV " +
                         "LEFT JOIN donhang dh ON nv.MaNV = dh.MaNV ");
         StringBuilder where = new StringBuilder("WHERE nv.TrangThai = 1 ");
 
@@ -233,10 +227,6 @@ public class BaoCaoNhanVienDAL {
         if (search.getNgaySinhTo() != null) {
             where.append("AND nv.NgaySinh <= ? ");
             param.add(search.getNgaySinhTo());
-        }
-        if (!search.getQuyen().equals("TẤT CẢ")) {
-            where.append("AND tk.Quyen = ? ");
-            param.add(search.getQuyen().trim());
         }
         if (!search.getSDT().trim().isEmpty()) {
             where.append("AND nv.SDT = ? ");

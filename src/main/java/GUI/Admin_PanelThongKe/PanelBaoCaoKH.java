@@ -2,6 +2,8 @@ package GUI.Admin_PanelThongKe;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.*;
@@ -137,6 +139,13 @@ public class PanelBaoCaoKH extends JPanel implements ActionListener {
     private void loadThanhVien(ArrayList<TheThanhVienDTO> ttv) {
         model.setRowCount(0);
         for (TheThanhVienDTO tv : ttv) {
+            LocalDate today = LocalDate.now();
+            if(tv.getNgayKT().before(Date.valueOf(today))){
+                if(TheThanhVienBLL.deleteMember(tv.getMaTV())){
+                    System.out.println("Đã khóa "+tv.getMaTV());
+                    continue;
+                }
+            }
             model.addRow(new Object[] {
                     tv.getMaTV(),
                     tv.getTenTV(),

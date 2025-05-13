@@ -258,6 +258,13 @@ public class PanelTimLoHang extends JPanel {
                 TienIch.chiduocnhapso(txtMaNCC);
                 TienIch.chiduocnhapso(txtMaSP);
                 TienIch.chiduocnhapso(txtMaLoHang);
+
+                TienIch.chiduocnhapDDMMYYYY(dateFrom);
+                TienIch.chiduocnhapDDMMYYYY(dateTo);
+
+                TienIch.chiDuocNhapChu(txtTenNV);
+                TienIch.chiDuocNhapChu(txtTenNCC);
+                TienIch.chiDuocNhapChu(txtTenSP);
         }
 
         public ArrayList<PhieuNhapHangDTO> ketqua() {

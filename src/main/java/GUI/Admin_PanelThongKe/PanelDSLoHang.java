@@ -12,7 +12,6 @@ import BLL.NhanVienBLL;
 import BLL.NhapHangBLL;
 import DTO.PhieuNhapHangDTO;
 import DTO.SearchLoHangDTO;
-import DTO.TheThanhVienDTO;
 import GUI.ComponentCommon.StyledTable;
 import GUI.ComponentCommon.TienIch;
 import java.util.List;

@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableModel;
 import BLL.DonHangBLL;
 import BLL.KhuyenMaiBLL;
 import BLL.NhanVienBLL;
-import BLL.TaiKhoanBLL;
 import BLL.TheThanhVienBLL;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
@@ -91,7 +90,7 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.gridheight = 6;
+        gbc.gridheight = 5;
         JLabel avt = new JLabel();
         TienIch.anhAVT(avt, nv.getImage(), 200, 250, "NV");
         pn1.add(avt, gbc);
@@ -147,42 +146,15 @@ public class PanelXemNV extends JPanel implements ActionListener {
 
         gbc.gridx = 1;
         gbc.gridy = 4;
-        JLabel cvu = new JLabel("Chức vụ:");
-        TienIch.labelStyle(cvu, 4, 15, null);
-        pn1.add(cvu, gbc);
-
-        gbc.gridx = 2;
-        gbc.gridy = 4;
-        lbChucVu = new JLabel(new TaiKhoanBLL().getQuyenNV(nv.getMaNV() + ""));
-        TienIch.labelStyle(lbChucVu, 2, 15, null);
-        pn1.add(lbChucVu, gbc);
-
-        gbc.gridx = 1;
-        gbc.gridy = 5;
         JLabel id = new JLabel("ID:");
         TienIch.labelStyle(id, 4, 15, null);
         pn1.add(id, gbc);
 
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 4;
         lbID = new JLabel(nv.getMaNV() + "");
         TienIch.labelStyle(lbID, 2, 15, null);
         pn1.add(lbID, gbc);
-
-        gbc.gridx = 3;
-        gbc.gridy = 0;
-        JLabel gthieu = new JLabel("Giới thiệu: ");
-        TienIch.labelStyle(gthieu, 4, 15, null);
-        // pn1.add(gthieu, gbc);
-
-        gbc.gridx = 4;
-        gbc.gridy = 0;
-        gbc.gridwidth = 6;
-        gbc.gridheight = 6;
-        GioiThieu = new JTextArea(6, 6);
-        GioiThieu.setEditable(false);
-        GioiThieu.setText("tôi thích công việc này, bla bla...");
-        // pn1.add(GioiThieu, gbc);
     }
 
     JLabel lbTongDonHang, lbDoanhSo, lbLuong;

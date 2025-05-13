@@ -5,7 +5,6 @@ public class SearchNhanVienDTO {
     public String tenNV;
     public String diaChi;
     public Date ngaySinhFrom, ngaySinhTo;
-    public String quyen;
     public String SDT;
     public int maDH;
     public int tongDHMin, tongDHMax;
@@ -14,7 +13,7 @@ public class SearchNhanVienDTO {
     public String order, by;
     public SearchNhanVienDTO() {
     }
-    public SearchNhanVienDTO(int maNV, String tenNV, String diaChi, Date ngaySinhFrom, Date ngaySinhTo, String quyen,
+    public SearchNhanVienDTO(int maNV, String tenNV, String diaChi, Date ngaySinhFrom, Date ngaySinhTo,
             String sDT, int maDH, int tongDHMin, int tongDHMax, int doanhSoMin, int doanhSoMax, int luongMin,
             int luongMax, String order, String by) {
         this.maNV = maNV;
@@ -22,7 +21,6 @@ public class SearchNhanVienDTO {
         this.diaChi = diaChi;
         this.ngaySinhFrom = ngaySinhFrom;
         this.ngaySinhTo = ngaySinhTo;
-        this.quyen = quyen;
         SDT = sDT;
         this.maDH = maDH;
         this.tongDHMin = tongDHMin;
@@ -63,12 +61,6 @@ public class SearchNhanVienDTO {
     }
     public void setNgaySinhTo(Date ngaySinhTo) {
         this.ngaySinhTo = ngaySinhTo;
-    }
-    public String getQuyen() {
-        return quyen;
-    }
-    public void setQuyen(String quyen) {
-        this.quyen = quyen;
     }
     public String getSDT() {
         return SDT;

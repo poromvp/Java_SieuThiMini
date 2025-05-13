@@ -16,7 +16,7 @@ public class PanelTimVN extends JPanel {
 
         private StyledTextField txtMaNV, txtTenNV, txtDiaChi, txtSoDienThoai, txtMaDonHang;
         private JDateChooser dateSinhFrom, dateSinhTo;
-        private JComboBox<String> cbChucVu, cbSapXep, cbTheoCot;
+        private JComboBox<String> cbSapXep, cbTheoCot;
         private JSpinner minTongDonHang, maxTongDonHang, minDoanhSo, maxDoanhSo, minLuong, maxLuong;
 
         public PanelTimVN() {
@@ -68,12 +68,12 @@ public class PanelTimVN extends JPanel {
                 gbc.gridy = 0;
                 add(txtDiaChi, gbc);
 
-                // GIF - chiếm 2 cột, 5 dòng
+                // GIF - chiếm 2 cột, 6 dòng
                 JLabel gifIMG = new JLabel();
-                TienIch.anhGif(gifIMG, "searching.gif", 320, 180);
+                TienIch.anhGif(gifIMG, "searching.gif", 320, 220);
                 gbc.gridx = 4;
-                gbc.gridy = 2;
-                gbc.gridheight = 5;
+                gbc.gridy = 1;
+                gbc.gridheight = 6;
                 gbc.gridwidth = 2;
                 add(gifIMG, gbc);
                 gbc.gridheight = 1;
@@ -109,18 +109,6 @@ public class PanelTimVN extends JPanel {
                 gbc.gridx = 3;
                 gbc.gridy = 1;
                 add(dateSinhTo, gbc);
-
-                JLabel lbChucVu = new JLabel("Chức vụ");
-                TienIch.timStyle(lbChucVu);
-                gbc.gridx = 4;
-                gbc.gridy = 1;
-                add(lbChucVu, gbc);
-
-                cbChucVu = new JComboBox<>(new String[] { "TẤT CẢ", "ADMIN", "QUẢN LÝ KHO", "NHÂN VIÊN" });
-                TienIch.timStyle(cbChucVu);
-                gbc.gridx = 5;
-                gbc.gridy = 1;
-                add(cbChucVu, gbc);
 
                 // Dòng 2: Số điện thoại, Mã đơn hàng
                 JLabel lbSoDienThoai = new JLabel("Số điện thoại");
@@ -274,7 +262,6 @@ public class PanelTimVN extends JPanel {
                                 txtDiaChi.getText(),
                                 ngayTu,
                                 ngayDen,
-                                (String) cbChucVu.getSelectedItem(),
                                 txtSoDienThoai.getText(),
                                 maDH,
                                 (int) minTongDonHang.getValue(),
@@ -300,7 +287,6 @@ public class PanelTimVN extends JPanel {
                                 txtDiaChi.getText(),
                                 ngayTu,
                                 ngayDen,
-                                (String) cbChucVu.getSelectedItem(),
                                 txtSoDienThoai.getText(),
                                 maDH,
                                 (int) minTongDonHang.getValue(),
@@ -326,7 +312,6 @@ public class PanelTimVN extends JPanel {
                                 txtDiaChi.getText().trim(),
                                 ngayTu,
                                 ngayDen,
-                                (String) cbChucVu.getSelectedItem(),
                                 txtSoDienThoai.getText().trim(),
                                 maDH,
                                 (int) minTongDonHang.getValue(),
@@ -360,7 +345,6 @@ public class PanelTimVN extends JPanel {
                 if (ngayTu != null && ngayDen != null) {
                         search.add("Ngày sinh từ: " + TienIch.ddmmyyyy(ngayTu) + " đến: " + TienIch.ddmmyyyy(ngayDen));
                 }
-                search.add("Chức vụ: " + (String) cbChucVu.getSelectedItem());
                 if (!txtSoDienThoai.getText().trim().isEmpty()) {
                         search.add("Số điện thoại: " + txtSoDienThoai.getText().trim());
                 }

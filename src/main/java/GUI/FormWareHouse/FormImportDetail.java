@@ -1,6 +1,7 @@
 package GUI.FormWareHouse;
 
 import BLL.ChiTietNhapHangBLL;
+import BLL.NhanVienBLL;
 import BLL.NhapHangBLL;
 import DTO.ChiTietPNHangDTO;
 import DTO.PhieuNhapHangDTO;
@@ -22,6 +23,7 @@ import java.util.Locale;
 public class FormImportDetail extends JPanel {
     private ChiTietNhapHangBLL chiTietBLL = new ChiTietNhapHangBLL();
     private NhapHangBLL nhapHangBLL = new NhapHangBLL();
+    private NhanVienBLL nhanVienBLL = new NhanVienBLL();
     private int maPNH;
     private StyledTable table;
     private  SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -44,6 +46,10 @@ public class FormImportDetail extends JPanel {
 
         infoPanel.add(new JLabel("Mã đơn nhập hàng:"));
         infoPanel.add(new JLabel(String.valueOf(phieuNhap.getMaPNH())));
+        infoPanel.add(new JLabel("Mã nhân viên:"));
+        infoPanel.add(new JLabel(String.valueOf(phieuNhap.getMaNV())));
+        infoPanel.add(new JLabel("Tên nhân viên:"));
+        infoPanel.add(new JLabel(nhanVienBLL.getNhanVienById(phieuNhap.getMaNV()).getTenNV()));
         infoPanel.add(new JLabel("Ngày nhập:"));
         infoPanel.add(new JLabel(dateFormat.format(phieuNhap.getNgayNhap())));
         infoPanel.add(new JLabel("Tổng tiền:"));

@@ -855,7 +855,7 @@ public class TienIch {
 
             // Kiểm tra nếu người dùng nhấn Cancel hoặc đóng dialog
             if (input == null) {
-                CustomMessage("Đã hủy nhập mã thành viên");
+                CustomMessage("Đã hủy");
                 return null; // Trả về null nếu hủy
             }
 

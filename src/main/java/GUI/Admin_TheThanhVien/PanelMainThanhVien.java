@@ -56,7 +56,9 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         GridBagConstraints gbc = new GridBagConstraints();
 
         btnThem = new JButton("Thêm");
+        btnThem.setToolTipText("Click chuột phải để nhập bằng danh sách");
         btnKhoa = new JButton("Khóa");
+        btnKhoa.setToolTipText("Click chuột phải để mở khóa");
         btnSua = new JButton("Sửa");
         btnTim = new JButton("Tìm kiếm");
         btnXemBlock = new JButton("<html><center>DS TTV Đã Khóa</center><html>");
@@ -121,9 +123,9 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         model.setRowCount(0);
         for (TheThanhVienDTO tv : ttv) {
             LocalDate today = LocalDate.now();
-            if(tv.getNgayKT().before(Date.valueOf(today))){
-                if(TheThanhVienBLL.deleteMember(tv.getMaTV())){
-                    System.out.println("Đã khóa "+tv.getMaTV());
+            if (tv.getNgayKT().before(Date.valueOf(today))) {
+                if (TheThanhVienBLL.deleteMember(tv.getMaTV())) {
+                    System.out.println("Đã khóa " + tv.getMaTV());
                     continue;
                 }
             }
@@ -221,94 +223,104 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
             PanelXemDSLock panel = new PanelXemDSLock(MANV);
             JOptionPane.showMessageDialog(null, panel, "Danh sách TTV đã khóa", JOptionPane.PLAIN_MESSAGE);
         } else if (e.getSource() == btnThem) {
-            PanelThemThanhVien panel = new PanelThemThanhVien();
-            int result = JOptionPane.showConfirmDialog(null, panel, "Thêm",
-                    JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-            if (result == JOptionPane.OK_OPTION) {
-                switch (panel.ktranull()) {
-                    case 1:
+            while (true) {
+                PanelThemThanhVien panel = new PanelThemThanhVien();
+                int result = JOptionPane.showConfirmDialog(null, panel, "Thêm",
+                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                if (result == JOptionPane.OK_OPTION) {
+                    int check = panel.ktranull();
+                    if (check == 1) {
                         String kq = TheThanhVienBLL.addMember(panel.create1TV());
                         TTV = TheThanhVienBLL.getAllMembersACTIVE();
                         TienIch.CustomMessage(kq);
                         loadThanhVien(TTV);
                         break;
-                    case 6:
+                    } else if (check == 6) {
                         TienIch.CustomMessage("Số điện thoại phải gồm 10 số");
-                        break;
-                    default:
+                    } else {
                         TienIch.CustomMessage("Phải nhập đầy đủ thông tin");
-                        break;
+                    }
+                } else {
+                    TienIch.CustomMessage("Đã hủy thêm thành viên!");
+                    break;
                 }
-
-            } else {
-                TienIch.CustomMessage("Đã hủy thêm thành viên!");
             }
         } else if (e.getSource() == btnSua) {
-            Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Sửa", "");
-            if (maTV != null) {
-                TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
-                if (member != null) {
-                    if (member.getTrangThai().equals("INACTIVE")) {
-                        TienIch.CustomMessage("Thành viên này đã bị khóa, không thể sửa");
-                    } else {
-                        PanelSuaThanhVien panel = new PanelSuaThanhVien(member);
-                        int result = JOptionPane.showConfirmDialog(null, panel, "Sửa thông tin thành viên",
-                                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-                        if (result == JOptionPane.OK_OPTION) {
-                            switch (panel.ktranull()) {
-                                case 1:
-                                    boolean success = TheThanhVienBLL.updateMember(panel.getDTOTheThanhVien());
-                                    if (success) {
-                                        TienIch.CustomMessage("Cập nhật thành viên thành công!");
-                                        TTV = TheThanhVienBLL.getAllMembersACTIVE();
-                                        loadThanhVien(TTV);
-                                    } else {
-                                        if (TheThanhVienBLL
-                                                .getMemberByPhone(panel.getDTOTheThanhVien().getSdt()) != null) {
-                                            TienIch.CustomMessage(
-                                                    "Cập nhật thất bại do số điện thoại này đã có người dùng rồi");
-                                        } else {
-                                            TienIch.CustomMessage("Cập nhật thất bại");
-                                        }
-                                    }
-                                    break;
-                                case 6:
-                                    TienIch.CustomMessage("Số điện thoại phải có 10 số");
-                                    break;
-                                default:
-                                    TienIch.CustomMessage("Không được để trống");
-                                    break;
-                            }
+            while (true) {
+                Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Sửa", "");
+                if (maTV != null) {
+                    TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
+                    if (member != null) {
+                        if (member.getTrangThai().equals("INACTIVE")) {
+                            TienIch.CustomMessage("Thành viên này đã bị khóa, không thể sửa");
                         } else {
-                            TienIch.CustomMessage("Đã hủy sửa thành viên");
+                            while (true) {
+                                PanelSuaThanhVien panel = new PanelSuaThanhVien(member);
+                                int result = JOptionPane.showConfirmDialog(null, panel, "Sửa thông tin thành viên",
+                                        JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+                                if (result == JOptionPane.OK_OPTION) {
+                                    int check = panel.ktranull();
+                                    if (check == 1) {
+                                        boolean success = TheThanhVienBLL.updateMember(panel.getDTOTheThanhVien());
+                                        if (success) {
+                                            TienIch.CustomMessage("Cập nhật thành viên thành công!");
+                                            TTV = TheThanhVienBLL.getAllMembersACTIVE();
+                                            loadThanhVien(TTV);
+                                            break;
+                                        } else {
+                                            if (TheThanhVienBLL
+                                                    .getMemberByPhone(panel.getDTOTheThanhVien().getSdt()) != null) {
+                                                TienIch.CustomMessage(
+                                                        "Cập nhật thất bại do số điện thoại này đã có người dùng rồi");
+                                            } else {
+                                                TienIch.CustomMessage("Cập nhật thất bại");
+                                                break;
+                                            }
+                                        }
+                                    } else if (check == 6) {
+                                        TienIch.CustomMessage("Số điện thoại phải có 10 số");
+                                    } else {
+                                        TienIch.CustomMessage("Không được để trống");
+                                    }
+                                } else {
+                                    TienIch.CustomMessage("Đã hủy sửa thành viên này");
+                                    break;
+                                }
+                            }
                         }
+                    } else {
+                        TienIch.CustomMessage("Mã thành viên không tồn tại");
                     }
                 } else {
-                    TienIch.CustomMessage("Mã thành viên không tồn tại");
+                    break;
                 }
             }
-        } else if (e.getSource() == btnKhoa)
-
-        {
-            Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Khóa", "");
-            if (maTV != null) {
-                TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
-                if (member != null) {
-                    if (TheThanhVienBLL.getMemberById(maTV).getTrangThai().equals("INACTIVE")) {
-                        TienIch.CustomMessage("Thành viên này đã khóa sẵn rồi!");
-                    } else {
-                        boolean success = TheThanhVienBLL.deleteMember(maTV);
-                        if (success) {
-                            TienIch.CustomMessage("Khóa thành viên thành công!");
-                            TTV = TheThanhVienBLL.getAllMembersACTIVE();
-                            loadThanhVien(TTV);
+        } else if (e.getSource() == btnKhoa) {
+            while (true) {
+                Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Khóa", "");
+                if (maTV != null) {
+                    TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
+                    if (member != null) {
+                        if (TheThanhVienBLL.getMemberById(maTV).getTrangThai().equals("INACTIVE")) {
+                            TienIch.CustomMessage("Thành viên này đã khóa sẵn rồi!");
                         } else {
-                            TienIch.CustomMessage("Khóa thành viên thất bại");
+                            boolean success = TheThanhVienBLL.deleteMember(maTV);
+                            if (success) {
+                                TienIch.CustomMessage("Khóa thành viên thành công!");
+                                TTV = TheThanhVienBLL.getAllMembersACTIVE();
+                                loadThanhVien(TTV);
+                                break;
+                            } else {
+                                TienIch.CustomMessage("Khóa thành viên thất bại");
+                                break;
+                            }
                         }
+                    } else {
+                        TienIch.CustomMessage("Mã thành viên không tồn tại");
                     }
                 } else {
-                    TienIch.CustomMessage("Mã thành viên không tồn tại");
+                    break;
                 }
             }
         }
@@ -344,29 +356,37 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                         TienIch.CustomMessage("Lỗi khi nhập từ Excel: " + ex.getMessage());
                     }
                 } else {
-                    TienIch.CustomMessageNormal("Hủy import");
+                    TienIch.setlookandfeel(false, null);
+                    TienIch.setDarkUI();
+                    TienIch.CustomMessage("Hủy import");
                 }
                 TienIch.setlookandfeel(false, null);
             } else if (e.getSource() == btnKhoa) {
-                // Nhấp chuột phải vào btnKhoa: Mở khóa thành viên
-                Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Mở Khóa", "");
-                if (maTV != null) {
-                    TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
-                    if (member != null) {
-                        if (member.getTrangThai().equals("ACTIVE")) {
-                            TienIch.CustomMessage("Thành viên này đã mở khóa sẵn rồi!");
-                        } else {
-                            boolean success = TheThanhVienBLL.UndeleteMember(maTV, member.getNgayKT());
-                            if (success) {
-                                TienIch.CustomMessage("Mở khóa thành viên thành công!");
-                                TTV = TheThanhVienBLL.getAllMembersACTIVE();
-                                loadThanhVien(TTV);
+                while (true) {
+                    // Nhấp chuột phải vào btnKhoa: Mở khóa thành viên
+                    Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Mở Khóa", "");
+                    if (maTV != null) {
+                        TheThanhVienDTO member = TheThanhVienBLL.getMemberById(maTV);
+                        if (member != null) {
+                            if (member.getTrangThai().equals("ACTIVE")) {
+                                TienIch.CustomMessage("Thành viên này đã mở khóa sẵn rồi!");
                             } else {
-                                TienIch.CustomMessage("Mở khóa thành viên thất bại");
+                                boolean success = TheThanhVienBLL.UndeleteMember(maTV, member.getNgayKT());
+                                if (success) {
+                                    TienIch.CustomMessage("Mở khóa thành viên thành công!");
+                                    TTV = TheThanhVienBLL.getAllMembersACTIVE();
+                                    loadThanhVien(TTV);
+                                    break;
+                                } else {
+                                    TienIch.CustomMessage("Mở khóa thành viên thất bại");
+                                    break;
+                                }
                             }
+                        } else {
+                            TienIch.CustomMessage("Mã thành viên không tồn tại");
                         }
                     } else {
-                        TienIch.CustomMessage("Mã thành viên không tồn tại");
+                        break;
                     }
                 }
             }

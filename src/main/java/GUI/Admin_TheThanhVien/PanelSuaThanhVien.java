@@ -61,7 +61,7 @@ public class PanelSuaThanhVien extends JPanel {
         if (member != null) {
             txtTenTV.setText(member.getTenTV());
             dateNgaySinh.setDate(member.getNgaySinh());
-            System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
+            //System.out.println("Ngày sinh: "+TienIch.ddmmyyyy(dateNgaySinh.getDate()));
             txtDiaChi.setText(member.getDiaChi());
             txtSDT.setText(member.getSdt());
             tenAnh = member.getTenAnh();

@@ -90,7 +90,7 @@ public class ExportPdfImport {
                 document.add(subheading);
 
                 // Bảng thông tin phiếu nhập hàng 2 cột
-                PdfPTable infoTable = new PdfPTable(2);
+                PdfPTable infoTable = new PdfPTable(1);
                 infoTable.setWidthPercentage(100);
                 infoTable.setSpacingBefore(10f);
                 infoTable.setSpacingAfter(10f);
@@ -109,7 +109,7 @@ public class ExportPdfImport {
 
                 double tongTien = chiTietBLL.calculateTongTien(phieuNhap.getMaPNH());
                 addInfoCell(infoTable, "Tổng tiền: " + currencyFormat.format(tongTien), fontNormal);
-                addInfoCell(infoTable, "Trạng thái: " + phieuNhap.getTrangThai(), fontNormal);
+//                addInfoCell(infoTable, "Trạng thái: " + phieuNhap.getTrangThai(), fontNormal);
 
                 document.add(infoTable);
 
@@ -170,7 +170,7 @@ public class ExportPdfImport {
                 supplierCell.addElement(new Paragraph("Đại diện nhà cung cấp", fontBold));
                 supplierCell.addElement(new Paragraph("(Ký, ghi rõ họ tên)", fontNormal));
                 supplierCell.addElement(new Paragraph("\n\n\n", fontNormal)); // Khoảng trống cho chữ ký
-                supplierCell.addElement(new Paragraph(nhaCungCap != null ? nhaCungCap.getTenNCC() : "", fontNormal));
+//                supplierCell.addElement(new Paragraph(nhaCungCap != null ? nhaCungCap.getTenNCC() : "", fontNormal));
                 signatureTable.addCell(supplierCell);
 
                 document.add(signatureTable);

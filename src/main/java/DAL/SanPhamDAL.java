@@ -105,7 +105,7 @@ public class SanPhamDAL {
     }
 
     public static boolean deleteProduct(int id) {
-        String sql = "DELETE FROM SanPham WHERE maSP = ?";
+        String sql = "UPDATE SanPham SET TrangThAI='INACTIVE' WHERE maSP = ?";
         return DBConnection.executeUpdate(sql, id) > 0;
     }
 

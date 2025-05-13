@@ -4,6 +4,7 @@ import BLL.ChiTietNhapHangBLL;
 import BLL.NhapHangBLL;
 import DTO.ChiTietPNHangDTO;
 import DTO.PhieuNhapHangDTO;
+import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
 import PDF.ExportPdfImport;
 
@@ -30,10 +31,10 @@ public class FormImportDetail extends JPanel {
         setLayout(new BorderLayout());
         setBackground(Color.white);
 
-        // Lấy thông tin phiếu nhập
+
         PhieuNhapHangDTO phieuNhap = nhapHangBLL.getPhieuNhapHangById(maPNH);
 
-        // Panel thông tin chung
+
         JPanel infoPanel = new JPanel(new GridLayout(3, 2, 10, 10));
         infoPanel.setBackground(Color.white);
         infoPanel.setBorder(BorderFactory.createTitledBorder("Thông tin đơn nhập hàng"));
@@ -51,7 +52,7 @@ public class FormImportDetail extends JPanel {
 
         add(infoPanel, BorderLayout.NORTH);
 
-        // Tạo bảng chi tiết
+
         String[] headerCol = {"STT", "Mã sản phẩm", "Mã lô hàng", "Số lượng", "Giá nhập","Ngày sản xuất","Hạn sử dụng","Thành tiền"};
         ArrayList<ChiTietPNHangDTO> chiTietList = chiTietBLL.getChiTietByMaPNH(maPNH);
 
@@ -63,11 +64,11 @@ public class FormImportDetail extends JPanel {
         scrollPane.setBackground(Color.white);
         add(scrollPane, BorderLayout.CENTER);
 
-//        // Panel nút chức năng
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        JButton exportButton = new JButton("Xuất PDF");
 
-// Thêm ActionListener cho nút Xuất PDF
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonPanel.setBackground(Color.white);
+        ButtonCustom exportButton = new ButtonCustom("Xuất pdf","exportPdf",16,20,20);
+
         exportButton.addActionListener(e -> {
             ExportPdfImport exportPdf = new ExportPdfImport();
             exportPdf.exportPDF(phieuNhap);

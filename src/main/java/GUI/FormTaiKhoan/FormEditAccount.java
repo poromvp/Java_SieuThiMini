@@ -91,7 +91,14 @@ public class FormEditAccount extends JDialog {
                         tk.setTrangThai(cbTrangThai.getSelectedItem().equals("Đang hoạt động") ? "ACTIVE" : "INACTIVE");
 
                         TaiKhoanBLL bll = new TaiKhoanBLL();
-                                      
+                        if (bll.kiemTraName(tk.getTenTK(),tk.getMaNV())) {
+                            JOptionPane.showMessageDialog(null, "Tên tài khoản đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+                        if (bll.kiemTraGmail(tk.getGmail(),tk.getMaNV())) {
+                            JOptionPane.showMessageDialog(null, "Gmail đã được sử dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
+                            return ;
+                        }
                         if (!FormAddAccount.isValidData(tk)) {
                             return ;
                         }

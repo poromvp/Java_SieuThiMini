@@ -146,6 +146,7 @@ public class TienIch {
     }
 
     public static void labelStyle(JLabel label, int rank, int size, String fileIcon) {
+        label.setToolTipText(label.getText());
         // Đặt font chữ
         label.setFont(new Font("Arial", Font.BOLD, size));
 
@@ -324,6 +325,13 @@ public class TienIch {
             // nào đó.
     }
 
+    public static Date addTwoYearsToDate(Date ngayBD) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(ngayBD); // Đặt thời gian cho calendar bằng ngày gốc
+        calendar.add(Calendar.YEAR, 2); // Thêm 2 năm
+        return new Date(calendar.getTimeInMillis()); // Trả về ngày mới sau khi cộng thêm 2 năm
+    }
+
     public static void checkngayKT(JDateChooser day, Date ngayBD, Date ngayKT) {
         // Kiểm tra khi người dùng tự gõ tay
         day.getDateEditor().addPropertyChangeListener("date", _ -> {
@@ -331,56 +339,185 @@ public class TienIch {
             if (selectedDate != null && selectedDate.before(ngayBD)) {
                 CustomMessage("Không thể chọn ngày trước ngày bắt đầu được!");
                 day.setDate(ngayKT);
-            } else if (selectedDate != null && selectedDate.after(ngayBD) && selectedDate.before(ngayKT)) {
-                CustomMessage("Ngày kết thúc phải cách ngày bắt đầu ít nhất 2 năm!");
-                day.setDate(ngayKT);
+            } else {// Tính ngày cách 2 năm sau ngày bắt đầu
+                if (selectedDate.before(addTwoYearsToDate(ngayBD))) {
+                    CustomMessage("Ngày kết thúc phải cách ngày bắt đầu ít nhất 2 năm!");
+                    day.setDate(ngayKT);
+                }
             }
         });
     }
 
+    private static Date removeTime(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal.getTime();
+        // Lý do là do cách bạn so sánh hai ngày bằng Date.after() không xét đến
+        // giờ/phút/giây, và bản chất là ngày bạn chọn tuy "giống nhau", nhưng có thể có
+        // sự khác biệt ở phần thời gian (time) dẫn đến việc select1.after(select2) trả
+        // về true.
+    }
+
     public static void checkFromTo(JDateChooser from, JDateChooser to) {
+        // Dùng một cờ (isAdjusting) để tạm vô hiệu hóa tạm thời listener khi đang chỉnh
+        // sửa bằng code, tránh kích hoạt chồng lấn.
+        final boolean[] isAdjusting = { false }; // Dùng mảng để thay đổi được trong lambda
+
         from.addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
             if (from.getDate() != null && to.getDate() != null) {
-                Date select1 = new java.sql.Date(from.getDate().getTime());
-                Date select2 = new java.sql.Date(to.getDate().getTime());
+                Date select1 = removeTime(from.getDate());
+                Date select2 = removeTime(to.getDate());
                 if (select1.after(select2)) {
+                    isAdjusting[0] = true;
                     TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
                     from.setDate(null);
                     to.setDate(null);
-                    return;
+                    isAdjusting[0] = false;
                 }
             }
         });
 
         to.addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = removeTime(from.getDate());
+                Date select2 = removeTime(to.getDate());
+                if (select1.after(select2)) {
+                    isAdjusting[0] = true;
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
+                    from.setDate(null);
+                    to.setDate(null);
+                    isAdjusting[0] = false;
+                }
+            }
+        });
+        // vì setDate() là thay đổi thuộc tính "date" → Java gọi tiếp
+        // PropertyChangeListener của đối tượng đó.
+    }
+
+    public static void checkFromToBanChay(JDateChooser from, JDateChooser to) {
+        // Ngày hôm nay
+        Date today = new Date(System.currentTimeMillis());
+
+        // Ngày đầu tiên của tháng
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = new Date(cal.getTimeInMillis());
+
+        final boolean[] isAdjusting = { false }; // Dùng mảng để thay đổi được trong lambda
+
+        from.addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
             if (from.getDate() != null && to.getDate() != null) {
                 Date select1 = new java.sql.Date(from.getDate().getTime());
                 Date select2 = new java.sql.Date(to.getDate().getTime());
                 if (select1.after(select2)) {
-                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
-                    from.setDate(null);
-                    to.setDate(null);
-                    return;
+                    isAdjusting[0] = true;
+                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc 1");
+                    from.setDate(firstDayOfMonth);
+                    to.setDate(today);
+                    isAdjusting[0] = false;
                 }
             }
         });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    isAdjusting[0] = true;
+                    TienIch.CustomMessageNormal("Ngày bắt đầu không thể lớn hơn ngày kết thúc 2");
+                    from.setDate(firstDayOfMonth);
+                    to.setDate(today);
+                    isAdjusting[0] = false;
+                }
+            }
+        });
+        // Dùng một cờ (isAdjusting) để tạm vô hiệu hóa tạm thời listener khi đang chỉnh
+        // sửa bằng code, tránh kích hoạt chồng lấn.
+        // vì setDate() là thay đổi thuộc tính "date" → Java gọi tiếp
+        // PropertyChangeListener của đối tượng đó.
+    }
+
+    public static void checkFromToTotNhat(JDateChooser from, JDateChooser to) {
+        // Ngày hôm nay
+        Date today = new Date(System.currentTimeMillis());
+
+        // Ngày đầu tiên của tháng
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        Date firstDayOfMonth = new Date(cal.getTimeInMillis());
+
+        final boolean[] isAdjusting = { false }; // Dùng mảng để thay đổi được trong lambda
+
+        from.addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    isAdjusting[0] = true;
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc 1");
+                    from.setDate(firstDayOfMonth);
+                    to.setDate(today);
+                    isAdjusting[0] = false;
+                }
+            }
+        });
+
+        to.addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
+            if (from.getDate() != null && to.getDate() != null) {
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                if (select1.after(select2)) {
+                    isAdjusting[0] = true;
+                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc 2");
+                    from.setDate(firstDayOfMonth);
+                    to.setDate(today);
+                    isAdjusting[0] = false;
+                }
+            }
+        });
+        // Dùng một cờ (isAdjusting) để tạm vô hiệu hóa tạm thời listener khi đang chỉnh
+        // sửa bằng code, tránh kích hoạt chồng lấn.
+        // vì setDate() là thay đổi thuộc tính "date" → Java gọi tiếp
+        // PropertyChangeListener của đối tượng đó.
     }
 
     public static void checkngaynhapdutuoi(JDateChooser day, Date ngay) {
+        final boolean[] isAdjusting = { false }; // cờ tránh lặp listener
+
         day.getDateEditor().addPropertyChangeListener("date", _ -> {
+            if (isAdjusting[0])
+                return;
+
             if (day != null && day.getDate() != null) {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(day.getDate());
                 int year = cal.get(Calendar.YEAR);
 
-                Date currentDay = new Date();
-                cal.setTime(currentDay);
-                int currentYear = cal.get(Calendar.YEAR);
+                Calendar now = Calendar.getInstance();
+                int currentYear = now.get(Calendar.YEAR);
 
                 if (currentYear - year < 18) {
+                    isAdjusting[0] = true; // bắt đầu điều chỉnh
                     CustomMessage("Chưa đủ 18 tuổi");
-                    day.setDate(ngay);
-                    return;
+                    day.setDate(ngay); // setDate sẽ gọi lại listener
+                    isAdjusting[0] = false; // kết thúc điều chỉnh
                 }
             }
         });
@@ -478,19 +615,22 @@ public class TienIch {
         lb.setIcon(new ImageIcon(resizedImg));
     }
 
-    /*public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
-        ImageIcon icon;
-        if (loai.equals("KH")) {
-            icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
-        } else {
-            icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
-        }
-        Image img = icon.getImage();
-        Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-        lb.setIcon(new ImageIcon(resizedImg));
-        lb.setHorizontalAlignment(SwingConstants.CENTER);
-        lb.setVerticalAlignment(SwingConstants.CENTER);
-    }*/
+    /*
+     * public static void anhAVT(JLabel lb, String file, int width, int height,
+     * String loai) {
+     * ImageIcon icon;
+     * if (loai.equals("KH")) {
+     * icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+     * } else {
+     * icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
+     * }
+     * Image img = icon.getImage();
+     * Image resizedImg = img.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+     * lb.setIcon(new ImageIcon(resizedImg));
+     * lb.setHorizontalAlignment(SwingConstants.CENTER);
+     * lb.setVerticalAlignment(SwingConstants.CENTER);
+     * }
+     */
 
     public static void anhAVT(JLabel lb, String file, int width, int height, String loai) {
         ImageIcon icon = null;
@@ -504,14 +644,16 @@ public class TienIch {
                 icon = new ImageIcon(TienIch.class.getResource("/images/avtMember/" + file));
             }
 
-            // Kiểm tra xem icon có hợp lệ không (nếu file không tồn tại, getResource trả về null)
+            // Kiểm tra xem icon có hợp lệ không (nếu file không tồn tại, getResource trả về
+            // null)
             if (icon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
                 throw new Exception("Hình ảnh không hợp lệ hoặc không tồn tại");
             }
         } catch (Exception e) {
-            // Nếu có lỗi (file không tồn tại, tên file không hợp lệ, hoặc ngoại lệ khác), sử dụng hình ảnh mặc định
+            // Nếu có lỗi (file không tồn tại, tên file không hợp lệ, hoặc ngoại lệ khác),
+            // sử dụng hình ảnh mặc định
             try {
-                icon = new ImageIcon(TienIch.class.getResource("/images/icon/"+defaultImage));
+                icon = new ImageIcon(TienIch.class.getResource("/images/icon/" + defaultImage));
                 if (icon.getImageLoadStatus() != java.awt.MediaTracker.COMPLETE) {
                     // Nếu cả error.jpg cũng không tồn tại, hiển thị thông báo trên JLabel
                     lb.setText("Không tìm thấy error.jpg");
@@ -973,7 +1115,8 @@ public class TienIch {
     }
 
     private static final int MAX_LENGTH_DATE = 10; // Độ dài tối đa cho định dạng dd/MM/yyyy
-    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{0,2}(/\\d{0,2}(/\\d{0,4})?)?"); // Kiểm tra định dạng tạm thời
+    private static final Pattern DATE_PATTERN = Pattern.compile("\\d{0,2}(/\\d{0,2}(/\\d{0,4})?)?"); // Kiểm tra định
+                                                                                                     // dạng tạm thời
 
     public static void chiduocnhapDDMMYYYY(JDateChooser dateChooser) {
         // Lấy JTextField bên trong JDateChooser
@@ -1029,6 +1172,70 @@ public class TienIch {
                             sdf.parse(newText);
                         } catch (ParseException e) {
                             CustomMessage("Ngày không hợp lệ! Vui lòng nhập lại theo định dạng dd/MM/yyyy.");
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+            });
+        }
+    }
+
+    public static void chiduocnhapDDMMYYYYNormal(JDateChooser dateChooser) {
+        // Lấy JTextField bên trong JDateChooser
+        JTextField editor = (JTextField) dateChooser.getDateEditor().getUiComponent();
+        Document doc = editor.getDocument();
+        if (doc instanceof AbstractDocument) {
+            ((AbstractDocument) doc).setDocumentFilter(new DocumentFilter() {
+                @Override
+                public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, 0, string)) {
+                        super.insertString(fb, offset, string, attr);
+                    }
+                }
+
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs)
+                        throws BadLocationException {
+                    if (isValidInput(fb, offset, length, text)) {
+                        super.replace(fb, offset, length, text, attrs);
+                    }
+                }
+
+                private boolean isValidInput(FilterBypass fb, int offset, int length, String text)
+                        throws BadLocationException {
+                    // Kiểm tra ký tự đầu vào: chỉ cho phép số và dấu /
+                    if (!text.matches("[0-9/]*")) {
+                        CustomMessageNormal("Chỉ được nhập số và dấu /!");
+                        return false;
+                    }
+
+                    // Lấy văn bản hiện tại và xây dựng văn bản mới sau khi thêm
+                    String oldText = fb.getDocument().getText(0, fb.getDocument().getLength());
+                    String newText = oldText.substring(0, offset) + text + oldText.substring(offset + length);
+
+                    // Kiểm tra độ dài tối đa
+                    if (newText.length() > MAX_LENGTH_DATE) {
+                        CustomMessageNormal("Định dạng ngày tối đa " + MAX_LENGTH_DATE + " ký tự (dd/MM/yyyy)!");
+                        return false;
+                    }
+
+                    // Kiểm tra định dạng tạm thời
+                    if (!DATE_PATTERN.matcher(newText).matches()) {
+                        CustomMessageNormal("Định dạng ngày không hợp lệ! Vui lòng nhập theo dd/MM/yyyy.");
+                        return false;
+                    }
+
+                    // Nếu văn bản đầy đủ (10 ký tự), kiểm tra định dạng ngày hợp lệ
+                    if (newText.length() == MAX_LENGTH_DATE) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                        sdf.setLenient(false); // Không cho phép ngày không hợp lệ (ví dụ: 32/13/2025)
+                        try {
+                            sdf.parse(newText);
+                        } catch (ParseException e) {
+                            CustomMessageNormal("Ngày không hợp lệ! Vui lòng nhập lại theo định dạng dd/MM/yyyy.");
                             return false;
                         }
                     }

@@ -252,7 +252,14 @@ public class PanelTimVN extends JPanel {
                 add(cbTheoCot, gbc);
 
                 TienIch.checkFromTo(dateSinhFrom, dateSinhTo);
-                TienIch.checkngaynhapdutuoi(dateSinhFrom, today);
+                TienIch.chiduocnhapDDMMYYYY(dateSinhFrom);
+                TienIch.chiduocnhapDDMMYYYY(dateSinhTo);
+
+                TienIch.chiduocnhapso(txtMaNV);
+                TienIch.chiduocnhapso(txtSoDienThoai);
+                TienIch.chiduocnhapso(txtMaDonHang);
+
+                TienIch.chiDuocNhapChu(txtTenNV);
         }
 
         public ArrayList<NhanVienDTO> ketqua(Date from, Date to) {

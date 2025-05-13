@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import BLL.BaoCaoKhoTongHopBLL;
 import BLL.BaoCaoNhanVienBLL;
 import DTO.NhanVienDTO;
 import DTO.SearchNhanVienDTO;
@@ -73,43 +74,44 @@ public class PanelTotNhat extends JPanel implements ActionListener {
 
         gbc.gridx = 3;
         pnTool.add(to);
-        sukien();
+
+        TienIch.checkFromToTotNhat(from, to);
+        khongthedetrong(firstDayOfMonth, today);
     }
 
-    public void sukien() {
+    public void khongthedetrong(Date first, Date today) {
         from.addPropertyChangeListener("date", _ -> {
             if (from.getDate() != null && to.getDate() != null) {
                 Date select1 = new java.sql.Date(from.getDate().getTime());
                 Date select2 = new java.sql.Date(to.getDate().getTime());
-                if (select1.after(select2)) {
-                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
-                    return;
-                }
-                System.out.println("Ngày được chọn (SQL) từ: " + select1);
-                System.out.println("Ngày được chọn (SQL) tới: " + select2);
                 DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
                 loadNhanVien(DsNV);
+                return;
             } else {
-                TienIch.CustomMessage("Không thể để trống");
-                from.setDate(new Date(System.currentTimeMillis()));
+                from.setDate(first);
+                to.setDate(today);
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
+                loadNhanVien(DsNV);
+                return;
             }
         });
-
         to.addPropertyChangeListener("date", _ -> {
             if (from.getDate() != null && to.getDate() != null) {
                 Date select1 = new java.sql.Date(from.getDate().getTime());
                 Date select2 = new java.sql.Date(to.getDate().getTime());
-                if (select1.after(select2)) {
-                    TienIch.CustomMessage("Ngày bắt đầu không thể lớn hơn ngày kết thúc");
-                    return;
-                }
-                System.out.println("Ngày được chọn (SQL) từ: " + select1);
-                System.out.println("Ngày được chọn (SQL) tới: " + select2);
                 DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
                 loadNhanVien(DsNV);
+                return;
             } else {
-                TienIch.CustomMessage("Không thể để trống");
-                to.setDate(new Date(System.currentTimeMillis()));
+                from.setDate(first);
+                to.setDate(today);
+                Date select1 = new java.sql.Date(from.getDate().getTime());
+                Date select2 = new java.sql.Date(to.getDate().getTime());
+                DsNV = BaoCaoNhanVienBLL.getTopNhanVienByDoanhSo(select1, select2);
+                loadNhanVien(DsNV);
+                return;
             }
         });
     }

@@ -256,6 +256,8 @@ public class PanelTimNVHD extends JPanel {
         add(cbTheoCot, gbc);
 
         TienIch.checkFromTo(dateTTFrom, dateTTTo);
+        TienIch.chiduocnhapDDMMYYYY(dateTTFrom);
+        TienIch.chiduocnhapDDMMYYYY(dateTTTo);
         TienIch.sukienSoSanh(minThanhTien, maxThanhTien);
 
         TienIch.chiduocnhapso(txtMaDonHang);
@@ -263,6 +265,11 @@ public class PanelTimNVHD extends JPanel {
         TienIch.chiduocnhapso(txtMaKhuyenMai);
         TienIch.chiduocnhapso(txtMaSanPham);
         TienIch.chiduocnhapso(txtMaLoaiSanPham);
+
+        TienIch.chiDuocNhapChu(txtTenKhachHang);
+        TienIch.chiDuocNhapChu(txtTenKhuyenMai);
+        TienIch.chiDuocNhapChu(txtTenSanPham);
+        TienIch.chiDuocNhapChu(txtTenLoaiSanPham);
     }
 
     public ArrayList<DonHangDTO> ketqua(int MaNV) {

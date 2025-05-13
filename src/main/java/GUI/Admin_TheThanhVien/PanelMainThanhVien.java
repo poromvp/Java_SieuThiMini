@@ -173,7 +173,6 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                             String manv = this.MANV;
                             // Gọi hàm exportToExcel
                             XuatFileExccel.exportToExcel(data, columnNames, title, manv, SEARCH2);
-                            TienIch.CustomMessage("Xuất file Excel thành công!");
                         } catch (Exception ex) {
                             TienIch.CustomMessage("Lỗi khi xuất file Excel: " + ex.getMessage());
                         }
@@ -181,7 +180,6 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                 } else {
                     if (TTV.size() != 0) {
                         PanelExport.InPDFTheThanhVienTheoSearch(TTV, SEARCH, MANV, "");
-                        panel.XuatPDF(model);
                     } else {
                         TienIch.CustomMessage("Không có gì để in");
                     }
@@ -274,6 +272,8 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
         if (SwingUtilities.isRightMouseButton(e)) {
             if (e.getSource() == btnThem) {
                 // Nhấp chuột phải vào btnThem: Nhập từ file Excel
+                TienIch.resetUI();
+                TienIch.setlookandfeel(true, null);
                 JFileChooser chooser = new JFileChooser("src/main/resources/file/import");
                 chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("File Excel", "xlsx", "xls"));
                 int result = chooser.showOpenDialog(this);
@@ -292,7 +292,10 @@ public class PanelMainThanhVien extends JPanel implements ActionListener, MouseL
                     } catch (Exception ex) {
                         TienIch.CustomMessage("Lỗi khi nhập từ Excel: " + ex.getMessage());
                     }
+                } else {
+                    TienIch.CustomMessageNormal("Hủy import");
                 }
+                TienIch.setlookandfeel(false, null);
             } else if (e.getSource() == btnKhoa) {
                 // Nhấp chuột phải vào btnKhoa: Mở khóa thành viên
                 Integer maTV = TienIch.getValidMemberId("Nhập Mã Thành Viên Cần Mở Khóa", "");

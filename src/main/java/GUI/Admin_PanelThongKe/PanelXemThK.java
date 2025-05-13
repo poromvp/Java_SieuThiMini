@@ -165,7 +165,7 @@ public class PanelXemThK extends JPanel {
         TienIch.labelStyle(lbDay, 4, 20, null);
 
         khach = TheThanhVienBLL.getMemberById(donhang.getMaKH());
-        lbGuest = new JLabel(khach.getTenTV());
+        lbGuest = new JLabel(khach!=null ? khach.getTenTV() : "Không có");
         TienIch.labelStyle(lbGuest, 4, 20, null);
 
         lbNV = new JLabel(LayChuoiTuBang(model, dong, 1));

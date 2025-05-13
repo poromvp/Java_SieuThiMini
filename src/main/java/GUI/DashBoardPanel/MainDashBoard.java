@@ -2,6 +2,8 @@ package GUI.DashBoardPanel;
 
 import javax.swing.*;
 
+import GUI.ComponentCommon.TienIch;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
@@ -55,7 +57,9 @@ public class MainDashBoard extends JPanel implements ActionListener {
             });
         }
     }
+
     public String MANV;
+
     public MainDashBoard(String MANV) {
         this.MANV = MANV;
         setLayout(new BorderLayout());
@@ -97,12 +101,13 @@ public class MainDashBoard extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exportItem) {
+            TienIch.setlookandfeel(true, null);
             JFileChooser fileChooser = new JFileChooser("src/main/resources/file/export");
             fileChooser.setDialogTitle("Lưu Báo Cáo");
             fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             fileChooser.setSelectedFile(new File("BaoCaoDoanhThu.pdf"));
             int userSelection = fileChooser.showSaveDialog(this);
-
+            TienIch.setlookandfeel(false, null);
             if (userSelection == JFileChooser.APPROVE_OPTION) {
                 JScrollPane scrollPane = (JScrollPane) this.getComponent(0);
                 JPanel pn1 = (JPanel) scrollPane.getViewport().getView();
@@ -110,6 +115,8 @@ public class MainDashBoard extends JPanel implements ActionListener {
                 vechart chart = (vechart) ((JScrollPane) panelChart.getComponent(0)).getViewport().getView();
                 PDFExporter.exportChartToPDFWithDialog(panelChart, chart.timeFilter, chart.selectedMonth,
                         chart.selectedYear, MANV); // Thay MANV_DEFAULT bằng mã nhân viên thực tế
+            } else {
+                TienIch.CustomMessageNormal("Hủy xuất file PDF");
             }
         }
     }

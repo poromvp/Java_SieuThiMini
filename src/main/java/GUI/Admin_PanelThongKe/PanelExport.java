@@ -2,7 +2,6 @@ package GUI.Admin_PanelThongKe;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,7 +10,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.swing.ButtonGroup;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -35,7 +33,6 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import java.sql.Date;
 
 import BLL.KhuyenMaiBLL;
 import BLL.LoaiSanPhamBLL;
@@ -48,6 +45,7 @@ import DTO.NhanVienDTO;
 import DTO.PhieuNhapHangDTO;
 import DTO.SanPhamDTO;
 import DTO.SearchBanChayDTO;
+import DTO.SearchFilterDTO;
 import DTO.SearchKHDHDTO;
 import DTO.SearchLoHangDTO;
 import DTO.SearchNVDHDTO;
@@ -81,13 +79,16 @@ public class PanelExport extends JPanel {
         rbExcel = new JRadioButton("");
         rbExcel.setIcon(TienIch.seticon(icon1));
         rbExcel.setHorizontalTextPosition(SwingConstants.LEFT);
+        TienIch.taoTitleBorder(rbExcel, "Excel");
+        TienIch.eventRadio(rbExcel);
         rbExcel.setBorderPainted(true);
-        
+
         rbPDF = new JRadioButton("");
         rbPDF.setIcon(TienIch.seticon(icon2));
         rbPDF.setHorizontalTextPosition(SwingConstants.LEFT);
+        TienIch.taoTitleBorder(rbPDF, "PDF");
+        TienIch.eventRadio(rbPDF);
         rbPDF.setBorderPainted(true);
-
 
         rbExcel.setForeground(Color.WHITE);
         rbPDF.setForeground(Color.WHITE);
@@ -109,7 +110,7 @@ public class PanelExport extends JPanel {
 
     public void XuatPDF(DefaultTableModel model) {
         this.tableModel = model;
-        TienIch.CustomMessage("Xuất file ra file PDF...");
+        TienIch.CustomMessageNormal("Xuất file ra file PDF...");
     }
 
     public void XuatExccel(JTable tb, String title) {
@@ -118,7 +119,7 @@ public class PanelExport extends JPanel {
 
     public void XuatExccel(DefaultTableModel model) {
         this.tableModel = model;
-        TienIch.CustomMessage("Xuất file ra file Excel...");
+        TienIch.CustomMessageNormal("Xuất file ra file Excel...");
     }
 
     // Trả về định dạng người dùng đã chọn
@@ -177,7 +178,7 @@ public class PanelExport extends JPanel {
                 document.add(pdfTable);
                 document.close();
 
-                TienIch.CustomMessage("Đã xuất file thành công!");
+                TienIch.CustomMessageNormal("Đã xuất file thành công!");
             } catch (Exception ex) {
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Lỗi khi xuất PDF: " + ex.getMessage());
@@ -401,13 +402,13 @@ public class PanelExport extends JPanel {
                 document.add(pdfTable);
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách thẻ thành viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách thẻ thành viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
         }
     }
@@ -415,6 +416,9 @@ public class PanelExport extends JPanel {
     public static void InPDFTheThanhVienTheoSearch(ArrayList<TheThanhVienDTO> list, SearchTheThanhVienDTO search,
             String MANV,
             String tua) {
+
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách thẻ thành viên");
@@ -623,19 +627,24 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách thẻ thành viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách thẻ thành viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFDonHangCuaTTVTheoSearch(ArrayList<DonHangDTO> list, SearchKHDHDTO search,
             TheThanhVienDTO member, String TONGCHITIEU, int SODONHANG, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách đơn hàng của thẻ thành viên");
@@ -916,18 +925,23 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách đơn hàng của thành viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách đơn hàng của thành viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFNhanVienTheoSearch(ArrayList<NhanVienDTO> list, SearchNhanVienDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách nhân viên");
@@ -1137,20 +1151,24 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách nhân viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách nhân viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
-
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFNhanVienTheoTotNhatSearch(ArrayList<NhanVienDTO> list, SearchNhanVienDTO search, Date from,
             Date to, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách nhân viên");
@@ -1366,19 +1384,24 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách nhân viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách nhân viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFDonHangCuaNVTheoSearch(ArrayList<DonHangDTO> list, SearchNVDHDTO search,
             NhanVienDTO nhanvien, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách đơn hàng do nhân viên làm");
@@ -1576,7 +1599,7 @@ public class PanelExport extends JPanel {
                 pdfTable.setSpacingBefore(10f);
 
                 // Header bảng
-                String[] headers = { "Mã ĐH", "KM", "Tên NV", "PTTToán", "Ngày TT", "Mã DTL",
+                String[] headers = { "Mã ĐH", "KM", "Tên KH", "PTTToán", "Ngày TT", "Mã DTL",
                         "Tiền KD", "Tổng tiền" };
                 for (String header : headers) {
                     PdfPCell cell = new PdfPCell(new Paragraph(header, fontHeader));
@@ -1662,19 +1685,24 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách đơn hàng của nhân viên thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách đơn hàng của nhân viên thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFSanPhamBanChaySearch(ArrayList<SearchBanChayDTO> list, SearchBanChayDTO search, Date from,
             Date to, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách sản phẩm bán chạy");
@@ -1842,18 +1870,23 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách sản phẩm bán chạy thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách sản phẩm bán chạy thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFSanPhamTonKhoSearch(ArrayList<SanPhamDTO> list, SearchTonKhoDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách sản phẩm tồn kho");
@@ -2037,18 +2070,23 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách sản phẩm tồn kho thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách sản phẩm tồn kho thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
     }
 
     public static void InPDFLoHangSearch(ArrayList<PhieuNhapHangDTO> list, SearchLoHangDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
         JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setDialogTitle("Chọn thư mục để lưu danh sách lô hàng");
@@ -2247,14 +2285,285 @@ public class PanelExport extends JPanel {
 
                 document.close();
 
-                TienIch.CustomMessage("Xuất danh sách phiếu nhập hàng thành công!");
+                TienIch.CustomMessageNormal("Xuất danh sách phiếu nhập hàng thành công!");
 
             } catch (java.io.FileNotFoundException e) {
-                TienIch.CustomMessage("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
             } catch (Exception e) {
                 e.printStackTrace();
-                TienIch.CustomMessage("Đã xảy ra lỗi khi xuất file!");
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
             }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
         }
+        TienIch.setlookandfeel(false, null);
+    }
+
+    public static void InPDFDonHang(ArrayList<DonHangDTO> list, SearchFilterDTO search, String MANV) {
+        TienIch.resetUI();
+        TienIch.setlookandfeel(true, null);
+        JFileChooser chooser = new JFileChooser("src/main/resources/file/export/");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setDialogTitle("Chọn thư mục để lưu danh sách đơn hàng");
+
+        int returnVal = chooser.showSaveDialog(null);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            File selectedFolder = chooser.getSelectedFile();
+            String filePath = selectedFolder.getAbsolutePath() + File.separator + "DanhSachDonHang_"
+                    + System.currentTimeMillis() + ".pdf";
+            try {
+                // Tạo document mới
+                Document document = new Document();
+                PdfWriter.getInstance(document, new FileOutputStream(filePath));
+                document.open();
+
+                // Font hỗ trợ tiếng Việt
+                String fontPath = "src/main/resources/fonts/arial.ttf";
+                BaseFont baseFont = BaseFont.createFont(fontPath, BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+                Font fontNormal = new Font(baseFont, 12);
+                Font fontBold = new Font(baseFont, 12, Font.BOLD);
+                Font fontTitle = new Font(baseFont, 20, Font.BOLD);
+                Font fontHeader = new Font(baseFont, 12, Font.BOLD, com.itextpdf.text.BaseColor.WHITE);
+
+                // Ngày tháng năm và tên người in
+                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                Date today = new Date(System.currentTimeMillis());
+                String currentDate = dateFormat.format(today);
+                String tenNhanVien = new NhanVienBLL().getNameNV(MANV); // Thay bằng tên nhân viên thực tế nếu có
+                Paragraph dateAndUser = new Paragraph("Ngày in: " + currentDate + " | Người in: " + tenNhanVien,
+                        fontNormal);
+                dateAndUser.setAlignment(com.itextpdf.text.Element.ALIGN_RIGHT);
+                document.add(dateAndUser);
+
+                // Logo
+                String imagePath = "src/main/resources/images/icon/Logo_Main.png";
+                Image logo = Image.getInstance(imagePath);
+                logo.scaleToFit(100, 100);
+                logo.setAlignment(Image.ALIGN_CENTER);
+                document.add(logo);
+
+                // Tiêu đề
+                Paragraph title = new Paragraph("DANH SÁCH ĐƠN HÀNG\n\n", fontTitle);
+                title.setAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                document.add(title);
+
+                // Tiêu chí lọc
+                if (search.getMaDH() != null) {
+                    if (search.getMaDH() != 0) {
+                        Paragraph ma = new Paragraph("Mã đơn hàng: " + search.getMaDH(), fontNormal);
+                        ma.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(ma);
+                    }
+                }
+                if (search.getNgayBD() != null && search.getNgayKT() != null) {
+                    Paragraph ngayTT = new Paragraph(
+                            "Ngày thanh toán từ: " + TienIch.ddmmyyyy(search.getNgayBD()) + " đến "
+                                    + TienIch.ddmmyyyy(search.getNgayKT()),
+                            fontNormal);
+                    ngayTT.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(ngayTT);
+                }
+                if (search.getTongTienMin() != 0 || search.getTongTienMax() != 0) {
+                    Paragraph thanhtien = new Paragraph(
+                            "Thành tiền từ: " + TienIch.formatVND(search.getTongTienMin()) + " đến "
+                                    + TienIch.formatVND(search.getTongTienMax()),
+                            fontNormal);
+                    document.add(thanhtien);
+                }
+                if (search.getPhuongThucTT() != null) {
+                    Paragraph ptttoan = new Paragraph("Phương thức thanh toán: " + search.getPhuongThucTT(),
+                            fontNormal);
+                    ptttoan.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(ptttoan);
+                }
+                if (search.getMaKH() != null) {
+                    if (search.getMaKH() != 0) {
+                        Paragraph maKH = new Paragraph("Mã khách hàng: " + search.getMaKH(), fontNormal);
+                        maKH.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(maKH);
+                    }
+                }
+                if (search.getTenKH() != null) {
+                    if (!search.getTenKH().trim().isEmpty()) {
+                        Paragraph tenKH = new Paragraph("Tên khách hàng: " + search.getTenKH(), fontNormal);
+                        tenKH.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(tenKH);
+                    }
+                }
+                if (search.getMaKM() != null) {
+                    if (search.getMaKM() != 0) {
+                        Paragraph maKM = new Paragraph("Mã khuyến mãi: " + search.getMaKM(), fontNormal);
+                        maKM.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(maKM);
+                    }
+                }
+                if (search.getTenKM() != null) {
+                    if (!search.getTenKM().trim().isEmpty()) {
+                        Paragraph tenKM = new Paragraph("Tên khuyến mãi: " + search.getTenKM(), fontNormal);
+                        tenKM.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(tenKM);
+                    }
+                }
+                if (search.getMaSP() != null) {
+                    if (search.getMaSP() != 0) {
+                        Paragraph maSP = new Paragraph("Mã sản phẩm: " + search.getMaSP(), fontNormal);
+                        maSP.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(maSP);
+                    }
+                }
+                if (search.getTenSP() != null) {
+                    if (!search.getTenSP().trim().isEmpty()) {
+                        Paragraph tenSP = new Paragraph("Tên sản phẩm: " + search.getTenSP(), fontNormal);
+                        tenSP.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(tenSP);
+                    }
+                }
+                if (search.getMaLSP() != null) {
+                    if (search.getMaLSP() != 0) {
+                        Paragraph maLSP = new Paragraph("Mã loại sản phẩm: " + search.getMaLSP(), fontNormal);
+                        maLSP.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(maLSP);
+                    }
+                }
+                if (search.getTenLSP() != null) {
+                    if (!search.getTenLSP().trim().isEmpty()) {
+                        Paragraph tenLSP = new Paragraph("Tên loại sản phẩm: " + search.getTenLSP(), fontNormal);
+                        tenLSP.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(tenLSP);
+                    }
+                }
+                if (search.getMaNV() != null) {
+                    if (search.getMaNV() != 0) {
+                        Paragraph maNV = new Paragraph("Mã nhân viên: " + search.getMaNV(), fontNormal);
+                        maNV.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(maNV);
+                    }
+                }
+                if (search.getTenNV() != null) {
+                    if (!search.getTenNV().trim().isEmpty()) {
+                        Paragraph tenNV = new Paragraph("Tên nhân viên: " + search.getTenNV(), fontNormal);
+                        tenNV.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                        document.add(tenNV);
+                    }
+                }
+
+                if (search.getSort() != null && search.getTenCot() != null) {
+                    Paragraph orderby = new Paragraph(
+                            "Sắp xếp: " + search.getSort() + " | Theo cột: " + search.getTenCot(),
+                            fontNormal);
+                    orderby.setAlignment(com.itextpdf.text.Element.ALIGN_LEFT);
+                    document.add(orderby);
+                }
+
+                // Tạo bảng dữ liệu
+                int columnCount = 9; // Dựa trên dữ liệu
+                PdfPTable pdfTable = new PdfPTable(columnCount);
+                pdfTable.setWidthPercentage(100);
+                pdfTable.setWidths(new float[] { 1f, 1.5f, 2.2f, 2.2f, 1.5f, 2f, 1f, 1.8f, 2f });
+                pdfTable.setSpacingBefore(10f);
+
+                // Header bảng
+                String[] headers = { "Mã ĐH", "KM", "Tên KH", "Tên NV", "PTTT", "Ngày TT", "Mã DTL",
+                        "Tiền KD", "Tổng tiền" };
+                for (String header : headers) {
+                    PdfPCell cell = new PdfPCell(new Paragraph(header, fontHeader));
+                    cell.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                    cell.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_MIDDLE);
+                    cell.setBackgroundColor(new com.itextpdf.text.BaseColor(33, 58, 89));
+                    pdfTable.addCell(cell);
+                }
+
+                // Dữ liệu bảng
+                for (DonHangDTO obj : list) {
+                    try {
+                        String madonhang = obj.getMaDH() + "";
+                        String tenkhuyenmai = obj.getMaKM() != null && obj.getMaKM() != 0
+                                ? KhuyenMaiBLL.getDiscountById(obj.getMaKM()).getTenKM()
+                                : "Không";
+                        String tenkhachhang = obj.getMaKH() != null && obj.getMaKH() != 0
+                                ? TheThanhVienBLL.getMemberById(obj.getMaKH()).getTenTV()
+                                : "Không";
+                        String tennhanvien = new NhanVienBLL().getNameNV(obj.getMaNV() + "");
+                        String phuongthucthanhtoan = obj.getPtThanhToan();
+                        String ngaythanhtoan = TienIch.ddmmyyyy(obj.getNgayTT());
+                        String madiemtichluy = obj.getMaDTL() != null && obj.getMaDTL() != 0 ? obj.getMaDTL() + "" : "Không";
+                        String tienkhachdua = TienIch.formatVND(obj.getTienKD());
+                        String tongtien = TienIch.formatVND(obj.getTongTien());
+
+                        PdfPCell cell1 = new PdfPCell(new Paragraph(madonhang, fontNormal));
+                        PdfPCell cell2 = new PdfPCell(new Paragraph(tenkhuyenmai, fontNormal));
+                        PdfPCell cell3 = new PdfPCell(new Paragraph(tenkhachhang, fontNormal));
+                        PdfPCell cell4 = new PdfPCell(new Paragraph(tennhanvien, fontNormal));
+                        PdfPCell cell5 = new PdfPCell(new Paragraph(phuongthucthanhtoan, fontNormal));
+                        PdfPCell cell6 = new PdfPCell(new Paragraph(ngaythanhtoan, fontNormal));
+                        PdfPCell cell7 = new PdfPCell(new Paragraph(madiemtichluy, fontNormal));
+                        PdfPCell cell8 = new PdfPCell(new Paragraph(tienkhachdua, fontNormal));
+                        PdfPCell cell9 = new PdfPCell(new Paragraph(tongtien, fontNormal));
+
+                        cell1.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell2.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell3.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell4.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell5.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell6.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell7.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell8.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                        cell9.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+
+                        pdfTable.addCell(cell1);
+                        pdfTable.addCell(cell2);
+                        pdfTable.addCell(cell3);
+                        pdfTable.addCell(cell4);
+                        pdfTable.addCell(cell5);
+                        pdfTable.addCell(cell6);
+                        pdfTable.addCell(cell7);
+                        pdfTable.addCell(cell8);
+                        pdfTable.addCell(cell9);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        JOptionPane.showMessageDialog(null, "Lỗi khi truy cập dữ liệu: " + e.getMessage(), "Lỗi",
+                                JOptionPane.ERROR_MESSAGE);
+                        document.close();
+                        return;
+                    }
+                }
+
+                document.add(pdfTable);
+
+                Paragraph nguoilambaocao = new Paragraph("Người in\nKý và ghi rõ họ tên", fontBold);
+                Paragraph banquanli = new Paragraph("Ban quản lý\nKý và ghi rõ họ tên", fontBold);
+
+                PdfPTable table2 = new PdfPTable(2);
+                table2.setWidthPercentage(100);
+                table2.setWidths(new float[] { 1, 1 });
+
+                PdfPCell nguoilam = new PdfPCell(nguoilambaocao);
+                nguoilam.setBorder(PdfPCell.NO_BORDER);
+                nguoilam.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                nguoilam.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_TOP);
+
+                PdfPCell nguoiduyet = new PdfPCell(banquanli);
+                nguoiduyet.setBorder(PdfPCell.NO_BORDER);
+                nguoiduyet.setHorizontalAlignment(com.itextpdf.text.Element.ALIGN_CENTER);
+                nguoiduyet.setVerticalAlignment(com.itextpdf.text.Element.ALIGN_TOP);
+
+                table2.addCell(nguoilam);
+                table2.addCell(nguoiduyet);
+                document.add(table2);
+
+                document.close();
+
+                TienIch.CustomMessageNormal("Xuất danh sách đơn hàng thành công!");
+
+            } catch (java.io.FileNotFoundException e) {
+                TienIch.CustomMessageNormal("Không thể xuất file vì file đang được mở, vui lòng đóng file và thử lại");
+            } catch (Exception e) {
+                e.printStackTrace();
+                TienIch.CustomMessageNormal("Đã xảy ra lỗi khi xuất file!");
+            }
+        } else {
+            TienIch.CustomMessageNormal("Hủy xuất file PDF");
+        }
+        TienIch.setlookandfeel(false, null);
     }
 }

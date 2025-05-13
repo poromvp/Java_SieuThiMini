@@ -273,9 +273,12 @@ public class PanelTimKH extends JPanel {
         TienIch.chiduocnhapso(txtSoDienThoai);
         TienIch.chiduocnhapso(txtMaDonHang);
 
+        TienIch.chiduocnhapDDMMYYYY(dateSinhFrom);
+        TienIch.chiduocnhapDDMMYYYY(dateSinhTo);
+        TienIch.chiduocnhapDDMMYYYY(dateHanTheFrom);
+        TienIch.chiduocnhapDDMMYYYY(dateHanTheTo);
         TienIch.checkFromTo(dateSinhFrom, dateSinhTo);
         TienIch.checkFromTo(dateHanTheFrom, dateHanTheTo);
-        TienIch.checkngaynhapdutuoi(dateSinhFrom, today);
 
         TienIch.sukienSoSanh(minTongDonHang, maxTongDonHang);
         TienIch.sukienSoSanh(minTongChiTieu, maxTongChiTieu);

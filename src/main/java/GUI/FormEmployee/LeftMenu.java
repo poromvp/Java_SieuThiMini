@@ -16,6 +16,7 @@ import GUI.FrameLogin;
 public class LeftMenu extends JPanel implements ActionListener {
 
     private JButton btn_home;
+    private JButton btn_Member;
     private JButton btn_sell;
     private JButton btn_user;
 //    private JButton btn_orderManagement;
@@ -71,6 +72,7 @@ public class LeftMenu extends JPanel implements ActionListener {
         btn_sell = new JButton("bán hàng", new ImageIcon("src/main/resources/images/selling.png"));
 //        btn_orderManagement = new JButton("Quản lí bán hàng", new ImageIcon("src/main/resources/images/product.png"));
         btn_report =  new StyledLeftMenubutton("src/main/resources/images/report.png", "Báo cáo");
+        btn_Member =  new StyledLeftMenubutton("src/main/resources/images/report.png", "Thẻ thành viên");
         
         btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
         btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
@@ -81,14 +83,14 @@ public class LeftMenu extends JPanel implements ActionListener {
 
         setButtonStyle(btn_home);
         setButtonStyle(btn_sell);
-//        setButtonStyle(btn_orderManagement);
+       setButtonStyle(btn_Member);
         setButtonStyle(btn_report);
         setButtonStyle(btn_user);
         setButtonStyle(btn_logout);
 
         btn_home.addActionListener(this);
         btn_sell.addActionListener(this);
-//        btn_orderManagement.addActionListener(this);
+       btn_Member.addActionListener(this);
         btn_report.addActionListener(this);
         btn_user.addActionListener(this);
         btn_logout.addActionListener(this);
@@ -96,6 +98,7 @@ public class LeftMenu extends JPanel implements ActionListener {
         add(btn_home);
         add(btn_user);
         add(btn_sell);
+        add(btn_Member);
 //        add(btn_orderManagement);
         add(btn_report);
         add(Box.createVerticalGlue());
@@ -134,10 +137,10 @@ public class LeftMenu extends JPanel implements ActionListener {
             System.out.println("click btn_home");
             FrameEmployee.setPage("formHome", "Trang Chủ");
         } 
-//        if (e.getSource() == btn_orderManagement) {
-//            System.out.println("click btn_orderManagement");
-//            FrameEmployee.setPage("formOrderManagement", "Quản Lí Đơn Hàng");
-//        }
+       if (e.getSource() == btn_Member) {
+           System.out.println("click btn_orderManagement");
+           FrameEmployee.setPage("formMember", "Thẻ thành viên");
+       }
 
         if (e.getSource() == btn_report) {
             System.out.println("click btn_report");

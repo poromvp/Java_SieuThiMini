@@ -865,7 +865,7 @@ public class OrderPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Kiểm tra nếu là double-click
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 1) {
 					int row = tableTimKiem.getSelectedRow();
 					if (row != -1) {
 						int maSP = (int) tableTimKiem.getValueAt(row, 0);  // Giả sử "Mã" nằm ở cột 0

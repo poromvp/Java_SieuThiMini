@@ -37,7 +37,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
 
     private  OrderPanel pn_formOrder;
     private  HomePanel pn_formHome;
-    private  BaoCaoPanel panelMainBaoCao;
+    private static BaoCaoPanel panelMainBaoCao;
     private  ProfilePanel panelProfile;
 
 
@@ -82,8 +82,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
         pn_cardLayout.add(pn_formHome, "formHome");
         pn_cardLayout.add(panelProfile, "formUser");
         pn_cardLayout.add(pn_formOrder, "formOrder");
-        pn_cardLayout.add(panelMainBaoCao, "formReport");
-
+        // pn_cardLayout.add(panelMainBaoCao, "formReport");
         
         pn_body = new JPanel(new BorderLayout());
         lbl_title.setHorizontalAlignment(JLabel.CENTER);
@@ -103,9 +102,21 @@ public class FrameEmployee extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    
+    public static void setTrangBaoCao(){
+        pn_cardLayout.remove( panelMainBaoCao);
+        BaoCaoPanel panelMainBaoCao = new BaoCaoPanel();
+        pn_cardLayout.add(panelMainBaoCao, "formReport");
+        lbl_title.setText("Báo cáo bán hàng");
+        cardLayout.show(pn_cardLayout, "formReport");
+        
+    }
 
     public static void main(String[] args) {
         new FrameEmployee(1 +"");
+        BaoCaoPanel panelMainBaoCao;
+        panelMainBaoCao = new BaoCaoPanel();
+
     }
     
     public static void setPage(String pagename, String title){
@@ -119,5 +130,6 @@ public class FrameEmployee extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
     }
+
 }
    

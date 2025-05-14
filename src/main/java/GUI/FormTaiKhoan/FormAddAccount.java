@@ -81,11 +81,11 @@ public class FormAddAccount extends JDialog {
                         return;
                     }
             
-                    if (bll.kiemTraName(tk.getTenTK())) {
+                    if (bll.kiemTraName(tk.getTenTK(),tk.getMaNV())) {
                         JOptionPane.showMessageDialog(null, "Tên tài khoản đã tồn tại!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                         return;
                     }
-                    if (bll.kiemTraGmail(tk.getGmail())) {
+                    if (bll.kiemTraGmail(tk.getGmail(),tk.getMaNV())) {
                         JOptionPane.showMessageDialog(null, "Gmail đã được sử dụng!", "Lỗi", JOptionPane.ERROR_MESSAGE);
                         return ;
                     }

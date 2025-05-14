@@ -20,6 +20,12 @@ public class ImportExcelProduct {
     private static LoaiSanPhamBLL loaiSanPhamBLL = new LoaiSanPhamBLL();
 
     public static boolean importProduct(JFrame parent) {
+        try {
+            // Đổi Look & Feel sang hệ điều hành
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Excel files", "xlsx", "xls"));
         int result = fileChooser.showOpenDialog(parent);

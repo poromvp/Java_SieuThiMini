@@ -19,6 +19,12 @@ import java.util.List;
 
 public class ExportExcelProduct {
     public static boolean exportProduct(JFrame parent) {
+        try {
+            // Đổi Look & Feel sang hệ điều hành
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setSelectedFile(new File("DanhSachSanPham.xlsx"));
         int result = fileChooser.showSaveDialog(parent);

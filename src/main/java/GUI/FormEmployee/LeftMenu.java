@@ -141,7 +141,7 @@ public class LeftMenu extends JPanel implements ActionListener {
 
         if (e.getSource() == btn_report) {
             System.out.println("click btn_report");
-            FrameEmployee.setPage("formReport", "Báo cáo đơn hàng");
+            FrameEmployee.setTrangBaoCao();
         }
         if (e.getSource() == btn_user) {
             System.out.println("click btn_user");

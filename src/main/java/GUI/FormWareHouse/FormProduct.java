@@ -10,6 +10,7 @@ import EXCEL.ExportExcelProduct;
 import EXCEL.ImportExcelProduct;
 import GUI.ComponentCommon.ButtonCustom;
 import GUI.ComponentCommon.StyledTable;
+import PDF.ExportPdfProduct;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -131,6 +132,7 @@ public class FormProduct extends JPanel {
 
         ButtonCustom importExcelBtn = new ButtonCustom("Nhập từ Excel","importExcel",16,20,20);
         ButtonCustom exportExcelBtn = new ButtonCustom("Xuất ra Excel","exportExcel",16,20,20);
+        ButtonCustom exportPdfBtn = new ButtonCustom("Xuất Pdf","exportPdf",16,20,20);
 
         importExcelBtn.addActionListener(e -> {
             if (ImportExcelProduct.importProduct((JFrame) SwingUtilities.getWindowAncestor(this))) {
@@ -140,13 +142,15 @@ public class FormProduct extends JPanel {
 
         exportExcelBtn.addActionListener(e -> ExportExcelProduct.exportProduct((JFrame) SwingUtilities.getWindowAncestor(this)));
         // Bảng sản phẩm
-        String[] headerCol = {"Mã SP", "Tên SP", "Giá","Số lượng tồn", "Loai","Nhà cung cấp"};
+        String[] headerCol = {"Mã SP", "Tên SP", "Giá","Số lượng tồn", "Loai","Nhà cung cấp","Trạng thái"};
         tableModel = new DefaultTableModel(headerCol,0){
             @Override
             public boolean isCellEditable(int row, int column){
                 return false;
             }
         };
+
+        exportPdfBtn.addActionListener(e -> new ExportPdfProduct().exportPDF());
         table = new StyledTable(new Object[][]{},headerCol);
         table.setModel(tableModel);
         loadTableData();
@@ -177,6 +181,7 @@ public class FormProduct extends JPanel {
         panelBtn.add(xoaBtn);
         panelBtn.add(importExcelBtn);
         panelBtn.add(exportExcelBtn);
+        panelBtn.add(exportPdfBtn);
 
         JPanel infoProduct = new JPanel();
         infoProduct.setBorder(BorderFactory.createTitledBorder("Thông tin sản phẩm"));
@@ -210,7 +215,7 @@ public class FormProduct extends JPanel {
                 product.getSoLuongTon(),
                 tenLoaiSP,
                 tenNcc,
-
+                product.getTrangThai()
             });
         }
     }

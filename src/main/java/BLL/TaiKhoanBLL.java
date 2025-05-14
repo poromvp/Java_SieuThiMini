@@ -29,14 +29,26 @@ public class TaiKhoanBLL {
     public boolean kiemTraExist(int maNV){
         return taiKhoanDAL.kiemTraExist(maNV);
     }
-    public boolean kiemTraName(String ten){
-        return taiKhoanDAL.kiemTraName(ten);
+    public boolean kiemTraName(String tenTK, int maNV) {
+        for (TaiKhoanDTO tk : taiKhoanDAL.getAllTaiKhoan()) {
+            if (tk.getTenTK().equals(tenTK) && tk.getMaNV() != maNV) {
+                return true;
+            }
+        }
+        return false;
     }
-    public boolean kiemTraGmail(String gmail){
-        return taiKhoanDAL.kiemTraGmail(gmail);
-    }
-    public boolean updateTaiKhoan(TaiKhoanDTO tk) {
 
+    public boolean kiemTraGmail(String gmail, int maNV) {
+        List<TaiKhoanDTO> danhSach = taiKhoanDAL.getAllTaiKhoan();
+        for (TaiKhoanDTO tk : danhSach) {
+            if (tk.getGmail().equals(gmail) && tk.getMaNV() != maNV) {
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+    public boolean updateTaiKhoan(TaiKhoanDTO tk) {
         return taiKhoanDAL.updateTaiKhoan(tk);
     }
 
@@ -63,6 +75,9 @@ public class TaiKhoanBLL {
     }
     public TaiKhoanDTO getTaiKhoanById (int id){
         return taiKhoanDAL.getTaiKhoanById(id);
+    }
+    public boolean taiKhoanExist(String tentk){
+        return taiKhoanDAL.taiKhoanExist(tentk);
     }
     
 }

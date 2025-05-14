@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.text.DecimalFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -69,7 +68,7 @@ public class ProfilePanel extends JPanel {
 	ButtonCustom btnLuuAnh = new ButtonCustom("Lưu ảnh",12,"blue");
 	String imgPath = "";
 	JPanel panel_Anh = new JPanel();
-	String imgFolder = "src/main/resources/images/avtEmployee/";
+	String imgFolder = "src/main/resources/images/avtMember/";
 
 
 

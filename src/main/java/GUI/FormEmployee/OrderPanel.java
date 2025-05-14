@@ -152,6 +152,7 @@ public class OrderPanel extends JPanel {
 	private JSpinner spinner_GiaMax;
 	ButtonCustom btnTaoMoi = new ButtonCustom("Tạo mới ĐH",12,"red");
 
+	SanPhamBLL sanPhamBLL = new SanPhamBLL();
 
 
 	private static JLabel label_qr;
@@ -720,6 +721,10 @@ public class OrderPanel extends JPanel {
     
 	public void addProductDetail(Object[] rowData) {
 		SanPhamDTO  sp = SanPhamBLL.getProductById(Integer.parseInt(rowData[0].toString()));
+		if(sp.getSoLuongTon() <= 0){
+			JOptionPane.showMessageDialog(null, "Số lượng của sản phẩm " +  sp .getTenSP() + " trong kho đã hết, Vui lòng chọn sản phẩm khác." );
+					return;
+		}
 		for (int i = 0; i < tableProduct.getRowCount(); i++) {
 			if (rowData[0].toString().equals(tableProduct.getValueAt(i, 0).toString())) {
 				int oldQty = Integer.parseInt(tableProduct.getValueAt(i, 4).toString());
@@ -1246,12 +1251,14 @@ public class OrderPanel extends JPanel {
 						return ;
 					}else{
 						DiemTichLuyDTO DTL_ = DiemTichLuyBLL.getAllDiemTichLuy().get(comboBoxDTL.getSelectedIndex()); 
-						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));						
+						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));		
+						JUST_MADONHANG = maDH;
 						khachHang.setDiemTL(khachHang.getDiemTL() - dieuKienDTL + (int)(calCalculateTotalAmount()/1000));
 						TheThanhVienBLL.updateMember(khachHang);
 					}
 				}else{
 					maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+					JUST_MADONHANG = maDH;
 					khachHang.setDiemTL(khachHang.getDiemTL()  + (int)(calCalculateTotalAmount()/1000));
 					TheThanhVienBLL.updateMember(khachHang);					
 				}
@@ -1265,7 +1272,10 @@ public class OrderPanel extends JPanel {
 		}
 
 		for( int i = 0; i < tableProduct.getRowCount(); i++){
-			ChiTietDonHangBLL.insertOrderDetail(new ChiTietDonHangDTO(JUST_MADONHANG, (int) tableProduct.getValueAt(i, 0), (int)tableProduct.getValueAt(i, 4), "ACTIVE"));
+			ChiTietDonHangBLL.insertOrderDetail(new ChiTietDonHangDTO(JUST_MADONHANG, (int) tableProduct.getValueAt(i, 0), Integer.parseInt(tableProduct.getValueAt(i, 4).toString()), "ACTIVE"));
+			SanPhamDTO sp = sanPhamBLL.getProductById(Integer.parseInt(tableProduct.getValueAt(i, 0).toString()));
+			sp.setSoLuongTon(sp.getSoLuongTon() - Integer.parseInt(tableProduct.getValueAt(i, 4).toString()));
+			sanPhamBLL.updateProduct(sp);
 		}
 		JOptionPane.showMessageDialog(null, "Lưu đơn hàng thành công !!!");
 		panel_ButtonLuuInDH.removeAll();

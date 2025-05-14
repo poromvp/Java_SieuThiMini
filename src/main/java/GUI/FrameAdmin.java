@@ -40,6 +40,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         this.maNV = maNV;
         setTitle("Frame Quản Lý");
         setSize(1300, 750);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

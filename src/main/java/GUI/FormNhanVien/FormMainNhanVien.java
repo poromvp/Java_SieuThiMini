@@ -135,7 +135,7 @@ private void deleteNhanVien() {
                 boolean isDeleted = bll.deleteNhanVien(maNV);
                 if (isDeleted) {
                     JOptionPane.showMessageDialog(this, 
-                        "Nhân viên đã được xóa (trạng thái đổi thành 0).", 
+                        "Nhân viên đã được xóa.", 
                         "Thông báo", 
                         JOptionPane.INFORMATION_MESSAGE
                     );

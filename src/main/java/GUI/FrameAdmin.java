@@ -52,7 +52,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
         getContentPane().add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
-        rightPn.setBackground(new Color(204, 255, 255));
+        rightPn.setBackground(new Color(255, 255, 255));
         rightPn.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelDashBoard(maNV);
 

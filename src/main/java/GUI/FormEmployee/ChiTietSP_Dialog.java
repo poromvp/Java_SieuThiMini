@@ -374,6 +374,18 @@ public class ChiTietSP_Dialog extends JDialog {
 				JButton cancelButton = new JButton("Thoát");
 				cancelButton.setActionCommand("Thoát");
 				buttonPane.add(cancelButton);
+				
+				JPanel panel = new JPanel();
+				panel.setPreferredSize(new Dimension(10, 50));
+				panel.setBackground(new Color(0, 51, 102));
+				getContentPane().add(panel, BorderLayout.NORTH);
+				panel.setLayout(new BorderLayout(0, 0));
+				
+				JLabel lblNewLabel = new JLabel("Thông tin sản phẩm");
+				lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+				lblNewLabel.setFont(new Font("Arial", Font.BOLD, 20));
+				lblNewLabel.setForeground(new Color(255, 255, 255));
+				panel.add(lblNewLabel);
 
 				cancelButton.addActionListener(e->{
 					dispose();

@@ -15,12 +15,13 @@ import GUI.FrameLogin;
 
 public class LeftMenu extends JPanel implements ActionListener {
 
-    private JButton btn_home;
-    private JButton btn_sell;
-    private JButton btn_user;
-//    private JButton btn_orderManagement;
-    private JButton btn_report;
-    private JButton btn_logout;
+    private StyledLeftMenubutton btn_home;
+    private StyledLeftMenubutton btn_Member;
+    private StyledLeftMenubutton btn_sell;
+    private StyledLeftMenubutton btn_user;
+//    private StyledLeftMenubutton btn_orderManagement;
+    private StyledLeftMenubutton btn_report;
+    private StyledLeftMenubutton btn_logout;
     private NhanVienBLL bllnv = new NhanVienBLL();
     private TaiKhoanBLL blltk = new TaiKhoanBLL();
     // private FrameNhanVien frame; // Tham chiếu đến FrameNhanVien
@@ -67,10 +68,11 @@ public class LeftMenu extends JPanel implements ActionListener {
         add(employeePanel);
         add(Box.createVerticalGlue());
 
-        btn_home =  new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
-        btn_sell = new JButton("bán hàng", new ImageIcon("src/main/resources/images/selling.png"));
+        // btn_home =  new JButton("Trang Chủ", new ImageIcon("src/main/resources/images/home.png"));
+        // btn_sell = new JButton("bán hàng", new ImageIcon("src/main/resources/images/selling.png"));
 //        btn_orderManagement = new JButton("Quản lí bán hàng", new ImageIcon("src/main/resources/images/product.png"));
         btn_report =  new StyledLeftMenubutton("src/main/resources/images/report.png", "Báo cáo");
+        btn_Member =  new StyledLeftMenubutton("src/main/resources/images/report.png", "Thẻ thành viên");
         
         btn_home = new StyledLeftMenubutton("src/main/resources/images/home.png", "Trang Chủ");
         btn_sell = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Bán Hàng");
@@ -78,17 +80,18 @@ public class LeftMenu extends JPanel implements ActionListener {
         btn_logout = new StyledLeftMenubutton("src/main/resources/images/exit.png","Đăng Xuất");
 //        btn_orderManagement = new StyledLeftMenubutton("src/main/resources/images/selling.png", "Quản Lí đơn hàng");
 
+      btn_home.setBackgroundColorButton(new Color(0, 102, 153));
 
         setButtonStyle(btn_home);
         setButtonStyle(btn_sell);
-//        setButtonStyle(btn_orderManagement);
+       setButtonStyle(btn_Member);
         setButtonStyle(btn_report);
         setButtonStyle(btn_user);
         setButtonStyle(btn_logout);
 
         btn_home.addActionListener(this);
         btn_sell.addActionListener(this);
-//        btn_orderManagement.addActionListener(this);
+       btn_Member.addActionListener(this);
         btn_report.addActionListener(this);
         btn_user.addActionListener(this);
         btn_logout.addActionListener(this);
@@ -96,6 +99,7 @@ public class LeftMenu extends JPanel implements ActionListener {
         add(btn_home);
         add(btn_user);
         add(btn_sell);
+        add(btn_Member);
 //        add(btn_orderManagement);
         add(btn_report);
         add(Box.createVerticalGlue());
@@ -124,30 +128,59 @@ public class LeftMenu extends JPanel implements ActionListener {
         });
     }
 
+    public void renderColorButton(){
+        for (Component cp : this.getComponents()) {
+            if (cp instanceof StyledLeftMenubutton) {
+                StyledLeftMenubutton btn = (StyledLeftMenubutton) cp;
+                btn.setBackgroundColorButton(bgColor);
+            }
+        }
+    }
+
+
+    
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btn_sell) {
+            
             System.out.println("click btn_sell");
+            renderColorButton();
+            btn_sell.setBackgroundColorButton(new Color(0, 102, 153));
             FrameEmployee.setPage("formOrder", "Bán Hàng");
         }
         if (e.getSource() == btn_home) {
             System.out.println("click btn_home");
+            renderColorButton();
+            btn_home.setBackgroundColorButton(new Color(0, 102, 153));
             FrameEmployee.setPage("formHome", "Trang Chủ");
         } 
-//        if (e.getSource() == btn_orderManagement) {
-//            System.out.println("click btn_orderManagement");
-//            FrameEmployee.setPage("formOrderManagement", "Quản Lí Đơn Hàng");
-//        }
+       if (e.getSource() == btn_Member) {
+            renderColorButton();
+            btn_Member.setBackgroundColorButton(new Color(0, 102, 153));
+
+           System.out.println("click btn_orderManagement");
+           FrameEmployee.setPage("formMember", "Thẻ thành viên");
+       }
 
         if (e.getSource() == btn_report) {
+            renderColorButton();
+            btn_report.setBackgroundColorButton(new Color(0, 102, 153));
+
             System.out.println("click btn_report");
             FrameEmployee.setTrangBaoCao();
         }
         if (e.getSource() == btn_user) {
+            renderColorButton();
+            btn_user.setBackgroundColorButton(new Color(0, 102, 153));
+
             System.out.println("click btn_user");
             FrameEmployee.setPage("formUser", "Người dùng");
         }
         if (e.getSource() == btn_logout) {
+            renderColorButton();
+            btn_logout.setBackgroundColorButton(new Color(0, 102, 153));
+
             JOptionPane.showMessageDialog(null, "Đăng xuất thành công");
             JFrame frame = (JFrame) SwingUtilities.getWindowAncestor(this);
             frame.dispose();  

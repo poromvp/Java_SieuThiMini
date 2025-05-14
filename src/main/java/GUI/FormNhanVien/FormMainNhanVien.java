@@ -65,7 +65,7 @@ public class FormMainNhanVien extends JPanel {
         buttonPanel.add(btnXemNghiViec);
         ButtonCustom btnXuatPDF = new ButtonCustom("Xuất", "printer",12,50,40);
         buttonPanel.add(btnXuatPDF);
-        btnXuatPDF.addActionListener(e -> FormExport("Danh sách nhân viên"));
+        btnXuatPDF.addActionListener(e -> FormExport("DANH SÁCH NHÂN VIÊN"));
         add(buttonPanel, BorderLayout.SOUTH);
     }
    
@@ -135,7 +135,7 @@ private void deleteNhanVien() {
                 boolean isDeleted = bll.deleteNhanVien(maNV);
                 if (isDeleted) {
                     JOptionPane.showMessageDialog(this, 
-                        "Nhân viên đã được xóa (trạng thái đổi thành 0).", 
+                        "Nhân viên đã được xóa.", 
                         "Thông báo", 
                         JOptionPane.INFORMATION_MESSAGE
                     );

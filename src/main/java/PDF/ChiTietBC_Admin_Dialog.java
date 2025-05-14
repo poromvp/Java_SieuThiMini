@@ -207,13 +207,13 @@ public class ChiTietBC_Admin_Dialog extends JDialog {
 					panel_Infor.add(panel_item3);
 					panel_item3.setLayout(new GridLayout(0, 2, 0, 0));
 					{
-						JLabel lbl_NgayBT = new JLabel("Thống kê từ ngày  : " + (BaoCaoPanel.getPanelTimkiem().getNgayBatDau() != null? "khang": " ngày thành lập"));
+						JLabel lbl_NgayBT = new JLabel("Thống kê từ ngày  : " + (BaoCaoPanel.getPanelTimkiem().getNgayBatDau() != null? BaoCaoPanel.getPanelTimkiem().getNgayBatDau(): " ngày thành lập"));
 						lbl_NgayBT.setFont(new Font("Arial", Font.BOLD, 14));
 						panel_item3.add(lbl_NgayBT);
 					}
 					{
 						LocalDate today = LocalDate.now();
-						JLabel lbl_NgayKT = new JLabel("Thống kê đến ngày : " +  (BaoCaoPanel.getPanelTimkiem().getNgayKetThuc() != null?"khản" : today.toString()));
+						JLabel lbl_NgayKT = new JLabel("Thống kê đến ngày : " +  (BaoCaoPanel.getPanelTimkiem().getNgayKetThuc() != null? BaoCaoPanel.getPanelTimkiem().getNgayKetThuc() : today.toString()));
 						lbl_NgayKT.setFont(new Font("Arial", Font.BOLD, 14));
 						panel_item3.add(lbl_NgayKT);
 					}

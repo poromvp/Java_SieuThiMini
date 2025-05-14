@@ -865,7 +865,7 @@ public class OrderPanel extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Kiểm tra nếu là double-click
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 1) {
 					int row = tableTimKiem.getSelectedRow();
 					if (row != -1) {
 						int maSP = (int) tableTimKiem.getValueAt(row, 0);  // Giả sử "Mã" nằm ở cột 0
@@ -885,18 +885,7 @@ public class OrderPanel extends JPanel {
 		textSDT.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                String phone = textSDT.getText().trim();
-				khachHang = TheThanhVienBLL.getMemberByPhone(phone);
-                if (!phone.isEmpty()) {
-                    if (khachHang != null) {
-                        textTenKH.setText(khachHang.getTenTV());
-                        textDiem.setText(khachHang.getDiemTL() + "");
-                       
-					}else{
-                        textTenKH.setText("lỗi thành viên!");
-                        textDiem.setText("lỗi thành viên!");
-                    }
-                }
+               rederKhachHangTheoSDT();
             }
         });     
     
@@ -1008,6 +997,7 @@ public class OrderPanel extends JPanel {
 			);
 		
 		if (confirm == JOptionPane.YES_OPTION) {
+			khachHang = null;
 			panel_ButtonLuuInDH.removeAll();
 			panel_ButtonLuuInDH.add(btnLuuDonHang);
 			panel_ButtonLuuInDH.repaint();
@@ -1030,6 +1020,26 @@ public class OrderPanel extends JPanel {
 		
 
 	};
+
+
+	public void rederKhachHangTheoSDT(){
+		String phone = textSDT.getText().trim();
+		khachHang = TheThanhVienBLL.getMemberByPhone(phone);
+		if (!phone.isEmpty()) {
+			if (khachHang != null) {
+				if(khachHang.getTrangThai().equalsIgnoreCase("inactive")){
+					JOptionPane.showMessageDialog(null, "Thẻ thành viên của " + khachHang.getTenTV() + " đã bị khoá.");
+					return;
+				}
+				textTenKH.setText(khachHang.getTenTV());
+				textDiem.setText(khachHang.getDiemTL() + "");
+				
+			}else{
+				textTenKH.setText("lỗi thành viên!");
+				textDiem.setText("lỗi thành viên!");
+			}
+		}
+	}
 
 	
 	private void customizeTable1(JTable talbe_) {
@@ -1202,6 +1212,11 @@ public class OrderPanel extends JPanel {
 
 
 	public void SaveOrder(){
+		if( khachHang != null && khachHang.getTrangThai().equalsIgnoreCase("inactive")){
+			JOptionPane.showMessageDialog(null, "Thẻ thành viên của " + khachHang.getTenTV() + " đã bị khoá.");
+			return;
+		}
+
 		
 		if(tableProduct.getRowCount() == 0){
 			JOptionPane.showMessageDialog(null,"Không thê thêm vì không có sản phẩm, Vui lòng thêm sản phẩm");

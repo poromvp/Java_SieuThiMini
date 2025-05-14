@@ -19,7 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-
+import GUI.Admin_TheThanhVien.PanelMainThanhVien;
 import GUI.ComponentCommon.Header;
 import GUI.ComponentCommon.TienIch;
 import GUI.FormEmployee.BaoCaoPanel;
@@ -39,6 +39,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
     private  HomePanel pn_formHome;
     private static BaoCaoPanel panelMainBaoCao;
     private  ProfilePanel panelProfile;
+    private  PanelMainThanhVien panelMemmber;
 
 
     private static  JLabel lbl_title = new JLabel("Trang Chủ");
@@ -71,7 +72,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
         pn_leftMenu = new LeftMenu(maNV);
         panelProfile = new ProfilePanel( Integer.parseInt( maNV));
         
-        
+        panelMemmber = new PanelMainThanhVien(maNV);
         cardLayout = new CardLayout(); 
         pn_cardLayout = new JPanel(cardLayout);  
 
@@ -82,6 +83,7 @@ public class FrameEmployee extends JFrame implements ActionListener {
         pn_cardLayout.add(pn_formHome, "formHome");
         pn_cardLayout.add(panelProfile, "formUser");
         pn_cardLayout.add(pn_formOrder, "formOrder");
+        pn_cardLayout.add(panelMemmber, "formMember");
         // pn_cardLayout.add(panelMainBaoCao, "formReport");
         
         pn_body = new JPanel(new BorderLayout());

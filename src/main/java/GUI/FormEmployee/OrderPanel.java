@@ -1,16 +1,16 @@
 package GUI.FormEmployee;
 
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -24,15 +24,31 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.Map;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -41,6 +57,7 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameConverter;
 import org.bytedeco.javacv.OpenCVFrameGrabber;
+import org.bytedeco.opencv.global.opencv_core;
 import org.bytedeco.opencv.opencv_core.Mat;
 
 import com.google.zxing.BinaryBitmap;
@@ -50,18 +67,6 @@ import com.google.zxing.MultiFormatReader;
 import com.google.zxing.Result;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.HybridBinarizer;
-
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextField;
-
-
 
 import BLL.ChiTietDonHangBLL;
 import BLL.ChiTietKhuyenMaiBLL;
@@ -80,39 +85,7 @@ import DTO.LoaiSanPhamDTO;
 import DTO.NhanVienDTO;
 import DTO.SanPhamDTO;
 import DTO.TheThanhVienDTO;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.UIManager;
-
-
-import org.bytedeco.javacv.Frame;
-import org.bytedeco.javacv.Java2DFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameConverter;
-import org.bytedeco.javacv.OpenCVFrameGrabber;
-import org.bytedeco.opencv.global.opencv_core;
-import org.bytedeco.opencv.opencv_core.Mat;
-
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.DecodeHintType;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.Result;
-import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
-
-import BLL.ChiTietKhuyenMaiBLL;
-import BLL.SanPhamBLL;
-import DTO.SanPhamDTO;
 import GUI.ComponentCommon.ButtonCustom;
-import GUI.ComponentCommon.RoundedComponent;
-import GUI.ComponentCommon.StyledTextField;
-import GUI.QR.ScanQR;
 import PDF.ChiTietDH_Dialog;
 
 
@@ -179,6 +152,7 @@ public class OrderPanel extends JPanel {
 	private JSpinner spinner_GiaMax;
 	ButtonCustom btnTaoMoi = new ButtonCustom("Tạo mới ĐH",12,"red");
 
+	SanPhamBLL sanPhamBLL = new SanPhamBLL();
 
 
 	private static JLabel label_qr;
@@ -259,6 +233,7 @@ public class OrderPanel extends JPanel {
 		panel_4.add(lbL_IdOrTenSP);
 		
 		textTenOrID = new JTextField();
+		textTenOrID.setToolTipText("Nhập ID hoặc tên sản phẩm cần tìm");
 		textTenOrID.setPreferredSize(new Dimension(7, 25));
 		panel_4.add(textTenOrID);
 		textTenOrID.setColumns(10);
@@ -280,6 +255,7 @@ public class OrderPanel extends JPanel {
 		for(LoaiSanPhamDTO loai : dsLoaiSP){
 			combobox_LoaiSP.addItem(loai.getTenLoaiSP());
 		}
+		combobox_LoaiSP.setToolTipText("Chọn Loại sản phẩm");
 		panel_5.add(combobox_LoaiSP);
 		
 		JPanel panel_6 = new JPanel();
@@ -295,6 +271,7 @@ public class OrderPanel extends JPanel {
 		panel_6.add(lblNewLabel_1);
 		
 		spinner_GiaMin = new JSpinner();
+		spinner_GiaMin.setToolTipText("Chọn giá thấp nhất để tìm");
 		spinner_GiaMin.setModel(new SpinnerNumberModel(10000, 1000, 1000000, 1000));
 		panel_6.add(spinner_GiaMin);
 		
@@ -310,6 +287,7 @@ public class OrderPanel extends JPanel {
 		panel_7.add(lblNewLabel_2);
 		
 		spinner_GiaMax = new JSpinner();
+		spinner_GiaMax.setToolTipText("chọn giá cao nhất để lọc");
 		spinner_GiaMax.setModel(new SpinnerNumberModel(100000, 1000, 100000000, 1000));
 		panel_7.add(spinner_GiaMax);
 		
@@ -334,9 +312,11 @@ public class OrderPanel extends JPanel {
 		panel_8.setPreferredSize(new Dimension(10, 25));
 		panel_QR.add(panel_8, BorderLayout.SOUTH);
 		panel_8.setLayout(new GridLayout(1, 0, 0, 0));
+		toggleButton.setToolTipText("Nút BẬT/TẮT quét mã QR");
 		
 		
 		panel_8.add(toggleButton);
+		lbl_id.setToolTipText("Mã sản phẩm quét được\r\n");
 		lbl_id.setText("_________");
 		lbl_id.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_id.setOpaque(true);
@@ -390,6 +370,7 @@ public class OrderPanel extends JPanel {
 		lblTongTien.setMaximumSize(new Dimension(100, 25));
 		
 		textFieldTongTien = new JTextField();
+		textFieldTongTien.setToolTipText("Tổng tiền khi chưa tính khuyến mãi");
 		textFieldTongTien.setHorizontalAlignment(SwingConstants.CENTER);
 		panelTongTien.add(textFieldTongTien);
 		textFieldTongTien.setFont(new Font("Arial", Font.BOLD, 14));
@@ -413,6 +394,7 @@ public class OrderPanel extends JPanel {
 		lblThanhTien.setMaximumSize(new Dimension(100, 25));
 		
 		text_ThanhTien = new JTextField();
+		text_ThanhTien.setToolTipText("Tổng tiền sau khi tính khuyến mãi\r\n");
 		text_ThanhTien.setHorizontalAlignment(SwingConstants.CENTER);
 		panelThanhTien.add(text_ThanhTien);
 		text_ThanhTien.setFont(new Font("Arial", Font.BOLD, 14));
@@ -437,6 +419,7 @@ public class OrderPanel extends JPanel {
 		lblKhuyenMai.setMaximumSize(new Dimension(100, 25));
 		
 		textKhuyenMai = new JTextField();
+		textKhuyenMai.setToolTipText("Mã khuyến mãi hôm nay\r\n");
 		textKhuyenMai.setHorizontalAlignment(SwingConstants.CENTER);
 		panelKM.add(textKhuyenMai);
 		textKhuyenMai.setFont(new Font("Arial", Font.BOLD, 14));
@@ -444,7 +427,7 @@ public class OrderPanel extends JPanel {
 		textKhuyenMai.setPreferredSize(new Dimension(7, 25));
 		textKhuyenMai.setMinimumSize(new Dimension(7, 25));
 		textKhuyenMai.setMaximumSize(new Dimension(2147483647, 25));
-		textKhuyenMai.setText("0");
+		textKhuyenMai.setText(KhuyenMaiBLL.getDiscountToday().getMaKM() + "");
 		textKhuyenMai.setColumns(20);
 		
 		JPanel panel_LaThanhVien = new JPanel();
@@ -487,6 +470,7 @@ public class OrderPanel extends JPanel {
 				lblSDTKH.setPreferredSize(new Dimension(19, 25));
 				
 				textSDT = new JTextField();
+				textSDT.setToolTipText("Hãy nhập số điện thoại khách hàng nếu muốn tích điểm\r\n");
 				textSDT.setHorizontalAlignment(SwingConstants.CENTER);
 				panel_SDT.add(textSDT);
 				textSDT.setFont(new Font("Arial", Font.BOLD, 14));
@@ -628,12 +612,15 @@ public class OrderPanel extends JPanel {
 		       
 		        JLabel lblNewLabel_3 = new JLabel(scaledIcon);
 				panel_QRbank.add(lblNewLabel_3);
+
+				panelRightInput.add(Box.createVerticalGlue());
 				
 				JPanel panel_2 = new JPanel();
-				panel_2.setPreferredSize(new Dimension(310, 10));
+				panel_2.setPreferredSize(new Dimension(310, 75));
 				panel_2.setMaximumSize(new Dimension(32767, 60));
 				panelRightInput.add(panel_2);
 				panel_2.setLayout(new GridLayout(2, 1, 10, 10));
+				
 				
 				panel_ButtonLuuInDH.setMaximumSize(new Dimension(32767, 25));
 				panel_2.add(panel_ButtonLuuInDH);
@@ -642,10 +629,12 @@ public class OrderPanel extends JPanel {
 				btnInDH.setBackground(new Color(0, 102, 153));
 				btnInDH.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_ButtonLuuInDH.add(btnInDH);
+				btnLuuDonHang.setToolTipText("nhấn nếu muốn Lưu  đơn hàng");
 				btnLuuDonHang.setBackground(new Color(51, 153, 0));
 				
 				btnLuuDonHang.setFont(new Font("Arial", Font.BOLD, 14));
 				panel_ButtonLuuInDH.add(btnLuuDonHang);
+				btnTaoMoi.setToolTipText("Nhấn khi muốn tạo đơn hàng mới\r\n");
 				
 				btnTaoMoi.setBackground(new Color(255, 0, 51));
 				// btnHuy.setBackground(new Color(255, 51, 0));
@@ -735,6 +724,10 @@ public class OrderPanel extends JPanel {
     
 	public void addProductDetail(Object[] rowData) {
 		SanPhamDTO  sp = SanPhamBLL.getProductById(Integer.parseInt(rowData[0].toString()));
+		if(sp.getSoLuongTon() <= 0){
+			JOptionPane.showMessageDialog(null, "Số lượng của sản phẩm " +  sp .getTenSP() + " trong kho đã hết, Vui lòng chọn sản phẩm khác." );
+					return;
+		}
 		for (int i = 0; i < tableProduct.getRowCount(); i++) {
 			if (rowData[0].toString().equals(tableProduct.getValueAt(i, 0).toString())) {
 				int oldQty = Integer.parseInt(tableProduct.getValueAt(i, 4).toString());
@@ -865,13 +858,14 @@ public class OrderPanel extends JPanel {
 				LoadSanPhamTimKiem();
 			}
 		});
+		tableTimKiem.setToolTipText("Nhấp chuột  2 lần vào 1 sản phẩm để thêm\r\n");
 		tableTimKiem.setPreferredScrollableViewportSize(new Dimension(40, 400));
 
 		tableTimKiem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// Kiểm tra nếu là double-click
-				if (e.getClickCount() == 2) {
+				if (e.getClickCount() == 1) {
 					int row = tableTimKiem.getSelectedRow();
 					if (row != -1) {
 						int maSP = (int) tableTimKiem.getValueAt(row, 0);  // Giả sử "Mã" nằm ở cột 0
@@ -891,23 +885,13 @@ public class OrderPanel extends JPanel {
 		textSDT.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                String phone = textSDT.getText().trim();
-				khachHang = TheThanhVienBLL.getMemberByPhone(phone);
-                if (!phone.isEmpty()) {
-                    if (khachHang != null) {
-                        textTenKH.setText(khachHang.getTenTV());
-                        textDiem.setText(khachHang.getDiemTL() + "");
-                       
-					}else{
-                        textTenKH.setText("lỗi thành viên!");
-                        textDiem.setText("lỗi thành viên!");
-                    }
-                }
+               rederKhachHangTheoSDT();
             }
         });     
     
 
 		toggleButton.addActionListener(e -> toggleScanning());
+		tableProduct.setToolTipText("Nhấp chuột phải vào sản phẩm để thao tác\r\n");
 		tableProduct.setComponentPopupMenu(createPopupMenu());
 		tableProduct.addMouseListener(new MouseAdapter() {
 			@Override
@@ -1013,6 +997,7 @@ public class OrderPanel extends JPanel {
 			);
 		
 		if (confirm == JOptionPane.YES_OPTION) {
+			khachHang = null;
 			panel_ButtonLuuInDH.removeAll();
 			panel_ButtonLuuInDH.add(btnLuuDonHang);
 			panel_ButtonLuuInDH.repaint();
@@ -1020,7 +1005,8 @@ public class OrderPanel extends JPanel {
 			tableModel_SP.setRowCount(0);
 			textFieldTongTien.setText("0 VND");
 			text_ThanhTien .setText("0 VND");
-			textKhuyenMai .setText("???");
+			// textKhuyenMai .setText("???");
+			spinner_tienKD.setValue(0);
 			// textTheThanhVien .setText("");
 			textSDT .setText("???");
 			textTenKH .setText("???");
@@ -1034,6 +1020,26 @@ public class OrderPanel extends JPanel {
 		
 
 	};
+
+
+	public void rederKhachHangTheoSDT(){
+		String phone = textSDT.getText().trim();
+		khachHang = TheThanhVienBLL.getMemberByPhone(phone);
+		if (!phone.isEmpty()) {
+			if (khachHang != null) {
+				if(khachHang.getTrangThai().equalsIgnoreCase("inactive")){
+					JOptionPane.showMessageDialog(null, "Thẻ thành viên của " + khachHang.getTenTV() + " đã bị khoá.");
+					return;
+				}
+				textTenKH.setText(khachHang.getTenTV());
+				textDiem.setText(khachHang.getDiemTL() + "");
+				
+			}else{
+				textTenKH.setText("lỗi thành viên!");
+				textDiem.setText("lỗi thành viên!");
+			}
+		}
+	}
 
 	
 	private void customizeTable1(JTable talbe_) {
@@ -1206,6 +1212,11 @@ public class OrderPanel extends JPanel {
 
 
 	public void SaveOrder(){
+		if(khachHang.getTrangThai().equalsIgnoreCase("inactive")){
+			JOptionPane.showMessageDialog(null, "Thẻ thành viên của " + khachHang.getTenTV() + " đã bị khoá.");
+			return;
+		}
+
 		
 		if(tableProduct.getRowCount() == 0){
 			JOptionPane.showMessageDialog(null,"Không thê thêm vì không có sản phẩm, Vui lòng thêm sản phẩm");
@@ -1258,12 +1269,14 @@ public class OrderPanel extends JPanel {
 						return ;
 					}else{
 						DiemTichLuyDTO DTL_ = DiemTichLuyBLL.getAllDiemTichLuy().get(comboBoxDTL.getSelectedIndex()); 
-						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));						
+						maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,DTL_.getMaDTL(), tienKD,tongTien, "FINISHED"));		
+						JUST_MADONHANG = maDH;
 						khachHang.setDiemTL(khachHang.getDiemTL() - dieuKienDTL + (int)(calCalculateTotalAmount()/1000));
 						TheThanhVienBLL.updateMember(khachHang);
 					}
 				}else{
 					maDH = DonHangBLL.insertOrder(new DonHangDTO(1, khachHang.getMaTV(), maKM, NHANVIEN.getMaNV(), pttt, formattedDateTime,null, tienKD,tongTien, "FINISHED"));	
+					JUST_MADONHANG = maDH;
 					khachHang.setDiemTL(khachHang.getDiemTL()  + (int)(calCalculateTotalAmount()/1000));
 					TheThanhVienBLL.updateMember(khachHang);					
 				}
@@ -1277,7 +1290,10 @@ public class OrderPanel extends JPanel {
 		}
 
 		for( int i = 0; i < tableProduct.getRowCount(); i++){
-			ChiTietDonHangBLL.insertOrderDetail(new ChiTietDonHangDTO(JUST_MADONHANG, (int) tableProduct.getValueAt(i, 0), (int)tableProduct.getValueAt(i, 4), "ACTIVE"));
+			ChiTietDonHangBLL.insertOrderDetail(new ChiTietDonHangDTO(JUST_MADONHANG, (int) tableProduct.getValueAt(i, 0), Integer.parseInt(tableProduct.getValueAt(i, 4).toString()), "ACTIVE"));
+			SanPhamDTO sp = sanPhamBLL.getProductById(Integer.parseInt(tableProduct.getValueAt(i, 0).toString()));
+			sp.setSoLuongTon(sp.getSoLuongTon() - Integer.parseInt(tableProduct.getValueAt(i, 4).toString()));
+			sanPhamBLL.updateProduct(sp);
 		}
 		JOptionPane.showMessageDialog(null, "Lưu đơn hàng thành công !!!");
 		panel_ButtonLuuInDH.removeAll();

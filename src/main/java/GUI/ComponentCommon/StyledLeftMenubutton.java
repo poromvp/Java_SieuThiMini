@@ -24,7 +24,7 @@ public class StyledLeftMenubutton extends JButton {
 
     public StyledLeftMenubutton(String pathImg, String buttonName) {
         setPreferredSize(new Dimension(230, 45));
-        setBackground(COLOR); // Màu mặc định chưa nhấn
+        setBackground(COLOR);
         this.buttonName = buttonName;
         setLayout(new BorderLayout());
 
@@ -85,6 +85,11 @@ public class StyledLeftMenubutton extends JButton {
             g2.drawRoundRect(1, 1, getWidth() - 2, getHeight() - 2, radius, radius);
         }
     }
+
+    public void setBackgroundColorButton(Color color) {
+        this.COLOR = color;
+        repaint(); 
+}
 
     public static void main(String args[]) {
         JFrame frame = new JFrame("Rounded Button Example");

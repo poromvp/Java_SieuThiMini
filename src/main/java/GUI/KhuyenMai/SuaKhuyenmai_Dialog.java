@@ -347,7 +347,11 @@ public class SuaKhuyenmai_Dialog extends JDialog {
 		java.sql.Date ngayBD = new java.sql.Date(dateChooserBatDau.getDate().getTime());
 		java.sql.Date ngayKT = new java.sql.Date(dateChooserKetThuc.getDate().getTime());
 		String trangThai = (String) comboBox_trangThai.getSelectedItem();
-		
+		if (ngayBD.after(ngayKT)) {
+			JOptionPane.showMessageDialog(null, "Ngày bắt đầu không được lớn hơn ngày kết thúc");
+			return;
+		}
+
 		if(tenKM.isEmpty()){
 			JOptionPane.showMessageDialog(null,"Tên khuyến mãi không được để trống. Vui lòng nhập tên Khuyến mãi");
 			return;

@@ -34,7 +34,7 @@ public class HomePanel extends JPanel {
         setLayout(new BorderLayout(0, 0));
         
         panelCenter = new JPanel();
-        panelCenter.setBackground(new Color(128,128,128));
+        panelCenter.setBackground(new Color(204, 255, 255));
         add(panelCenter, BorderLayout.CENTER);
         panelCenter.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.X_AXIS));
@@ -191,7 +191,7 @@ public class HomePanel extends JPanel {
 		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new EmptyBorder(10, 10, 10, 10));
-		panel_2.setBackground(new Color(128,128,128));
+		panel_2.setBackground(new Color(204, 255, 255));
 		add(panel_2, BorderLayout.NORTH);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		// C:\Users\KHANG\GIT-SGU\Java_SieuThiMini\src\main\resources\images\anhcho1.png
@@ -205,11 +205,12 @@ public class HomePanel extends JPanel {
 
 
 		JEditorPane editorPaneTieuDe = new JEditorPane();
+		editorPaneTieuDe.setForeground(new Color(0, 51, 102));
         editorPaneTieuDe.setContentType("text/html");
         editorPaneTieuDe.setText(
             "<html>" +
                 "<body style='text-align: center; margin: 0; padding: 10px;'>" +
-                    "<div style='width: 100%; font-size: 20px; font-family: Arial; font-weight: bold; color: white;'>" +
+                    "<div style='width: 100%; font-size: 20px; font-family: Arial; font-weight: bold; color: rgb(0, 51, 102);'>" +
                         "ỨNG DỤNG QUẢN LÝ CỬA HÀNG SIÊU THỊ MINI <br>Bán hàng nhanh - Quản lý chuẩn - Tối ưu lợi nhuận" +
                     "</div>" +
                 "</body>" +
@@ -219,7 +220,8 @@ public class HomePanel extends JPanel {
         editorPaneTieuDe.setOpaque(false);
 		
 		JPanel panel_4 = new JPanel();
-		panel_4.setBackground(new Color(44, 51, 51));
+		panel_4.setForeground(new Color(0, 51, 102));
+		panel_4.setBackground(new Color(255, 255, 255));
 		panel_4.add(editorPaneTieuDe);
 		panel_2.add(panel_4, BorderLayout.CENTER);
 

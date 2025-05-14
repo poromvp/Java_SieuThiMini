@@ -71,7 +71,9 @@ public class PanelBaoCaoNV extends JPanel implements ActionListener {
     public void initPanel1() {
         pn1.setBorder(new CompoundBorder(new TitledBorder("Chức năng"), new EmptyBorder(4, 4, 4, 4)));
         pn1.setLayout(new GridLayout(1, 2, 2, 5));
-
+        // pn1.setPreferredSize(new Dimension(10000, 40));
+        // pn1.setMinimumSize(new Dimension(10000, 40));
+        pn1.setMaximumSize(new Dimension(10000, 70));
         btnTim = new JButton("Tìm");
         TienIch.nutStyle(btnTim, "search.png", 20, 50, 25);
         pn1.add(btnTim);

@@ -997,6 +997,7 @@ public class OrderPanel extends JPanel {
 			);
 		
 		if (confirm == JOptionPane.YES_OPTION) {
+			khachHang = null;
 			panel_ButtonLuuInDH.removeAll();
 			panel_ButtonLuuInDH.add(btnLuuDonHang);
 			panel_ButtonLuuInDH.repaint();

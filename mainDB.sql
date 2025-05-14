@@ -147,10 +147,27 @@ CREATE TABLE `chitietkm` (
 
 INSERT INTO `chitietkm` (`MaKM`, `MaSP`, `TileGiam`, `TrangThai`) VALUES
 (1, 1, 10.00, 'ACTIVE'),
+(1, 2, 10.00, 'ACTIVE'),
+(1, 3, 10.00, 'ACTIVE'),
+(1, 4, 10.00, 'ACTIVE'),
+(1, 5, 10.00, 'ACTIVE'),
+(1, 6, 10.00, 'ACTIVE'),
+(1, 7, 10.00, 'ACTIVE'),
+(2, 1, 15.50, 'ACTIVE'),
 (2, 2, 15.50, 'ACTIVE'),
+(2, 3, 15.50, 'ACTIVE'),
+(2, 4, 15.50, 'ACTIVE'),
+(2, 6, 15.50, 'ACTIVE'),
+(2, 8, 15.50, 'ACTIVE'),
 (3, 3, 20.00, 'ACTIVE'),
 (4, 4, 5.00, 'ACTIVE'),
-(5, 5, 12.75, 'ACTIVE');
+(5, 1, 5.00, 'ACTIVE'),
+(5, 2, 5.00, 'ACTIVE'),
+(5, 3, 5.00, 'ACTIVE'),
+(5, 4, 5.00, 'ACTIVE'),
+(5, 5, 5.00, 'ACTIVE'),
+(5, 7, 5.00, 'ACTIVE'),
+(5, 9, 12.75, 'ACTIVE');
 
 -- --------------------------------------------------------
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2025 at 05:46 AM
+-- Generation Time: May 14, 2025 at 08:20 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -170,11 +170,11 @@ CREATE TABLE `chitietpnh` (
 --
 
 INSERT INTO `chitietpnh` (`MaCTPNH`, `MaPNH`, `MaSP`, `MaLH`, `NgayHH`, `NgaySX`, `SoLuong`, `GiaNhap`, `TrangThai`) VALUES
-(1, 1, 1, 1, NULL, NULL, 100, 45000.00, 'ACTIVE'),
-(2, 2, 2, 2, NULL, NULL, 200, 70000.00, 'ACTIVE'),
-(3, 3, 3, 3, NULL, NULL, 150, 95000.00, 'ACTIVE'),
-(4, 4, 4, 4, NULL, NULL, 180, 120000.00, 'ACTIVE'),
-(5, 5, 5, 5, NULL, NULL, 220, 140000.00, 'ACTIVE');
+(1, 1, 1, 1, '2023-05-01', '2025-05-31', 100, 45000.00, 'ACTIVE'),
+(2, 2, 2, 2, '2021-05-01', '2025-05-31', 200, 70000.00, 'ACTIVE'),
+(3, 3, 3, 3, '2021-05-01', '2025-05-31', 150, 95000.00, 'ACTIVE'),
+(4, 4, 4, 4, '2021-05-01', '2025-05-31', 180, 120000.00, 'ACTIVE'),
+(5, 5, 5, 5, '2021-05-01', '2025-05-31', 220, 140000.00, 'ACTIVE');
 
 -- --------------------------------------------------------
 

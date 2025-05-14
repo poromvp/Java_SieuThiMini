@@ -612,12 +612,15 @@ public class OrderPanel extends JPanel {
 		       
 		        JLabel lblNewLabel_3 = new JLabel(scaledIcon);
 				panel_QRbank.add(lblNewLabel_3);
+
+				panelRightInput.add(Box.createVerticalGlue());
 				
 				JPanel panel_2 = new JPanel();
-				panel_2.setPreferredSize(new Dimension(310, 10));
+				panel_2.setPreferredSize(new Dimension(310, 75));
 				panel_2.setMaximumSize(new Dimension(32767, 60));
 				panelRightInput.add(panel_2);
 				panel_2.setLayout(new GridLayout(2, 1, 10, 10));
+				
 				
 				panel_ButtonLuuInDH.setMaximumSize(new Dimension(32767, 25));
 				panel_2.add(panel_ButtonLuuInDH);

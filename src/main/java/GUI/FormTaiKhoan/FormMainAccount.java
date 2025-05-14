@@ -94,7 +94,7 @@ public class FormMainAccount extends JPanel {
                 }
             }
         });
-        expButton.addActionListener(e -> FormExport("Danh sách tài khoản"));
+        expButton.addActionListener(e -> FormExport("DANH SÁCH TÀI KHOẢN"));
         
     }
      private void FormExport(String title) {

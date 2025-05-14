@@ -56,10 +56,10 @@ public class DiscountPanel extends JPanel {
 	private static JDateChooser dateChooserBatDau = new JDateChooser();
 	private static	JComboBox comboBox_sapXep = new JComboBox(new String[]{"Tăng dần", "Giảm dần"});
 	private static JComboBox comboBox_column = new JComboBox(new String[] {"Mã khuyến mãi", "Tên khuyến mãi", "Ngày bắt đầu", "Ngày kết thúc"});
-	private static JButton btnthem = new JButton("Thêm");
-	private static JButton btnXem = new JButton("Xem");
-	private static JButton btnSua = new JButton("Sửa");
-	private static JButton btnXoa = new JButton("Xoá");
+	private  JButton btnthem = new JButton("Thêm");
+	private  JButton btnXem = new JButton("Xem");
+	private  JButton btnSua = new JButton("Sửa");
+	private  JButton btnXoa = new JButton("Xoá");
 
 
 
@@ -284,7 +284,7 @@ public class DiscountPanel extends JPanel {
 
 	}
 
-	public static void addEvent(){
+	public  void addEvent(){
 		textField_tenOrIdKM.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void insertUpdate(DocumentEvent e) {

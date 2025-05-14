@@ -76,6 +76,7 @@ public class BaoCaoPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public BaoCaoPanel() {
+		panelTimKiem = new PanelTimThK();
 		NhanVienBLL nvBLL = new NhanVienBLL();
 		NHANVIEN = nvBLL.getNhanVienByMa(ProfilePanel.getMaNhanVien() + "");
 		setBackground(new Color(224, 255, 255));

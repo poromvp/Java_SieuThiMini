@@ -33,6 +33,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
@@ -695,10 +696,24 @@ public class ProfilePanel extends JPanel {
 
 	public  String chonAnhTuLocal() {
 		
+try {
+            // Đổi Look & Feel sang hệ điều hành
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Chọn ảnh");
         fileChooser.setAcceptAllFileFilterUsed(false);
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Ảnh", "jpg", "jpeg", "png", "gif"));
+try {
+		    // Trả về Look & Feel mặc định của Java (thường là Metal)
+		    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		    // Cập nhật lại UI trên frame (nếu cần)
+		    SwingUtilities.updateComponentTreeUI(this); // yourFrame là JFrame hoặc JDialog
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
 
         int result = fileChooser.showOpenDialog(null);
         if (result == JFileChooser.APPROVE_OPTION) {

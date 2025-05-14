@@ -30,6 +30,7 @@ import BLL.DonHangBLL;
 import BLL.NhanVienBLL;
 import DTO.DonHangDTO;
 import DTO.NhanVienDTO;
+import GUI.Admin_PanelThongKe.PanelTimThK;
 import GUI.FormEmployee.BaoCaoPanel;
 import GUI.FormEmployee.ProfilePanel;
 
@@ -45,6 +46,8 @@ public class ExportExcelReport extends JFrame {
   	JTableHeader tableHeader = tableProduct.getTableHeader();
 	private ArrayList<DonHangDTO> DSHoaDon = DonHangBLL.getAllOrders();
 	JTextArea txtrNhapNoiDung = new JTextArea();
+    public static PanelTimThK panelTimkiem = new PanelTimThK();
+
 
 	private  NhanVienDTO  NHANVIEN = new NhanVienDTO(
             1,

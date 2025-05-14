@@ -1212,7 +1212,7 @@ public class OrderPanel extends JPanel {
 
 
 	public void SaveOrder(){
-		if(khachHang.getTrangThai().equalsIgnoreCase("inactive")){
+		if( khachHang != null && khachHang.getTrangThai().equalsIgnoreCase("inactive")){
 			JOptionPane.showMessageDialog(null, "Thẻ thành viên của " + khachHang.getTenTV() + " đã bị khoá.");
 			return;
 		}

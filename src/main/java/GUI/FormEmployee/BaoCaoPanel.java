@@ -291,11 +291,13 @@ public class BaoCaoPanel extends JPanel {
 		panel_TimKiemBtn.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				TienIch.setDarkUI();
 				int result = JOptionPane.showConfirmDialog(null, panelTimKiem, "Export",
 						JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 				if (result == JOptionPane.OK_OPTION) {
 					loadDonHang();
 				}
+				TienIch.resetUI();
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {

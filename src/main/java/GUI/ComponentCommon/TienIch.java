@@ -960,7 +960,7 @@ public class TienIch {
     public static void lamDepTabbedPaneEdgeStyle(JTabbedPane tabbedPane) {
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 14));
         tabbedPane.setForeground(Color.BLACK);
-        tabbedPane.setBackground(new Color(204, 255, 255));
+        tabbedPane.setBackground(Color.WHITE);
         tabbedPane.setOpaque(false);
         tabbedPane.setFocusable(false);
 

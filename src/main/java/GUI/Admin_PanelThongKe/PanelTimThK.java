@@ -309,8 +309,6 @@ public class PanelTimThK extends JPanel {
         add(cboTheoCot, gbc);
 
         TienIch.checkFromTo(dateChooserBatDau, dateChooserKetThuc);
-        TienIch.chiduocnhapDDMMYYYY(dateChooserBatDau);
-        TienIch.chiduocnhapDDMMYYYY(dateChooserKetThuc);
         TienIch.sukienSoSanh(Min, Max);
 
         // Chỉ cho phép nhập số đối với các trường mã

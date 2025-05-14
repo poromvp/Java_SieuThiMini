@@ -28,7 +28,7 @@ public class FrameAdmin extends JFrame implements ActionListener {
     private JLabel lbl_header = new JLabel("Thống kê");
     private LeftSidebarMenu leftMenu;
     public TaiKhoanDTO tk;
-    public String maNV;
+    public String maNV = "1";
     public FrameAdmin(String maNV) {
         header.setBackground(new Color(33, 58, 89));
         header.setPreferredSize(new Dimension(0, 50));

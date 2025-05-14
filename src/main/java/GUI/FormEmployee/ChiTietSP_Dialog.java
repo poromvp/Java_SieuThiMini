@@ -165,7 +165,7 @@ public class ChiTietSP_Dialog extends JDialog {
 		// setBorder(new EmptyBorder(20, 20, 20, 20));
 		setBackground(new Color(214, 235, 241));
 		getContentPane().setLayout(new BorderLayout());
-		ImageIcon imageIcon = new ImageIcon(imgFolder  + SANPHAM.getTenAnh().equalsIgnoreCase(""));
+		ImageIcon imageIcon = new ImageIcon(imgFolder  + SANPHAM.getTenAnh());
 		// ImageIcon imageIcon = new ImageIcon(imgFolder  + "product-default.jpg");
 		Image image = imageIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH); 
 		

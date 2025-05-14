@@ -10,7 +10,7 @@ public class PanelMainThongKe extends JPanel{
     public String MANV;
     public PanelMainThongKe(String MANV) {
         this.MANV = MANV;
-        setBackground(new Color(204, 255, 255));
+        setBackground(Color.WHITE);
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JTabbedPane tab = new JTabbedPane();

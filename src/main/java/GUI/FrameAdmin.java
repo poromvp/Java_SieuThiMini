@@ -18,32 +18,46 @@ import GUI.FormTaiKhoan.FormMainAccount;
 import GUI.FormWareHouse.FormProduct;
 import GUI.KhuyenMai.DiscountPanel;
 import JDBC.DBConnection;
+import javax.swing.border.EmptyBorder;
 
 public class FrameAdmin extends JFrame implements ActionListener {
 
     private JPanel rightPn;
+    private JPanel Center = new JPanel(new BorderLayout());
+    private JPanel header = new JPanel(new BorderLayout());
+    private JLabel lbl_header = new JLabel("Thống kê");
     private LeftSidebarMenu leftMenu;
     public TaiKhoanDTO tk;
     public String maNV;
     public FrameAdmin(String maNV) {
+        header.setBackground(new Color(33, 58, 89));
+        header.setPreferredSize(new Dimension(0, 50));
+        lbl_header.setForeground(new Color(255, 255, 255));
+        lbl_header.setFont(new Font("Arial", Font.BOLD, 20));
+        lbl_header.setHorizontalAlignment(SwingConstants.CENTER);
+        header.add(lbl_header);
+        Center.add(header, BorderLayout.NORTH);
         this.maNV = maNV;
         setTitle("Frame Quản Lý");
         setSize(1300, 750);
         setLocationRelativeTo(null);
         setResizable(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        getContentPane().setLayout(new BorderLayout());
 
         leftMenu = new LeftSidebarMenu(maNV);
         leftMenu.setActionListener(this);
         leftMenu.setPreferredSize(new Dimension(250, 0));
 
-        add(leftMenu, BorderLayout.WEST);
+        getContentPane().add(leftMenu, BorderLayout.WEST);
 
         rightPn = new JPanel();
+        rightPn.setBackground(new Color(204, 255, 255));
+        rightPn.setBorder(new EmptyBorder(10, 10, 10, 10));
         panelDashBoard(maNV);
 
-        add(rightPn, BorderLayout.CENTER);
+        Center.add(rightPn, BorderLayout.CENTER);
+        getContentPane().add(Center, BorderLayout.CENTER);
 
         Toolkit.getDefaultToolkit().addAWTEventListener(event -> {
             if (event.getID() == WindowEvent.WINDOW_OPENED) {
@@ -66,7 +80,8 @@ public class FrameAdmin extends JFrame implements ActionListener {
     public void panelNhanVien() {
         Connection conn = DBConnection.getConnection();
         rightPn.removeAll();
-        rightPn.setBackground(new Color(95, 200, 150));
+        lbl_header.setText("Nhân Viên");
+        // rightPn.setBackground(new Color(95, 200, 150));
         rightPn.setLayout(new BorderLayout());
 
         FormMainNhanVien formNhanVien = new FormMainNhanVien(conn);
@@ -79,7 +94,9 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
     public void panelSanPham() {
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
+        lbl_header.setText("Sản phẩm");
+
+        // rightPn.setBackground(new Color(55, 11, 77));
         rightPn.setLayout(new BorderLayout());
 
         FormProduct productPanel = new FormProduct();
@@ -90,19 +107,23 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public void panelBaoCao(String MANV) {
+        lbl_header.setText("Báo cáo");
+
         rightPn.removeAll();
-        rightPn.setBackground(new Color(176, 90, 20));
+        // rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
         PanelMainThongKe mainPanel = new PanelMainThongKe(MANV);
         rightPn.add(mainPanel, BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
-        add(rightPn);
+        // getContentPane().add(rightPn);
     }
 
     public void panelTaiKhoan() {
+        lbl_header.setText("Tài khoản");
+
         rightPn.removeAll();
-        rightPn.setBackground(new Color(55, 11, 77));
+        // rightPn.setBackground(new Color(55, 11, 77));
 
         FormMainAccount accountPanel = new FormMainAccount();
         rightPn.add(accountPanel, BorderLayout.CENTER);
@@ -112,6 +133,8 @@ public class FrameAdmin extends JFrame implements ActionListener {
     }
 
     public void panelDashBoard(String MANV) {
+        lbl_header.setText("Thống kê");
+
         rightPn.removeAll();
         rightPn.setLayout(new BorderLayout());
 
@@ -120,29 +143,33 @@ public class FrameAdmin extends JFrame implements ActionListener {
 
         rightPn.revalidate();
         rightPn.repaint();
-        add(rightPn);
+        // getContentPane().add(rightPn);
     }
 
     public void panelTheThanhVien(String MANV) {
+        lbl_header.setText("Thẻ thành viên");
+
         rightPn.removeAll();
-        rightPn.setBackground(new Color(176, 90, 20));
+        // rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
         PanelMainThanhVien mainPanel = new PanelMainThanhVien(MANV);
         rightPn.add(mainPanel, BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
-        add(rightPn);
+        // getContentPane().add(rightPn);
     }
 
     public void panelKhuyenMai() {
+        lbl_header.setText("Khuyến mãi");
+
         rightPn.removeAll();
-        rightPn.setBackground(new Color(176, 90, 20));
+        // rightPn.setBackground(new Color(176, 90, 20));
         rightPn.setLayout(new BorderLayout());
         DiscountPanel mainPanel = new DiscountPanel();
         rightPn.add(mainPanel,BorderLayout.CENTER);
         rightPn.revalidate();
         rightPn.repaint();
-        add(rightPn);
+        // getContentPane().add(rightPn);
     }
 
     @Override

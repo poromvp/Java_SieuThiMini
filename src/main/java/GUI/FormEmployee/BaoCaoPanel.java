@@ -369,7 +369,7 @@ public class BaoCaoPanel extends JPanel {
 				TienIch.ddmmyyyy(hd.getNgayTT())
 			});
 		}
-		lbl_TongTien.setText(tongTien_ + " VND");		
+		lbl_TongTien.setText(TienIch.formatVND( tongTien_) );		
 		soDonHang = DSHoaDon.size();
 		danhThu = tongTien_;
 		lbl_DH.setText(DSHoaDon.size()+ "");

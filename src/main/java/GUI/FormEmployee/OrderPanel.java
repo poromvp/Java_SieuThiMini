@@ -774,20 +774,30 @@ public class OrderPanel extends JPanel {
             String currentQty = tableProduct.getValueAt(row, 4).toString();
             String newQty = JOptionPane.showInputDialog(null, "Nhập số lượng mới:", currentQty);
 			SanPhamDTO sp = SanPhamBLL.getProductById(Integer.parseInt(tableProduct.getValueAt(row, 0).toString()));
-			if(sp.getSoLuongTon() <  Integer.parseInt(newQty)){
-				JOptionPane.showMessageDialog(null, " Đơn hàng sẽ có số lượng của sản phẩm " +  sp .getTenSP() + " vượt quá số lượng tồn kho sau khi thêm (" + sp .getSoLuongTon() +  " < "  + ( newQty) +") . KHÔNG thể thêm!!!" );
-				return;
+			try {
+				if(Integer.parseInt(newQty) <= 0){
+					JOptionPane.showMessageDialog(null, " Số lượng không được âm !!!" );
+					return;
+				}
+				if(sp.getSoLuongTon() <  Integer.parseInt(newQty)){
+					JOptionPane.showMessageDialog(null, " Đơn hàng sẽ có số lượng của sản phẩm " +  sp .getTenSP() + " vượt quá số lượng tồn kho sau khi thêm (" + sp .getSoLuongTon() +  " < "  + ( newQty) +") . KHÔNG thể thêm!!!" );
+					return;
+				}
+				if (newQty != null && !newQty.trim().isEmpty()) {
+					double price = Double.parseDouble(tableProduct.getValueAt(row, 2).toString());
+					double discount = Double.parseDouble(tableProduct.getValueAt(row, 3).toString());
+					double total = (price - (price * discount / 100)) * Integer.parseInt(newQty);
+	
+					tableModel_SP.setValueAt(newQty, row, 4);
+					tableModel_SP.setValueAt(total, row, 5);
+					JOptionPane.showMessageDialog(null, "Sửa số lượng thành công!!!" );
+	
+				}
+				
+			} catch (Exception e) {
+					JOptionPane.showMessageDialog(null, " Chỉ được nhập số !!!" );
+					return;
 			}
-            if (newQty != null && !newQty.trim().isEmpty()) {
-                double price = Double.parseDouble(tableProduct.getValueAt(row, 2).toString());
-                double discount = Double.parseDouble(tableProduct.getValueAt(row, 3).toString());
-                double total = (price - (price * discount / 100)) * Integer.parseInt(newQty);
-
-                tableModel_SP.setValueAt(newQty, row, 4);
-                tableModel_SP.setValueAt(total, row, 5);
-				JOptionPane.showMessageDialog(null, "Sửa số lượng thành công!!!" );
-
-            }
         }
     }
 
@@ -1131,7 +1141,6 @@ public class OrderPanel extends JPanel {
                                 System.out.println("Quét thành công: " + qrText);
                                 insertProductInformation(id);
 
-                                // Ghi nhận mã hiện tại và thời gian
                                 lastQRText = qrText;
                                 lastScanTime = now;
 
@@ -1174,10 +1183,7 @@ public class OrderPanel extends JPanel {
         try {
             LuminanceSource source = new BufferedImageLuminanceSource(img);
             BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-            Map<DecodeHintType, Object> hints = new EnumMap<>(DecodeHintType.class);
-            hints.put(DecodeHintType.TRY_HARDER, Boolean.TRUE);
-
-            Result result = new MultiFormatReader().decode(bitmap, hints);
+            Result result = new MultiFormatReader().decode(bitmap);
             return result.getText();
         } catch (Exception e) {
             return null;
